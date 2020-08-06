@@ -6,6 +6,7 @@ import ForgotPasswordSuccess from "./ForgotPasswordSuccess";
 import ChangePassword from "./ChangePassword";
 import ChangePasswordSuccess from "./ChangePasswordSuccess";
 
+
 export {
     Login,
     Registry,

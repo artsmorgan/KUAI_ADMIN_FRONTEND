@@ -3,6 +3,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 
 import ROUTES from './util/routes'
 import * as PublicComponents from './Components/Public/index'
+import  './assets/css/style.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends React.Component {
     render() {
