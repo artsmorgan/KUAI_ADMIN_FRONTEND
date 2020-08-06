@@ -1,26 +1,30 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ROUTES from './util/routes'
+import * as PublicComponents from './Components/Public/index'
+
+class App extends React.Component {
+    render() {
+        return (
+            <>
+                <Router>
+                    <Switch>
+                        <Route path={ROUTES.LOGIN} exact component={PublicComponents.Login}/>
+                        <Route path={ROUTES.REGISTRY} exact component={PublicComponents.Registry}/>
+                        <Route path={ROUTES.REGISTRY_SUCCESS} component={PublicComponents.RegistrySuccess}/>
+                        <Route path={ROUTES.FORGOT_PASSWORD} exact component={PublicComponents.ForgotPassword}/>
+                        <Route path={ROUTES.FORGOT_PASSWORD_SUCCESS} component={PublicComponents.ForgotPasswordSuccess}/>
+                        <Route path={ROUTES.CHANGE_PASSWORD} exact component={PublicComponents.ChangePassword}/>
+                        <Route path={ROUTES.CHANGE_PASSWORD_SUCCESS} component={PublicComponents.ChangePasswordSuccess}/>
+
+                        <Redirect to={ROUTES.LOGIN}/>
+                    </Switch>
+                </Router>
+            </>
+        );
+    }
 }
 
-export default App;
+export default App
+
