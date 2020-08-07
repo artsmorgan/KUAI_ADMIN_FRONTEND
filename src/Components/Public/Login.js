@@ -2,11 +2,28 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import {Button} from 'react-bootstrap';
+import Modal from "react-bootstrap/Modal";
 
 class Login extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            show: false
+        }
+    }
+
     handleLoginReq = () => {
         this.props.history.push('/orders');
+    }
+
+    showForgotPasswordModal = () => {
+        this.setState({show: true});
+    }
+
+    hideForgotPasswordModal = () => {
+        this.setState({show: false});
     }
 
     render() {
@@ -21,12 +38,26 @@ class Login extends React.Component {
                         <Button className="btn btn-theme" onClick={this.handleLoginReq}>
                             INGRESAR
                         </Button>
-                        <div className="link-holder" style={{marginTop: '20px'}}><Link className="pull-left"
-                                                                                       to={'/forgot-password'}>Olvidate
-                            tu contraseña?</Link><Link className="pull-right" to={'/registry'}>Registrarse</Link></div>
+                        <div className="link-holder" style={{marginTop: '20px'}}><a href={"#"} className="pull-left"
+                                                                                       onClick={this.showForgotPasswordModal}>Olvidate
+                            tu contraseña?</a>&emsp;<Link className="pull-right" to={'/registry'}>Registrarse</Link></div>
                     </div>
                 </div>
 
+                <Modal
+                    size="sm"
+                    show={this.state.show}
+                    onHide={this.hideForgotPasswordModal}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-modal-sizes-title-sm">
+                            Modal
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>...</Modal.Body>
+                </Modal>
             </>
 
         );

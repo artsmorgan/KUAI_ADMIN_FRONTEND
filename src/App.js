@@ -1,7 +1,9 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
+import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
 
 import ROUTES from './util/routes'
+import PublicRoutes from "./Components/Public/PublicRoutes";
+import PrivateRoutes from "./Components/Private/PrivateRoutes";
 import * as PublicComponents from './Components/Public/index'
 import * as PrivateComponents from './Components/Private/index'
 import  './assets/css/style.css'
@@ -13,15 +15,20 @@ class App extends React.Component {
             <>
                 <Router>
                     <Switch>
-                        <Route path={ROUTES.LOGIN} exact component={PublicComponents.Login}/>
-                        <Route path={ROUTES.REGISTRY} exact component={PublicComponents.Registry}/>
-                        <Route path={ROUTES.REGISTRY_SUCCESS} component={PublicComponents.RegistrySuccess}/>
-                        <Route path={ROUTES.FORGOT_PASSWORD} exact component={PublicComponents.ForgotPassword}/>
-                        <Route path={ROUTES.FORGOT_PASSWORD_SUCCESS} component={PublicComponents.ForgotPasswordSuccess}/>
-                        <Route path={ROUTES.CHANGE_PASSWORD} exact component={PublicComponents.ChangePassword}/>
-                        <Route path={ROUTES.CHANGE_PASSWORD_SUCCESS} component={PublicComponents.ChangePasswordSuccess}/>
+                        <PublicRoutes path={ROUTES.LOGIN} exact component={PublicComponents.Login}/>
+                        <PublicRoutes path={ROUTES.REGISTRY} exact component={PublicComponents.Registry}/>
+                        <PublicRoutes path={ROUTES.REGISTRY_SUCCESS} component={PublicComponents.RegistrySuccess}/>
+                        <PublicRoutes path={ROUTES.FORGOT_PASSWORD} exact component={PublicComponents.ForgotPassword}/>
+                        <PublicRoutes path={ROUTES.FORGOT_PASSWORD_SUCCESS} component={PublicComponents.ForgotPasswordSuccess}/>
+                        <PublicRoutes path={ROUTES.CHANGE_PASSWORD} exact component={PublicComponents.ChangePassword}/>
+                        <PublicRoutes path={ROUTES.CHANGE_PASSWORD_SUCCESS} component={PublicComponents.ChangePasswordSuccess}/>
 
-                        <Route path={ROUTES.ORDERS} component={PrivateComponents.Orders}/>
+                        <PrivateRoutes path={ROUTES.ORDERS} component={PrivateComponents.Orders}/>
+                        <PrivateRoutes path={ROUTES.MODIFY_RESTAURANT} component={PrivateComponents.ModifyRestaurant}/>
+                        <PrivateRoutes path={ROUTES.MODIFY_MENU} component={PrivateComponents.ModifyMenu}/>
+                        <PrivateRoutes path={ROUTES.PAYMENT_METHODS} component={PrivateComponents.PaymentMethods}/>
+                        <PrivateRoutes path={ROUTES.DELIVERY_METHODS} component={PrivateComponents.DeliveryMethods}/>
+                        <PrivateRoutes path={ROUTES.CONTROL_CENTER} component={PrivateComponents.ControlCenter}/>
 
                         <Redirect to={ROUTES.LOGIN}/>
                     </Switch>

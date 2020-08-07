@@ -7,5 +7,10 @@ export default {
     CHANGE_PASSWORD: "/change-password",
     CHANGE_PASSWORD_SUCCESS: "/change-password/success",
 
-    ORDERS: '/orders'
+    ORDERS: '/orders',
+    MODIFY_RESTAURANT: '/modify-restaurant',
+    MODIFY_MENU: '/modify-menu',
+    PAYMENT_METHODS: '/payment-methods',
+    DELIVERY_METHODS: '/delivery-methods',
+    CONTROL_CENTER: '/control-center'
 };

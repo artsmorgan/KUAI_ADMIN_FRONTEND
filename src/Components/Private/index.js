@@ -1,5 +1,15 @@
 import Orders from "./Orders";
+import ModifyRestaurant from "./ModifyRestaurant";
+import ModifyMenu from "./ModifyMenu";
+import PaymentMethods from "./PaymentMethods";
+import DeliveryMethods from "./DeliveryMethods";
+import ControlCenter from "./ControlCenter";
 
 export {
-    Orders
+    Orders,
+    ModifyRestaurant,
+    ModifyMenu,
+    PaymentMethods,
+    DeliveryMethods,
+    ControlCenter
 }
