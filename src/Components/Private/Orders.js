@@ -8,12 +8,13 @@ class Orders extends React.Component {
     render() {
         return (
             <>
-                <Navbar/>
                 <Sidebar/>
-                <OrdersAside/>
-                <div>Middle content</div>
+                <div className="wrapper">
+                    <Navbar/>
+                    <div>Middle content</div>
+                    <OrdersAside/>
+                </div>
             </>
-
         );
     }
 }
