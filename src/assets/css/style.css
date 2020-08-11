@@ -204,4 +204,8 @@ body {
   line-height: 5px;
   font-weight: 600;
 }
+
+.order-short-info label .new {
+  fill: #000;
+}
 /*# sourceMappingURL=style.css.map */
