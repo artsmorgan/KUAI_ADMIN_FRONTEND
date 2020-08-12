@@ -1,5 +1,7 @@
 import React from 'react';
-import {Button , Dropdown} from 'react-bootstrap';
+
+import Avatar from "../../../../assets/images/avatar.svg";
+import {Dropdown} from 'react-bootstrap';
 
 class Navbar extends React.Component {
     render() {
@@ -17,17 +19,22 @@ class Navbar extends React.Component {
                             <span>Ventas</span>
                         </label>
                     </div>
-                    <Dropdown className="float-right">
-                        <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            Dropdown Button
-                        </Dropdown.Toggle>
+                    <div className="float-right" style={{height: '60px', position: 'relative'}}>
+                        <div className="avatar">
+                            <img src={Avatar} alt="User Avatar"/>
+                        </div>
+                        <Dropdown className="cstm-drop">
+                            <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                Costa Rica
+                                Beer factory
+                            </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                            <Dropdown.Menu>
+                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                    </div>
                 </div>
             </>
 
