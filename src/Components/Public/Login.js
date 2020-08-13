@@ -39,9 +39,9 @@ class Login extends React.Component {
                         <Button className="btn btn-theme" onClick={this.handleLoginReq}>
                             INGRESAR
                         </Button>
-                        <div className="link-holder" style={{marginTop: '20px'}}><Link className="pull-left"
+                        <div className="link-holder" style={{marginTop: '20px'}}><Link className="float-left"
                                                                                        to={'/forgot-password'}>Olvidate
-                            tu contraseña?</Link>&emsp;<Link className="pull-right" to={'/registry'}>Registrarse</Link></div>
+                            tu contraseña?</Link>&emsp;<Link className="float-right" to={'/registry'}>Registrarse</Link></div>
                     </div>
                 </div>
 

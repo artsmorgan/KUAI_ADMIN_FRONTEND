@@ -8,13 +8,14 @@ class Navbar extends React.Component {
         return (
             <>
                 <div className="navbar-cstm clearfix">
-                    <div className="pull-left order-short-info">
+                    <div className="float-left order-short-info">
                         <span>Total de hoy</span>
                         <label>
                             20
                             <span>Ordenes</span>
                         </label>
-                        <label>
+                        <label htmlFor="" className="decorate">|</label>
+                        <label className="balance">
                             ₡300.000
                             <span>Ventas</span>
                         </label>

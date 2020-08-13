@@ -47,7 +47,7 @@ body {
     .help-txt {
       font-size: 11px;
       color: #262628;
-      opacity: 40%;
+      opacity: 0.4;
       font-weight: 500;
       margin-top: -7px;
       margin-bottom: 15px;
@@ -84,6 +84,7 @@ body {
     display: block;
     font-weight: 500 !important;
     border: 0px !important;
+    margin: 0px auto;
   }
 }
 // button-block
@@ -206,7 +207,7 @@ body {
     padding: 0px !important;
     height: 60px;
     padding-left: 10px !important;
-    white-space: break-spaces !important;
+    white-space: revert !important;
     padding-right: 50px !important;
   }
 }
@@ -249,11 +250,26 @@ body {
     margin: 0px 30px;
     text-align: center;
     font-weight: 500;
+    position: relative;
     span {
       font-size: 16px;
       display: block;
       line-height: 5px;
       font-weight: 600;
+    }
+    &.decorate{
+      color: transparent !important;
+      position: relative;
+      margin: 0px 0px;
+      &::after{
+        position: absolute;
+        left: 3px;
+        top: 5px;
+        width: 2px;
+        height: 45px;
+        content: " ";
+        background: #c1c1c1;
+      }
     }
   }
 }
