@@ -75,6 +75,7 @@ class Login extends React.Component {
         const data = this.state.dataToPost;
 
         // API calling and response
+        this.props.history.push('/orders')
     }
 
 
@@ -100,13 +101,13 @@ class Login extends React.Component {
                         <form onSubmit={this.formSubmitHandler}>
                             <div className="ls-panel">
                                 <h3>Iniciar sesión</h3>
-                                <input type="email" name="email" placeholder="Correo electrónico"
-                                       onChange={this.inputChangeHandler}/>
+                                <input type="text" name="email" placeholder="Correo electrónico"
+                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.email}/>
                                 <p style={{color: "red"}}>
                                     {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
                                 </p>
-                                <input type="text" name="password" placeholder="Contraseña"
-                                       onChange={this.inputChangeHandler}/>
+                                <input type="password" name="password" placeholder="Contraseña"
+                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
                                 <p style={{color: "red"}}>
                                     {this.validator.message('password', this.state.dataToPost.password, 'required')}
                                 </p>
