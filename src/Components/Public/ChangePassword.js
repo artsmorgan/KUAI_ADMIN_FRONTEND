@@ -6,6 +6,7 @@ import SimpleReactValidator from 'simple-react-validator';
 import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
+import * as APITools from '../../util/api'
 
 class ChangePassword extends React.Component {
 
@@ -35,13 +36,6 @@ class ChangePassword extends React.Component {
                     },
                 }
             }
-        });
-    }
-
-    handleSuccess(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'success',
-            autoHideDuration: 3000,
         });
     }
 
@@ -76,13 +70,29 @@ class ChangePassword extends React.Component {
     }
 
     processSubmit() {
+        const url = "https://jsonplaceholder.typicode.com/posts" // dummy
         const headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json, charset=UTF-8', // dummy
         };
-        const data = this.state.dataToPost;
+        // const data = this.state.dataToPost;
+        // dummy
+        const data = JSON.stringify({
+            title: 'foo',
+            body: 'bar',
+            userId: 1
+        })
 
-        // API calling and response
-        this.props.history.push('/change-password/success')
+        // API calling and handling response
+        const res = APITools.postEndPointsHandler(url, data, headers)
+
+        res.then(result => {
+            console.log(result)
+            if (result.status === 201) {
+                this.props.history.push('/change-password/success')
+            }
+        }).catch(err => {
+            this.handleError(err)
+        })
     }
 
     render() {
