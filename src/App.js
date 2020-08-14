@@ -1,5 +1,7 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 
 import ROUTES from './util/routes'
 import PublicRoutes from "./Components/Public/PublicRoutes";
@@ -7,7 +9,6 @@ import PrivateRoutes from "./Components/Private/PrivateRoutes";
 import * as PublicComponents from './Components/Public/index'
 import * as PrivateComponents from './Components/Private/index'
 import  './assets/css/style.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends React.Component {
     render() {
