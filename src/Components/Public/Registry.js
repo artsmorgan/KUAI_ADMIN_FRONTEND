@@ -1,9 +1,26 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import Logo from "../../assets/images/logo-kuai-white.svg";
 import { Button } from 'react-bootstrap';
+import { withSnackbar } from 'notistack';
+
+import Logo from "../../assets/images/logo-kuai-white.svg";
 
 class Registry extends React.Component {
+
+    handleSuccess(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'success',
+            autoHideDuration: 3000,
+        });
+    }
+
+    handleError(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'error',
+            autoHideDuration: 3000,
+        });
+    }
+
     render() {
         return (
             <>
@@ -37,4 +54,4 @@ class Registry extends React.Component {
     }
 }
 
-export default Registry
+export default withSnackbar(Registry);

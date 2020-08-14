@@ -1,8 +1,10 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import Logo from "../../assets/images/logo-kuai-white.svg";
 import { Button } from 'react-bootstrap';
 import Modal from "react-bootstrap/Modal";
+import { withSnackbar } from 'notistack';
+
+import Logo from "../../assets/images/logo-kuai-white.svg";
 
 class ForgotPassword extends React.Component {
     constructor(props) {
@@ -12,9 +14,25 @@ class ForgotPassword extends React.Component {
             show: false
         }
     }
+
+    handleSuccess(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'success',
+            autoHideDuration: 3000,
+        });
+    }
+
+    handleError(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'error',
+            autoHideDuration: 3000,
+        });
+    }
+
     showForgetPasswordSuccessModal = () => {
         this.setState({show: true});
     }
+
     hideForgetPasswordSuccessModal = () => {
         this.setState({show: false});
     }
@@ -65,4 +83,4 @@ class ForgotPassword extends React.Component {
     }
 }
 
-export default ForgotPassword
+export default withSnackbar(ForgotPassword);
