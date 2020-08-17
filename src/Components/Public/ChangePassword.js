@@ -8,6 +8,8 @@ import Loader from 'react-loader-spinner'
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/api'
 
+const endpointURL = process.env.REACT_APP_SERVER_ENDPOINT + ":" + process.env.REACT_APP_SERVER_PORT
+
 class ChangePassword extends React.Component {
 
     constructor(props) {
@@ -70,7 +72,7 @@ class ChangePassword extends React.Component {
     }
 
     processSubmit() {
-        const url = "https://jsonplaceholder.typicode.com/posts" // dummy
+        const url = endpointURL // dummy
         const headers = {
             'Content-Type': 'application/json, charset=UTF-8', // dummy
         };
