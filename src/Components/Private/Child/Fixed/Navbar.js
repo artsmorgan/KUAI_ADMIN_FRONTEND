@@ -1,7 +1,8 @@
 import React from 'react';
+import {Link} from "react-router-dom";
+import {Dropdown} from 'react-bootstrap';
 
 import Avatar from "../../../../assets/images/avatar.svg";
-import {Dropdown} from 'react-bootstrap';
 
 class Navbar extends React.Component {
     render() {
@@ -31,8 +32,7 @@ class Navbar extends React.Component {
                             </Dropdown.Toggle>
 
                             <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                                <Dropdown.Item><Link to={'/logout'}>Logout</Link></Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
                     </div>
