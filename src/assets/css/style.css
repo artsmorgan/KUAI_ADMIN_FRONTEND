@@ -3,7 +3,7 @@ body {
   background-color: #f5f5f5 !important;
   font-family: "Roboto", sans-serif;
   font-weight: 400;
-  padding-top: 50px;
+  padding-top: 60px;
 }
 
 .container-login {
@@ -661,5 +661,136 @@ body {
   background-position: center;
   height: 300px;
   border-radius: 15px;
+}
+
+.mod-rest-container .cover-pic .cvr {
+  position: relative;
+  width: 100%;
+}
+
+.mod-rest-container .cover-pic .cvr-main {
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mod-rest-container .cover-pic .cvr-main .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.07);
+  left: 0px;
+  top: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.mod-rest-container .cover-pic .cvr-main .overlay .btn-cvr-change {
+  width: 35px;
+  height: 35px;
+  background: #fff;
+  border-radius: 10px;
+  border: 0px;
+}
+
+.mod-rest-container .cover-pic .cvr-main .overlay .btn-cvr-change svg {
+  margin-top: -5px;
+}
+
+.mod-rest-container .cover-pic .cvr-photo {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: -40px;
+  margin-left: 20px;
+}
+
+.mod-rest-container .cover-pic .cvr-photo .overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.07);
+  left: 0px;
+  top: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.mod-rest-container .cover-pic .cvr-photo .overlay .btn-photo-change {
+  width: 35px;
+  height: 35px;
+  background: #fff;
+  border-radius: 10px;
+  border: 0px;
+}
+
+.mod-rest-container .cover-pic .cvr-photo .overlay .btn-photo-change svg {
+  margin-top: -5px;
+}
+
+.uni-input {
+  background: #FFFFFF;
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
+  border-radius: 50px;
+  width: 100%;
+  height: 48px;
+  border: 1px solid #fff;
+  padding-left: 12px;
+}
+
+.uni-input:focus {
+  border: 1px solid #650ADD;
+  outline: none;
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
+}
+
+.uni-input.md {
+  height: 75px;
+  border-radius: 50px;
+}
+
+.cstm-select .css-yk16xz-control {
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+  border: 1px solid #fff !important;
+  border-radius: 50px !important;
+  height: 48px !important;
+}
+
+.cstm-select .css-1pahdxg-control {
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+  border: 1px solid #650ADD !important;
+  border-radius: 50px !important;
+  height: 48px !important;
+}
+
+.cstm-select .css-1okebmr-indicatorSeparator {
+  display: none;
+}
+
+.cstm-select .css-6q0nyr-Svg {
+  fill: transparent;
+  background: url(../images/arrow-select.svg) no-repeat;
+  background-position: 0px;
 }
 /*# sourceMappingURL=style.css.map */
