@@ -663,6 +663,27 @@ body {
   border-radius: 15px;
 }
 
+.mod-rest-container h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 600;
+}
+
+.mod-rest-container label {
+  font-weight: 500;
+  font-size: 14px;
+  margin-left: 5px;
+  text-transform: uppercase;
+}
+
+.mod-rest-container .cstm-select {
+  margin-bottom: 20px;
+}
+
+.mod-rest-container .uni-input {
+  margin-bottom: 20px;
+}
+
 .mod-rest-container .cover-pic .cvr {
   position: relative;
   width: 100%;
@@ -768,6 +789,32 @@ body {
   border-radius: 50px;
 }
 
+.uni-input.tarea {
+  height: 75px;
+  border-radius: 50px;
+  overflow: auto;
+  resize: none;
+  padding-left: 20px;
+}
+
+.cstm-select.mini .css-yk16xz-control {
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+  border: 1px solid #fff !important;
+  border-radius: 50px !important;
+  height: 35px !important;
+  width: 100px;
+}
+
+.cstm-select.mini .css-1pahdxg-control {
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
+  border: 1px solid #650ADD !important;
+  border-radius: 50px !important;
+  height: 35px !important;
+  width: 100px;
+}
+
 .cstm-select .css-yk16xz-control {
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
@@ -792,5 +839,59 @@ body {
   fill: transparent;
   background: url(../images/arrow-select.svg) no-repeat;
   background-position: 0px;
+}
+
+.oc-checkbox {
+  display: inline-block;
+}
+
+.oc-checkbox .icon {
+  width: 20px !important;
+}
+
+.oc-checkbox .icon svg {
+  border: 0px !important;
+  border-radius: 6px;
+  background: transparent !important;
+  color: transparent !important;
+  -webkit-box-shadow: 0px 0px 0px 2px #c1c1c1;
+          box-shadow: 0px 0px 0px 2px #c1c1c1;
+}
+
+.oc-checkbox .icon svg path {
+  -webkit-transform: scale(0.5);
+          transform: scale(0.5);
+  -webkit-transform-origin: center;
+          transform-origin: center;
+}
+
+.oc-checkbox.checked svg {
+  color: #fff !important;
+  background: -webkit-gradient(linear, left top, left bottom, from(#B40DFF), to(#650ADD)) !important;
+  background: linear-gradient(180deg, #B40DFF 0%, #650ADD 100%) !important;
+}
+
+.hor-inline {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.hor-inline .chk-label {
+  font-size: 12px;
+  margin-left: 22px;
+}
+
+.hor-inline .time-block {
+  width: 220px;
+  float: right;
+  margin-top: 3px;
+  position: relative;
+}
+
+.hor-inline .time-block .dash {
+  position: absolute;
+  left: 107px;
+  top: 5px;
 }
 /*# sourceMappingURL=style.css.map */
