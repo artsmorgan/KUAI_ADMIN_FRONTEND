@@ -7,6 +7,8 @@ import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/api'
+import Modal from "react-bootstrap/Modal";
+import TermsAndCondition from "./TermsAndCondition";
 
 const endpointURL = process.env.REACT_APP_SERVER_ENDPOINT + ":" + process.env.REACT_APP_SERVER_PORT
 
@@ -16,6 +18,7 @@ class Registry extends React.Component {
         super(props);
 
         this.state = {
+            show: false,
             submitLoading: false,
             dataToPost: {
                 name: '',
@@ -43,6 +46,14 @@ class Registry extends React.Component {
                 }
             }
         });
+    }
+
+    showTermsAndConditionsModal = () => {
+        this.setState({show: true});
+    }
+
+    hideTermsAndConditionsModal = () => {
+        this.setState({show: false});
     }
 
     handleSuccess(msg) {
@@ -141,7 +152,8 @@ class Registry extends React.Component {
                                 <p style={{color: "red"}}>
                                     {this.validator.message('restaurant', this.state.dataToPost.restaurant, 'required')}
                                 </p>
-                                <input type="text" placeholder="Correo electrónico" name="email" onChange={this.inputChangeHandler}
+                                <input type="text" placeholder="Correo electrónico" name="email"
+                                       onChange={this.inputChangeHandler}
                                        value={this.state.dataToPost.email}/>
                                 <p style={{color: "red"}}>
                                     {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
@@ -155,15 +167,37 @@ class Registry extends React.Component {
                                 <Button className="btn btn-theme" type="submit">
                                     REGISTRARSE
                                 </Button>
-                                <div className="link-holder">¿Ya tienes cuenta? <Link to={'/login'}>Iniciar sesión</Link>
+                                <div className="link-holder">¿Ya tienes cuenta? <Link to={'/login'}>Iniciar
+                                    sesión</Link>
                                 </div>
                                 <div className="link-holder" style={{marginTop: '10px'}}>
-                                    Al registrarse usted acepta nuestros <Link className="default" href="#">Terminos y
+                                    Al registrarse usted acepta nuestros <Link className="default"
+                                                                               onClick={this.showTermsAndConditionsModal}>Terminos
+                                    y
                                     Condiciones</Link>
                                 </div>
                             </div>
                         </form>
                     </div>
+
+                    <Modal
+                        className="cstm-modal"
+                        size="xl"
+                        show={this.state.show}
+                        onHide={this.hideTermsAndConditionsModal}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        scrollable={true}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title id="example-modal-sizes-title-sm">
+
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <TermsAndCondition/>
+                        </Modal.Body>
+                    </Modal>
                 </>
             );
         }
