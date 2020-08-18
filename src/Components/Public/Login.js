@@ -135,7 +135,7 @@ class Login extends React.Component {
                                     INGRESAR
                                 </Button>
                                 <div className="link-holder" style={{marginTop: '20px'}}><Link className="float-left"
-                                                                                               to={'/forgot-password'}>Olvidate
+                                                                                               to={'/forgot-password'}>Olvidaste
                                     tu contraseña?</Link>&emsp;<Link className="float-right"
                                                                      to={'/registry'}>Registrarse</Link></div>
                             </div>
