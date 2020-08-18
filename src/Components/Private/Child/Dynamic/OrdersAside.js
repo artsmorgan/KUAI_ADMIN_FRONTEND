@@ -13,7 +13,8 @@ class OrdersAside extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        this.setState({seeMore: props.seeMore, seeSinpeMobile: !props.seeMore, seeExpress: !props.seeMore});
+        // console.log(props.seeMore)
+        this.setState({seeMore: props.seeMore, seeSinpeMobile: props.seeMore, seeExpress: props.seeMore});
     }
 
     seeSinpeMobile = () => {
