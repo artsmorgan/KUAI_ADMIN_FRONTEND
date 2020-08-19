@@ -52,7 +52,8 @@ class Orders extends React.Component {
                 this.getTotalSales()
             }
         }).catch(err => {
-            this.handleError(err)
+            console.log(err)
+            // this.handleError(err)
         })
     }
 

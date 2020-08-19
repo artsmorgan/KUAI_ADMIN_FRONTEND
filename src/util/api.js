@@ -9,7 +9,7 @@ export const endPoints = {
 }
 
 export const getEndPointsHandler = async function (url, headers = {}) {
-    const res = axios.get(url, {headers})
+    const res = await axios.get(url, {headers})
     // console.log(res)
     return res
 }
