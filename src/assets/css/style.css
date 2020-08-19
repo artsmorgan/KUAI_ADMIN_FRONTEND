@@ -588,7 +588,7 @@ body {
 
 .snipe-title {
   position: absolute;
-  background: #650ADD;
+  background: #650add;
   left: 0px;
   top: 0px;
   width: 100%;
@@ -657,7 +657,7 @@ body {
 }
 
 .order-desc-area .cam {
-  background: #EDEDED url(../images/camera.svg) no-repeat;
+  background: #ededed url(../images/camera.svg) no-repeat;
   background-position: center;
   height: 300px;
   border-radius: 15px;
@@ -767,7 +767,7 @@ body {
 }
 
 .uni-input {
-  background: #FFFFFF;
+  background: #ffffff;
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
   border-radius: 50px;
@@ -778,7 +778,7 @@ body {
 }
 
 .uni-input:focus {
-  border: 1px solid #650ADD;
+  border: 1px solid #650add;
   outline: none;
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
@@ -809,7 +809,7 @@ body {
 .cstm-select.mini .css-1pahdxg-control {
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
-  border: 1px solid #650ADD !important;
+  border: 1px solid #650add !important;
   border-radius: 50px !important;
   height: 35px !important;
   width: 100px;
@@ -826,7 +826,7 @@ body {
 .cstm-select .css-1pahdxg-control {
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
-  border: 1px solid #650ADD !important;
+  border: 1px solid #650add !important;
   border-radius: 50px !important;
   height: 48px !important;
 }
@@ -867,8 +867,8 @@ body {
 
 .oc-checkbox.checked svg {
   color: #fff !important;
-  background: -webkit-gradient(linear, left top, left bottom, from(#B40DFF), to(#650ADD)) !important;
-  background: linear-gradient(180deg, #B40DFF 0%, #650ADD 100%) !important;
+  background: -webkit-gradient(linear, left top, left bottom, from(#b40dff), to(#650add)) !important;
+  background: linear-gradient(180deg, #b40dff 0%, #650add 100%) !important;
 }
 
 .hor-inline {
@@ -893,5 +893,129 @@ body {
   position: absolute;
   left: 107px;
   top: 5px;
+}
+
+.mod-rest-container .rotator-container .rotator {
+  -webkit-box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.08);
+          box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  height: 48px;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.mod-rest-container .rotator-container .rotator .directional {
+  position: absolute;
+  left: 0px;
+  top: 10px;
+  height: 30px;
+  width: 30px;
+}
+
+.mod-rest-container .rotator-container .rotator .directional svg.top {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.mod-rest-container .rotator-container .rotator .directional svg.bottom {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+  cursor: pointer;
+}
+
+.mod-rest-container .rotator-container .rotator input {
+  margin-left: 30px;
+  margin-top: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 0px;
+  width: 85%;
+}
+
+.mod-rest-container .rotator-container .rotator input:focus {
+  outline: none;
+}
+
+.mod-rest-container .rotator-container .rotator .action {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+}
+
+.mod-rest-container .rotator-container .rotator .action svg {
+  cursor: pointer;
+}
+
+.mod-rest-container .rotator-container .rotator.active {
+  -webkit-box-shadow: 0px 0px 1px 1px #37dbe4;
+          box-shadow: 0px 0px 1px 1px #37dbe4;
+}
+
+.mod-rest-container .rotator-container .rotator.active .directional svg {
+  fill: #37dbe4;
+}
+
+.mod-rest-container .rotator-container .rotator.active .directional svg path {
+  fill: #37dbe4;
+}
+
+.mod-rest-container .rotator-container.lg {
+  min-height: 50px;
+  height: auto !important;
+}
+
+.mod-rest-container .rotator-container.lg .rotator {
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.mod-rest-container .rotator-container.lg .rotator .directional {
+  top: 32px;
+}
+
+.mod-rest-container .rotator-container.lg .img {
+  width: 68px;
+  height: 68px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 15px 15px 8px 30px;
+  background-color: #d8d8d8;
+  background-size: cover !important;
+}
+
+.mod-rest-container .rotator-container.lg .menu-ind {
+  display: inline-block;
+  width: 100%;
+  padding: 15px 20px 15px 0px;
+}
+
+.mod-rest-container .rotator-container.lg .menu-ind p {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0px;
+}
+
+.mod-rest-container .rotator-container.lg .menu-ind span {
+  font-size: 11px;
+}
+
+.mod-rest-container .rotator-container.lg .menu-ind button {
+  width: 100%;
+  border: 0px;
+  border-radius: 20px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#24dff7), to(#1cbec9));
+  background: linear-gradient(180deg, #24dff7 0%, #1cbec9 100%);
+  -webkit-box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.12);
+          box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.12);
 }
 /*# sourceMappingURL=style.css.map */
