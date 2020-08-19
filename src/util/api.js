@@ -19,7 +19,7 @@ export const postEndPointsHandler = async function (url, data, headers) {
         console.log(res)
         return res*/
 
-    // just dummy response
+    // Just a dummy response instead of actual one. Note: to get real response comment out /* inside portion */
     const res = {
         'status': 201
     }
