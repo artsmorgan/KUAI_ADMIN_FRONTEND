@@ -6,18 +6,19 @@ import Avatar from "../../../../assets/images/avatar.svg";
 
 class Navbar extends React.Component {
     render() {
+        const {totalOrders, totalSales} = this.props
         return (
             <>
                 <div className="navbar-cstm clearfix">
                     <div className="float-left order-short-info">
                         <span>Total de hoy</span>
                         <label>
-                            20
+                            {totalOrders}
                             <span>Ordenes</span>
                         </label>
                         <label htmlFor="" className="decorate">|</label>
                         <label className="balance">
-                            ₡300.000
+                            ₡{totalSales}
                             <span>Ventas</span>
                         </label>
                     </div>

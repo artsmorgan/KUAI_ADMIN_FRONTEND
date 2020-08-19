@@ -1,9 +1,14 @@
 import React from "react";
+import {Button, Nav} from 'react-bootstrap';
+import {withSnackbar} from 'notistack';
 
 import Navbar from "./Child/Fixed/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
-import {Button, Nav} from 'react-bootstrap';
+import * as APITools from "../../util/api";
+
+
+const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class Orders extends React.Component {
 
@@ -11,8 +16,45 @@ class Orders extends React.Component {
         super(props);
 
         this.state = {
-            seeMore: false
+            seeMore: false,
+            myOrders: [],
+            totalSales: 0
         }
+    }
+
+    handleError(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'error',
+            autoHideDuration: 3000,
+        });
+    }
+
+    getTotalSales = () => {
+        const {myOrders} = this.state
+        let totalSales = 0
+        myOrders.map((item) => {
+            totalSales += item.prices.total;
+        })
+        // console.log(myOrders)
+        this.setState({totalSales: totalSales})
+    }
+
+    componentDidMount() {
+        const url = endpointURL + APITools.endPoints.MY_ORDERS
+
+        // API calling and handling response
+        const res = APITools.getEndPointsHandler(url)
+
+        res.then(result => {
+            console.log(result)
+            if (result.status === 200) {
+                this.setState({myOrders: result.data})
+                this.getTotalSales()
+            }
+        }).catch(err => {
+            console.log(err)
+            // this.handleError(err)
+        })
     }
 
     seeMore = () => {
@@ -20,11 +62,13 @@ class Orders extends React.Component {
     }
 
     render() {
+        const {myOrders, totalSales} = this.state
+        console.log(this.state)
         return (
             <>
                 <Sidebar/>
                 <div className="wrapper">
-                    <Navbar/>
+                    <Navbar totalOrders={myOrders.length} totalSales={totalSales}/>
                     <div className="flex-area content container-fluid">
                         <div className="row">
                             <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
@@ -41,45 +85,41 @@ class Orders extends React.Component {
                                 <div className="ord-table shadow-1">
                                     <table>
                                         <tbody>
-                                        <tr>
-                                            <td className="ord-title">
-                                                Orden Ap20-00002 <span>11:40 | 16 items</span>
-                                            </td>
-                                            <td className="price">
-                                                ₡103.000
-                                            </td>
-                                            <td style={{textAlign: 'right'}}>
-                                                <Button className="btn-detail" onClick={this.seeMore}>
-                                                    ver más
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="ord-title">
-                                                Orden Ap20-00002 <span>11:40 | 16 items</span>
-                                            </td>
-                                            <td className="price">
-                                                ₡103.000
-                                            </td>
-                                            <td style={{textAlign: 'right'}}>
-                                                <Button className="btn-detail">
-                                                    ver más
-                                                </Button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="ord-title">
-                                                Orden Ap20-00002 <span>11:40 | 16 items</span>
-                                            </td>
-                                            <td className="price">
-                                                ₡103.000
-                                            </td>
-                                            <td style={{textAlign: 'right'}}>
-                                                <Button className="btn-detail">
-                                                    ver más
-                                                </Button>
-                                            </td>
-                                        </tr>
+                                        {
+                                            myOrders.length === 0 &&
+                                            <>
+                                                <tr>
+                                                    <td colSpan={3}><h1 className="display-4">No order found.</h1></td>
+                                                </tr>
+                                            </>
+                                        }
+
+                                        {
+                                            myOrders.length !== 0 &&
+                                            <>
+                                                {
+                                                    myOrders.map((item, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td className="ord-title">
+                                                                    {item.name}
+                                                                    <span>{item.date} | {item.items.length} items</span>
+                                                                </td>
+                                                                <td className="price">
+                                                                    ₡{item.prices.total}
+                                                                </td>
+                                                                <td style={{textAlign: 'right'}}>
+                                                                    <Button className="btn-detail"
+                                                                            onClick={this.seeMore}>
+                                                                        ver más
+                                                                    </Button>
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                }
+                                            </>
+                                        }
                                         </tbody>
                                     </table>
                                 </div>
@@ -93,4 +133,4 @@ class Orders extends React.Component {
     }
 }
 
-export default Orders;
+export default withSnackbar(Orders);

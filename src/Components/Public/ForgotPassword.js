@@ -9,7 +9,7 @@ import Loader from 'react-loader-spinner'
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/api'
 
-const endpointURL = process.env.REACT_APP_SERVER_ENDPOINT + ":" + process.env.REACT_APP_SERVER_PORT
+const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class ForgotPassword extends React.Component {
     constructor(props) {

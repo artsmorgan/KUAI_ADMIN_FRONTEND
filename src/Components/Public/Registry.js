@@ -10,7 +10,7 @@ import * as APITools from '../../util/api'
 import Modal from "react-bootstrap/Modal";
 import TermsAndCondition from "./TermsAndCondition";
 
-const endpointURL = process.env.REACT_APP_SERVER_ENDPOINT + ":" + process.env.REACT_APP_SERVER_PORT
+const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class Registry extends React.Component {
 
