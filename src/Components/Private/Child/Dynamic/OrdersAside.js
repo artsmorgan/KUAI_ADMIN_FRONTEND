@@ -1,4 +1,6 @@
 import React from 'react';
+import {withSnackbar} from 'notistack';
+import * as APITools from "../../../../util/api";
 
 class OrdersAside extends React.Component {
 
@@ -6,19 +8,39 @@ class OrdersAside extends React.Component {
         super(props);
 
         this.state = {
-            seeMore: null,
+            seeMore: false,
+            seeMoreThisOrder: {},
             seeSinpeMobile: false,
             seeExpress: false
         }
     }
 
+    handleSuccess(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'success',
+            autoHideDuration: 3000,
+        });
+    }
+
+    handleError(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'error',
+            autoHideDuration: 3000,
+        });
+    }
+
     componentWillReceiveProps(props) {
         // console.log(props.seeMore)
-        this.setState({seeMore: props.seeMore, seeSinpeMobile: props.seeMore, seeExpress: props.seeMore});
+        this.setState({
+            seeMore: props.seeMore,
+            seeMoreThisOrder: props.seeMoreThisOrder,
+            seeSinpeMobile: props.seeMore ? false : null,
+            seeExpress: props.seeMore ? false : null
+        });
     }
 
     seeSinpeMobile = () => {
-        this.setState({seeMore: false, seeSinpeMobile: true});
+        this.setState({seeMore: false, seeExpress: false, seeSinpeMobile: true});
     }
 
     hideSinpeMobile = () => {
@@ -26,18 +48,66 @@ class OrdersAside extends React.Component {
     }
 
     seeExpress = () => {
-        this.setState({seeMore: false, seeExpress: true});
+        this.setState({seeMore: false, seeSinpeMobile: false, seeExpress: true});
     }
 
     hideExpress = () => {
         this.setState({seeMore: true, seeExpress: false});
     }
 
+    confirmOrder = (orderId) => {
+        if (localStorage.getItem("kuaiUserAuthToken")) {
+            /*const url = endpointURL + APITools.endPoints.MY_ORDERS
+
+            // API calling and handling response
+            const res = APITools.getEndPointsHandler(url)
+
+            res.then(result => {
+                console.log(result)
+                if (result.status === 200) {
+                    this.setState({myOrders: result.data})
+                    this.getTotalSales()
+                }
+            }).catch(err => {
+                console.log(err)
+                this.handleError("Something went wrong! Please try again later.")
+            })*/
+            this.handleSuccess("Successfully confirmed")
+        } else {
+            this.handleError("Unauthorized access")
+            this.props.history.push('/login')
+        }
+    }
+
+    packOffOrder = (orderId) => {
+        if (localStorage.getItem("kuaiUserAuthToken")) {
+            /*const url = endpointURL + APITools.endPoints.MY_ORDERS
+
+            // API calling and handling response
+            const res = APITools.getEndPointsHandler(url)
+
+            res.then(result => {
+                console.log(result)
+                if (result.status === 200) {
+                    this.setState({myOrders: result.data})
+                    this.getTotalSales()
+                }
+            }).catch(err => {
+                console.log(err)
+                this.handleError("Something went wrong! Please try again later.")
+            })*/
+            this.handleSuccess("Successfully packed off")
+        } else {
+            this.handleError("Unauthorized access")
+            this.props.history.push('/login')
+        }
+    }
 
 
     render() {
 
         const seeMore = this.state.seeMore
+        const seeMoreThisOrder = this.state.seeMoreThisOrder
         let style = {}
         if (seeMore) {
             if (this.state.seeSinpeMobile || this.state.seeExpress) {
@@ -67,7 +137,7 @@ class OrdersAside extends React.Component {
                     </div>
                     {/* Order Details start */}
                     <div className="order-detail shadow-1" style={!seeMore ? {display: 'none'} : {}}>
-                        <h3 className="order-title">Orden Ap20-00002</h3>
+                        <h3 className="order-title">{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.name : "N/A"}</h3>
                         <div className="action-container">
                             <div className="btn-snipe" onClick={this.seeSinpeMobile}>
                                 <button className="inner">
@@ -119,36 +189,22 @@ class OrdersAside extends React.Component {
                         <div className="order-ptable">
                             <table>
                                 <tbody>
-                                <tr className="item">
-                                    <td className="item-quantity">1X</td>
-                                    <td className="item-name">
-                                        TABLA MONCHIS
-                                        <span>Salsa de queso adicional
-                                  Sin hongos</span>
-                                    </td>
-                                    <td className="text-right item-price">
-                                        ₡16.500
-                                    </td>
-                                </tr>
-                                <tr className="item">
-                                    <td className="item-quantity">2X</td>
-                                    <td className="item-name">
-                                        ALITAS - ORDEN DE 6
-                                        <span>Salsa Mostaza Miel Salsa Queso Azul</span>
-                                    </td>
-                                    <td className="text-right item-price">
-                                        ₡16.500
-                                    </td>
-                                </tr>
-                                <tr className="item">
-                                    <td className="item-quantity">3X</td>
-                                    <td className="item-name">
-                                        CEVICHE TROPICAL
-                                    </td>
-                                    <td className="text-right item-price">
-                                        ₡16.500
-                                    </td>
-                                </tr>
+                                {
+                                    Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.items.map((item, index) => {
+                                        return (
+                                            <tr className="item" key={index}>
+                                                <td className="item-quantity">{item.quantity}X</td>
+                                                <td className="item-name">
+                                                    {item.dishName}
+                                                    <span>{item.dishDetail}</span>
+                                                </td>
+                                                <td className="text-right item-price">
+                                                    ₡{item.price}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                }
                                 <tr>
                                     <td className="st-title" colSpan="3">
                                         Sin notas
@@ -163,19 +219,19 @@ class OrdersAside extends React.Component {
                                             </tr>
                                             <tr>
                                                 <td>Subtotal</td>
-                                                <td className="text-right">₡33.053</td>
+                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.subTotal : "N/A"}</td>
                                             </tr>
                                             <tr>
                                                 <td>Impuestos</td>
-                                                <td className="text-right">₡4.297</td>
+                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.taxes : "N/A"}</td>
                                             </tr>
                                             <tr>
                                                 <td>Envio express</td>
-                                                <td className="text-right">₡2.500</td>
+                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.express : "N/A"}</td>
                                             </tr>
                                             <tr className="total">
                                                 <td>Total</td>
-                                                <td className="text-right">₡39.850</td>
+                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.total : "N/A"}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -186,7 +242,7 @@ class OrdersAside extends React.Component {
 
                             <div className="action-container">
                                 <div className="btn-confirm">
-                                    <button className="inner">
+                                    <button className="inner" onClick={() => {this.confirmOrder(Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.id : null)}}>
                                         <svg width="41" height="42" viewBox="0 0 41 42" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -197,7 +253,7 @@ class OrdersAside extends React.Component {
                                     <span>Confirmar</span>
                                 </div>
                                 <div className="btn-hold">
-                                    <button className="inner">
+                                    <button className="inner" onClick={() => {this.packOffOrder(Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.id : null)}}>
                                         <svg width="31" height="32" viewBox="0 0 31 32" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path fillRule="evenodd" clipRule="evenodd"
@@ -238,15 +294,15 @@ class OrdersAside extends React.Component {
                         <div className="order-desc-area">
                             <div>
                                 <label>recibe:</label>
-                                <p>Juan Cortés</p>
+                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.name : "N/A"}</p>
                             </div>
                             <div>
                                 <label>dirección:</label>
-                                <p>Condominio Condado del Parque, apartamento 703-B</p>
+                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.address.otherSigns : "N/A"}</p>
                             </div>
                             <div>
                                 <label>barrio:</label>
-                                <p>Pithaya</p>
+                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.address.neighborhood : "N/A"}</p>
                             </div>
                         </div>
                     </div>
@@ -294,11 +350,12 @@ class OrdersAside extends React.Component {
                         <div className="order-desc-area">
                             <div>
                                 <label>número de referencia:</label>
-                                <p>23908900213123</p>
+                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.paymentInformation.transferNumber : "N/A"}</p>
                             </div>
                             <div>
                                 <label>captura:</label>
-                                <div className="cam">
+                                <div className="cam"
+                                     style={Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.paymentInformation.attachment ? {display: 'none'} : {}}>
 
                                 </div>
                             </div>
@@ -313,4 +370,4 @@ class OrdersAside extends React.Component {
     }
 }
 
-export default OrdersAside
+export default withSnackbar(OrdersAside)
