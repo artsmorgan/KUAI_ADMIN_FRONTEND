@@ -90,6 +90,7 @@ class Login extends React.Component {
         res.then(result => {
             console.log(result)
             if (result.status === 201) {
+                localStorage.setItem("kuaiUserAuthToken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN0YXVyYW50IjoiZTJhYWM1MDYtYmUyOS00NzY1LWFiZGMtOTI5NWM3MmM1ODM0IiwiaWF0IjoxNTE2MjM5MDIyfQ.pYbKf78JD9hQeMVHnBNV9a3WDxL4nwCvarwUMQqxGNE")
                 this.handleSuccess("Login success.")
                 this.props.history.push('/orders')
             }
