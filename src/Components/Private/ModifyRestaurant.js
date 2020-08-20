@@ -19,7 +19,6 @@ class ModifyRestaurant extends React.Component {
             width: 0,
             checked: false,
             horario0: false,
-            horario1: false,
 
             submitLoading: false,
             dataToPost: {
@@ -29,10 +28,40 @@ class ModifyRestaurant extends React.Component {
                 canton: '',
                 distrito: '',
                 barrio: '',
-                direccion: ''
+                direccion: '',
+                horario:{
+                    horario0:{
+                        checkbox:true,
+                        starttime:{startTIme:'',endTime:''}
+                    },
+                    horario1:{
+                        checkbox:false,
+                        starttime:{startTIme:'',endTime:''}
+                    },
+                    horario2:{
+                        checkbox:true,
+                        starttime:{startTIme:'',endTime:''}
+                    },
+                    horario3:{
+                        checkbox:false,
+                        starttime:{startTIme:'',endTime:''}
+                    },
+                    horario4:{
+                        checkbox:false,
+                        starttime:{startTIme:'',endTime:''}
+                    },
+                    horario5:{
+                        checkbox:false,
+                        starttime:{startTIme:'',endTime:''}
+                    },
+                    horario6:{
+                        checkbox:false,
+                        starttime:{startTIme:'',endTime:''}
+                    }      
+                }
             }
-
         }
+
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
 
         SimpleReactValidator.addLocale('es', {
@@ -67,6 +96,7 @@ class ModifyRestaurant extends React.Component {
         this.setState({[e.target.name]: !this.state[e.target.name]});
     };
 
+   
 
     handleSuccess(msg) {
         this.key = this.props.enqueueSnackbar(msg, {
@@ -97,6 +127,22 @@ class ModifyRestaurant extends React.Component {
         obj[e.name] = e.value;
         this.setState({dataToPost: obj});
     };
+
+    harioCheckboxChangeHandler = (e) =>{
+        let obj = this.state.dataToPost;
+        console.log(e.target)
+        obj['horario'][e.target.name]['checkbox'] = !obj['horario'][e.target.name]['checkbox']; 
+        this.setState({dataToPost: obj});
+    }
+
+    horarioSelectChangeHander = (e) => {
+        console.log(e)
+        // let obj = this.state.dataToPost;
+        // console.log(!obj['horario'][e.target.name]['checkbox'])
+        // console.log(e.target)
+        // obj['horario'][e.target.name]['checkbox'] = !obj['horario'][e.target.name]['checkbox']; 
+        // this.setState({dataToPost: obj});
+    }
 
     formSubmitHandler = (e) => {
         e.preventDefault();
@@ -163,6 +209,12 @@ class ModifyRestaurant extends React.Component {
             {value: "chocolate", label: "Chocolate", name: "barrio"},
             {value: "strawberry", label: "Strawberry", name: "barrio"},
             {value: "vanilla", label: "Vanilla", name: "barrio"},
+        ];
+
+        const optionTime = [
+            {value: "10", label: "10.00 a.m"},
+            {value: "11", label: "11.00 a.m"},
+            {value: "12", label: "12.00 p.m"},
         ];
 
         if (width > 1024) {
@@ -336,92 +388,152 @@ class ModifyRestaurant extends React.Component {
                                             <h3 style={{marginBottom: '55px'}}>Horario</h3>
                                             <div className="hor-inline">
                                                 <Checkbox
-                                                    onChange={this.checkboxChangeHandler} name="horario0" value="0"
-                                                    checked={this.state.horario0} className={""}
-                                                /> <label htmlFor="" className="chk-label">Lunes</label>
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario0" value="Lunes"
+                                                    checked={this.state.dataToPost.horario.horario0.checkbox} id="horario0"
+                                               /> <label htmlFor="horario0" className="chk-label">Lunes</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                    <Select className="cstm-select mini float-left" 
+                                                    options={optionTime} name="horario0_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.horarioSelectChangeHander}
+                                                    value={this.state.dataToPost.horario.horario0.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right" 
+                                                    options={optionTime} name="horario0_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.horarioSelectChangeHander}
+                                                    value={this.state.dataToPost.horario.horario0.endTime}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
                                                 <Checkbox
-                                                    onChange={this.checkboxChangeHandler} name="horario1" value="1"
-                                                    checked={this.state.horario1} className={"horario-1"}
-                                                /> <label htmlFor="horario-1" className="chk-label">Lunes</label>
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario1" value="Martes"
+                                                    checked={this.state.dataToPost.horario.horario1.checkbox} id="horario1"
+                                                /> <label htmlFor="horario1" className="chk-label">Martes</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                    <Select className="cstm-select mini float-left"
+                                                    options={optionTime} name="horario1_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectHarioChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario1.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right"
+                                                    options={optionTime} name="horario1_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario1.endTime}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
                                                 <Checkbox
-                                                    onChange={this.checkboxChangeHandler} name="horario-2"
-                                                    checked={this.state.checked} className={""}
-                                                /> <label htmlFor="horario-2" className="chk-label">Lunes</label>
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario2" value="Miercoles"
+                                                    checked={this.state.dataToPost.horario.horario2.checkbox}  id="horario2"
+                                                /> <label htmlFor="horario2" className="chk-label">Miercoles</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                    <Select className="cstm-select mini float-left"
+                                                    options={optionTime} name="horario2_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario2.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right"
+                                                    options={optionTime} name="horario2_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario2.endTime}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
-                                                <Checkbox
-                                                    onChange={this.checkboxChangeHandler} checked={this.state.checked}
-                                                    className={""}
-                                                /> <label htmlFor="" className="chk-label">Lunes</label>
+                                            <Checkbox
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario3" value="Jueves"
+                                                    checked={this.state.dataToPost.horario.horario3.checkbox}  id="horario3"
+                                                /> <label htmlFor="" className="chk-label">Jueves</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                <Select className="cstm-select mini float-left"
+                                                    options={optionTime} name="horario3_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectHarioChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario3.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right"
+                                                    options={optionTime} name="horario3_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario3.endTime}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
-                                                <Checkbox
-                                                    onChange={this.checkboxChangeHandler} checked={this.state.checked}
-                                                    className={""}
-                                                /> <label htmlFor="" className="chk-label">Lunes</label>
+                                            <Checkbox
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario4" value="Viernes"
+                                                    checked={this.state.dataToPost.horario.horario4.checkbox}  id="horario4"
+                                                /> <label htmlFor="" className="chk-label">Viernes</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                <Select className="cstm-select mini float-left"
+                                                    options={optionTime} name="horario4_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectHarioChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario4.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right"
+                                                    options={optionTime} name="horario4_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario4.endTime}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
-                                                <Checkbox
-                                                    onChange={this.checkboxChangeHandler} checked={this.state.checked}
-                                                    className={""}
-                                                /> <label htmlFor="" className="chk-label">Lunes</label>
+                                            <Checkbox
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario5" value="Sabado"
+                                                    checked={this.state.dataToPost.horario.horario5.checkbox}  id="horario5"
+                                                /> <label htmlFor="" className="chk-label">Sabado</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                <Select className="cstm-select mini float-left"
+                                                    options={optionTime} name="horario5_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectHarioChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario5.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right"
+                                                    options={optionTime} name="horario5_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario5.endTime}
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
-                                                <Checkbox
-                                                    onChange={this.checkboxChangeHandler} checked={this.state.checked}
-                                                    className={""}
-                                                /> <label htmlFor="" className="chk-label">Lunes</label>
+                                            <Checkbox
+                                                    onChange={this.harioCheckboxChangeHandler} name="horario6" value="Domingo"
+                                                    checked={this.state.dataToPost.horario.horario6.checkbox}  id="horario6"
+                                                /> <label htmlFor="" className="chk-label">Domingo</label>
                                                 <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
+                                                <Select className="cstm-select mini float-left"
+                                                    options={optionTime} name="horario6_startTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectHarioChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario6.startTime}
+                                                    />
                                                     <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
+                                                    <Select className="cstm-select mini float-right"
+                                                    options={optionTime} name="horario6_endTime"
+                                                    placeholder="Select"
+                                                    onChange={this.selectChangeHandler}
+                                                    value={this.state.dataToPost.horario.horario6.endTime}
+                                                    />
                                                 </div>
                                             </div>
-                                            <div className="hor-inline">
-                                                <Checkbox
-                                                    onChange={this.checkboxChangeHandler} checked={this.state.checked}
-                                                    className={""}
-                                                /> <label htmlFor="" className="chk-label">Lunes</label>
-                                                <div className="time-block">
-                                                    <Select className="cstm-select mini float-left"/>
-                                                    <span className="dash">-</span>
-                                                    <Select className="cstm-select mini float-right"/>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </form>
