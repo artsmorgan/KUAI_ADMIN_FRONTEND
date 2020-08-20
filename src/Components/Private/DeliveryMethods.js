@@ -46,7 +46,7 @@ class DeliveryMethods extends React.Component {
             return (
                 <>
                     <MobileNavbar/>
-                    <MobileSidebar/>
+                    <Sidebar/>
                     <div>Delivery Methods content</div>
                 </>
             );

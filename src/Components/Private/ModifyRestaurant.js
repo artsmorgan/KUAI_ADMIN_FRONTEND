@@ -2,18 +2,11 @@ import React from 'react';
 import Select from 'react-select';
 import Checkbox from '@opuscapita/react-checkbox';
 import SimpleReactValidator from 'simple-react-validator';
-import Loader from 'react-loader-spinner'
 
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import MobileSidebar from "./Child/Fixed/Sidebar/MobileSidebar";
 import MobileNavbar from "./Child/Fixed/Navbar/MobileNavbar";
 import * as APITools from '../../util/api'
-/*const optionProvince = [
-    {value: "chocolate", label: "Chocolate"},
-    {value: "strawberry", label: "Strawberry"},
-    {value: "vanilla", label: "Vanilla"},
-];*/
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 

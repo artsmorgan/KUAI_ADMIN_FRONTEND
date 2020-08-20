@@ -152,9 +152,9 @@ class Orders extends React.Component {
         } else {
             return (
                 <>
-                    <MobileSidebar/>
+                    <MobileNavbar/>
+                    <Sidebar/>
                     <div className="wrapper">
-                        <MobileNavbar/>
                         <div className="flex-area content container-fluid">
                             <div className="row">
                                 <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">

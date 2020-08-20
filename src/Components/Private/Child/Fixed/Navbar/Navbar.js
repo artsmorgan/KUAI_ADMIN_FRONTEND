@@ -3,8 +3,36 @@ import {Link} from "react-router-dom";
 import {Dropdown} from 'react-bootstrap';
 
 import Avatar from "../../../../../assets/images/avatar.svg";
+import $ from "jquery";
 
 class Navbar extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            width: 0
+        }
+
+        window.addEventListener("resize", this.updateDimension);
+    }
+
+    updateDimension = () => {
+        this.setState({
+            width: window.innerWidth
+        });
+        if (this.state.width < 1024) {
+            // console.log(this.state.width)
+            if ($(".sidebar-wrapper").hasClass("collapsed")) {
+                $(".sidebar-wrapper").removeClass('collapsed')
+            }
+        }
+    };
+
+    componentDidMount() {
+        this.updateDimension();
+    }
+
     render() {
         const {totalOrders, totalSales} = this.props
         return (

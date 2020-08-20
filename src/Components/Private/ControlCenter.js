@@ -46,7 +46,7 @@ class ControlCenter extends React.Component {
             return (
                 <>
                     <MobileNavbar/>
-                    <MobileSidebar/>
+                    <Sidebar/>
                     <div>Control Center content</div>
                 </>
             );

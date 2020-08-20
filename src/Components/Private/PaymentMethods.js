@@ -46,7 +46,7 @@ class PaymentMethods extends React.Component {
             return (
                 <>
                     <MobileNavbar/>
-                    <MobileSidebar/>
+                    <Sidebar/>
                     <div>Payment Methods content</div>
                 </>
             );

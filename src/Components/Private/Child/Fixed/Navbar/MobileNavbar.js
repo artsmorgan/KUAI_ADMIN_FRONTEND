@@ -17,16 +17,16 @@ class MobileNavbar extends React.Component {
         this.setState({
             width: window.innerWidth
         });
-    };
-
-    componentDidMount() {
-        this.updateDimension();
         if(this.state.width < 1024) {
-            console.log(this.state.width)
+            // console.log(this.state.width)
             if($(".sidebar-wrapper").hasClass( "collapsed" )){
                 $(".sidebar-wrapper").removeClass('collapsed')
             }
         }
+    };
+
+    componentDidMount() {
+        this.updateDimension();
     }
 
     componentWillUnmount() {
