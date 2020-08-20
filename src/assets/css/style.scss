@@ -257,11 +257,11 @@ body {
       line-height: 5px;
       font-weight: 600;
     }
-    &.decorate{
+    &.decorate {
       color: transparent !important;
       position: relative;
       margin: 0px 0px;
-      &::after{
+      &::after {
         position: absolute;
         left: 3px;
         top: 5px;
@@ -326,11 +326,11 @@ body {
   border-radius: 18px;
   padding-top: 15px;
   position: relative;
-  .select-ins{
-      font-size: 24px;
-      font-weight: 600;
-      padding: 30px;
-      margin-top: 30px;
+  .select-ins {
+    font-size: 24px;
+    font-weight: 600;
+    padding: 30px;
+    margin-top: 30px;
   }
   h3.order-title {
     font-size: 21px;
@@ -530,7 +530,7 @@ body {
 }
 .snipe-title {
   position: absolute;
-  background: #650ADD;
+  background: #650add;
   left: 0px;
   top: 0px;
   width: 100%;
@@ -573,8 +573,8 @@ body {
 }
 
 .order-desc-area {
-    padding: 20px;
-    padding-top:100px;
+  padding: 20px;
+  padding-top: 100px;
   label {
     color: #41404d;
     opacity: 0.7;
@@ -587,41 +587,41 @@ body {
     line-height: 16px;
     color: #41404d;
   }
-  .cam{
-      background: #EDEDED url(../images/camera.svg)no-repeat;
-      background-position: center;
-      height: 300px;
-      border-radius: 15px;
+  .cam {
+    background: #ededed url(../images/camera.svg) no-repeat;
+    background-position: center;
+    height: 300px;
+    border-radius: 15px;
   }
 }
 
-.mod-rest-container{
-  h3{
+.mod-rest-container {
+  h3 {
     text-align: center;
     margin-bottom: 30px;
     font-weight: 600;
   }
-  label{
+  label {
     font-weight: 500;
     font-size: 14px;
     margin-left: 5px;
     text-transform: uppercase;
   }
-  .cstm-select{
+  .cstm-select {
     margin-bottom: 20px;
   }
-  .uni-input{
+  .uni-input {
     margin-bottom: 20px;
   }
-  .cover-pic{
-    .cvr{
+  .cover-pic {
+    .cvr {
       position: relative;
       width: 100%;
-      &-main{
+      &-main {
         height: 200px;
         position: relative;
         overflow: hidden;
-        .overlay{
+        .overlay {
           position: absolute;
           width: 100%;
           height: 100%;
@@ -631,19 +631,19 @@ body {
           display: flex;
           align-items: center;
           justify-content: center;
-          .btn-cvr-change{
+          .btn-cvr-change {
             width: 35px;
             height: 35px;
             background: #fff;
             border-radius: 10px;
             border: 0px;
-            svg{
+            svg {
               margin-top: -5px;
             }
           }
         }
       }
-      &-photo{
+      &-photo {
         width: 80px;
         height: 80px;
         position: relative;
@@ -652,7 +652,7 @@ body {
         overflow: hidden;
         margin-top: -40px;
         margin-left: 20px;
-        .overlay{
+        .overlay {
           position: absolute;
           width: 100%;
           height: 100%;
@@ -662,42 +662,41 @@ body {
           display: flex;
           align-items: center;
           justify-content: center;
-          .btn-photo-change{
+          .btn-photo-change {
             width: 35px;
             height: 35px;
             background: #fff;
             border-radius: 10px;
             border: 0px;
-            svg{
+            svg {
               margin-top: -5px;
             }
           }
         }
-        
       }
     }
   }
 }
 
 // Universal Inputs
-.uni-input{
-  background: #FFFFFF;
+.uni-input {
+  background: #ffffff;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
   border-radius: 50px;
   width: 100%;
   height: 48px;
   border: 1px solid #fff;
   padding-left: 12px;
-  &:focus{
-    border: 1px solid #650ADD;
+  &:focus {
+    border: 1px solid #650add;
     outline: none;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
   }
-  &.md{
+  &.md {
     height: 75px;
     border-radius: 50px;
   }
-  &.tarea{
+  &.tarea {
     height: 75px;
     border-radius: 50px;
     overflow: auto;
@@ -705,90 +704,196 @@ body {
     padding-left: 20px;
   }
 }
-.cstm-select{
-  &.mini{
-    .css-yk16xz-control{
+.cstm-select {
+  &.mini {
+    .css-yk16xz-control {
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
       border: 1px solid #fff !important;
       border-radius: 50px !important;
       height: 35px !important;
       width: 100px;
     }
-    .css-1pahdxg-control{
+    .css-1pahdxg-control {
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
-      border: 1px solid #650ADD !important;
+      border: 1px solid #650add !important;
       border-radius: 50px !important;
       height: 35px !important;
       width: 100px;
     }
   }
-  .css-yk16xz-control{
+  .css-yk16xz-control {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
     border: 1px solid #fff !important;
     border-radius: 50px !important;
     height: 48px !important;
   }
-  .css-1pahdxg-control{
+  .css-1pahdxg-control {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
-    border: 1px solid #650ADD !important;
+    border: 1px solid #650add !important;
     border-radius: 50px !important;
     height: 48px !important;
   }
-  .css-1okebmr-indicatorSeparator{
+  .css-1okebmr-indicatorSeparator {
     display: none;
   }
   // .css-tlfecz-indicatorContainer{
   //   background: linear-gradient(45deg, #0BFFFB 0%, #26ABC6 100%) !important;
   // }
-  .css-6q0nyr-Svg{
+  .css-6q0nyr-Svg {
     fill: transparent;
-    background: url(../images/arrow-select.svg)no-repeat;
+    background: url(../images/arrow-select.svg) no-repeat;
     background-position: 0px;
   }
 }
 
-.oc-checkbox{
+.oc-checkbox {
   display: inline-block;
-  .icon{
+  .icon {
     width: 20px !important;
-    svg{
+    svg {
       border: 0px !important;
       border-radius: 6px;
       background: transparent !important;
       color: transparent !important;
       box-shadow: 0px 0px 0px 2px #c1c1c1;
-      path{
+      path {
         transform: scale(0.5);
         transform-origin: center;
       }
     }
   }
-  &.checked{
-    svg{
+  &.checked {
+    svg {
       color: #fff !important;
-      background: linear-gradient(180deg, #B40DFF 0%, #650ADD 100%) !important;
+      background: linear-gradient(180deg, #b40dff 0%, #650add 100%) !important;
     }
   }
 }
 // Universal Inputs
 
-.hor-inline{
+.hor-inline {
   display: inline-block;
   width: 100%;
   margin-bottom: 4px;
-  .chk-label{
+  .chk-label {
     font-size: 12px;
-    margin-left:22px;
+    margin-left: 22px;
   }
-  .time-block{
-    width:220px;
+  .time-block {
+    width: 220px;
     float: right;
     margin-top: 3px;
     position: relative;
-    .dash{
+    .dash {
       position: absolute;
       left: 107px;
       top: 5px;
+    }
+  }
+}
+
+.mod-rest-container {
+  .rotator-container {
+    .rotator {
+      box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      height: 48px;
+      background: #fff;
+      border-radius: 10px;
+      position: relative;
+      margin-bottom: 20px;
+      .directional {
+        position: absolute;
+        left: 0px;
+        top: 10px;
+        height: 30px;
+        width: 30px;
+        svg.top {
+          position: absolute;
+          top: 5px;
+          left: 10px;
+          cursor: pointer;
+        }
+        svg.bottom {
+          position: absolute;
+          bottom: 5px;
+          left: 10px;
+          transform: rotate(180deg);
+          cursor: pointer;
+        }
+      }
+      input {
+        margin-left: 30px;
+        margin-top: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        border: 0px;
+        width: 85%;
+        &:focus {
+          outline: none;
+        }
+      }
+      .action {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        svg {
+          cursor: pointer;
+        }
+      }
+      &.active {
+        box-shadow: 0px 0px 1px 1px #37dbe4;
+        .directional {
+          svg {
+            fill: #37dbe4;
+            path {
+              fill: #37dbe4;
+            }
+          }
+        }
+      }
+    }
+    &.lg {
+      min-height: 50px;
+      height: auto !important;
+      .rotator {
+        height: auto;
+        display: flex;
+        .directional {
+          top: 32px;
+        }
+      }
+      .img {
+        width: 68px;
+        height: 68px;
+        border-radius: 5px;
+        display: inline-block;
+        margin: 15px 15px 8px 30px;
+        background-color: #d8d8d8;
+        background-size: cover !important;
+      }
+      .menu-ind {
+        display: inline-block;
+        width: 100%;
+        padding: 15px 20px 15px 0px;
+    
+        p {
+          font-size: 14px;
+          font-weight: 600;
+          text-transform: uppercase;
+          margin-bottom: 0px;
+        }
+        span {
+          font-size: 11px;
+        }
+        button {
+          width: 100%;
+          border: 0px;
+          border-radius: 20px;
+          background: linear-gradient(180deg, #24dff7 0%, #1cbec9 100%);
+          box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.12);
+        }
+      }
     }
   }
 }
