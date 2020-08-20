@@ -34,7 +34,7 @@ class ModifyMenu extends React.Component {
     render() {
         return (
             <>
-                <Navbar/>
+                <MobileNavbar/>
                 <Sidebar/>
                 <div className="wrapper">
                     <div className="flex-area conten container-fluid">
@@ -138,7 +138,7 @@ class ModifyMenu extends React.Component {
             return (
                 <>
                     <MobileNavbar/>
-                    <MobileSidebar/>
+                    <Sidebar/>
                     <div>Modify Menu content</div>
                 </>
             );

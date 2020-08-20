@@ -442,7 +442,7 @@ class ModifyRestaurant extends React.Component {
             return (
                 <>
                     <MobileNavbar/>
-                    <MobileSidebar/>
+                    <Sidebar/>
                     <div className="wrapper">
                         <div className="flex-area conten container-fluid">
                             <div className="mod-rest-container">
