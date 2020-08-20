@@ -118,7 +118,7 @@ class ChangePassword extends React.Component {
                         <form onSubmit={this.formSubmitHandler}>
                             <div className="ls-panel">
                                 <p>Indica tu nuevo password</p>
-                                <input type="password" placeholder="*********" name="password"
+                                <input className="pass" type="password" placeholder="*********" name="password"
                                        onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
                                 <p style={{color: "red"}}>
                                     {this.validator.message('password', this.state.dataToPost.password, 'required|mixPass')}

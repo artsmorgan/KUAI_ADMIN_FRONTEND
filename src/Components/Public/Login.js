@@ -121,12 +121,12 @@ class Login extends React.Component {
                         <form onSubmit={this.formSubmitHandler}>
                             <div className="ls-panel">
                                 <h3>Iniciar sesión</h3>
-                                <input type="text" name="email" placeholder="Correo electrónico"
+                                <input type="text" className="user" name="email" placeholder="Correo electrónico"
                                        onChange={this.inputChangeHandler} value={this.state.dataToPost.email}/>
                                 <p style={{color: "red"}}>
                                     {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
                                 </p>
-                                <input type="password" name="password" placeholder="Contraseña"
+                                <input type="password" className="pass" name="password" placeholder="Contraseña"
                                        onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
                                 <p style={{color: "red"}}>
                                     {this.validator.message('password', this.state.dataToPost.password, 'required')}

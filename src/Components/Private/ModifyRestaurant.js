@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import {Button, Nav} from 'react-bootstrap';
 import Checkbox from '@opuscapita/react-checkbox';
 import SimpleReactValidator from 'simple-react-validator';
 
@@ -175,6 +176,7 @@ class ModifyRestaurant extends React.Component {
                             <div className="mod-rest-container">
                                 <form onSubmit={this.formSubmitHandler}>
                                     <div className="row clearfix">
+                                        {/* <div className="">New</div> */}
                                         <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
                                             <h3>
                                                 General

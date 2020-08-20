@@ -89,6 +89,7 @@ class Orders extends React.Component {
                         <Navbar totalOrders={myOrders.length} totalSales={totalSales}/>
                         <div className="flex-area content container-fluid">
                             <div className="row">
+                                
                                 <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
                                     <div>
                                         <Nav className="tab-cstm" variant="pills" defaultActiveKey="/home">
@@ -151,71 +152,95 @@ class Orders extends React.Component {
             );
         } else {
             return (
-                <>
-                    <MobileNavbar/>
-                    <Sidebar/>
-                    <div className="wrapper">
-                        <div className="flex-area content container-fluid">
-                            <div className="row">
-                                <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                                    <div>
-                                        <Nav className="tab-cstm" variant="pills" defaultActiveKey="/home">
-                                            <Nav.Item>
-                                                <Nav.Link href="#">ORDENES</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="link-1">ORDENES DESPACHADAS</Nav.Link>
-                                            </Nav.Item>
-                                        </Nav>
-                                    </div>
-                                    <div className="ord-table shadow-1">
-                                        <table>
-                                            <tbody>
-                                            {
-                                                myOrders.length === 0 &&
-                                                <>
-                                                    <tr>
-                                                        <td colSpan={3}><h1 className="display-4">No order found.</h1>
-                                                        </td>
-                                                    </tr>
-                                                </>
-                                            }
-
-                                            {
-                                                myOrders.length !== 0 &&
-                                                <>
-                                                    {
-                                                        myOrders.map((item, index) => {
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td className="ord-title">
-                                                                        {item.name}
-                                                                        <span>{item.date} | {item.items.length} items</span>
-                                                                    </td>
-                                                                    <td className="price">
-                                                                        ₡{item.prices.total}
-                                                                    </td>
-                                                                    <td style={{textAlign: 'right'}}>
-                                                                        <Button className="btn-detail"
-                                                                                onClick={this.seeMore}>
-                                                                            ver más
-                                                                        </Button>
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        })
-                                                    }
-                                                </>
-                                            }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <OrdersAside seeMore={this.state.seeMore}/>
+              <>
+                <MobileNavbar />
+                <Sidebar />
+                <div className="wrapper">
+                  <div className="flex-area content container-fluid">
+                    <div className="mb-total-view">
+                        <div className="row">
+                            <div className="col">
+                                <label>
+                                    20 <span>Ordenes</span>
+                                </label>
+                            </div>
+                            <div className="col">
+                                <label>
+                                ₡300.000 <span>Ventas</span>
+                                </label>
                             </div>
                         </div>
                     </div>
-                </>
+                    <div className="row">
+                      <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                        <div>
+                          <Nav
+                            className="tab-cstm"
+                            variant="pills"
+                            defaultActiveKey="/home"
+                          >
+                            <Nav.Item>
+                              <Nav.Link href="#">ORDENES</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                              <Nav.Link eventKey="link-1">
+                                ORDENES DESPACHADAS
+                              </Nav.Link>
+                            </Nav.Item>
+                          </Nav>
+                        </div>
+                        <div className="ord-table shadow-1">
+                          <table>
+                            <tbody>
+                              {myOrders.length === 0 && (
+                                <>
+                                  <tr>
+                                    <td colSpan={3}>
+                                      <h1 className="display-4">
+                                        No order found.
+                                      </h1>
+                                    </td>
+                                  </tr>
+                                </>
+                              )}
+
+                              {myOrders.length !== 0 && (
+                                <>
+                                  {myOrders.map((item, index) => {
+                                    return (
+                                      <tr key={index}>
+                                        <td className="ord-title">
+                                          {item.name}
+                                          <span>
+                                            {item.date} | {item.items.length}{" "}
+                                            items
+                                          </span>
+                                        </td>
+                                        <td className="price">
+                                          ₡{item.prices.total}
+                                        </td>
+                                        <td style={{ textAlign: "right" }}>
+                                          <Button
+                                            className="btn-detail"
+                                            onClick={this.seeMore}
+                                          >
+                                            ver más
+                                          </Button>
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <OrdersAside seeMore={this.state.seeMore} />
+                    </div>
+                  </div>
+                </div>
+              </>
             );
         }
     }
