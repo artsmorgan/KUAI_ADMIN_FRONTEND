@@ -3,7 +3,6 @@ import {Button, Nav} from 'react-bootstrap';
 import {withSnackbar} from 'notistack';
 
 import Navbar from "./Child/Fixed/Navbar/Navbar";
-import MobileNavbar from "./Child/Fixed/Navbar/MobileNavbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
 import * as APITools from "../../util/api";
@@ -17,25 +16,14 @@ class Orders extends React.Component {
         super(props);
 
         this.state = {
-            width: 0,
             seeMore: false,
             seeMoreThisOrder: {},
             myOrders: [],
             totalSales: 0
         }
-
-        window.addEventListener("resize", this.updateDimension);
     }
 
-    updateDimension = () => {
-        this.setState({
-            width: window.innerWidth
-        });
-    };
-
     componentDidMount() {
-        this.updateDimension();
-
         if (localStorage.getItem("kuaiUserAuthToken")) {
             const url = endpointURL + APITools.endPoints.MY_ORDERS
 
@@ -56,10 +44,6 @@ class Orders extends React.Component {
             this.handleError("Unauthorized access.")
             this.props.history.push('/login')
         }
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimension);
     }
 
     handleError(msg) {
@@ -89,228 +73,78 @@ class Orders extends React.Component {
     }
 
     render() {
-        const {width, myOrders, totalSales} = this.state
+        const {myOrders, totalSales} = this.state
 
-        if (width > 1024) {
-            return (
-                <>
-                    <Sidebar/>
-                    <div className="wrapper">
-                        <Navbar totalOrders={myOrders.length} totalSales={totalSales}/>
-                        <div className="flex-area content container-fluid">
-                            <div className="row">
-                                
-                                <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                                    <div>
-                                        <Nav className="tab-cstm" variant="pills" defaultActiveKey="/home">
-                                            <Nav.Item>
-                                                <Nav.Link href="#">ORDENES</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="link-1">ORDENES DESPACHADAS</Nav.Link>
-                                            </Nav.Item>
-                                        </Nav>
-                                    </div>
-                                    <div className="ord-table shadow-1">
-                                        <table>
-                                            <tbody>
-                                            {
-                                                myOrders.length === 0 &&
-                                                <>
-                                                    <tr>
-                                                        <td colSpan={3}><h1 className="display-4">No order
-                                                            found.</h1></td>
-                                                    </tr>
-                                                </>
-                                            }
-
-                                            {
-                                                myOrders.length !== 0 &&
-                                                <>
-                                                    {
-                                                        myOrders.map((item, index) => {
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td className="ord-title">
-                                                                        {item.name}
-                                                                        <span>{item.date} | {item.items.length} items</span>
-                                                                    </td>
-                                                                    <td className="price">
-                                                                        ₡{item.prices.total}
-                                                                    </td>
-                                                                    <td style={{textAlign: 'right'}}>
-                                                                        <Button className="btn-detail"
-                                                                                onClick={() => {this.seeMore(item.id)}}>
-                                                                            ver más
-                                                                        </Button>
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        })
-                                                    }
-                                                </>
-                                            }
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
-                            </div>
-                        </div>
-                    </div>
-                </>
-            );
-        } else {
-            return (
-
-                <>
-                    <MobileNavbar/>
-                    <Sidebar/>
-                    <div className="wrapper">
-                        <div className="flex-area content container-fluid">
-                        <div className="mb-total-view">
+        return (
+            <>
+                <Sidebar/>
+                <div className="wrapper">
+                    <Navbar totalOrders={myOrders.length} totalSales={totalSales}/>
+                    <div className="flex-area content container-fluid">
                         <div className="row">
-                            <div className="col">
-                                <label>
-                                    20 <span>Ordenes</span>
-                                </label>
-                            </div>
-                            <div className="col">
-                                <label>
-                                ₡300.000 <span>Ventas</span>
-                                </label>
-                                </div>
-                                </div>
-                                </div>
-                            <div className="row">
-                                <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                                    <div>
-                                        <Nav className="tab-cstm" variant="pills" defaultActiveKey="/home">
-                                            <Nav.Item>
-                                                <Nav.Link href="#">ORDENES</Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link eventKey="link-1">ORDENES DESPACHADAS</Nav.Link>
-                                            </Nav.Item>
-                                        </Nav>
-                                    </div>
-                                    <div className="ord-table shadow-1">
-                                        <table>
-                                            <tbody>
-                                            {
-                                                myOrders.length === 0 &&
-                                                <>
-                                                    <tr>
-                                                        <td colSpan={3}><h1 className="display-4">No order found.</h1>
-                                                        </td>
-                                                    </tr>
-                                                </>
-                                            }
 
-                                            {
-                                                myOrders.length !== 0 &&
-                                                <>
-                                                    {
-                                                        myOrders.map((item, index) => {
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td className="ord-title">
-                                                                        {item.name}
-                                                                        <span>{item.date} | {item.items.length} items</span>
-                                                                    </td>
-                                                                    <td className="price">
-                                                                        ₡{item.prices.total}
-                                                                    </td>
-                                                                    <td style={{textAlign: 'right'}}>
-                                                                        <Button className="btn-detail"
-                                                                                onClick={this.seeMore}>
-                                                                            ver más
-                                                                        </Button>
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        })
-                                                    }
-                                                </>
-                                            }
-                                            </tbody>
-                                        </table>
-                                    </div>
+                            <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                                <div>
+                                    <Nav className="tab-cstm" variant="pills" defaultActiveKey="/home">
+                                        <Nav.Item>
+                                            <Nav.Link href="#">ORDENES</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="link-1">ORDENES DESPACHADAS</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
                                 </div>
-                                <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
+                                <div className="ord-table shadow-1">
+                                    <table>
+                                        <tbody>
+                                        {
+                                            myOrders.length === 0 &&
+                                            <>
+                                                <tr>
+                                                    <td colSpan={3}><h1 className="display-4">No order
+                                                        found.</h1></td>
+                                                </tr>
+                                            </>
+                                        }
+
+                                        {
+                                            myOrders.length !== 0 &&
+                                            <>
+                                                {
+                                                    myOrders.map((item, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td className="ord-title">
+                                                                    {item.name}
+                                                                    <span>{item.date} | {item.items.length} items</span>
+                                                                </td>
+                                                                <td className="price">
+                                                                    ₡{item.prices.total}
+                                                                </td>
+                                                                <td style={{textAlign: 'right'}}>
+                                                                    <Button className="btn-detail"
+                                                                            onClick={() => {
+                                                                                this.seeMore(item.id)
+                                                                            }}>
+                                                                        ver más
+                                                                    </Button>
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                }
+                                            </>
+                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+                            <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
                         </div>
                     </div>
-                    <div className="row">
-                      <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
-                        <div>
-                          <Nav
-                            className="tab-cstm"
-                            variant="pills"
-                            defaultActiveKey="/home"
-                          >
-                            <Nav.Item>
-                              <Nav.Link href="#">ORDENES</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                              <Nav.Link eventKey="link-1">
-                                ORDENES DESPACHADAS
-                              </Nav.Link>
-                            </Nav.Item>
-                          </Nav>
-                        </div>
-                        <div className="ord-table shadow-1">
-                          <table>
-                            <tbody>
-                              {myOrders.length === 0 && (
-                                <>
-                                  <tr>
-                                    <td colSpan={3}>
-                                      <h1 className="display-4">
-                                        No order found.
-                                      </h1>
-                                    </td>
-                                  </tr>
-                                </>
-                              )}
-
-                              {myOrders.length !== 0 && (
-                                <>
-                                  {myOrders.map((item, index) => {
-                                    return (
-                                      <tr key={index}>
-                                        <td className="ord-title">
-                                          {item.name}
-                                          <span>
-                                            {item.date} | {item.items.length}{" "}
-                                            items
-                                          </span>
-                                        </td>
-                                        <td className="price">
-                                          ₡{item.prices.total}
-                                        </td>
-                                        <td style={{ textAlign: "right" }}>
-                                          <Button
-                                            className="btn-detail"
-                                            onClick={this.seeMore}
-                                          >
-                                            ver más
-                                          </Button>
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
-                                </>
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                      <OrdersAside seeMore={this.state.seeMore} />
-                    </div>
-              </>
-            );
-        }
+                </div>
+            </>
+        );
     }
 }
 
