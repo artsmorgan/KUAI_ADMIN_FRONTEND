@@ -981,9 +981,117 @@ body {
   top: 18px;
 }
 
+.collapse-area{
+  float: none;
+  margin: 0px auto;
+  .collapse-container{
+    margin-bottom: 20px;
+    .react-switch{
+      svg{
+        fill: transparent !important;
+        path{
+          fill: transparent !important;
+        }
+      }
+    }
+    .collapse-header{
+      background: #fff;
+      border-radius: 10px;
+      min-height: 40px;
+      padding: 10px;
+      color: #3F3356;
+      svg{
+        margin-right: 15px;
+        fill: #3F3356;
+        path{
+          fill: #3F3356;
+        }
+      }
+      span{
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .arrow{
+        margin-left: 15px;
+        margin-top: -2px;
+      }
+      &.active{
+        background: #650ADD;
+        color: #fff;
+        svg{
+          fill: #fff;
+          path{
+            fill: #fff;
+          }
+        }
+      }
+    }
+    .collapse-content{
+      .col{
+        padding: 25px 20px;
+        label{
+          font-size: 14px;
+          font-weight: 500;
+        }
+        input{
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+}
+
+.ca-delivery{
+  .collapse-header{
+    color: #3F3356;
+    svg{
+      fill: #3F3356;
+      path{
+        fill: #3F3356;
+      }
+    }
+    &.active{
+      background: #37DBE4 !important;
+      color: #3F3356 !important;
+      svg{
+        fill: #3F3356 !important;
+        path{
+          fill: #3F3356 !important;
+        }
+      }
+      .react-switch{
+        svg{
+          fill: transparent !important;
+          path{
+            fill: transparent !important;
+          }
+        }
+      }
+    }
+
+  }
+}
+
+// switch
+.switch.btn-sm{
+    min-width: 4.25rem;
+    border-radius: 35px;
+    min-height: calc(1.5em + .5rem + 2px);
+}
+
+.react-switch{
+  float: right;
+  margin-top: -2px;
+}
+// switch
+
 @media only screen 
   and (min-device-width: 320px) 
   and (max-device-width: 768px) { 
+
+    .collapse-area .collapse-container .collapse-header span{
+      font-size: 14px;
+    }
     .wrapper{
       padding-left: 0px;
     }

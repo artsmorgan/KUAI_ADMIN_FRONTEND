@@ -1114,7 +1114,124 @@ body {
   top: 18px;
 }
 
+.collapse-area {
+  float: none;
+  margin: 0px auto;
+}
+
+.collapse-area .collapse-container {
+  margin-bottom: 20px;
+}
+
+.collapse-area .collapse-container .react-switch svg {
+  fill: transparent !important;
+}
+
+.collapse-area .collapse-container .react-switch svg path {
+  fill: transparent !important;
+}
+
+.collapse-area .collapse-container .collapse-header {
+  background: #fff;
+  border-radius: 10px;
+  min-height: 40px;
+  padding: 10px;
+  color: #3F3356;
+}
+
+.collapse-area .collapse-container .collapse-header svg {
+  margin-right: 15px;
+  fill: #3F3356;
+}
+
+.collapse-area .collapse-container .collapse-header svg path {
+  fill: #3F3356;
+}
+
+.collapse-area .collapse-container .collapse-header span {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.collapse-area .collapse-container .collapse-header .arrow {
+  margin-left: 15px;
+  margin-top: -2px;
+}
+
+.collapse-area .collapse-container .collapse-header.active {
+  background: #650ADD;
+  color: #fff;
+}
+
+.collapse-area .collapse-container .collapse-header.active svg {
+  fill: #fff;
+}
+
+.collapse-area .collapse-container .collapse-header.active svg path {
+  fill: #fff;
+}
+
+.collapse-area .collapse-container .collapse-content .col {
+  padding: 25px 20px;
+}
+
+.collapse-area .collapse-container .collapse-content .col label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.collapse-area .collapse-container .collapse-content .col input {
+  margin-bottom: 20px;
+}
+
+.ca-delivery .collapse-header {
+  color: #3F3356;
+}
+
+.ca-delivery .collapse-header svg {
+  fill: #3F3356;
+}
+
+.ca-delivery .collapse-header svg path {
+  fill: #3F3356;
+}
+
+.ca-delivery .collapse-header.active {
+  background: #37DBE4 !important;
+  color: #3F3356 !important;
+}
+
+.ca-delivery .collapse-header.active svg {
+  fill: #3F3356 !important;
+}
+
+.ca-delivery .collapse-header.active svg path {
+  fill: #3F3356 !important;
+}
+
+.ca-delivery .collapse-header.active .react-switch svg {
+  fill: transparent !important;
+}
+
+.ca-delivery .collapse-header.active .react-switch svg path {
+  fill: transparent !important;
+}
+
+.switch.btn-sm {
+  min-width: 4.25rem;
+  border-radius: 35px;
+  min-height: calc(1.5em + .5rem + 2px);
+}
+
+.react-switch {
+  float: right;
+  margin-top: -2px;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+  .collapse-area .collapse-container .collapse-header span {
+    font-size: 14px;
+  }
   .wrapper {
     padding-left: 0px;
   }
