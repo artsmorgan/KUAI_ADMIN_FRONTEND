@@ -2,6 +2,10 @@ import React from 'react';
 import Switch from "react-switch";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
+import * as APITools from '../../util/api';
+import SimpleReactValidator from 'simple-react-validator';
+
+const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class PaymentMethods extends React.Component {
 
@@ -16,28 +20,24 @@ class PaymentMethods extends React.Component {
             dataToPost: {
                 transferencia: {
                     checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
+                    numeroDeCuenta: '',
+                    tipoDeCambio: '',
+                    cuentaBancaria: '',
+                    numeroDeCuentaIBAN: '',
+                    nombrar: ''
                 },
                 efectivoContraEntrega: {
-                    checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
+                    checked: false
                 },
                 tarjetaViaApp: {
-                    checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
+                    checked: false
                 },
                 tarjetaViaTelefono: {
                     checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
+                    numeroDeTelefonoDesdeElqueLlama:''
                 },
                 tarjetaEnEntrega: {
-                    checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
+                    checked: false
                 },
                 SinpeMovil: {
                     checked: false,
@@ -49,6 +49,15 @@ class PaymentMethods extends React.Component {
         this.handleChange = this.handleChange.bind(this);
 
         window.addEventListener("resize", this.updateDimension);
+
+        SimpleReactValidator.addLocale('es', {
+            required: 'este campo es requerido'
+        });
+
+        this.validator = new SimpleReactValidator({
+            locale: 'es',
+            autoForceUpdate: this
+        });
     }
 
     handleChange(e, switchName) {
@@ -83,6 +92,54 @@ class PaymentMethods extends React.Component {
         window.removeEventListener('resize', this.updateDimension);
     }
 
+    formSubmitHandler = (e) => {
+        e.preventDefault();
+        if(this.state.dataToPost.transferencia.checked){
+           
+        }
+        
+        // if (this.validator.allValid()) {
+        //     this.showAndHideSubmitLoader()
+        // } else {
+        //     this.validator.showMessages();
+        // }
+    };
+
+    showAndHideSubmitLoader() {
+        this.setState({submitLoading: true});
+        setTimeout(() => {
+            this.setState({submitLoading: false});
+            this.processSubmit();
+        }, 1000);
+    }
+
+    processSubmit() {
+        const url = endpointURL // dummy
+        const headers = {
+            'Content-Type': 'application/json, charset=UTF-8', // dummy
+        };
+        // const data = this.state.dataToPost;
+        // dummy
+        const data = JSON.stringify({
+            title: 'foo',
+            body: 'bar',
+            userId: 1
+        })
+
+        // API calling and handling response
+        const res = APITools.postEndPointsHandler(url, data, headers)
+
+        res.then(result => {
+            console.log(result)
+            if (result.status === 201) {
+                this.handleSuccess("Login success.")
+                this.props.history.push('/orders')
+            }
+        }).catch(err => {
+            this.handleError(err)
+        })
+    }
+
     render() {
         const { width } = this.state
 
@@ -94,6 +151,7 @@ class PaymentMethods extends React.Component {
                     <div className="flex-area content container-fluid">
                         <h3 className="text-center" style={{ marginBottom: '35px' }}>Métodos de pago</h3>
                         <div className="row">
+                        {/* <form onSubmit={this.formSubmitHandler}> */}
                             <div className="collapse-area col col-md-6 col-lg-6 col-sm-12 col-xs-12">
                                 <div className="collapse-container">
                                     <div className={"collapse-header " + (this.state.dataToPost.transferencia.checked ? 'active' : '')}>
@@ -129,10 +187,31 @@ class PaymentMethods extends React.Component {
                                     <div className={"collapse-content " + (this.state.dataToPost.transferencia.checked ? '' : 'collapse')}>
                                         <div className="col">
                                             <label htmlFor="">DEPOSITAR A:</label><br />
-                                            <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} />
-                                            <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} />
+                                            <label htmlFor="">Numero De Cuenta:</label>
+                                            <input type="text" className="uni-input" name="numeroDeCuenta" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.numeroDeCuenta} />
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('numeroDeCuenta', this.state.dataToPost.transferencia.numeroDeCuenta, 'required')}
+                                            </p>
+                                            <label htmlFor="">Tipo De Cambio:</label>
+                                            <input type="text" className="uni-input" name="tipoDeCambio" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.tipoDeCambio}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('tipoDeCambio', this.state.dataToPost.transferencia.tipoDeCambio, 'required')}
+                                            </p>
+                                            <label htmlFor="">Cuenta Bancaria:</label>
+                                            <input type="text" className="uni-input" name="cuentaBancaria" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.cuentaBancaria}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('cuentaBancaria', this.state.dataToPost.transferencia.cuentaBancaria, 'required')}
+                                            </p>
+                                            <label htmlFor="">Número De Cuenta IBAN:</label>
+                                            <input type="text" className="uni-input" name="numeroDeCuentaIBAN" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.numeroDeCuentaIBAN}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('numeroDeCuentaIBAN', this.state.dataToPost.transferencia.numeroDeCuentaIBAN, 'required')}
+                                            </p>
+                                            <label htmlFor="">Nombrar:</label>
+                                            <input type="text" className="uni-input" name="nombrar" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.nombrar}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('nombrar', this.state.dataToPost.transferencia.nombrar, 'required')}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -168,15 +247,6 @@ class PaymentMethods extends React.Component {
                                             className="react-switch"
                                             id="small-radius-switch"
                                         />
-                                    </div>
-                                    <div className={"collapse-content " + (this.state.dataToPost.efectivoContraEntrega.checked ? '' : 'collapse')}>
-                                        <div className="col">
-                                            <label htmlFor="">DEPOSITAR A:</label><br />
-                                            <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'efectivoContraEntrega')} />
-                                            <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'efectivoContraEntrega')} />
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container">
@@ -216,15 +286,7 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className={"collapse-content " + (this.state.dataToPost.tarjetaViaApp.checked ? '' : 'collapse')}>
-                                        <div className="col">
-                                            <label htmlFor="">DEPOSITAR A:</label><br />
-                                            <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaApp')} />
-                                            <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaApp')} />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 <div className="collapse-container">
                                     <div className={"collapse-header " + (this.state.dataToPost.tarjetaViaTelefono.checked ? 'active' : '')}>
@@ -264,12 +326,12 @@ class PaymentMethods extends React.Component {
                                         />
                                     </div>
                                     <div className={"collapse-content " + (this.state.dataToPost.tarjetaViaTelefono.checked ? '' : 'collapse')}>
-                                        <div className="col">
-                                            <label htmlFor="">DEPOSITAR A:</label><br />
-                                            <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaTelefono')} />
-                                            <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaTelefono')} />
+                                        <div className="col">                                        
+                                            <label htmlFor="">Número de teléfono desde el que llama:</label>
+                                            <input type="text" className="uni-input" name="numeroDeTelefonoDesdeElqueLlama" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaTelefono')} value={this.state.dataToPost.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('numeroDeTelefonoDesdeElqueLlama', this.state.dataToPost.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama, 'required')}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -302,15 +364,7 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className={"collapse-content " + (this.state.dataToPost.tarjetaEnEntrega.checked ? '' : 'collapse')}>
-                                        <div className="col">
-                                            <label htmlFor="">DEPOSITAR A:</label><br />
-                                            <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaEnEntrega')} />
-                                            <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaEnEntrega')} />
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                                 <div className="collapse-container">
                                     <div className={"collapse-header " + (this.state.dataToPost.SinpeMovil.checked ? 'active' : '')}>
@@ -350,16 +404,23 @@ class PaymentMethods extends React.Component {
                                         <div className="col">
                                             <label htmlFor="">DEPOSITAR A:</label><br />
                                             <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} />
+                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={this.state.dataToPost.SinpeMovil.numeroDeTelefono}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('numeroDeTelefono', this.state.dataToPost.SinpeMovil.numeroDeTelefono, 'required')}
+                                            </p>
                                             <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} />
+                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={this.state.dataToPost.SinpeMovil.aNombreDe}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('aNombreDe', this.state.dataToPost.SinpeMovil.aNombreDe, 'required')}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="text-center" style={{ marginTop: '70px' }}>
-                                    <button className="btn-theme">GUARDAR</button>
+                                    <button className="btn-theme" onClick={this.formSubmitHandler}>GUARDAR</button>
                                 </div>
                             </div>
+                        {/* </form> */}
                         </div>
                     </div>
                 </div>

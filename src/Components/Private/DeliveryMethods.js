@@ -12,27 +12,54 @@ class DeliveryMethods extends React.Component {
         this.state = {
             checked: false,
             dataToPost: {
-                comerEnRestaurante: false,
-                paraLlevar: false,
-                servicioALaHabitacion: false,
-                entregaEnParqueo: false,
-                tarjetaEnEntrega: false,
+                comerEnRestaurante:{
+                    checked:false,
+                    aceptarReservaciones:false
+                },
+                paraLlevar:{
+                    checked:false,
+                    Entrega:''
+                } ,
+                servicioALaHabitacion:{
+                    checked:false
+                },
+                entregaEnParqueo: {
+                    checked:false,
+                    Entrega:''
+                },
+                tarjetaEnEntrega:{
+                    checked:false,
+                    precioDeEnvio:'',
+                    cada:'',
+                    envioGratis:false
+                },
             }
         };
         this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(e, switchName) {
-        console.log(e)
-        console.log(switchName)
         let obj = this.state.dataToPost;
-        obj[switchName] = e;
+        obj[switchName]['checked'] = e;
         this.setState({dataToPost: obj});
+        console.log(this.state.dataToPost)
     }
 
     
-    CheckboxChangeHandler = (e) => {
-        this.setState({checked: !this.state.checked});
+    CheckboxChangeHandler = (e,switchName) => {
+        let obj = this.state.dataToPost;
+        let value = !obj[switchName][e.target.name];
+        obj[switchName][e.target.name] = value;
+        this.setState({dataToPost: obj});
+        console.log(this.state.dataToPost)
+    }
+
+    inputChangeHandler = (e,switchName) => {
+        let obj = this.state.dataToPost;
+        let value = e.target.value;
+        obj[switchName][e.target.name] = value;
+        this.setState({dataToPost: obj});
+        console.log(this.state.dataToPost)
     }
 
     render() {
@@ -47,7 +74,7 @@ class DeliveryMethods extends React.Component {
                             <div className="collapse-area col col-md-6 col-lg-6 col-sm-12 col-xs-12">
                                 <div className="collapse-container ca-delivery">
                                     <div
-                                        className={"collapse-header " + (this.state.dataToPost.comerEnRestaurante ? 'active' : '')}>
+                                        className={"collapse-header " + (this.state.dataToPost.comerEnRestaurante.checked ? 'active' : '')}>
                                         <svg width="28" height="29" viewBox="0 0 28 29" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0)">
@@ -82,7 +109,7 @@ class DeliveryMethods extends React.Component {
                                                 fill="#3F3356"/>
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.comerEnRestaurante}
+                                            checked={this.state.dataToPost.comerEnRestaurante.checked}
                                             onChange={(e) => this.handleChange(e, 'comerEnRestaurante')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -95,18 +122,18 @@ class DeliveryMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className="collapse-content">
+                                    <div className={"collapse-content " + (this.state.dataToPost.comerEnRestaurante.checked ? '' : 'collapse')}>
                                         <div className="col">
-                                        <Checkbox checked={this.state.checked}
-                                            onChange={this.CheckboxChangeHandler}
-                                        />
+                                        <Checkbox id="aceptarReservaciones" name="aceptarReservaciones"
+                                            onChange={(e) => this.CheckboxChangeHandler(e, 'comerEnRestaurante')}
+                                            checked={this.state.dataToPost.comerEnRestaurante.aceptarReservaciones}/>
                                         <label htmlFor="" className="chk-label">Accept reservations</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container ca-delivery">
                                     <div
-                                        className={"collapse-header " + (this.state.dataToPost.paraLlevar ? 'active' : '')}>
+                                        className={"collapse-header " + (this.state.dataToPost.paraLlevar.checked ? 'active' : '')}>
                                         <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -126,7 +153,7 @@ class DeliveryMethods extends React.Component {
                                                 fill="#3F3356"/>
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.paraLlevar}
+                                            checked={this.state.dataToPost.paraLlevar.checked}
                                             onChange={(e) => this.handleChange(e, 'paraLlevar')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -139,16 +166,18 @@ class DeliveryMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className="collapse-content">
+                                    <div className={"collapse-content " + (this.state.dataToPost.paraLlevar.checked ? '' : 'collapse')}>
                                         <div className="col">
                                             <label htmlFor="">Delivery</label>
-                                            <textarea name="" id="" cols="30" rows="10" className="uni-input tarea"></textarea>
+                                            <textarea name="" id="" cols="30" rows="10" className="uni-input tarea" name="entrega"
+                                            onChange={(e) => this.inputChangeHandler(e, 'paraLlevar')}
+                                            value={this.state.dataToPost.paraLlevar.entrega}></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container ca-delivery">
                                     <div
-                                        className={"collapse-header " + (this.state.dataToPost.servicioALaHabitacion ? 'active' : '')}>
+                                        className={"collapse-header " + (this.state.dataToPost.servicioALaHabitacion.checked ? 'active' : '')}>
                                         <svg width="27" height="27" viewBox="0 0 27 27" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0)">
@@ -189,7 +218,7 @@ class DeliveryMethods extends React.Component {
                                                 fill="#3F3356"/>
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.servicioALaHabitacion}
+                                            checked={this.state.dataToPost.servicioALaHabitacion.checked}
                                             onChange={(e) => this.handleChange(e, 'servicioALaHabitacion')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -208,7 +237,7 @@ class DeliveryMethods extends React.Component {
                                 </div>
                                 <div className="collapse-container ca-delivery">
                                     <div
-                                        className={"collapse-header " + (this.state.dataToPost.entregaEnParqueo ? 'active' : '')}>
+                                        className={"collapse-header " + (this.state.dataToPost.entregaEnParqueo.checked ? 'active' : '')}>
                                         <svg width="29" height="28" viewBox="0 0 29 28" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <g clip-path="url(#clip0)">
@@ -236,7 +265,7 @@ class DeliveryMethods extends React.Component {
                                                 fill="#3F3356"/>
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.entregaEnParqueo}
+                                            checked={this.state.dataToPost.entregaEnParqueo.checked}
                                             onChange={(e) => this.handleChange(e, 'entregaEnParqueo')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -249,16 +278,18 @@ class DeliveryMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className="collapse-content">
+                                    <div className={"collapse-content " + (this.state.dataToPost.entregaEnParqueo.checked ? '' : 'collapse')}>
                                     <div className="col">
                                             <label htmlFor="">Delivery</label>
-                                            <textarea name="" id="" cols="30" rows="10" className="uni-input tarea"></textarea>
+                                            <textarea name="" id="" cols="30" rows="10" className="uni-input tarea" name="entrega"
+                                            onChange={(e) => this.inputChangeHandler(e, 'entregaEnParqueo')}
+                                            value={this.state.dataToPost.entregaEnParqueo.entrega}></textarea>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container ca-delivery">
                                     <div
-                                        className={"collapse-header " + (this.state.dataToPost.tarjetaEnEntrega ? 'active' : '')}>
+                                        className={"collapse-header " + (this.state.dataToPost.tarjetaEnEntrega.checked ? 'active' : '')}>
                                         <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -279,7 +310,7 @@ class DeliveryMethods extends React.Component {
                                                 fill="#3F3356"/>
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.tarjetaEnEntrega}
+                                            checked={this.state.dataToPost.tarjetaEnEntrega.checked}
                                             onChange={(e) => this.handleChange(e, 'tarjetaEnEntrega')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -292,16 +323,18 @@ class DeliveryMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className="collapse-content">
+                                    <div className={"collapse-content " + (this.state.dataToPost.tarjetaEnEntrega.checked ? '' : 'collapse')}>
                                         <div className="col">
                                             <div className="row">
                                                 <div className="col">
                                                     <label htmlFor="">PRECIO DE ENVÍO</label>
-                                                    <input type="text" className="uni-input"/>
+                                                    <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'tarjetaEnEntrega')}
+                                            value={this.state.dataToPost.tarjetaEnEntrega.precioDeEnvio} name="precioDeEnvio"/>
                                                 </div>
                                                 <div className="col">
                                                     <label htmlFor="">CADA</label>
-                                                    <input type="text" className="uni-input"/>
+                                                    <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'tarjetaEnEntrega')}
+                                            value={this.state.dataToPost.tarjetaEnEntrega.cada} name="cada"/>
                                                 </div>
                                             </div>
                                             <div className="row index-sample">
@@ -328,11 +361,11 @@ class DeliveryMethods extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="collapse-end">
+                                <div className={"collapse-end " + (this.state.dataToPost.tarjetaEnEntrega.checked ? '' : 'collapse')}>
                                     <div className="col">
-                                    <Checkbox checked={this.state.checked}
-                                            onChange={this.CheckboxChangeHandler}
-                                        />
+                                    <Checkbox id="envioGratis" name="envioGratis"
+                                            onChange={(e) => this.CheckboxChangeHandler(e, 'tarjetaEnEntrega')}
+                                            checked={this.state.dataToPost.tarjetaEnEntrega.envioGratis}/>
                                         <label htmlFor="" className="chk-label" style={{fontSize: '13px', fontWeight: '500'}}>Envío gratis</label>
 
                                         <div className="row">
