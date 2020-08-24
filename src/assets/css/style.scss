@@ -1029,9 +1029,15 @@ body {
     .collapse-content{
       .col{
         padding: 25px 20px;
+        .chk-label{
+          margin-left: 25px;
+          text-transform: capitalize;
+        }
         label{
           font-size: 14px;
           font-weight: 500;
+          text-transform: uppercase;
+          margin-left: 8px;
         }
         input{
           margin-bottom: 20px;
@@ -1084,6 +1090,37 @@ body {
   margin-top: -2px;
 }
 // switch
+
+.index-sample{
+  .col{
+    font-size: 14px;
+    position: relative;
+    color: #AEA7AF;
+    padding: 7px !important;
+    font-weight: 500;
+    &:nth-child(2)::after{
+      position: absolute;
+      content: " ";
+      width: 100%;
+      height: 5px;
+      left: 10px;
+      top: 18px;
+      border-top: 1px dashed #AEA7AF;
+    }
+    &:nth-child(3){
+      text-align: right;
+    }
+  }
+}
+.collapse-end{
+  .col{
+    .chk-label{
+      margin-left: 25px !important;
+      text-transform: capitalize;
+    }
+  }
+}
+
 
 @media only screen 
   and (min-device-width: 320px) 

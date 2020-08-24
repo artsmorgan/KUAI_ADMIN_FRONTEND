@@ -1175,9 +1175,16 @@ body {
   padding: 25px 20px;
 }
 
+.collapse-area .collapse-container .collapse-content .col .chk-label {
+  margin-left: 25px;
+  text-transform: capitalize;
+}
+
 .collapse-area .collapse-container .collapse-content .col label {
   font-size: 14px;
   font-weight: 500;
+  text-transform: uppercase;
+  margin-left: 8px;
 }
 
 .collapse-area .collapse-container .collapse-content .col input {
@@ -1226,6 +1233,33 @@ body {
 .react-switch {
   float: right;
   margin-top: -2px;
+}
+
+.index-sample .col {
+  font-size: 14px;
+  position: relative;
+  color: #AEA7AF;
+  padding: 7px !important;
+  font-weight: 500;
+}
+
+.index-sample .col:nth-child(2)::after {
+  position: absolute;
+  content: " ";
+  width: 100%;
+  height: 5px;
+  left: 10px;
+  top: 18px;
+  border-top: 1px dashed #AEA7AF;
+}
+
+.index-sample .col:nth-child(3) {
+  text-align: right;
+}
+
+.collapse-end .col .chk-label {
+  margin-left: 25px !important;
+  text-transform: capitalize;
 }
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
