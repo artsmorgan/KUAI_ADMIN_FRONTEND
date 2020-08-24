@@ -1,4 +1,5 @@
 import axios from "axios";
+import myOrders from './data/myOrders.json'
 
 export const endPoints = {
     LOGIN: "/login",
@@ -11,7 +12,8 @@ export const endPoints = {
 export const getEndPointsHandler = async function (url, headers = {}) {
     const res = await axios.get(url, {headers})
     // console.log(res)
-    return res
+    // return res
+    return myOrders
 }
 
 export const postEndPointsHandler = async function (url, data, headers) {

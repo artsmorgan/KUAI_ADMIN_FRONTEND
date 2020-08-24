@@ -32,10 +32,12 @@ class Orders extends React.Component {
 
             res.then(result => {
                 console.log(result)
-                if (result.status === 200) {
+                this.setState({myOrders: result})
+                this.getTotalSales()
+                /*if (result.status === 200) {
                     this.setState({myOrders: result.data})
                     this.getTotalSales()
-                }
+                }*/
             }).catch(err => {
                 console.log(err)
                 this.handleError("Something went wrong. Please try again later.")
