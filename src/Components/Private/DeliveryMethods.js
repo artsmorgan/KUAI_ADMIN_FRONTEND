@@ -1,5 +1,6 @@
 import React from 'react';
 import Switch from "react-switch";
+import Checkbox from '@opuscapita/react-checkbox';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 
@@ -15,7 +16,7 @@ class DeliveryMethods extends React.Component {
                 paraLlevar: false,
                 servicioALaHabitacion: false,
                 entregaEnParqueo: false,
-                tarjetaEnEntrega: false
+                tarjetaEnEntrega: false,
             }
         };
         this.handleChange = this.handleChange.bind(this);
@@ -27,6 +28,11 @@ class DeliveryMethods extends React.Component {
         let obj = this.state.dataToPost;
         obj[switchName] = e;
         this.setState({dataToPost: obj});
+    }
+
+    
+    CheckboxChangeHandler = (e) => {
+        this.setState({checked: !this.state.checked});
     }
 
     render() {
@@ -90,7 +96,12 @@ class DeliveryMethods extends React.Component {
                                         />
                                     </div>
                                     <div className="collapse-content">
-
+                                        <div className="col">
+                                        <Checkbox checked={this.state.checked}
+                                            onChange={this.CheckboxChangeHandler}
+                                        />
+                                        <label htmlFor="" className="chk-label">Accept reservations</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container ca-delivery">
@@ -129,7 +140,10 @@ class DeliveryMethods extends React.Component {
                                         />
                                     </div>
                                     <div className="collapse-content">
-
+                                        <div className="col">
+                                            <label htmlFor="">Delivery</label>
+                                            <textarea name="" id="" cols="30" rows="10" className="uni-input tarea"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container ca-delivery">
@@ -236,7 +250,10 @@ class DeliveryMethods extends React.Component {
                                         />
                                     </div>
                                     <div className="collapse-content">
-
+                                    <div className="col">
+                                            <label htmlFor="">Delivery</label>
+                                            <textarea name="" id="" cols="30" rows="10" className="uni-input tarea"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container ca-delivery">
@@ -253,7 +270,7 @@ class DeliveryMethods extends React.Component {
                                         </svg>
 
                                         <span>
-                                Tarjeta en entrega +5%
+                                    Envío express
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
@@ -276,7 +293,54 @@ class DeliveryMethods extends React.Component {
                                         />
                                     </div>
                                     <div className="collapse-content">
+                                        <div className="col">
+                                            <div className="row">
+                                                <div className="col">
+                                                    <label htmlFor="">PRECIO DE ENVÍO</label>
+                                                    <input type="text" className="uni-input"/>
+                                                </div>
+                                                <div className="col">
+                                                    <label htmlFor="">CADA</label>
+                                                    <input type="text" className="uni-input"/>
+                                                </div>
+                                            </div>
+                                            <div className="row index-sample">
+                                                <div className="col">
+                                                    HASTA 3 KM
+                                                </div>
+                                                <div className="col"></div>
+                                                <div className="col">₡ 1.500</div>
+                                            </div>
+                                            <div className="row index-sample">
+                                                <div className="col">
+                                                    HASTA 5 KM
+                                                </div>
+                                                <div className="col"></div>
+                                                <div className="col">₡ 3.500</div>
+                                            </div>
+                                            <div className="row index-sample">
+                                                <div className="col">
+                                                    HASTA 7 KM
+                                                </div>
+                                                <div className="col"></div>
+                                                <div className="col">₡ 4.500</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="collapse-end">
+                                    <div className="col">
+                                    <Checkbox checked={this.state.checked}
+                                            onChange={this.CheckboxChangeHandler}
+                                        />
+                                        <label htmlFor="" className="chk-label" style={{fontSize: '13px', fontWeight: '500'}}>Envío gratis</label>
 
+                                        <div className="row">
+                                            <div className="col" style={{marginLeft: '45px', marginTop: '15px'}}>
+                                                <label htmlFor="" style={{fontSize: '14px', fontWeight: '500'}}>COMPRA MIÍNIMA</label>
+                                                <input type="text" className="uni-input" style={{width: '50%', display: 'block'}}/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="text-center" style={{marginTop: '70px'}}>
