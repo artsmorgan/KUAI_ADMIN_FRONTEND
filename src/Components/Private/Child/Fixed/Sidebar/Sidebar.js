@@ -45,6 +45,11 @@ class Sidebar extends React.Component {
         $(".sidebar-wrapper").addClass('collapsed')
     }
 
+    logOut = () => {
+        localStorage.removeItem("kuaiUserAuthToken")
+        this.props.history.push('/login')
+    }
+
     render() {
         return (
             <>
@@ -345,7 +350,7 @@ class Sidebar extends React.Component {
                             </Link>
                         </li>
                         <li>
-                            <Link to={'/logout'}>
+                            <Link onClick={this.logOut}>
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g clipPath="url(#clip0)">
