@@ -4,6 +4,10 @@ import {Dropdown} from 'react-bootstrap';
 
 import Avatar from "../../../../../assets/images/avatar.svg";
 import $ from "jquery";
+import * as APITools from "../../../../../util/api";
+import myOrders from "../../../../../util/data/myOrders.json";
+
+const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class Navbar extends React.Component {
 
@@ -11,7 +15,10 @@ class Navbar extends React.Component {
         super(props);
 
         this.state = {
-            width: 0
+            width: 0,
+            myOrders: [],
+            totalOrders: 0,
+            totalSales: 0
         }
 
         window.addEventListener("resize", this.updateDimension);
@@ -29,8 +36,48 @@ class Navbar extends React.Component {
         }
     };
 
+    getTotalSales = () => {
+        const {myOrders} = this.state
+        let totalSales = 0
+        myOrders.forEach((element) => {
+            totalSales += element.prices.total;
+        })
+        // console.log(myOrders)
+        this.setState({totalSales: totalSales})
+    }
+
+    getTotalOrders = () => {
+        this.setState({totalOrders: this.state.myOrders.length})
+    }
+
     componentDidMount() {
         this.updateDimension();
+
+        if (localStorage.getItem("kuaiUserAuthToken")) {
+            const url = endpointURL + APITools.endPoints.MY_ORDERS
+
+            // API calling and handling response
+            /*const res = APITools.getEndPointsHandler(url)
+
+            res.then(result => {
+                console.log(result)
+                if (result.status === 200) {
+                    this.setState({myOrders: result.data})
+                    this.getTotalSales()
+                }
+            }).catch(err => {
+                console.log(err)
+                this.handleError("Something went wrong. Please try again later.")
+            })*/
+
+            this.setState({myOrders: myOrders}, () => {
+                this.getTotalOrders()
+                this.getTotalSales()
+            })
+        } else {
+            this.handleError("Unauthorized access.")
+            this.props.history.push('/login')
+        }
     }
 
     componentWillUnmount() {
@@ -42,7 +89,7 @@ class Navbar extends React.Component {
     }
 
     render() {
-        const {width, totalOrders, totalSales} = this.props
+        const {width, totalOrders, totalSales} = this.state
         if (width > 1024) {
             return (
                 <>
