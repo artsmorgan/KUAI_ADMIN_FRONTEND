@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import $ from 'jquery';
 import {Dropdown} from 'react-bootstrap';
 import Avatar from "../../../../../assets/images/avatar.svg";
@@ -12,7 +12,8 @@ class Sidebar extends React.Component {
         super(props);
 
         this.state = {
-            width: 0
+            width: 0,
+            redirectToLogin: false
         }
 
         window.addEventListener("resize", this.updateDimension);
@@ -47,10 +48,22 @@ class Sidebar extends React.Component {
 
     logOut = () => {
         localStorage.removeItem("kuaiUserAuthToken")
-        this.props.history.push('/login')
+        this.setState({redirectToLogin: true})
+        // this.props.history.push('/login')
     }
 
+    renderRedirect = () => {
+        return <Redirect to='/login'/>
+    };
+
     render() {
+        if (this.state.redirectToLogin) {
+            return (
+                <>
+                    {this.renderRedirect()}
+                </>
+            )
+        }
         return (
             <>
                 <div className="sidebar-wrapper">
