@@ -6,6 +6,7 @@ import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
 import * as APITools from "../../util/api";
+import myOrders from '../../util/data/myOrders.json'
 
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
@@ -18,30 +19,30 @@ class Orders extends React.Component {
         this.state = {
             seeMore: false,
             seeMoreThisOrder: {},
-            myOrders: [],
-            totalSales: 0
+            myOrders: []
         }
     }
 
     componentDidMount() {
+        console.log("componentDidMount")
         if (localStorage.getItem("kuaiUserAuthToken")) {
             const url = endpointURL + APITools.endPoints.MY_ORDERS
 
             // API calling and handling response
-            const res = APITools.getEndPointsHandler(url)
+            /*const res = APITools.getEndPointsHandler(url)
 
             res.then(result => {
                 console.log(result)
-                this.setState({myOrders: result})
-                this.getTotalSales()
-                /*if (result.status === 200) {
+                if (result.status === 200) {
                     this.setState({myOrders: result.data})
                     this.getTotalSales()
-                }*/
+                }
             }).catch(err => {
                 console.log(err)
                 this.handleError("Something went wrong. Please try again later.")
-            })
+            })*/
+
+            this.setState({myOrders: myOrders})
         } else {
             this.handleError("Unauthorized access.")
             this.props.history.push('/login')
@@ -55,16 +56,6 @@ class Orders extends React.Component {
         });
     }
 
-    getTotalSales = () => {
-        const {myOrders} = this.state
-        let totalSales = 0
-        myOrders.forEach((element) => {
-            totalSales += element.prices.total;
-        })
-        // console.log(myOrders)
-        this.setState({totalSales: totalSales})
-    }
-
     seeMore = (orderId) => {
         // console.log(orderId)
         const order = this.state.myOrders.filter(obj => {
@@ -74,25 +65,30 @@ class Orders extends React.Component {
         this.setState({seeMore: true, seeMoreThisOrder: order[0]});
     }
 
+    getOrdersDispatched = () => {
+        console.log("ORDENES DESPACHADAS")
+        this.setState({myOrders: myOrders})
+    }
+
     render() {
-        const {myOrders, totalSales} = this.state
+        const {myOrders} = this.state
 
         return (
             <>
                 <Sidebar/>
                 <div className="wrapper">
-                    <Navbar totalOrders={myOrders.length} totalSales={totalSales}/>
+                    <Navbar/>
                     <div className="flex-area content container-fluid">
                         <div className="row">
 
                             <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
                                 <div>
-                                    <Nav className="tab-cstm" variant="pills" defaultActiveKey="/home">
+                                    <Nav className="tab-cstm" variant="pills" defaultActiveKey="/ORDENES">
                                         <Nav.Item>
-                                            <Nav.Link href="#">ORDENES</Nav.Link>
+                                            <Nav.Link href="/ORDENES">ORDENES</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-1">ORDENES DESPACHADAS</Nav.Link>
+                                            <Nav.Link eventKey="link-1" onClick={this.getOrdersDispatched}>ORDENES DESPACHADAS</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                 </div>

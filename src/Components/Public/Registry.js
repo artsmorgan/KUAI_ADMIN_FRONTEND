@@ -19,6 +19,7 @@ class Registry extends React.Component {
 
         this.state = {
             show: false,
+            registrySuccess: false,
             submitLoading: false,
             dataToPost: {
                 name: '',
@@ -54,6 +55,10 @@ class Registry extends React.Component {
 
     hideTermsAndConditionsModal = () => {
         this.setState({show: false});
+    }
+
+    hideRegistrySuccessModal = () => {
+        this.setState({registrySuccess: false});
     }
 
     handleSuccess(msg) {
@@ -112,8 +117,12 @@ class Registry extends React.Component {
         res.then(result => {
             console.log(result)
             if (result.status === 201) {
+                this.setState({registrySuccess: true});
                 this.handleSuccess("Registration success.")
-                this.props.history.push('/login')
+                window.setTimeout(() => {
+                    this.setState({registrySuccess: false});
+                    this.props.history.push('/login')
+                }, 3000)
             }
         }).catch(err => {
             this.handleError(err)
@@ -196,6 +205,28 @@ class Registry extends React.Component {
                         </Modal.Header>
                         <Modal.Body>
                             <TermsAndCondition/>
+                        </Modal.Body>
+                    </Modal>
+
+                    <Modal
+                        className="cstm-modal"
+                        size="sm"
+                        show={this.state.registrySuccess}
+                        onHide={this.hideRegistrySuccessModal}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title id="example-modal-sizes-title-sm">
+
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Gracias por registrarse con nosotros, hemos enviado un email de verificación a la direccion
+                            que ingresaste.
+
+                            Sigue la instrucciones que te enviamos para completar tu perfil y comenzar a utilizar la
+                            plataforma.
                         </Modal.Body>
                     </Modal>
                 </>
