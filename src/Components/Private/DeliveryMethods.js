@@ -11,6 +11,31 @@ class DeliveryMethods extends React.Component {
 
         this.state = {
             checked: false,
+            errorMessage:"este campo es requerido",
+            errors: {
+                comerEnRestaurante:{
+                    checked:false,
+                    // aceptarReservaciones:false
+                },
+                paraLlevar:{
+                    checked:false,
+                    entrega:''
+                } ,
+                servicioALaHabitacion:{
+                    checked:false
+                },
+                entregaEnParqueo: {
+                    checked:false,
+                    entrega:''
+                },
+                tarjetaEnEntrega:{
+                    checked:false,
+                    precioDeEnvio:'',
+                    cada:'',
+                    compraMiinima:''
+                    // envioGratis:false
+                }
+            },
             dataToPost: {
                 comerEnRestaurante:{
                     checked:false,
@@ -18,19 +43,20 @@ class DeliveryMethods extends React.Component {
                 },
                 paraLlevar:{
                     checked:false,
-                    Entrega:''
+                    entrega:''
                 } ,
                 servicioALaHabitacion:{
                     checked:false
                 },
                 entregaEnParqueo: {
                     checked:false,
-                    Entrega:''
+                    entrega:''
                 },
                 tarjetaEnEntrega:{
                     checked:false,
                     precioDeEnvio:'',
                     cada:'',
+                    compraMiinima:'',
                     envioGratis:false
                 },
             }
@@ -60,6 +86,51 @@ class DeliveryMethods extends React.Component {
         obj[switchName][e.target.name] = value;
         this.setState({dataToPost: obj});
         console.log(this.state.dataToPost)
+        this.handleValidation()
+    }
+
+
+    formSubmitHandler = (e) => {
+        // e.preventDefault();
+        if(this.handleValidation()){
+            alert("Form submitted");
+         }else{
+            alert("Form has errors.")
+         }
+    };
+
+    handleValidation(){
+        let errors = this.state.errors;
+        let formIsValid = true;
+
+        let obj =this.state.dataToPost;
+        let length = obj.length;
+        console.log(obj)
+        for (const [key, value] of Object.entries(obj)) {
+            if(value.checked){
+                for (const [k, v] of Object.entries(value)){
+                    if(k!='checked'){
+                        console.log(k)
+                        if(!v && typeof(v)!='boolean'){
+                            console.log(k)
+                            console.log(typeof(v))
+                            formIsValid = false;
+                            errors[key][k] = this.state.errorMessage
+                         }else{
+                            errors[key][k] = '';
+                         }
+                    }
+                    
+                }
+            }
+        }
+
+        console.log(errors)
+        this.setState({errors: errors});
+
+            // console.log(this.state.errors)
+        return formIsValid;
+            //console.log(`${key}: ${value}`);
     }
 
     render() {
@@ -172,6 +243,9 @@ class DeliveryMethods extends React.Component {
                                             <textarea name="" id="" cols="30" rows="10" className="uni-input tarea" name="entrega"
                                             onChange={(e) => this.inputChangeHandler(e, 'paraLlevar')}
                                             value={this.state.dataToPost.paraLlevar.entrega}></textarea>
+                                             <p style={{color: "red"}}>
+                                                {this.state.errors.paraLlevar.entrega}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -284,6 +358,9 @@ class DeliveryMethods extends React.Component {
                                             <textarea name="" id="" cols="30" rows="10" className="uni-input tarea" name="entrega"
                                             onChange={(e) => this.inputChangeHandler(e, 'entregaEnParqueo')}
                                             value={this.state.dataToPost.entregaEnParqueo.entrega}></textarea>
+                                            <p style={{color: "red"}}>
+                                                {this.state.errors.entregaEnParqueo.entrega}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -330,11 +407,17 @@ class DeliveryMethods extends React.Component {
                                                     <label htmlFor="">PRECIO DE ENVÍO</label>
                                                     <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'tarjetaEnEntrega')}
                                             value={this.state.dataToPost.tarjetaEnEntrega.precioDeEnvio} name="precioDeEnvio"/>
+                                            <p style={{color: "red"}}>
+                                                {this.state.errors.tarjetaEnEntrega.precioDeEnvio}
+                                            </p>
                                                 </div>
                                                 <div className="col">
                                                     <label htmlFor="">CADA</label>
                                                     <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'tarjetaEnEntrega')}
                                             value={this.state.dataToPost.tarjetaEnEntrega.cada} name="cada"/>
+                                            <p style={{color: "red"}}>
+                                                {this.state.errors.tarjetaEnEntrega.cada}
+                                            </p>
                                                 </div>
                                             </div>
                                             <div className="row index-sample">
@@ -371,13 +454,17 @@ class DeliveryMethods extends React.Component {
                                         <div className="row">
                                             <div className="col" style={{marginLeft: '45px', marginTop: '15px'}}>
                                                 <label htmlFor="" style={{fontSize: '14px', fontWeight: '500'}}>COMPRA MIÍNIMA</label>
-                                                <input type="text" className="uni-input" style={{width: '50%', display: 'block'}}/>
+                                                <input type="text" className="uni-input" style={{width: '50%', display: 'block'}} onChange={(e) => this.inputChangeHandler(e, 'tarjetaEnEntrega')}
+                                                value={this.state.dataToPost.tarjetaEnEntrega.compraMiinima} name="compraMiinima"/>
+                                                <p style={{color: "red"}}>
+                                                    {this.state.errors.tarjetaEnEntrega.compraMiinima}
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="text-center" style={{marginTop: '70px'}}>
-                                    <button className="btn-theme">GUARDAR</button>
+                                    <button className="btn-theme" onClick={this.formSubmitHandler}>GUARDAR</button>
                                 </div>
                             </div>
                         </div>
