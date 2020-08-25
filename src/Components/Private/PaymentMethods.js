@@ -17,6 +17,35 @@ class PaymentMethods extends React.Component {
         }
         this.state = {
             checked: false,
+            errorMessage:"este campo es requerido",
+            errors: {
+                transferencia: {
+                    checked: false,
+                    numeroDeCuenta: '',
+                    tipoDeCambio: '',
+                    cuentaBancaria: '',
+                    numeroDeCuentaIBAN: '',
+                    nombrar: ''
+                },
+                efectivoContraEntrega: {
+                    checked: false
+                },
+                tarjetaViaApp: {
+                    checked: false
+                },
+                tarjetaViaTelefono: {
+                    checked: false,
+                    numeroDeTelefonoDesdeElqueLlama:''
+                },
+                tarjetaEnEntrega: {
+                    checked: false
+                },
+                SinpeMovil: {
+                    checked: false,
+                    numeroDeTelefono: '',
+                    aNombreDe: ''
+                }
+            },
             dataToPost: {
                 transferencia: {
                     checked: false,
@@ -61,21 +90,19 @@ class PaymentMethods extends React.Component {
     }
 
     handleChange(e, switchName) {
-        console.log(e)
-        console.log(switchName)
         let obj = this.state.dataToPost;
         obj[switchName]['checked'] = e;
-        // obj[switchName]['numeroDeTelefono'] = '';
-        // obj[switchName]['aNombreDe'] = '';
         this.setState({ dataToPost: obj });
+        // this.handleValidation()
     }
 
     paymentInputChangeHandler(e, switchName) {
-
         let obj = this.state.dataToPost;
         console.log(obj)
         obj[switchName][e.target.name] = e.target.value;
+        
         this.setState({ dataToPost: obj });
+        this.handleValidation()
     }
 
     updateDimension = () => {
@@ -94,16 +121,45 @@ class PaymentMethods extends React.Component {
 
     formSubmitHandler = (e) => {
         e.preventDefault();
-        if(this.state.dataToPost.transferencia.checked){
-           
-        }
-        
-        // if (this.validator.allValid()) {
-        //     this.showAndHideSubmitLoader()
-        // } else {
-        //     this.validator.showMessages();
-        // }
+        if(this.handleValidation()){
+            alert("Form submitted");
+         }else{
+            // alert("Form has errors.")
+         }
     };
+
+    handleValidation(){
+        let errors = this.state.errors;
+        let formIsValid = true;
+
+        let obj =this.state.dataToPost;
+        let length = obj.length;
+        console.log(obj)
+        for (const [key, value] of Object.entries(obj)) {
+            console.log(value)
+            if(value.checked){
+                console.log(value)
+                for (const [k, v] of Object.entries(value)){
+                    if(k!='checked'){
+                        console.log(k)
+                        if(!v){
+                            
+                            formIsValid = false;
+                            errors[key][k] = this.state.errorMessage
+                         }else{
+                            errors[key][k] = '';
+                         }
+                    }
+                    
+                }
+            }
+        }
+        this.setState({errors: errors});
+
+            // console.log(this.state.errors)
+            return formIsValid;
+            //console.log(`${key}: ${value}`);
+    }
 
     showAndHideSubmitLoader() {
         this.setState({submitLoading: true});
@@ -190,27 +246,27 @@ class PaymentMethods extends React.Component {
                                             <label htmlFor="">Numero De Cuenta:</label>
                                             <input type="text" className="uni-input" name="numeroDeCuenta" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.numeroDeCuenta} />
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('numeroDeCuenta', this.state.dataToPost.transferencia.numeroDeCuenta, 'required')}
+                                                {this.state.errors.transferencia.numeroDeCuenta}
                                             </p>
                                             <label htmlFor="">Tipo De Cambio:</label>
                                             <input type="text" className="uni-input" name="tipoDeCambio" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.tipoDeCambio}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('tipoDeCambio', this.state.dataToPost.transferencia.tipoDeCambio, 'required')}
+                                            {this.state.errors.transferencia.tipoDeCambio}
                                             </p>
                                             <label htmlFor="">Cuenta Bancaria:</label>
                                             <input type="text" className="uni-input" name="cuentaBancaria" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.cuentaBancaria}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('cuentaBancaria', this.state.dataToPost.transferencia.cuentaBancaria, 'required')}
+                                                {this.state.errors.transferencia.cuentaBancaria}
                                             </p>
                                             <label htmlFor="">Número De Cuenta IBAN:</label>
                                             <input type="text" className="uni-input" name="numeroDeCuentaIBAN" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.numeroDeCuentaIBAN}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('numeroDeCuentaIBAN', this.state.dataToPost.transferencia.numeroDeCuentaIBAN, 'required')}
+                                            {this.state.errors.transferencia.numeroDeCuentaIBAN}
                                             </p>
                                             <label htmlFor="">Nombrar:</label>
                                             <input type="text" className="uni-input" name="nombrar" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.nombrar}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('nombrar', this.state.dataToPost.transferencia.nombrar, 'required')}
+                                                {this.state.errors.transferencia.nombrar}
                                             </p>
                                         </div>
                                     </div>
@@ -330,7 +386,7 @@ class PaymentMethods extends React.Component {
                                             <label htmlFor="">Número de teléfono desde el que llama:</label>
                                             <input type="text" className="uni-input" name="numeroDeTelefonoDesdeElqueLlama" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaTelefono')} value={this.state.dataToPost.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('numeroDeTelefonoDesdeElqueLlama', this.state.dataToPost.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama, 'required')}
+                                                {this.state.errors.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama}
                                             </p>
                                         </div>
                                     </div>
@@ -406,12 +462,12 @@ class PaymentMethods extends React.Component {
                                             <label htmlFor="">NUMERO DE TELEFONO:</label>
                                             <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={this.state.dataToPost.SinpeMovil.numeroDeTelefono}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('numeroDeTelefono', this.state.dataToPost.SinpeMovil.numeroDeTelefono, 'required')}
+                                                {this.state.errors.SinpeMovil.numeroDeTelefono}
                                             </p>
                                             <label htmlFor="">A NOMBRE DE:</label>
                                             <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={this.state.dataToPost.SinpeMovil.aNombreDe}/>
                                             <p style={{color: "red"}}>
-                                                {this.validator.message('aNombreDe', this.state.dataToPost.SinpeMovil.aNombreDe, 'required')}
+                                                {this.state.errors.SinpeMovil.aNombreDe}
                                             </p>
                                         </div>
                                     </div>
