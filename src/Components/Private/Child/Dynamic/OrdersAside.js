@@ -11,7 +11,8 @@ class OrdersAside extends React.Component {
             seeMore: false,
             seeMoreThisOrder: {},
             seeSinpeMobile: false,
-            seeExpress: false
+            seeExpress: false,
+            mobile:true
         }
     }
 
@@ -126,7 +127,7 @@ class OrdersAside extends React.Component {
 
         return (
             <>
-                <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : 'order-aside-nai')}>
                     <h4 className="text-center" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">

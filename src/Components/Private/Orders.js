@@ -19,7 +19,8 @@ class Orders extends React.Component {
         this.state = {
             seeMore: false,
             seeMoreThisOrder: {},
-            myOrders: []
+            myOrders: [],
+            mobile:false
         }
     }
 
@@ -57,12 +58,27 @@ class Orders extends React.Component {
     }
 
     seeMore = (orderId) => {
-        // console.log(orderId)
+        // this.setState({
+        //     width: window.innerWidth
+        // }, () => {
+        //     if (this.state.width < 1024) {
+                
+        //     } else {
+        //         const order = this.state.myOrders.filter(obj => {
+        //             return obj.id === orderId
+        //         })
+        //         console.log("desktop")
+        //         this.setState({seeMore: true, seeMoreThisOrder: order[0],mobile:false});
+        //     }
+        // });
+
         const order = this.state.myOrders.filter(obj => {
             return obj.id === orderId
         })
-        // console.log(order)
-        this.setState({seeMore: true, seeMoreThisOrder: order[0]});
+        console.log("mobile")
+        this.setState({seeMore: true, seeMoreThisOrder: order[0],mobile:true});
+        // console.log(orderId)
+        
     }
 
     getOrdersDispatched = () => {
@@ -137,7 +153,7 @@ class Orders extends React.Component {
                                     </table>
                                 </div>
                             </div>
-                            <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
+                            <OrdersAside mobile={this.state.mobile} seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
                         </div>
                     </div>
                 </div>
