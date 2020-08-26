@@ -58,25 +58,25 @@ class Orders extends React.Component {
     }
 
     seeMore = (orderId) => {
-        // this.setState({
-        //     width: window.innerWidth
-        // }, () => {
-        //     if (this.state.width < 1024) {
-                
-        //     } else {
-        //         const order = this.state.myOrders.filter(obj => {
-        //             return obj.id === orderId
-        //         })
-        //         console.log("desktop")
-        //         this.setState({seeMore: true, seeMoreThisOrder: order[0],mobile:false});
-        //     }
-        // });
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                const order = this.state.myOrders.filter(obj => {
+                    return obj.id === orderId
+                })
+                console.log("mobile")
+                this.setState({seeMore: true, seeMoreThisOrder: order[0],mobile:true});
+            } else {
+                const order = this.state.myOrders.filter(obj => {
+                    return obj.id === orderId
+                })
+                console.log("desktop")
+                this.setState({seeMore: true, seeMoreThisOrder: order[0],mobile:false});
+            }
+        });
 
-        const order = this.state.myOrders.filter(obj => {
-            return obj.id === orderId
-        })
-        console.log("mobile")
-        this.setState({seeMore: true, seeMoreThisOrder: order[0],mobile:true});
+        
         // console.log(orderId)
         
     }
