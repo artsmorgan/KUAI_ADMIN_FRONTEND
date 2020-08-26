@@ -146,7 +146,7 @@ class OrdersAside extends React.Component {
 
         return (
             <>
-                <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12 order-aside">
+                <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12 order-aside order-aside-mb">
                     <h4 className="text-center" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">

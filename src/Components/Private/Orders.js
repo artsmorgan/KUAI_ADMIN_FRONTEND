@@ -1,10 +1,11 @@
 import React from "react";
 import {Button, Nav} from 'react-bootstrap';
 import {withSnackbar} from 'notistack';
-
+import $ from 'jquery';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
+import OrdersAside from "./Child/Dynamic/OrdersAsideMobile";
 import * as APITools from "../../util/api";
 import myOrders from '../../util/data/myOrders.json'
 
@@ -17,6 +18,7 @@ class Orders extends React.Component {
         super(props);
 
         this.state = {
+            width: 0,
             seeMore: false,
             seeMoreThisOrder: {},
             myOrders: []
@@ -57,6 +59,15 @@ class Orders extends React.Component {
     }
 
     seeMore = (orderId) => {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                $(".order-aside").addClass('order-aside-mb');
+            } else {
+                
+            }
+        });
         // console.log(orderId)
         const order = this.state.myOrders.filter(obj => {
             return obj.id === orderId
@@ -137,7 +148,8 @@ class Orders extends React.Component {
                                     </table>
                                 </div>
                             </div>
-                            <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
+                            {/* <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/> */}
+                            <OrdersAsideMobile seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
                         </div>
                     </div>
                 </div>
