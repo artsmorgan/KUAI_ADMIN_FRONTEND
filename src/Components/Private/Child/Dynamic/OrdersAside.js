@@ -162,7 +162,7 @@ class OrdersAside extends React.Component {
         return (
             <>
                 <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
-                    <h4 className="text-center" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
+                    <h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">
                             Selecciona una

@@ -100,7 +100,7 @@ class Orders extends React.Component {
                     <div className="flex-area content container-fluid">
                         <div className="row">
 
-                            <div className="col col-md-8 col-lg-8 col-sm-12 col-xs-12">
+                            <div className={"col col-md-8 col-lg-8 col-sm-12 col-xs-12 mb-order-table " + (this.state.orderDiv ? 'new' : 'hidden')}>
                                 <div>
                                     <Nav className="tab-cstm" variant="pills" defaultActiveKey="/ORDENES">
                                         <Nav.Item>
@@ -111,7 +111,7 @@ class Orders extends React.Component {
                                         </Nav.Item>
                                     </Nav>
                                 </div>
-                                <div className={"ord-table shadow-1 " +(this.state.orderDiv ? '' : 'hidden')}>
+                                <div className="ord-table shadow-1">
                                     <table>
                                         <tbody>
                                         {

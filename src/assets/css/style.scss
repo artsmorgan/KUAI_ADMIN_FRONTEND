@@ -1457,12 +1457,18 @@ body {
 }
 
 .order-aside-mb{
+  display: block;
+}
+
+.hidden{
   display: none;
 }
+
 
 @media only screen 
   and (min-device-width: 320px) 
   and (max-device-width: 768px) { 
+
 
     .collapse-area .collapse-container .collapse-header span{
       font-size: 12px;
@@ -1539,7 +1545,26 @@ body {
     .order-detail{
       height: 100%;
     }
-}
+    .mb-order-table{
+      .ord-table{
+        height: auto;
+      }
+    }
+    .mb-hidden{
+      display: none;
+    }
+    .order-ptable table td{
+      width: 20px;
+    }
+    .order-desc-area{
+      min-height: 85vh;
+    }
+    .collapse-area .collapse-container .collapse-content .col {
+      padding: 12px 10px;
+    }
+    .collapse-area .collapse-container .collapse-content .col input{
+      margin-bottom: 10px;
+    }
 }
 @media only screen 
   and (min-device-width: 320px) 
@@ -1621,7 +1646,14 @@ body {
     .order-detail{
       height: 100%;
     }
-}
+    .mb-order-table{
+      .ord-table{
+        // background: transparent !important;
+      }
+    }
+    .collapse-area .collapse-container .collapse-content .col {
+      padding: 12px 10px;
+    }
 }
 @media only screen 
   and (min-device-width: 375px) 
@@ -1703,4 +1735,31 @@ body {
     .order-detail{
       height: 100%;
     }
+    .mb-order-table{
+      .ord-table{
+        // background: transparent !important;
+      }
+    }
+    .collapse-area .collapse-container .collapse-content .col {
+      padding: 12px 10px;
+    }
 }
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 568px)
+  and (-webkit-min-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71) {
+    .hor-inline .time-block{
+      width: 100%;
+      margin-top: 13px;
+    }
+    .cstm-select.mini .css-yk16xz-control{
+      width: 130px;
+    }
+    .hor-inline .time-block .dash{
+      left: 145px;
+    }
+    .collapse-area .collapse-container .collapse-content .col {
+      padding: 12px 10px;
+    }
+  }

@@ -6,10 +6,6 @@ body {
   padding-top: 60px;
 }
 
-.hidden{
-  display: none;
-}
-
 .container-login {
   position: relative;
   display: block;
@@ -1655,9 +1651,17 @@ body {
   margin-left: 15px;
 }
 
+.order-aside-mb {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
   .collapse-area .collapse-container .collapse-header span {
-    font-size: 14px;
+    font-size: 12px;
   }
   .wrapper {
     padding-left: 0px;
@@ -1722,12 +1726,33 @@ body {
   }
   .flex-area {
     padding: 15px !important;
+  }
+  .order-detail {
+    height: 100%;
+  }
+  .mb-order-table .ord-table {
+    height: auto;
+  }
+  .mb-hidden {
+    display: none;
+  }
+  .order-ptable table td {
+    width: 20px;
+  }
+  .order-desc-area {
+    min-height: 85vh;
+  }
+  .collapse-area .collapse-container .collapse-content .col {
+    padding: 12px 10px;
+  }
+  .collapse-area .collapse-container .collapse-content .col input {
+    margin-bottom: 10px;
   }
 }
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
   .collapse-area .collapse-container .collapse-header span {
-    font-size: 14px;
+    font-size: 12px;
   }
   .wrapper {
     padding-left: 0px;
@@ -1792,12 +1817,18 @@ body {
   }
   .flex-area {
     padding: 15px !important;
+  }
+  .order-detail {
+    height: 100%;
+  }
+  .collapse-area .collapse-container .collapse-content .col {
+    padding: 12px 10px;
   }
 }
 
 @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
   .collapse-area .collapse-container .collapse-header span {
-    font-size: 14px;
+    font-size: 12px;
   }
   .wrapper {
     padding-left: 0px;
@@ -1862,6 +1893,28 @@ body {
   }
   .flex-area {
     padding: 15px !important;
+  }
+  .order-detail {
+    height: 100%;
+  }
+  .collapse-area .collapse-container .collapse-content .col {
+    padding: 12px 10px;
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (device-aspect-ratio: 40 / 71) {
+  .hor-inline .time-block {
+    width: 100%;
+    margin-top: 13px;
+  }
+  .cstm-select.mini .css-yk16xz-control {
+    width: 130px;
+  }
+  .hor-inline .time-block .dash {
+    left: 145px;
+  }
+  .collapse-area .collapse-container .collapse-content .col {
+    padding: 12px 10px;
   }
 }
 /*# sourceMappingURL=style.css.map */
