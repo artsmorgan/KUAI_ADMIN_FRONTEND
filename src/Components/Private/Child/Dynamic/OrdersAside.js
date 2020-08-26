@@ -9,11 +9,13 @@ class OrdersAside extends React.Component {
         super(props);
 
         this.state = {
-            width: 0,
+            width:0,
             seeMore: false,
             seeMoreThisOrder: {},
             seeSinpeMobile: false,
-            seeExpress: false
+            seeExpress: false,
+            mobile:false,
+            selectedOrderDiv:true
         }
     }
 
@@ -37,7 +39,8 @@ class OrdersAside extends React.Component {
             seeMore: props.seeMore,
             seeMoreThisOrder: props.seeMoreThisOrder,
             seeSinpeMobile: props.seeMore ? false : null,
-            seeExpress: props.seeMore ? false : null
+            seeExpress: props.seeMore ? false : null,
+            selectedOrderDiv: props.selectedOrderDiv ? true : null,
         });
     }
 
@@ -123,9 +126,21 @@ class OrdersAside extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                this.setState({mobile:true,selectedOrderDiv:false});
+                
+            } 
+        });
+
+    }
+
 
     render() {
-
+        
         const seeMore = this.state.seeMore
         const seeMoreThisOrder = this.state.seeMoreThisOrder
         let style = {}
@@ -146,7 +161,7 @@ class OrdersAside extends React.Component {
 
         return (
             <>
-                <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12 order-aside">
+                <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
                     <h4 className="text-center" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">

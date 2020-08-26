@@ -5,7 +5,6 @@ import $ from 'jquery';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
-import OrdersAside from "./Child/Dynamic/OrdersAsideMobile";
 import * as APITools from "../../util/api";
 import myOrders from '../../util/data/myOrders.json'
 
@@ -18,14 +17,26 @@ class Orders extends React.Component {
         super(props);
 
         this.state = {
-            width: 0,
+            width:0,
             seeMore: false,
             seeMoreThisOrder: {},
-            myOrders: []
+            myOrders: [],
+            mobile:false,
+            selectedOrderDiv:true,
+            orderDiv:true,
+            
         }
     }
 
     componentDidMount() {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                this.setState({mobile:true,selectedOrderDiv:false});
+            } 
+        });
+        
         console.log("componentDidMount")
         if (localStorage.getItem("kuaiUserAuthToken")) {
             const url = endpointURL + APITools.endPoints.MY_ORDERS
@@ -59,21 +70,18 @@ class Orders extends React.Component {
     }
 
     seeMore = (orderId) => {
-        this.setState({
-            width: window.innerWidth
-        }, () => {
-            if (this.state.width < 1024) {
-                $(".order-aside").addClass('order-aside-mb');
-            } else {
-                
-            }
-        });
-        // console.log(orderId)
+        
+        if(this.state.mobile){
+            this.setState({selectedOrderDiv:true,orderDiv:false})
+        }
         const order = this.state.myOrders.filter(obj => {
             return obj.id === orderId
         })
-        // console.log(order)
+        console.log("desktop")
         this.setState({seeMore: true, seeMoreThisOrder: order[0]});
+        
+        // console.log(orderId)
+        
     }
 
     getOrdersDispatched = () => {
@@ -103,7 +111,7 @@ class Orders extends React.Component {
                                         </Nav.Item>
                                     </Nav>
                                 </div>
-                                <div className="ord-table shadow-1">
+                                <div className={"ord-table shadow-1 " +(this.state.orderDiv ? '' : 'hidden')}>
                                     <table>
                                         <tbody>
                                         {
@@ -148,8 +156,7 @@ class Orders extends React.Component {
                                     </table>
                                 </div>
                             </div>
-                            {/* <OrdersAside seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/> */}
-                            <OrdersAsideMobile seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
+                            <OrdersAside selectedOrderDiv={this.state.selectedOrderDiv} seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder}/>
                         </div>
                     </div>
                 </div>
