@@ -10,7 +10,7 @@ class ModifyMenu extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleNewMenuItem = this.handleNewMenuItem.bind(this);
+        
         this.state = {
             width:0,
             mobile:false,

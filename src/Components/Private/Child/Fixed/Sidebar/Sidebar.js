@@ -3,8 +3,9 @@ import {Link, Redirect} from "react-router-dom";
 import $ from 'jquery';
 import {Dropdown} from 'react-bootstrap';
 import Avatar from "../../../../../assets/images/avatar.svg";
-
+import Modal from "react-bootstrap/Modal";
 import Logo from "../../../../../assets/images/logo-kuai-white.svg";
+import SupportModal from "./SupportModal";
 
 class Sidebar extends React.Component {
 
@@ -13,6 +14,7 @@ class Sidebar extends React.Component {
 
         this.state = {
             width: 0,
+            show:false,
             redirectToLogin: false
         }
 
@@ -55,6 +57,14 @@ class Sidebar extends React.Component {
     renderRedirect = () => {
         return <Redirect to='/login'/>
     };
+
+    showSupportModal = () => {
+        this.setState({show: true});
+    }
+
+    hideSupportModal = () => {
+        this.setState({show: false});
+    }
 
     render() {
         if (this.state.redirectToLogin) {
@@ -332,7 +342,7 @@ class Sidebar extends React.Component {
                             </Link>
                         </li>
                         <li>
-                            <Link to={'/control-center'}>
+                            <Link to={'/control-center'} onClick={this.showSupportModal}>
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g clipPath="url(#clip0)">
@@ -374,6 +384,25 @@ class Sidebar extends React.Component {
                         </li>
                     </ul>
                 </div>
+
+                <Modal
+                        className="cstm-modal"
+                        size="xl"
+                        show={this.state.show}
+                        onHide={this.hideSupportModal}
+                        aria-labelledby="contained-modal-title-vcenter"
+                        centered
+                        scrollable={true}
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title id="example-modal-sizes-title-sm">
+
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <SupportModal/>
+                        </Modal.Body>
+                    </Modal>
             </>
 
         );
