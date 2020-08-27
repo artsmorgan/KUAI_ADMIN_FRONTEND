@@ -18,6 +18,14 @@ class ModifyRestaurant extends React.Component {
         this.showFileUpload = this.showFileUpload.bind(this);
 
         this.state = {
+            width:0,
+            mobile:false,
+            formTab:{
+                generalTab:true,
+                informationTab:true,
+                scheduleTab:true,
+            },
+
             checked: false,
             horario0: false,
 
@@ -180,6 +188,43 @@ class ModifyRestaurant extends React.Component {
             this.handleError(err)
         })
     }
+    
+    activateTab(e,tabName){
+        let obj = this.state.formTab;
+        let alltabs = this.state.formTab;
+        if(this.state.mobile){
+            for (const [key, value] of Object.entries(obj)) {
+                console.log(key)
+                console.log(value)
+                console.log(tabName)
+                if(key==tabName){
+                    alltabs[key] = true
+                }else{
+                    alltabs[key] = false
+                }
+            }
+    
+            this.setState({formTab:alltabs})
+        }     
+    }
+
+    componentDidMount() {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                let obj = this.state.formTab
+                
+                obj.informationTab = false;
+                obj.scheduleTab = false
+            
+                this.setState({formTab:obj,mobile:true});               
+            } 
+        });
+
+    }
+
+
 
     render() {
         const {width} = this.state
@@ -223,19 +268,19 @@ class ModifyRestaurant extends React.Component {
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="/ORDENES">
                                         <Nav.Item>
-                                            <Nav.Link href="#">General</Nav.Link>
+                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'generalTab')}>General</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link href="#">Información</Nav.Link>
+                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'informationTab')}>Información</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link href="#">Horario</Nav.Link>
+                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'scheduleTab')}>Horario</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                     </div>
 
                                     {/* This section will be go inside tab start */}
-                                    <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                    <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " +(this.state.formTab.generalTab ? '' : 'hidden')}>
                                         <h3 className="mb-hidden">
                                             General
                                         </h3>
@@ -353,7 +398,7 @@ class ModifyRestaurant extends React.Component {
 
                                     {/* This section will be go inside tab start */}
 
-                                    <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                    <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 "+(this.state.formTab.informationTab ? '' : 'hidden')}>
                                         <h3 className="mb-hidden">Información</h3>
                                         <div>
                                             <label htmlFor="">PROVINCIA:</label>
@@ -406,7 +451,7 @@ class ModifyRestaurant extends React.Component {
 
                                     {/* This section will be go inside tab start */}
 
-                                    <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                    <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 "+(this.state.formTab.scheduleTab ? '' : 'hidden')}>
                                         <h3 style={{marginBottom: '55px'}} className="mb-hidden">Horario</h3>
                                         <div className="hor-inline">
                                             <Checkbox

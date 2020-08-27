@@ -10,6 +10,58 @@ class ModifyMenu extends React.Component {
 
     constructor(props) {
         super(props);
+        this.handleNewMenuItem = this.handleNewMenuItem.bind(this);
+        this.state = {
+            width:0,
+            mobile:false,
+            formTab:{
+                menuTab:true,
+                categoriesTab:true,
+                newMenuItem:false
+            },
+            
+        }
+    }
+
+
+    activateTab(e,tabName){
+        let obj = this.state.formTab;
+        let alltabs = this.state.formTab;
+        if(this.state.mobile){
+            for (const [key, value] of Object.entries(obj)) {
+                console.log(key)
+                console.log(value)
+                console.log(tabName)
+                if(key==tabName){
+                    alltabs[key] = true
+                }else{
+                    alltabs[key] = false
+                }
+            }
+    
+            this.setState({formTab:alltabs})
+        }     
+    }
+
+    handleNewMenuItem(e){
+        console.log(e)
+        let obj = this.state.formTab;
+        obj.newMenuItem = true;
+        this.setState({formTab:obj});
+    }
+
+    componentDidMount() {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                let obj = this.state.formTab
+                obj.categoriesTab = false;
+            
+                this.setState({formTab:obj,mobile:true});               
+            } 
+        });
+
     }
 
     render() {
@@ -24,16 +76,16 @@ class ModifyMenu extends React.Component {
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="/ORDENES">
                                         <Nav.Item>
-                                            <Nav.Link href="#">Menú</Nav.Link>
+                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'menuTab')}>Menú</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link href="#">Categorías</Nav.Link>
+                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'categoriesTab')}>Categorías</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                     </div>
 
                                     {/* This section will go for tab start */}
-                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "+(this.state.formTab.categoriesTab ? '' : 'hidden')}>
                                     <h3 className="mb-hidden">
                                         Categorías
                                     </h3>
@@ -106,7 +158,7 @@ class ModifyMenu extends React.Component {
 
                                 {/* This section will go for tab start */}
 
-                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "+(this.state.formTab.menuTab ? '' : 'hidden')}>
                                     <h3 className="mb-hidden">Menú</h3>
                                     <div className="rotator-container lg">
                                         <div className="btn-theme add-menu">
@@ -118,7 +170,7 @@ class ModifyMenu extends React.Component {
                                                 <p className="dummy"></p>
                                                 <p className="dummy" style={{width: '80px'}}></p>
                                                 <p className="dummy" style={{width: '80px'}}></p>
-                                                <button className="btn-add-menu"><span>+</span>AÑADIR</button>
+                                                <button className="btn-add-menu" ><span>+</span>AÑADIR</button>
                                             </div>
                                         </div>
                                         <div className="rotator-scroll">
@@ -223,7 +275,7 @@ class ModifyMenu extends React.Component {
 
                                 {/* This section will appear after the button click of ad menu New menu */}
 
-                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+                                <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "+(this.state.formTab.newMenuItem ? '' : 'hidden')}>
                                     <h3 style={{marginBottom: '21px'}}>Nuevo item de Menú</h3>
                                     <div className="menu-details">
                                     <label htmlFor="">VISTA PREVIA</label>
