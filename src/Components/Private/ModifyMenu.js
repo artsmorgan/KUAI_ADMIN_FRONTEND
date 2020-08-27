@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import {Button, Nav} from 'react-bootstrap';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Checkbox from '@opuscapita/react-checkbox';
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
@@ -20,8 +21,20 @@ class ModifyMenu extends React.Component {
                     <div className="flex-area conten container-fluid">
                         <div className="mod-rest-container">
                             <div className="row clearfix">
+                            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="/ORDENES">
+                                        <Nav.Item>
+                                            <Nav.Link href="#">Menú</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link href="#">Categorías</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
+                                    </div>
+
+                                    {/* This section will go for tab start */}
                                 <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                    <h3>
+                                    <h3 className="mb-hidden">
                                         Categorías
                                     </h3>
                                     <div className="rotator-container">
@@ -88,8 +101,13 @@ class ModifyMenu extends React.Component {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* This section will go for tab end */}
+
+                                {/* This section will go for tab start */}
+
                                 <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                    <h3>Menú</h3>
+                                    <h3 className="mb-hidden">Menú</h3>
                                     <div className="rotator-container lg">
                                         <div className="btn-theme add-menu">
                                             <div className="add-item">
@@ -200,6 +218,11 @@ class ModifyMenu extends React.Component {
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* This section will go for tab end */}
+
+                                {/* This section will appear after the button click of ad menu New menu */}
+
                                 <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
                                     <h3 style={{marginBottom: '21px'}}>Nuevo item de Menú</h3>
                                     <div className="menu-details">
@@ -349,6 +372,9 @@ class ModifyMenu extends React.Component {
                                         </div>
                                     </div>
                                 </div>
+                                
+                                {/* New menu */}
+
                             </div>
                         </div>
                     </div>

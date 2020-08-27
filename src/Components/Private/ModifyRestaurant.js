@@ -220,8 +220,23 @@ class ModifyRestaurant extends React.Component {
                             <form onSubmit={this.formSubmitHandler}>
                                 <div className="row clearfix">
                                     {/* <div className="">New</div> */}
+                                    <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="/ORDENES">
+                                        <Nav.Item>
+                                            <Nav.Link href="#">General</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link href="#">Información</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link href="#">Horario</Nav.Link>
+                                        </Nav.Item>
+                                    </Nav>
+                                    </div>
+
+                                    {/* This section will be go inside tab start */}
                                     <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                        <h3>
+                                        <h3 className="mb-hidden">
                                             General
                                         </h3>
                                         <input type="file" id="my_file" style={{display: "none"}}
@@ -332,8 +347,14 @@ class ModifyRestaurant extends React.Component {
                                             </p>
                                         </div>
                                     </div>
+
+                                    {/* This section will be go inside tab end */}
+
+
+                                    {/* This section will be go inside tab start */}
+
                                     <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                        <h3>Información</h3>
+                                        <h3 className="mb-hidden">Información</h3>
                                         <div>
                                             <label htmlFor="">PROVINCIA:</label>
                                             <Select className="cstm-select" options={optionProvince}
@@ -381,8 +402,12 @@ class ModifyRestaurant extends React.Component {
                                             <button className="btn-theme" type="submit">GUARDAR</button>
                                         </div>
                                     </div>
+                                    {/* This section will be go inside tab end */}
+
+                                    {/* This section will be go inside tab start */}
+
                                     <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12">
-                                        <h3 style={{marginBottom: '55px'}}>Horario</h3>
+                                        <h3 style={{marginBottom: '55px'}} className="mb-hidden">Horario</h3>
                                         <div className="hor-inline">
                                             <Checkbox
                                                 onChange={this.harioCheckboxChangeHandler} name="horario0" value="Lunes"
@@ -538,6 +563,9 @@ class ModifyRestaurant extends React.Component {
                                         </div>
 
                                     </div>
+
+                                    {/* This section will be go inside tab end */}
+
                                 </div>
                             </form>
                         </div>

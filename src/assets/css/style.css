@@ -1659,6 +1659,10 @@ body {
   display: none;
 }
 
+.mb-visible {
+  display: none;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;
@@ -1747,6 +1751,11 @@ body {
   }
   .collapse-area .collapse-container .collapse-content .col input {
     margin-bottom: 10px;
+  }
+  .mb-visible {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
   }
 }
 

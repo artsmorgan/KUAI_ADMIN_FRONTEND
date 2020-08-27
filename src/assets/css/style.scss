@@ -1464,6 +1464,9 @@ body {
   display: none;
 }
 
+.mb-visible{
+  display: none;
+}
 
 @media only screen 
   and (min-device-width: 320px) 
@@ -1564,6 +1567,9 @@ body {
     }
     .collapse-area .collapse-container .collapse-content .col input{
       margin-bottom: 10px;
+    }
+    .mb-visible{
+      display: inline-flex;
     }
 }
 @media only screen 
