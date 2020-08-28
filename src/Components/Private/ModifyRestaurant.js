@@ -250,9 +250,22 @@ class ModifyRestaurant extends React.Component {
         ];
 
         const optionTime = [
-            {value: "10", label: "10.00 a.m", name: 'time'},
-            {value: "11", label: "11.00 a.m", name: 'time'},
-            {value: "12", label: "12.00 p.m", name: 'time'},
+            {value: "8", label: "08.00 am", name: 'time'},
+            {value: "9", label: "09.00 am", name: 'time'},
+            {value: "10", label: "10.00 am", name: 'time'},
+            {value: "11", label: "11.00 am", name: 'time'},
+            {value: "12", label: "12.00 am", name: 'time'},
+            {value: "13", label: "01.00 pm", name: 'time'},
+            {value: "14", label: "02.00 pm", name: 'time'},
+            {value: "15", label: "03.00 pm", name: 'time'},
+            {value: "16", label: "04.00 pm", name: 'time'},
+            {value: "17", label: "05.00 pm", name: 'time'},
+            {value: "18", label: "06.00 pm", name: 'time'},
+            {value: "19", label: "07.00 pm", name: 'time'},
+            {value: "20", label: "08.00 pm", name: 'time'},
+            {value: "21", label: "09.00 pm", name: 'time'},
+            {value: "22", label: "10.00 pm", name: 'time'},
+            {value: "23", label: "11.00 pm", name: 'time'}
         ];
 
         return (
@@ -461,14 +474,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario0_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={(e) => this.horarioSelectChangeHander(e, 'horario0_startTime')}
                                                         value={this.state.dataToPost.horario.horario0.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario0_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={(e) => this.horarioSelectChangeHander(e, 'horario0_endTime')}
                                                         value={this.state.dataToPost.horario.horario0.endTime}
                                                 />
@@ -483,14 +496,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario1_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectHarioChangeHandler}
                                                         value={this.state.dataToPost.horario.horario1.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario1_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario1.endTime}
                                                 />
@@ -505,14 +518,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario2_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario2.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario2_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario2.endTime}
                                                 />
@@ -527,14 +540,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario3_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectHarioChangeHandler}
                                                         value={this.state.dataToPost.horario.horario3.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario3_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario3.endTime}
                                                 />
@@ -549,14 +562,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario4_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectHarioChangeHandler}
                                                         value={this.state.dataToPost.horario.horario4.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario4_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario4.endTime}
                                                 />
@@ -571,14 +584,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario5_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectHarioChangeHandler}
                                                         value={this.state.dataToPost.horario.horario5.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario5_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario5.endTime}
                                                 />
@@ -593,14 +606,14 @@ class ModifyRestaurant extends React.Component {
                                             <div className="time-block">
                                                 <Select className="cstm-select mini float-left"
                                                         options={optionTime} name="horario6_startTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectHarioChangeHandler}
                                                         value={this.state.dataToPost.horario.horario6.startTime}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                         options={optionTime} name="horario6_endTime"
-                                                        placeholder="Select"
+                                                        placeholder="Seleccionar"
                                                         onChange={this.selectChangeHandler}
                                                         value={this.state.dataToPost.horario.horario6.endTime}
                                                 />
