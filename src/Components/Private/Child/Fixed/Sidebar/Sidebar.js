@@ -387,7 +387,7 @@ class Sidebar extends React.Component {
 
                 <Modal
                         className="cstm-modal"
-                        size="xl"
+                        size="xs"
                         show={this.state.show}
                         onHide={this.hideSupportModal}
                         aria-labelledby="contained-modal-title-vcenter"
