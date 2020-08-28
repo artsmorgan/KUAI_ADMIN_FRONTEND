@@ -225,7 +225,7 @@ body {
   width: 100%;
   top: 0px;
   left: 0px;
-  z-index: 1;
+  z-index: 99;
   padding-left: 330px;
 }
 
@@ -847,13 +847,45 @@ body {
   padding-left: 20px;
 }
 
+.modal-contact {
+  padding: 20px;
+}
+
+.modal-contact h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: -20px;
+}
+
+.modal-contact label {
+  text-transform: uppercase;
+  font-size: 14px;
+  margin-left: 7px;
+  font-weight: 500;
+}
+
+.modal-contact input {
+  margin-bottom: 20px;
+}
+
+.modal-contact button {
+  margin-top: 30px;
+}
+
+.modal-contact .success-txt {
+  text-align: center;
+  font-weight: 600;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 .cstm-select.mini .css-yk16xz-control {
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
   border: 1px solid #fff !important;
   border-radius: 50px !important;
   height: 35px !important;
-  width: 100px;
+  width: 120px;
 }
 
 .cstm-select.mini .css-1pahdxg-control {
@@ -933,7 +965,7 @@ body {
 }
 
 .hor-inline .time-block {
-  width: 220px;
+  width: 260px;
   float: right;
   margin-top: 3px;
   position: relative;
@@ -941,7 +973,7 @@ body {
 
 .hor-inline .time-block .dash {
   position: absolute;
-  left: 107px;
+  left: 126px;
   top: 5px;
 }
 
@@ -956,6 +988,7 @@ body {
   width: 100%;
   overflow: auto;
   padding: 5px;
+  z-index: 1;
 }
 
 .mod-rest-container .rotator-container .rotator {
@@ -1353,6 +1386,8 @@ body {
   border-radius: 10px !important;
   padding: 15px !important;
   height: auto;
+  z-index: 9;
+  cursor: pointer;
 }
 
 .add-menu .add-item {
@@ -1656,14 +1691,37 @@ body {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 .mb-visible {
   display: none;
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 768px) {
+.mb-navigator {
+  position: fixed;
+  top: 0px;
+  z-index: 999;
+  width: 100%;
+  background: #fff;
+  height: 60px;
+  text-align: center;
+  display: none;
+}
+
+.mb-navigator svg {
+  position: absolute;
+  left: 30px;
+  top: 22px;
+}
+
+.mb-navigator p {
+  margin-top: 16px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 896px) {
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;
   }
@@ -1697,7 +1755,7 @@ body {
     margin-top: 5px;
   }
   .sidebar-wrapper {
-    z-index: 99;
+    z-index: 999;
     background: #f5f5f5;
     -webkit-box-shadow: 0px 0px 10px #bdbdbd;
             box-shadow: 0px 0px 10px #bdbdbd;
@@ -1757,9 +1815,12 @@ body {
     display: -ms-inline-flexbox;
     display: inline-flex;
   }
+  .mb-navigator {
+    display: block;
+  }
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;
   }
@@ -1793,7 +1854,106 @@ body {
     margin-top: 5px;
   }
   .sidebar-wrapper {
-    z-index: 99;
+    z-index: 999;
+    background: #f5f5f5;
+    -webkit-box-shadow: 0px 0px 10px #bdbdbd;
+            box-shadow: 0px 0px 10px #bdbdbd;
+  }
+  .sidebar-wrapper .menu-list {
+    margin-top: 20px;
+  }
+  .sidebar-wrapper .menu-list a {
+    border-left: 0px;
+  }
+  .container-login {
+    width: 90%;
+    margin: 20% auto;
+  }
+  .container-login .ls-panel {
+    padding: 30px 25px;
+  }
+  .tab-cstm div.nav-item a {
+    font-size: 14px;
+    padding: 2px 10px !important;
+  }
+  .mb-total-view {
+    display: block;
+  }
+  .ord-table .ord-title {
+    font-size: 13px;
+  }
+  .ord-table .price {
+    font-size: 13px;
+  }
+  .flex-area {
+    padding: 15px !important;
+  }
+  .order-detail {
+    height: 100%;
+  }
+  .mb-order-table .ord-table {
+    height: auto;
+  }
+  .mb-hidden {
+    display: none;
+  }
+  .order-ptable table td {
+    width: 20px;
+  }
+  .order-desc-area {
+    min-height: 85vh;
+  }
+  .collapse-area .collapse-container .collapse-content .col {
+    padding: 12px 10px;
+  }
+  .collapse-area .collapse-container .collapse-content .col input {
+    margin-bottom: 10px;
+  }
+  .mb-visible {
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+  }
+  .mb-navigator {
+    display: block;
+  }
+}
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2) {
+  .collapse-area .collapse-container .collapse-header span {
+    font-size: 12px;
+  }
+  .wrapper {
+    padding-left: 0px;
+  }
+  .navbar-cstm {
+    padding-left: 0px;
+  }
+  .menu-btn {
+    display: block;
+  }
+  .menu-close {
+    display: block;
+  }
+  .logo-sidebar {
+    display: none;
+  }
+  .hidden-lg {
+    display: block;
+  }
+  .extra-space {
+    min-height: 100px;
+    padding: 25px;
+    background: #fff;
+  }
+  .extra-space .dropdown-toggle::after {
+    display: none;
+  }
+  .extra-space .cstm-drop {
+    margin-top: 5px;
+  }
+  .sidebar-wrapper {
+    z-index: 999;
     background: #f5f5f5;
     -webkit-box-shadow: 0px 0px 10px #bdbdbd;
             box-shadow: 0px 0px 10px #bdbdbd;
@@ -1833,9 +1993,12 @@ body {
   .collapse-area .collapse-container .collapse-content .col {
     padding: 12px 10px;
   }
+  .mb-navigator {
+    display: block;
+  }
 }
 
-@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) {
+@media only screen and (min-device-width: 375px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 3) {
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;
   }
@@ -1869,7 +2032,7 @@ body {
     margin-top: 5px;
   }
   .sidebar-wrapper {
-    z-index: 99;
+    z-index: 999;
     background: #f5f5f5;
     -webkit-box-shadow: 0px 0px 10px #bdbdbd;
             box-shadow: 0px 0px 10px #bdbdbd;
@@ -1908,6 +2071,9 @@ body {
   }
   .collapse-area .collapse-container .collapse-content .col {
     padding: 12px 10px;
+  }
+  .mb-navigator {
+    display: block;
   }
 }
 
@@ -1924,6 +2090,9 @@ body {
   }
   .collapse-area .collapse-container .collapse-content .col {
     padding: 12px 10px;
+  }
+  .mb-navigator {
+    display: block;
   }
 }
 /*# sourceMappingURL=style.css.map */

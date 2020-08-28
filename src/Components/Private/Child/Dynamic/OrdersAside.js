@@ -62,6 +62,8 @@ class OrdersAside extends React.Component {
         this.setState({seeMore: true, seeMoreThisOrder: order[0]});
     }
 
+    
+
     seeSinpeMobile = () => {
         this.setState({seeMore: false, seeExpress: false, seeSinpeMobile: true});
     }
@@ -161,6 +163,8 @@ class OrdersAside extends React.Component {
 
         return (
             <>
+                
+                
                 <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
                     <h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
@@ -399,6 +403,7 @@ class OrdersAside extends React.Component {
                     </div>
                     {/* Snipe Movil end */}
                 </div>
+                
             </>
 
         );
