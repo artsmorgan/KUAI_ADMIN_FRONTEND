@@ -74,12 +74,12 @@ class ModifyMenu extends React.Component {
                         <div className="mod-rest-container">
                             <div className="row clearfix">
                             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="/ORDENES">
+                                    <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="link-1">
                                         <Nav.Item>
-                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'menuTab')}>Menú</Nav.Link>
+                                            <Nav.Link href="#" eventKey="link-1" onClick={(e) => this.activateTab(e, 'menuTab')}>Menú</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link href="#" onClick={(e) => this.activateTab(e, 'categoriesTab')}>Categorías</Nav.Link>
+                                            <Nav.Link href="#" eventKey="link-2" onClick={(e) => this.activateTab(e, 'categoriesTab')}>Categorías</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                     </div>
