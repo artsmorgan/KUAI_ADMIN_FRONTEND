@@ -23,7 +23,7 @@ class Registry extends React.Component {
             submitLoading: false,
             dataToPost: {
                 name: '',
-                restaurant: '',
+                restaurantName: '',
                 email: '',
                 password: ''
             }
@@ -99,17 +99,18 @@ class Registry extends React.Component {
     }
 
     processSubmit() {
-        const url = endpointURL // dummy
+        const url = APITools.endPoints.APIBASEURL+APITools.endPoints.AUTH.registration        
         const headers = {
             'Content-Type': 'application/json, charset=UTF-8', // dummy
         };
+        const data = JSON.stringify(this.state.dataToPost);
         // const data = this.state.dataToPost;
         // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
+        // const data = JSON.stringify({
+        //     title: 'foo',
+        //     body: 'bar',
+        //     userId: 1
+        // })
 
         // API calling and handling response
         const res = APITools.postEndPointsHandler(url, data, headers)
@@ -156,10 +157,10 @@ class Registry extends React.Component {
                                 <p style={{color: "red"}}>
                                     {this.validator.message('name', this.state.dataToPost.name, 'required')}
                                 </p>
-                                <input type="text" placeholder="Restaurante" name="restaurant"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.restaurant}/>
+                                <input type="text" placeholder="Restaurante" name="restaurantName"
+                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.restaurantName}/>
                                 <p style={{color: "red"}}>
-                                    {this.validator.message('restaurant', this.state.dataToPost.restaurant, 'required')}
+                                    {this.validator.message('restaurantName', this.state.dataToPost.restaurantName, 'required')}
                                 </p>
                                 <input type="text" placeholder="Correo electrónico" name="email"
                                        onChange={this.inputChangeHandler}
