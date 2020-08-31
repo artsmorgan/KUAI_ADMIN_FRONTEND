@@ -1,12 +1,13 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {Button} from 'react-bootstrap';
-import {withSnackbar} from 'notistack';
+import { Link } from "react-router-dom";
+import { Button } from 'react-bootstrap';
+import { withSnackbar } from 'notistack';
 import SimpleReactValidator from 'simple-react-validator';
 import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/api'
+import axios from "axios";
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
@@ -51,7 +52,7 @@ class Login extends React.Component {
     inputChangeHandler = (e) => {
         let obj = this.state.dataToPost;
         obj[e.target.name] = e.target.value;
-        this.setState({dataToPost: obj});
+        this.setState({ dataToPost: obj });
     };
 
     formSubmitHandler = (e) => {
@@ -64,39 +65,43 @@ class Login extends React.Component {
     };
 
     showAndHideSubmitLoader() {
-        this.setState({submitLoading: true});
+        this.setState({ submitLoading: true });
         setTimeout(() => {
-            this.setState({submitLoading: false});
+            this.setState({ submitLoading: false });
             this.processSubmit();
         }, 1000);
     }
 
-    processSubmit() {
-        const url = endpointURL // dummy
+    async processSubmit() {
+        const url = APITools.endPoints.APIBASEURL + APITools.endPoints.AUTH.login
         const headers = {
             'Content-Type': 'application/json, charset=UTF-8', // dummy
         };
-        // const data = this.state.dataToPost;
-        // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
 
         // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                localStorage.setItem("kuaiUserAuthToken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXN0YXVyYW50IjoiZTJhYWM1MDYtYmUyOS00NzY1LWFiZGMtOTI5NWM3MmM1ODM0IiwiaWF0IjoxNTE2MjM5MDIyfQ.pYbKf78JD9hQeMVHnBNV9a3WDxL4nwCvarwUMQqxGNE")
-                this.handleSuccess("Login success.")
-                this.props.history.push('/orders')
-            }
-        }).catch(err => {
-            this.handleError(err)
-        })
+        // const res = await APITools.postEndPointsHandler(url, this.state.dataToPost, headers)
+        // console.log("------------------")
+        // console.log(res)
+        // if(res!=undefined){
+        //     console.log("I am logged in")
+        // }else{
+        //     console.log("error")
+        // }
+        localStorage.setItem("kuaiUserAuthToken", "asdasdamckmmklvamaklmcaklmcalkmcaslkcmalkcmaklcmasklcmaslkcmaskl")
+        this.handleSuccess("Login success.")
+        this.props.history.push('/orders')
+        // res.then(result => {
+        //     console.log(result)
+        //     // if (result.success) {
+        //         // localStorage.setItem("kuaiUserAuthToken", result.user.stsTokenManager.accessToken)
+        //     //     this.handleSuccess("Login success.")
+        //     //     this.props.history.push('/orders')
+        //     // }else{
+        //     //     console.log(result)
+        //     // }
+        // }).catch(err => {
+        //     this.handleError(err)
+        // })
     }
 
 
@@ -118,27 +123,27 @@ class Login extends React.Component {
             return (
                 <>
                     <div className="container-login">
-                        <img src={Logo} alt="website logo"/>
+                        <img src={Logo} alt="website logo" />
                         <form onSubmit={this.formSubmitHandler}>
                             <div className="ls-panel">
                                 <h3>Iniciar sesión</h3>
                                 <input type="text" className="user" name="email" placeholder="Correo electrónico"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.email}/>
-                                <p style={{color: "red"}}>
+                                    onChange={this.inputChangeHandler} value={this.state.dataToPost.email} />
+                                <p style={{ color: "red" }}>
                                     {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
                                 </p>
                                 <input type="password" className="pass" name="password" placeholder="Contraseña"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
-                                <p style={{color: "red"}}>
+                                    onChange={this.inputChangeHandler} value={this.state.dataToPost.password} />
+                                <p style={{ color: "red" }}>
                                     {this.validator.message('password', this.state.dataToPost.password, 'required')}
                                 </p>
                                 <Button className="btn btn-theme" type="submit">
                                     INGRESAR
                                 </Button>
-                                <div className="link-holder" style={{marginTop: '20px'}}><Link className="float-left"
-                                                                                               to={'/forgot-password'}>Olvidaste
+                                <div className="link-holder" style={{ marginTop: '20px' }}><Link className="float-left"
+                                    to={'/forgot-password'}>Olvidaste
                                     tu contraseña?</Link>&emsp;<Link className="float-right"
-                                                                     to={'/registry'}>Registrarse</Link></div>
+                                        to={'/registry'}>Registrarse</Link></div>
                             </div>
                         </form>
                     </div>

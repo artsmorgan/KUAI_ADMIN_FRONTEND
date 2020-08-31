@@ -21,6 +21,8 @@ class ModifyMenu extends React.Component {
             },
             
         }
+
+        this.newMenuItem = this.newMenuItem.bind(this);
     }
 
 
@@ -43,10 +45,14 @@ class ModifyMenu extends React.Component {
         }     
     }
 
-    handleNewMenuItem(e){
-        console.log(e)
-        let obj = this.state.formTab;
-        obj.newMenuItem = true;
+    newMenuItem(){
+        
+        let obj = this.state.formTab
+        console.log(obj)
+        obj['newMenuItem'] = true;
+        if(this.state.mobile){
+            obj['menuTab'] = false
+        }
         this.setState({formTab:obj});
     }
 
@@ -161,7 +167,7 @@ class ModifyMenu extends React.Component {
                                 <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "+(this.state.formTab.menuTab ? '' : 'hidden')}>
                                     <h3 className="mb-hidden">Menú</h3>
                                     <div className="rotator-container lg">
-                                        <div className="btn-theme add-menu">
+                                        <div className="btn-theme add-menu" onClick={this.newMenuItem}>
                                             <div className="add-item">
                                                 <span>+</span>
                                             </div>
