@@ -148,7 +148,7 @@ body {
   background: #fff;
   left: 0px;
   top: 0px;
-  z-index: 9;
+  z-index: 999;
   -webkit-transition: 0.4s;
   transition: 0.4s;
   left: 0;
