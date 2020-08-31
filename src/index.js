@@ -5,11 +5,18 @@ import {SnackbarProvider} from 'notistack';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {Provider} from 'react-redux'
+import {ConnectedRouter} from 'connected-react-router'
+import store, {history} from './store'
 
 ReactDOM.render(
     <React.StrictMode>
         <SnackbarProvider maxSnack={3}>
-            <App/>
+            <Provider store={store}>
+                <ConnectedRouter history={history}>
+                    <App/>
+                </ConnectedRouter>
+            </Provider>
         </SnackbarProvider>
     </React.StrictMode>,
     document.getElementById('root')

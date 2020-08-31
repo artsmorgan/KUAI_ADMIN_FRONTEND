@@ -2,13 +2,15 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 import ROUTES from './util/routes'
 import PublicRoutes from "./Components/Public/PublicRoutes";
 import PrivateRoutes from "./Components/Private/PrivateRoutes";
 import * as PublicComponents from './Components/Public/index'
 import * as PrivateComponents from './Components/Private/index'
-import  './assets/css/style.css'
+import './assets/css/style.css'
 
 class App extends React.Component {
     render() {
@@ -20,9 +22,11 @@ class App extends React.Component {
                         <PublicRoutes path={ROUTES.REGISTRY} exact component={PublicComponents.Registry}/>
                         <PublicRoutes path={ROUTES.REGISTRY_SUCCESS} component={PublicComponents.RegistrySuccess}/>
                         <PublicRoutes path={ROUTES.FORGOT_PASSWORD} exact component={PublicComponents.ForgotPassword}/>
-                        <PublicRoutes path={ROUTES.FORGOT_PASSWORD_SUCCESS} component={PublicComponents.ForgotPasswordSuccess}/>
+                        <PublicRoutes path={ROUTES.FORGOT_PASSWORD_SUCCESS}
+                                      component={PublicComponents.ForgotPasswordSuccess}/>
                         <PublicRoutes path={ROUTES.CHANGE_PASSWORD} exact component={PublicComponents.ChangePassword}/>
-                        <PublicRoutes path={ROUTES.CHANGE_PASSWORD_SUCCESS} component={PublicComponents.ChangePasswordSuccess}/>
+                        <PublicRoutes path={ROUTES.CHANGE_PASSWORD_SUCCESS}
+                                      component={PublicComponents.ChangePasswordSuccess}/>
 
                         <PrivateRoutes path={ROUTES.ORDERS} component={PrivateComponents.Orders}/>
                         <PrivateRoutes path={ROUTES.MODIFY_RESTAURANT} component={PrivateComponents.ModifyRestaurant}/>
@@ -39,5 +43,15 @@ class App extends React.Component {
     }
 }
 
-export default App
+const mapStateToProps = ({auth, form}) => ({
+    auth, form
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {},
+        dispatch
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
 
