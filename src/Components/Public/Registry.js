@@ -9,8 +9,12 @@ import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/apiX'
 import Modal from "react-bootstrap/Modal";
 import TermsAndCondition from "./TermsAndCondition";
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { postFormData, isLoggedInAndRedirect, redirectToUrl } from '../../actions'
+import ROUTES from '../../util/routes'
 
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+// const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class Registry extends React.Component {
 
@@ -18,15 +22,17 @@ class Registry extends React.Component {
         super(props);
 
         this.state = {
+            form: {},
+            step: 'REGISTER',
             show: false,
             registrySuccess: false,
             submitLoading: false,
-            dataToPost: {
+/*            dataToPost: {
                 name: '',
                 restaurantName: '',
                 email: '',
                 password: ''
-            }
+            }*/
         }
 
         SimpleReactValidator.addLocale('es', {
@@ -49,6 +55,14 @@ class Registry extends React.Component {
         });
     }
 
+    gotoStep = (e, step) => {
+        this.props.redirectToUrl(step)
+    }
+
+    componentWillMount() {
+        this.props.isLoggedInAndRedirect()
+    }
+
     showTermsAndConditionsModal = () => {
         this.setState({show: true});
     }
@@ -61,25 +75,12 @@ class Registry extends React.Component {
         this.setState({registrySuccess: false});
     }
 
-    handleSuccess(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'success',
-            autoHideDuration: 3000,
-        });
-    }
-
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
-
     inputChangeHandler = (e) => {
-        let obj = this.state.dataToPost;
-        obj[e.target.name] = e.target.value;
-        this.setState({dataToPost: obj});
-    };
+        let obj = this.state.form
+        obj[e.target.name] = e.target.value
+        this.setState({ form: obj })
+        // console.log(this.state.form);
+    }
 
     formSubmitHandler = (e) => {
         e.preventDefault();
@@ -99,35 +100,9 @@ class Registry extends React.Component {
     }
 
     processSubmit() {
-        const url = APITools.endPoints.APIBASEURL+APITools.endPoints.AUTH.registration        
-        const headers = {
-            'Content-Type': 'application/json, charset=UTF-8', // dummy
-        };
-        const data = JSON.stringify(this.state.dataToPost);
-        // const data = this.state.dataToPost;
-        // dummy
-        // const data = JSON.stringify({
-        //     title: 'foo',
-        //     body: 'bar',
-        //     userId: 1
-        // })
-
-        // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                this.setState({registrySuccess: true});
-                this.handleSuccess("Registration success.")
-                window.setTimeout(() => {
-                    this.setState({registrySuccess: false});
-                    this.props.history.push('/login')
-                }, 3000)
-            }
-        }).catch(err => {
-            this.handleError(err)
-        })
+        let data = this.state
+        // console.log(data)
+        this.props.postFormData(data)
     }
 
     render() {
@@ -153,32 +128,32 @@ class Registry extends React.Component {
                             <div className="ls-panel">
                                 <h3>Registro</h3>
                                 <input type="text" placeholder="Nombre" name="name" onChange={this.inputChangeHandler}
-                                       value={this.state.dataToPost.name}/>
+                                       value={this.state.form.name}/>
                                 <p style={{color: "red"}}>
-                                    {this.validator.message('name', this.state.dataToPost.name, 'required')}
+                                    {this.validator.message('name', this.state.form.name, 'required')}
                                 </p>
                                 <input type="text" placeholder="Restaurante" name="restaurantName"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.restaurantName}/>
+                                       onChange={this.inputChangeHandler} value={this.state.form.restaurantName}/>
                                 <p style={{color: "red"}}>
-                                    {this.validator.message('restaurantName', this.state.dataToPost.restaurantName, 'required')}
+                                    {this.validator.message('restaurantName', this.state.form.restaurantName, 'required')}
                                 </p>
                                 <input type="text" placeholder="Correo electrónico" name="email"
                                        onChange={this.inputChangeHandler}
-                                       value={this.state.dataToPost.email}/>
+                                       value={this.state.form.email}/>
                                 <p style={{color: "red"}}>
-                                    {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
+                                    {this.validator.message('email', this.state.form.email, 'required|email')}
                                 </p>
                                 <input type="password" placeholder="Contraseña" name="password"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
+                                       onChange={this.inputChangeHandler} value={this.state.form.password}/>
                                 <p style={{color: "red"}}>
-                                    {this.validator.message('password', this.state.dataToPost.password, 'required|mixPass')}
+                                    {this.validator.message('password', this.state.form.password, 'required|mixPass')}
                                 </p>
                                 <p className="help-txt">Minimo 8 caracteres, letras y números unicamente.</p>
                                 <Button className="btn btn-theme" type="submit">
                                     REGISTRARSE
                                 </Button>
-                                <div className="link-holder">¿Ya tienes cuenta? <Link to={'/login'}>Iniciar
-                                    sesión</Link>
+                                <div className="link-holder">¿Ya tienes cuenta? <a onClick={e => this.gotoStep(e, ROUTES.LOGIN)}>Iniciar
+                                    sesión</a>
                                 </div>
                                 <div className="link-holder" style={{marginTop: '10px'}}>
                                     Al registrarse usted acepta nuestros <Link className="default"
@@ -236,4 +211,14 @@ class Registry extends React.Component {
     }
 }
 
-export default Registry;
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            postFormData,
+            isLoggedInAndRedirect,
+            redirectToUrl
+        },
+        dispatch
+    )
+
+export default connect(null, mapDispatchToProps)(Registry)

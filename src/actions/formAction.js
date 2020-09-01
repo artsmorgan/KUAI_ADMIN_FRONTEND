@@ -13,7 +13,7 @@ const postFormRequest = () => ({ type: actionType.POST_FORM_REQUEST })
 const postFormSuccess = (payload) => ({ type: actionType.POST_FORM_SUCCESS, payload })
 const postFormError = () => ({ type: actionType.POST_FORM_ERROR })
 
-const REGISTER_URL = '/api/register'
+const REGISTER_URL = '/api/createUser'
 const ORDERS_URL = '/api/orders'
 
 export const getFormData = (payload) => {
@@ -84,7 +84,7 @@ export const postFormData = (payload) => {
             axiosRequest.post(URL, formData, { headers })
                 .then(response => {
                     const data = response.data
-                    // console.log(data)
+                    console.log(data)
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postFormSuccess(data))
