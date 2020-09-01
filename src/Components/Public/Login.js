@@ -6,7 +6,6 @@ import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/apiX'
-import axios from "axios";
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
@@ -31,20 +30,6 @@ class Login extends React.Component {
         this.validator = new SimpleReactValidator({
             locale: 'es',
             autoForceUpdate: this
-        });
-    }
-
-    handleSuccess(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'success',
-            autoHideDuration: 3000,
-        });
-    }
-
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
         });
     }
 
@@ -87,7 +72,6 @@ class Login extends React.Component {
         //     console.log("error")
         // }
         localStorage.setItem("kuaiUserAuthToken", "asdasdamckmmklvamaklmcaklmcalkmcaslkcmalkcmaklcmasklcmaslkcmaskl")
-        this.handleSuccess("Login success.")
         this.props.history.push('/orders')
         // res.then(result => {
         //     console.log(result)
