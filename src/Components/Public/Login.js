@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { Button } from 'react-bootstrap';
-import { withSnackbar } from 'notistack';
 import SimpleReactValidator from 'simple-react-validator';
 import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
-import * as APITools from '../../util/api'
+import * as APITools from '../../util/apiX'
 import axios from "axios";
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
@@ -156,4 +155,4 @@ class Login extends React.Component {
     }
 }
 
-export default withSnackbar(Login);
+export default Login;

@@ -1,11 +1,10 @@
 import React from "react";
 import { Button, Nav } from 'react-bootstrap';
-import { withSnackbar } from 'notistack';
 import $ from 'jquery';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
-import * as APITools from "../../util/api";
+import * as APITools from "../../util/apiX";
 import myOrders from '../../util/data/myOrders.json'
 
 
@@ -178,4 +177,4 @@ class Orders extends React.Component {
     }
 }
 
-export default withSnackbar(Orders);
+export default Orders;

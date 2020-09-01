@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
+import {Switch, Redirect} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css"
 import {connect} from 'react-redux'
@@ -12,11 +12,20 @@ import * as PublicComponents from './Components/Public/index'
 import * as PrivateComponents from './Components/Private/index'
 import './assets/css/style.css'
 
+import {Toaster} from './Components/Public'
+import {checkStorageLoginCred} from './actions'
+
 class App extends React.Component {
+
+    state = {}
+
+    componentWillMount() {
+        this.props.checkStorageLoginCred()
+    }
+
     render() {
         return (
-            <>
-                <Router>
+            <React.Fragment>
                     <Switch>
                         <PublicRoutes path={ROUTES.LOGIN} exact component={PublicComponents.Login}/>
                         <PublicRoutes path={ROUTES.REGISTRY} exact component={PublicComponents.Registry}/>
@@ -37,8 +46,8 @@ class App extends React.Component {
 
                         <Redirect to={ROUTES.LOGIN}/>
                     </Switch>
-                </Router>
-            </>
+                <Toaster/>
+            </React.Fragment>
         );
     }
 }
@@ -49,7 +58,7 @@ const mapStateToProps = ({auth, form}) => ({
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
-        {},
+        {checkStorageLoginCred},
         dispatch
     )
 

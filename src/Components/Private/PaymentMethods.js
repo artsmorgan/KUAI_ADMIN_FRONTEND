@@ -2,7 +2,7 @@ import React from 'react';
 import Switch from "react-switch";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import * as APITools from '../../util/api';
+import * as APITools from '../../util/apiX';
 import SimpleReactValidator from 'simple-react-validator';
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT

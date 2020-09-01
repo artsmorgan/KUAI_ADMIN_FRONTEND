@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
-import {withSnackbar} from 'notistack';
-import * as APITools from "../../../../util/api";
+
+import * as APITools from "../../../../util/apiX";
 
 class OrdersAside extends React.Component {
 

@@ -24,7 +24,7 @@ const composedEnhancers = compose(
 );
 
 export default createStore(
-    rootReducer(history),
+    connectRouter(history)(rootReducer),
     initialState,
     composedEnhancers
 )

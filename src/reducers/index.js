@@ -1,16 +1,9 @@
 import {combineReducers} from 'redux';
-import { connectRouter } from 'connected-react-router'
+import {reducer as toastrReducer} from 'react-redux-toastr';
 
 import auth from './authReducer';
 import form from './formReducer';
 
-/*export default combineReducers({
-    router: connectRouter(history),
-    auth, form
-})*/
-
-const createRootReducer = (history) => combineReducers({
-    router: connectRouter(history),
-    auth, form
+export default combineReducers({
+    auth, toastr: toastrReducer, form
 })
-export default createRootReducer

@@ -1,12 +1,12 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {Button} from 'react-bootstrap';
-import {withSnackbar} from 'notistack';
+
 import SimpleReactValidator from 'simple-react-validator';
 import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
-import * as APITools from '../../util/api'
+import * as APITools from '../../util/apiX'
 import Modal from "react-bootstrap/Modal";
 import TermsAndCondition from "./TermsAndCondition";
 
@@ -236,4 +236,4 @@ class Registry extends React.Component {
     }
 }
 
-export default withSnackbar(Registry);
+export default Registry;

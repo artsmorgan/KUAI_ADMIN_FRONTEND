@@ -4,7 +4,7 @@ import {Dropdown} from 'react-bootstrap';
 
 import Avatar from "../../../../../assets/images/avatar.svg";
 import $ from "jquery";
-import * as APITools from "../../../../../util/api";
+import * as APITools from "../../../../../util/apiX";
 import myOrders from "../../../../../util/data/myOrders.json";
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT

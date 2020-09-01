@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {SnackbarProvider} from 'notistack';
 
 import './index.css';
 import App from './App';
@@ -8,17 +7,14 @@ import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux'
 import {ConnectedRouter} from 'connected-react-router'
 import store, {history} from './store'
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 ReactDOM.render(
-    <React.StrictMode>
-        <SnackbarProvider maxSnack={3}>
-            <Provider store={store}>
-                <ConnectedRouter history={history}>
-                    <App/>
-                </ConnectedRouter>
-            </Provider>
-        </SnackbarProvider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+                <App/>
+        </ConnectedRouter>
+    </Provider>,
     document.getElementById('root')
 );
 
