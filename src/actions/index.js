@@ -11,6 +11,16 @@ import {
     postFormData,
 } from './formAction'
 
+import {
+    getRestaurantFormData,
+    updateRestaurantFormData,
+} from './restaurantAction'
+
+import {
+    getDeliveryMethodFormData,
+    updateDeliveryMethodFormData,
+} from './deliveryMethodAction'
+
 export {
     redirectToUrl,
     postLoginForm,
@@ -21,4 +31,10 @@ export {
 
     getFormData,
     postFormData,
+    
+    getRestaurantFormData,
+    updateRestaurantFormData,
+
+    getDeliveryMethodFormData,
+    updateDeliveryMethodFormData,
 }

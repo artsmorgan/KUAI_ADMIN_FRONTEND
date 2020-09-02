@@ -6,7 +6,10 @@ import SimpleReactValidator from 'simple-react-validator';
 
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import * as APITools from '../../util/apiX'
+import * as APITools from '../../util/apiX';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getRestaurantFormData,updateRestaurantFormData } from '../../actions';
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
@@ -25,50 +28,50 @@ class ModifyRestaurant extends React.Component {
                 informationTab:true,
                 scheduleTab:true,
             },
-
+            form: {},
             checked: false,
             horario0: false,
 
             submitLoading: false,
-            dataToPost: {
-                nombre: '',
-                administrador: '',
-                provincia: '',
-                canton: '',
-                distrito: '',
-                barrio: '',
-                direccion: '',
-                horario: {
-                    horario0: {
-                        checkbox: true,
-                        starttime: {startTIme: '', endTime: ''}
-                    },
-                    horario1: {
-                        checkbox: false,
-                        starttime: {startTIme: '', endTime: ''}
-                    },
-                    horario2: {
-                        checkbox: true,
-                        starttime: {startTIme: '', endTime: ''}
-                    },
-                    horario3: {
-                        checkbox: false,
-                        starttime: {startTIme: '', endTime: ''}
-                    },
-                    horario4: {
-                        checkbox: false,
-                        starttime: {startTIme: '', endTime: ''}
-                    },
-                    horario5: {
-                        checkbox: false,
-                        starttime: {startTIme: '', endTime: ''}
-                    },
-                    horario6: {
-                        checkbox: false,
-                        starttime: {startTIme: '', endTime: ''}
-                    }
-                }
-            }
+            // dataToPost: {
+            //     nombre: '',
+            //     administrador: '',
+            //     provincia: '',
+            //     canton: '',
+            //     distrito: '',
+            //     barrio: '',
+            //     direccion: '',
+            //     horario: {
+            //         horario0: {
+            //             checkbox: true,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         },
+            //         horario1: {
+            //             checkbox: false,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         },
+            //         horario2: {
+            //             checkbox: true,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         },
+            //         horario3: {
+            //             checkbox: false,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         },
+            //         horario4: {
+            //             checkbox: false,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         },
+            //         horario5: {
+            //             checkbox: false,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         },
+            //         horario6: {
+            //             checkbox: false,
+            //             starttime: {startTIme: '', endTime: ''}
+            //         }
+            //     }
+            // }
         }
 
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
@@ -223,6 +226,10 @@ class ModifyRestaurant extends React.Component {
         });
 
     }
+
+    // componentWillMount(){
+        
+    // }
 
 
 
@@ -635,4 +642,14 @@ class ModifyRestaurant extends React.Component {
     }
 }
 
-export default ModifyRestaurant
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getRestaurantFormData, updateRestaurantFormData
+        },
+        dispatch
+    )
+
+export default connect(null, mapDispatchToProps)(ModifyRestaurant)
+// export default ModifyRestaurant

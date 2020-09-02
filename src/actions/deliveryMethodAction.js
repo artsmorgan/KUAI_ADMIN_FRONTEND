@@ -5,20 +5,20 @@ import { toastr } from 'react-redux-toastr'
 import { push } from 'connected-react-router'
 import language from '../constants/error-msg-definitions'
 
-const getRestaurantFormRequest = () => ({ type: actionType.GET_RESTAURANT_FORM_REQUEST })
-const getRestaurantFormSuccess = (payload) => ({ type: actionType.GET_RESTAURANT_FORM_SUCCESS, payload })
-const getRestaurantFormError = () => ({ type: actionType.GET_RESTAURANT_FORM_ERROR })
+const getDeliveryMethodFormRequest = () => ({ type: actionType.GET_DELIVERY_METHOD_FORM_REQUEST })
+const getDeliveryMethodFormSuccess = (payload) => ({ type: actionType.GET_DELIVERY_METHOD_FORM_SUCCESS, payload })
+const getDeliveryMethodFormError = () => ({ type: actionType.GET_DELIVERY_METHOD_FORM_ERROR })
 
-const postRestaurantFormRequest = () => ({ type: actionType.POST_RESTAURANT_FORM_REQUEST })
-const postRestaurantFormSuccess = (payload) => ({ type: actionType.POST_RESTAURANT_FORM_SUCCESS, payload })
-const postRestaurantFormError = () => ({ type: actionType.POST_RESTAURANT_FORM_ERROR })
-const GET_RESTAURANT_URL = '/api/restaurant/05c546a8-ba70-4d0e-be64-17f5f785eae7';
-const UPDATE_RESTAURANT_URL = '/api/restaurant/05c546a8-ba70-4d0e-be64-17f5f785eae7';
+const postDeliveryMethodFormRequest = () => ({ type: actionType.POST_DELIVERY_METHOD_FORM_REQUEST })
+const postDeliveryMethodFormSuccess = (payload) => ({ type: actionType.POST_DELIVERY_METHOD_FORM_SUCCESS, payload })
+const postDeliveryMethodFormError = () => ({ type: actionType.POST_DELIVERY_METHOD_FORM_ERROR })
+const GET_DELIVERY_METHOD_URL = '/api/deliveryMethods/';
+const UPDATE_DELIVERY_METHOD_URL = '/api/deliveryMethods/05c546a8-ba70-4d0e-be64-17f5f785eae7';
 
-export const getRestaurantFormData = (payload) => {
+export const getDeliveryMethodFormData = (payload) => {
     return (dispatch, getState) => {
-        dispatch(getRestaurantFormRequest())
-        let URL = GET_RESTAURANT_URL;
+        dispatch(getDeliveryMethodFormRequest())
+        let URL = GET_DELIVERY_METHOD_URL + payload.restaurantId;
 
         if (URL) {
             const state = getState()
@@ -27,30 +27,29 @@ export const getRestaurantFormData = (payload) => {
             axiosRequest.get(URL, { headers, params })
                 .then(response => {
                     // console.log(response)
-                    dispatch(getRestaurantFormSuccess({
-                        data: response.data,
-                    }))
+                    dispatch(getDeliveryMethodFormSuccess(response.data))
                 })
                 .catch(error => {
                     const response = error.response
                     // console.log(response)
-                    dispatch(getRestaurantFormError())
+                    dispatch(getDeliveryMethodFormError())
                     if (response && response.status === 401) {
                         // logout(dispatch)
                     }
                 })
         } else {
-            dispatch(getRestaurantFormError())
+            dispatch(getDeliveryMethodFormError())
         }
     }
 
 }
 
 
-export const updateRestaurantFormData = (payload) => {
+export const updateDeliveryMethodFormData = (payload) => {
     return (dispatch, getState) => {
-        dispatch(postRestaurantFormRequest())
-        let URL = UPDATE_RESTAURANT_URL
+        dispatch(postDeliveryMethodFormRequest())
+        
+        let URL = UPDATE_DELIVERY_METHOD_URL
         if (URL) {
             const state = getState()
             const lang = 'en'
@@ -66,24 +65,24 @@ export const updateRestaurantFormData = (payload) => {
                     console.log(data)
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
-                        dispatch(postRestaurantFormSuccess(data))
+                        dispatch(postDeliveryMethodFormSuccess(data))
                         // dispatch(push(nextForm))
                     } else {
                         const response = data.data
                         toastr.error(language[lang].error, response.message)
-                        dispatch(postRestaurantFormError())
+                        dispatch(postDeliveryMethodFormError())
                     }
                 })
                 .catch(error => {
                     const response = error.response
                     toastr.error(language[lang].error, language[lang].postFailed)
-                    dispatch(postRestaurantFormError())
+                    dispatch(postDeliveryMethodFormError())
                     if (response && response.status === 401) {
                         // logout(dispatch)
                     }
                 })
         } else {
-            dispatch(postRestaurantFormError())
+            dispatch(postDeliveryMethodFormError())
         }
     }
 
