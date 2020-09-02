@@ -6,6 +6,10 @@ import Avatar from "../../../../../assets/images/avatar.svg";
 import Modal from "react-bootstrap/Modal";
 import Logo from "../../../../../assets/images/logo-kuai-white.svg";
 import SupportModal from "./SupportModal";
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import ROUTES from '../../../../../util/routes'
+import { logout, redirectToUrl, getFormData } from '../../../../../actions'
 
 class Sidebar extends React.Component {
 
@@ -48,10 +52,12 @@ class Sidebar extends React.Component {
         $(".sidebar-wrapper").addClass('collapsed')
     }
 
+    gotoStep = (e, step) => {
+        this.props.redirectToUrl(step)
+    }
+
     logOut = () => {
-        localStorage.removeItem("kuaiUserAuthToken")
-        this.setState({redirectToLogin: true})
-        // this.props.history.push('/login')
+        this.props.logout()
     }
 
     renderRedirect = () => {
@@ -102,7 +108,7 @@ class Sidebar extends React.Component {
                     </div>
                     <ul className="menu-list">
                         <li>
-                            <Link className="active" to={'/orders'}>
+                            <a className="active" onClick={e => this.gotoStep(e, ROUTES.ORDERS)}>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7" clipPath="url(#clip0)">
@@ -144,10 +150,10 @@ class Sidebar extends React.Component {
                                     </defs>
                                 </svg>
                                 Ordenes
-                            </Link>
+                            </a>
                         </li>
                         <li>
-                            <Link to={'/modify-restaurant'}>
+                            <a onClick={e => this.gotoStep(e, ROUTES.MODIFY_RESTAURANT)}>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7">
@@ -164,10 +170,10 @@ class Sidebar extends React.Component {
                                 </svg>
 
                                 Modificar Restaurante
-                            </Link>
+                            </a>
                         </li>
                         <li>
-                            <Link to={'/modify-menu'}>
+                            <a onClick={e => this.gotoStep(e, ROUTES.MODIFY_MENU)}>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7">
@@ -219,10 +225,10 @@ class Sidebar extends React.Component {
                                     </g>
                                 </svg>
                                 Modificar Menú
-                            </Link>
+                            </a>
                         </li>
                         <li>
-                            <Link to={'/payment-methods'}>
+                            <a onClick={e => this.gotoStep(e, ROUTES.PAYMENT_METHODS)}>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7" clipPath="url(#clip0)">
@@ -259,10 +265,10 @@ class Sidebar extends React.Component {
                                 </svg>
 
                                 Métodos de pago
-                            </Link>
+                            </a>
                         </li>
                         <li>
-                            <Link to={'/delivery-methods'}>
+                            <a onClick={e => this.gotoStep(e, ROUTES.DELIVERY_METHODS)}>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7">
@@ -276,14 +282,14 @@ class Sidebar extends React.Component {
                                 </svg>
 
                                 Métodos de entrega
-                            </Link>
+                            </a>
                         </li>
 
                         <li>
                             <hr></hr>
                         </li>
                         <li>
-                            <Link to={'/control-center'}>
+                            <a onClick={e => this.gotoStep(e, ROUTES.CONTROL_CENTER)}>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7" clipPath="url(#clip0)">
@@ -339,7 +345,7 @@ class Sidebar extends React.Component {
 
 
                                 Centro de Control
-                            </Link>
+                            </a>
                         </li>
                         <li>
                             <Link to={'/control-center'} onClick={this.showSupportModal}>
@@ -409,4 +415,21 @@ class Sidebar extends React.Component {
     }
 }
 
-export default Sidebar
+const mapStateToProps = ({ form }) => ({
+    form
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getFormData,
+            redirectToUrl,
+            logout
+        },
+        dispatch
+    )
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Sidebar)

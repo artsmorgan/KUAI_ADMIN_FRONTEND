@@ -1,7 +1,7 @@
 import actionType from '../actions/actionTypes'
 
 const initialState = {
-    loginToken: null,
+    accessToken: null,
     refreshToken: null,
     token: null,
     tokenExpiredAt: null,
@@ -14,20 +14,20 @@ export default (state = initialState, action) => {
             return { ...state, loading: true }
 
         case actionType.LOGIN_POST_SUCCESS:
-            // console.log(action.payload)
-            const tokenExpiredAt = new Date().getTime() + (60000 * 45)
-            const tokenB64 = Buffer.from(action.payload.token + ':' + '000777').toString('base64')
-            localStorage.setItem('loginToken', action.payload.token)
-            localStorage.setItem('loginRefreshToken', action.payload.refreshToken)
-            localStorage.setItem('token', tokenB64)
-            localStorage.setItem('tokenExpiredAt', tokenExpiredAt)
+            console.log(action.payload)
+            localStorage.setItem('accessToken', action.payload.user.stsTokenManager.accessToken)
+            localStorage.setItem('refreshToken', action.payload.user.stsTokenManager.refreshToken)
+            localStorage.setItem('token', action.payload.user.stsTokenManager.apiKey)
+            localStorage.setItem('tokenExpiredAt', action.payload.user.stsTokenManager.expirationTime)
+            localStorage.setItem('restaurantId', action.payload.metadata.restaurantId)
             return {
                 ...state,
                 loading: false,
-                loginToken: action.payload.token,
-                refreshToken: action.payload.refreshToken,
-                token: tokenB64,
-                tokenExpiredAt
+                accessToken: action.payload.user.stsTokenManager.accessToken,
+                refreshToken: action.payload.user.stsTokenManager.refreshToken,
+                token: action.payload.user.stsTokenManager.apiKey,
+                tokenExpiredAt: action.payload.user.stsTokenManager.expirationTime,
+                restaurantId: action.payload.metadata.restaurantId
             }
 
         case actionType.LOGIN_POST_ERROR:
@@ -38,10 +38,11 @@ export default (state = initialState, action) => {
             return { ...state, ...action.payload }
 
         case actionType.FLUSH_LOGIN_CRED:
-            state.loginToken = null
+            state.accessToken = null
             state.refreshToken = null
             state.token = null
             state.tokenExpiredAt = null
+            state.restaurantId = null
             return { ...state }
 
         default:

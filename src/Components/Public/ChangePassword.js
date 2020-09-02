@@ -2,7 +2,6 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 
 import SimpleReactValidator from 'simple-react-validator';
-import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/apiX'
@@ -15,7 +14,6 @@ class ChangePassword extends React.Component {
         super(props);
 
         this.state = {
-            submitLoading: false,
             dataToPost: {
                 password: '',
             }
@@ -56,19 +54,11 @@ class ChangePassword extends React.Component {
     formSubmitHandler = (e) => {
         e.preventDefault();
         if (this.validator.allValid()) {
-            this.showAndHideSubmitLoader()
+            this.processSubmit();
         } else {
             this.validator.showMessages();
         }
     };
-
-    showAndHideSubmitLoader() {
-        this.setState({submitLoading: true});
-        setTimeout(() => {
-            this.setState({submitLoading: false});
-            this.processSubmit();
-        }, 1000);
-    }
 
     processSubmit() {
         const url = endpointURL // dummy
@@ -97,41 +87,26 @@ class ChangePassword extends React.Component {
     }
 
     render() {
-        if (this.state.submitLoading) {
-            return (
-                <>
-                    <div className="post-loader">
-                        <Loader
-                            type="TailSpin"
-                            color="#B40DFF"
-                            height={100}
-                            width={100}
-                        />
-                    </div>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <div className="container-login">
-                        <img src={Logo} alt="website logo"/>
-                        <form onSubmit={this.formSubmitHandler}>
-                            <div className="ls-panel">
-                                <p>Indica tu nuevo password</p>
-                                <input className="pass" type="password" placeholder="*********" name="password"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
-                                <p style={{color: "red"}}>
-                                    {this.validator.message('password', this.state.dataToPost.password, 'required|mixPass')}
-                                </p>
-                                <Button className="btn btn-theme" type="submit">
-                                    CONFIRMAR
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-                </>
-            );
-        }
+        return (
+            <>
+                <div className="container-login">
+                    <img src={Logo} alt="website logo"/>
+                    <form onSubmit={this.formSubmitHandler}>
+                        <div className="ls-panel">
+                            <p>Indica tu nuevo password</p>
+                            <input className="pass" type="password" placeholder="*********" name="password"
+                                   onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
+                            <p style={{color: "red"}}>
+                                {this.validator.message('password', this.state.dataToPost.password, 'required|mixPass')}
+                            </p>
+                            <Button className="btn btn-theme" type="submit">
+                                CONFIRMAR
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </>
+        );
     }
 }
 
