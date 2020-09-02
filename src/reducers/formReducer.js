@@ -1,10 +1,7 @@
 import actionType from '../actions/actionTypes'
 
 const initialState = {
-    DASHBOARD: {},
     loading: false,
-    TRANSFER_MONEY: {},
-    TRANSFER_MONEY_SUCCESS: {}
 }
 export default (state = initialState, action) => {
     switch (action.type) {

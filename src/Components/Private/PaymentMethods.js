@@ -2,10 +2,10 @@ import React from 'react';
 import Switch from "react-switch";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import * as APITools from '../../util/apiX';
 import SimpleReactValidator from 'simple-react-validator';
-
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { getFormData, redirectToUrl, isUploadedPhotoAndID } from '../../actions'
 
 class PaymentMethods extends React.Component {
 
@@ -13,9 +13,8 @@ class PaymentMethods extends React.Component {
         super(props);
 
         this.state = {
-            width: 0
-        }
-        this.state = {
+            width: 0,
+            step: 'PAYMENT_METHODS',
             checked: false,
             errorMessage:"este campo es requerido",
             errors: {
@@ -111,6 +110,11 @@ class PaymentMethods extends React.Component {
         });
     };
 
+    componentWillMount() {
+        console.log(this.state)
+        this.props.getFormData(this.state)
+    }
+
     componentDidMount() {
         this.updateDimension();
     }
@@ -170,30 +174,7 @@ class PaymentMethods extends React.Component {
     }
 
     processSubmit() {
-        const url = endpointURL // dummy
-        const headers = {
-            'Content-Type': 'application/json, charset=UTF-8', // dummy
-        };
-        // const data = this.state.dataToPost;
-        // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
 
-        // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                this.handleSuccess("Login success.")
-                this.props.history.push('/orders')
-            }
-        }).catch(err => {
-            this.handleError(err)
-        })
     }
 
     render() {
@@ -485,4 +466,20 @@ class PaymentMethods extends React.Component {
     }
 }
 
-export default PaymentMethods
+const mapStateToProps = ({ form }) => ({
+    form
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getFormData,
+            redirectToUrl
+        },
+        dispatch
+    )
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PaymentMethods)
