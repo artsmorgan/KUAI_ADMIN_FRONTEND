@@ -12,13 +12,13 @@ const getRestaurantFormError = () => ({ type: actionType.GET_RESTAURANT_FORM_ERR
 const postRestaurantFormRequest = () => ({ type: actionType.POST_RESTAURANT_FORM_REQUEST })
 const postRestaurantFormSuccess = (payload) => ({ type: actionType.POST_RESTAURANT_FORM_SUCCESS, payload })
 const postRestaurantFormError = () => ({ type: actionType.POST_RESTAURANT_FORM_ERROR })
-const GET_RESTAURANT_URL = '/api/restaurant/05c546a8-ba70-4d0e-be64-17f5f785eae7';
+const GET_RESTAURANT_URL = '/api/restaurant/';
 const UPDATE_RESTAURANT_URL = '/api/restaurant/05c546a8-ba70-4d0e-be64-17f5f785eae7';
 
 export const getRestaurantFormData = (payload) => {
     return (dispatch, getState) => {
         dispatch(getRestaurantFormRequest())
-        let URL = GET_RESTAURANT_URL;
+        let URL = GET_RESTAURANT_URL+payload.restaurantId;
 
         if (URL) {
             const state = getState()
@@ -27,9 +27,7 @@ export const getRestaurantFormData = (payload) => {
             axiosRequest.get(URL, { headers, params })
                 .then(response => {
                     // console.log(response)
-                    dispatch(getRestaurantFormSuccess({
-                        data: response.data,
-                    }))
+                    dispatch(getRestaurantFormSuccess(response.data))
                 })
                 .catch(error => {
                     const response = error.response

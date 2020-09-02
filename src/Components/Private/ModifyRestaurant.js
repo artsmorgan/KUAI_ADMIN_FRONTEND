@@ -33,45 +33,45 @@ class ModifyRestaurant extends React.Component {
             horario0: false,
 
             submitLoading: false,
-            // dataToPost: {
-            //     nombre: '',
-            //     administrador: '',
-            //     provincia: '',
-            //     canton: '',
-            //     distrito: '',
-            //     barrio: '',
-            //     direccion: '',
-            //     horario: {
-            //         horario0: {
-            //             checkbox: true,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         },
-            //         horario1: {
-            //             checkbox: false,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         },
-            //         horario2: {
-            //             checkbox: true,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         },
-            //         horario3: {
-            //             checkbox: false,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         },
-            //         horario4: {
-            //             checkbox: false,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         },
-            //         horario5: {
-            //             checkbox: false,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         },
-            //         horario6: {
-            //             checkbox: false,
-            //             starttime: {startTIme: '', endTime: ''}
-            //         }
-            //     }
-            // }
+            dataToPost: {
+                nombre: '',
+                administrador: '',
+                provincia: '',
+                canton: '',
+                distrito: '',
+                barrio: '',
+                direccion: '',
+                horario: {
+                    horario0: {
+                        checkbox: true,
+                        starttime: {startTIme: '', endTime: ''}
+                    },
+                    horario1: {
+                        checkbox: false,
+                        starttime: {startTIme: '', endTime: ''}
+                    },
+                    horario2: {
+                        checkbox: true,
+                        starttime: {startTIme: '', endTime: ''}
+                    },
+                    horario3: {
+                        checkbox: false,
+                        starttime: {startTIme: '', endTime: ''}
+                    },
+                    horario4: {
+                        checkbox: false,
+                        starttime: {startTIme: '', endTime: ''}
+                    },
+                    horario5: {
+                        checkbox: false,
+                        starttime: {startTIme: '', endTime: ''}
+                    },
+                    horario6: {
+                        checkbox: false,
+                        starttime: {startTIme: '', endTime: ''}
+                    }
+                }
+            }
         }
 
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
@@ -227,9 +227,9 @@ class ModifyRestaurant extends React.Component {
 
     }
 
-    // componentWillMount(){
-        
-    // }
+    componentWillMount(){
+        this.props.getRestaurantFormData({ restaurantId: localStorage.getItem('restaurantId') })
+    }
 
 
 
@@ -651,5 +651,12 @@ const mapDispatchToProps = dispatch =>
         dispatch
     )
 
-export default connect(null, mapDispatchToProps)(ModifyRestaurant)
+    const mapStateToProps = store =>
+    (
+        {
+            restaurant: store.restaurant
+        }
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModifyRestaurant)
 // export default ModifyRestaurant
