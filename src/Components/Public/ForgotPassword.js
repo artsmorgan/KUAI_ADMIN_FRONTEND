@@ -4,7 +4,6 @@ import {Button} from 'react-bootstrap';
 import Modal from "react-bootstrap/Modal";
 
 import SimpleReactValidator from 'simple-react-validator';
-import Loader from 'react-loader-spinner'
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
 import * as APITools from '../../util/apiX'
@@ -17,7 +16,6 @@ class ForgotPassword extends React.Component {
 
         this.state = {
             show: false,
-            submitLoading: false,
             dataToPost: {
                 email: ''
             }
@@ -58,19 +56,11 @@ class ForgotPassword extends React.Component {
     formSubmitHandler = (e) => {
         e.preventDefault();
         if (this.validator.allValid()) {
-            this.showAndHideSubmitLoader()
+            this.processSubmit();
         } else {
             this.validator.showMessages();
         }
     };
-
-    showAndHideSubmitLoader() {
-        this.setState({submitLoading: true});
-        setTimeout(() => {
-            this.setState({submitLoading: false});
-            this.processSubmit();
-        }, 1000);
-    }
 
     processSubmit() {
         const url = endpointURL // dummy
@@ -99,69 +89,54 @@ class ForgotPassword extends React.Component {
     }
 
     render() {
-        if (this.state.submitLoading) {
-            return (
-                <>
-                    <div className="post-loader">
-                        <Loader
-                            type="TailSpin"
-                            color="#B40DFF"
-                            height={100}
-                            width={100}
-                        />
-                    </div>
-                </>
-            )
-        } else {
-            return (
-                <>
-                    <div className="container-login">
-                        <img src={Logo} alt="website logo"/>
-                        <form onSubmit={this.formSubmitHandler}>
+        return (
+            <>
+                <div className="container-login">
+                    <img src={Logo} alt="website logo"/>
+                    <form onSubmit={this.formSubmitHandler}>
+                        <div className="ls-panel">
+                            <p>Ingresa el email que quieras reestablecer su contraseña</p>
+                            <input type="text" name="email" placeholder="Correo electrónico"
+                                   onChange={this.inputChangeHandler} value={this.state.dataToPost.email}/>
+                            <p style={{color: "red"}}>
+                                {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
+                            </p>
+                            <Button className="btn btn-theme" type="submit">
+                                CONFIRMAR
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+
+                <Modal
+                    className="cstm-modal"
+                    size="md"
+                    show={this.state.show}
+                    onHide={this.hideForgetPasswordSuccessModal}
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-modal-sizes-title-sm">
+
+                        </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className="container-login">
+                            <img src={Logo} alt="website logo"/>
                             <div className="ls-panel">
-                                <p>Ingresa el email que quieras reestablecer su contraseña</p>
-                                <input type="text" name="email" placeholder="Correo electrónico"
-                                       onChange={this.inputChangeHandler} value={this.state.dataToPost.email}/>
-                                <p style={{color: "red"}}>
-                                    {this.validator.message('email', this.state.dataToPost.email, 'required|email')}
-                                </p>
-                                <Button className="btn btn-theme" type="submit">
-                                    CONFIRMAR
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <Modal
-                        className="cstm-modal"
-                        size="md"
-                        show={this.state.show}
-                        onHide={this.hideForgetPasswordSuccessModal}
-                        aria-labelledby="contained-modal-title-vcenter"
-                        centered
-                    >
-                        <Modal.Header closeButton>
-                            <Modal.Title id="example-modal-sizes-title-sm">
-
-                            </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <div className="container-login">
-                                <img src={Logo} alt="website logo"/>
-                                <div className="ls-panel">
-                                    <p style={{fontSize: '18px'}}>Hemos enviado un e-mail
-                                        con las instrucciones para resetear tu password</p>
-                                    <div className="link-holder">
-                                        <Link to={'/change-password'} style={{color: 'blue'}}>Change Password</Link>
-                                    </div>
-
+                                <p style={{fontSize: '18px'}}>Hemos enviado un e-mail
+                                    con las instrucciones para resetear tu password</p>
+                                <div className="link-holder">
+                                    <Link to={'/change-password'} style={{color: 'blue'}}>Change Password</Link>
                                 </div>
+
                             </div>
-                        </Modal.Body>
-                    </Modal>
-                </>
-            );
-        }
+                        </div>
+                    </Modal.Body>
+                </Modal>
+            </>
+        );
     }
 }
 

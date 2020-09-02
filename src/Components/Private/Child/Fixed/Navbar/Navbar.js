@@ -52,32 +52,6 @@ class Navbar extends React.Component {
 
     componentDidMount() {
         this.updateDimension();
-
-        if (localStorage.getItem("kuaiUserAuthToken")) {
-            const url = endpointURL + APITools.endPoints.MY_ORDERS
-
-            // API calling and handling response
-            /*const res = APITools.getEndPointsHandler(url)
-
-            res.then(result => {
-                console.log(result)
-                if (result.status === 200) {
-                    this.setState({myOrders: result.data})
-                    this.getTotalSales()
-                }
-            }).catch(err => {
-                console.log(err)
-                this.handleError("Something went wrong. Please try again later.")
-            })*/
-
-            this.setState({myOrders: myOrders}, () => {
-                this.getTotalOrders()
-                this.getTotalSales()
-            })
-        } else {
-            this.handleError("Unauthorized access.")
-            this.props.history.push('/login')
-        }
     }
 
     componentWillUnmount() {
