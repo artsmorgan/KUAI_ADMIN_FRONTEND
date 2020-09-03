@@ -6,7 +6,10 @@ import SimpleReactValidator from 'simple-react-validator';
 
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import * as APITools from '../../util/apiX'
+import * as APITools from '../../util/apiX';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getRestaurantFormData,updateRestaurantFormData } from '../../actions';
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
@@ -25,7 +28,7 @@ class ModifyRestaurant extends React.Component {
                 informationTab:true,
                 scheduleTab:true,
             },
-
+            form: {},
             checked: false,
             horario0: false,
 
@@ -222,6 +225,10 @@ class ModifyRestaurant extends React.Component {
             } 
         });
 
+    }
+
+    componentWillMount(){
+        this.props.getRestaurantFormData({ restaurantId: localStorage.getItem('restaurantId') })
     }
 
 
@@ -635,4 +642,21 @@ class ModifyRestaurant extends React.Component {
     }
 }
 
-export default ModifyRestaurant
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getRestaurantFormData, updateRestaurantFormData
+        },
+        dispatch
+    )
+
+    const mapStateToProps = store =>
+    (
+        {
+            restaurant: store.restaurant
+        }
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(ModifyRestaurant)
+// export default ModifyRestaurant
