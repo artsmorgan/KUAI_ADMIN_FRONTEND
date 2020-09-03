@@ -1,37 +1,6 @@
 import actionType from '../actions/actionTypes'
 
 const initialState = {
-    name: null,
-    administrator: null,
-    fb: null,
-    ig: null,
-    province: null,
-    canton: null,
-    district: null,
-    neighborhood: null,
-    otherSigns: null,
-    mondayEnable: null,
-    mondayOpen: null,
-    mondayClose: null,
-    tuesdayEnable: null,
-    tuesdayOpen: null,
-    tuesdayClose: null,
-    wednesdayEnable: null,
-    wednesdayOpen: null,
-    wednesdayClose: null,
-    thursdayEnable: null,
-    thursdayOpen: null,
-    thursdayClose: null,
-    fridayEnable: null,
-    fridayOpen: null,
-    fridayClose: null,
-    saturdayEnable: null,
-    saturdayOpen: null,
-    saturdayClose: null,
-    sundayEnable: null,
-    sundayOpen: null,
-    sundayClose: null,
-    owner: null,
     loading: false
 }
 

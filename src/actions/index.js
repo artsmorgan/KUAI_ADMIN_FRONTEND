@@ -25,6 +25,9 @@ import {
     getCategoryListData,
     updateCategoryFormData,
 } from './menuAction'
+import {
+    getControlCenterMethodFormData,
+} from './controlCenterMethodAction'
 
 export {
     redirectToUrl,
@@ -44,5 +47,6 @@ export {
     updateDeliveryMethodFormData,
 
     getCategoryListData,
-    updateCategoryFormData
+    updateCategoryFormData,
+    getControlCenterMethodFormData
 }

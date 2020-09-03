@@ -45,41 +45,41 @@ class DeliveryMethods extends React.Component {
             },
             dataToPost: {
                 restaurantId: localStorage.getItem('restaurantId'),
-                comerRestauranteEnabled: null,
-                acceptReservations: null,
-                paraLlevarEnabled: null,
-                deliveryOptions: null,
-                servicioHabitacionEnabled: null,
-                entregaParqueoEnabled: null,
-                entregaParqueoOptions: null,
-                expressEnabled:null,
-                expressPrecioEnvio: null,
-                expressCada: null,
-                expressEnvioGratisEnabled: null,
-                // comerEnRestaurante: {
-                //     checked: false,
-                //     aceptarReservaciones: false
-                // },
-                // paraLlevar: {
-                //     checked: false,
-                //     entrega: ''
-                // },
-                // servicioALaHabitacion: {
-                //     checked: false
-                // },
-                // entregaEnParqueo: {
-                //     checked: false,
-                //     entrega: ''
-                // },
-                // tarjetaEnEntrega: {
-                //     checked: false,
-                //     precioDeEnvio: '',
-                //     cada: '',
-                //     compraMiinima: '',
-                //     envioGratis: false
-                // },
+                comerRestauranteEnabled: false,
+                acceptReservations: false,
+                paraLlevarEnabled: false,
+                deliveryOptions: "",
+                servicioHabitacionEnabled: false,
+                entregaParqueoEnabled: false,
+                entregaParqueoOptions: "",
+                expressEnabled: false,
+                expressPrecioEnvio: "",
+                expressCada: "",
+                expressEnvioGratisEnabled: false,
+                id: null
             }
         };
+
+        if (props.delivery.id) {
+            const delivery = props.delivery;
+            this.state.dataToPost =
+            {
+                comerRestauranteEnabled: this.getBool(delivery.comerRestaurante.enabled),
+                acceptReservations: this.getBool(delivery.comerRestaurante.acceptReservations),
+                paraLlevarEnabled: this.getBool(delivery.paraLlevar.enabled),
+                deliveryOptions: delivery.paraLlevar.deliveryOptions,
+                servicioHabitacionEnabled: this.getBool(delivery.servicioHabitacion),
+                entregaParqueoEnabled: this.getBool(delivery.entregaParqueo.enabled),
+                entregaParqueoOptions: delivery.entregaParqueo.entregaParqueoOptions,
+                expressEnabled: this.getBool(delivery.express.enabled),
+                expressPrecioEnvio: delivery.express.precioEnvio,
+                expressCada: delivery.express.cada,
+                expressEnvioGratisEnabled: this.getBool(delivery.express.envioGratis),
+                id: delivery.id,
+                restaurantId: localStorage.getItem('restaurantId')
+            }
+
+        }
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -102,22 +102,28 @@ class DeliveryMethods extends React.Component {
 
     inputChangeHandler = (e, switchName) => {
         let obj = this.state.dataToPost;
-        let value = switchName;
-        obj[switchName]= value;
+        let value = e.target.value;
+        obj[switchName] = value;
         this.setState({ dataToPost: obj });
         // console.log(this.state.dataToPost)
-        this.handleValidation()
+        // this.handleValidation()
     }
 
 
     formSubmitHandler = (e) => {
+        this.processSubmit();
         // e.preventDefault();
-        if (this.handleValidation()) {
-            alert("Form submitted");
-        } else {
-            alert("Form has errors.")
-        }
+        // if (this.handleValidation()) {
+        //     this.processSubmit();
+        // } else {
+        //     alert("Form has errors.")
+        // }
     };
+
+    processSubmit() {
+
+        this.props.updateDeliveryMethodFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+    }
 
     handleValidation() {
         let errors = this.state.errors;
@@ -158,24 +164,31 @@ class DeliveryMethods extends React.Component {
 
     }
 
+    getBool(val) {
+        return !!JSON.parse(String(val).toLowerCase());
+    }
+
     componentDidUpdate(previousProps) {
         if (!previousProps.delivery.id && this.props.delivery.id) {
             const delivery = this.props.delivery;
             this.setState({
                 dataToPost: {
-                    comerRestauranteEnabled: delivery.comerRestaurante.enabled,
-                    acceptReservations: delivery.comerRestaurante.acceptReservations,
-                    paraLlevarEnabled: delivery.paraLlevar.enabled,
+                    comerRestauranteEnabled: this.getBool(delivery.comerRestaurante.enabled),
+                    acceptReservations: this.getBool(delivery.comerRestaurante.acceptReservations),
+                    paraLlevarEnabled: this.getBool(delivery.paraLlevar.enabled),
                     deliveryOptions: delivery.paraLlevar.deliveryOptions,
-                    servicioHabitacionEnabled: delivery.servicioHabitacion,
-                    entregaParqueoEnabled: delivery.entregaParqueo.enabled,
+                    servicioHabitacionEnabled: this.getBool(delivery.servicioHabitacion),
+                    entregaParqueoEnabled: this.getBool(delivery.entregaParqueo.enabled),
                     entregaParqueoOptions: delivery.entregaParqueo.entregaParqueoOptions,
-                    expressEnabled:delivery.express.enabled,
+                    expressEnabled: this.getBool(delivery.express.enabled),
                     expressPrecioEnvio: delivery.express.precioEnvio,
                     expressCada: delivery.express.cada,
-                    expressEnvioGratisEnabled: delivery.express.envioGratis,
+                    expressEnvioGratisEnabled: this.getBool(delivery.express.envioGratis),
+                    id: delivery.id,
+                    restaurantId: localStorage.getItem('restaurantId')
                 }
             });
+
         }
     }
 
