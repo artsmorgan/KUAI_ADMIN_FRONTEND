@@ -13,7 +13,7 @@ const postRestaurantFormRequest = () => ({ type: actionType.POST_RESTAURANT_FORM
 const postRestaurantFormSuccess = (payload) => ({ type: actionType.POST_RESTAURANT_FORM_SUCCESS, payload })
 const postRestaurantFormError = () => ({ type: actionType.POST_RESTAURANT_FORM_ERROR })
 const GET_RESTAURANT_URL = '/api/restaurant/';
-const UPDATE_RESTAURANT_URL = '/api/restaurant/05c546a8-ba70-4d0e-be64-17f5f785eae7';
+const UPDATE_RESTAURANT_URL = '/api/restaurant/';
 
 export const getRestaurantFormData = (payload) => {
     return (dispatch, getState) => {
@@ -48,24 +48,26 @@ export const getRestaurantFormData = (payload) => {
 export const updateRestaurantFormData = (payload) => {
     return (dispatch, getState) => {
         dispatch(postRestaurantFormRequest())
-        let URL = UPDATE_RESTAURANT_URL
+        let URL = UPDATE_RESTAURANT_URL+payload.restaurantId
         if (URL) {
             const state = getState()
             const lang = 'en'
             let formData = new URLSearchParams()
-            Object.keys(payload).forEach(field => {
-                formData.set(field, payload[field])
+            let dataToPost = payload.form; 
+            Object.keys(dataToPost).forEach(field => {
+                formData.set(field, dataToPost[field])
             })
 
             const headers = { Authorization: `bearer ${state.auth.token}` }
-            axiosRequest.post(URL, formData, { headers })
+            axiosRequest.put(URL, formData, { headers })
                 .then(response => {
                     const data = response.data
-                    console.log(data)
-                    if (data.success) {
+                    console.log(response)
+                    if (response.status===200) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postRestaurantFormSuccess(data))
-                        // dispatch(push(nextForm))
+                        
+                        dispatch(getRestaurantFormData({restaurantId:localStorage.getItem('restaurantId')}))
                     } else {
                         const response = data.data
                         toastr.error(language[lang].error, response.message)
