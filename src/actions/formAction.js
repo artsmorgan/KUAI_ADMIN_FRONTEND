@@ -1,22 +1,26 @@
 import actionType from './actionTypes'
-import { axiosRequest } from '../util/api'
+import {axiosRequest} from '../util/api'
 import ROUTES from '../util/routes'
-import { toastr } from 'react-redux-toastr'
-import { push } from 'connected-react-router'
-import { logout } from './authAction'
+import {toastr} from 'react-redux-toastr'
+import {push} from 'connected-react-router'
+import {logout} from './authAction'
 import language from '../constants/error-msg-definitions'
 
-const getFormRequest = () => ({ type: actionType.GET_FORM_REQUEST })
-const getFormSuccess = (payload) => ({ type: actionType.GET_FORM_SUCCESS, payload })
-const getFormError = () => ({ type: actionType.GET_FORM_ERROR })
-const postFormRequest = () => ({ type: actionType.POST_FORM_REQUEST })
-const postFormSuccess = (payload) => ({ type: actionType.POST_FORM_SUCCESS, payload })
-const postFormError = () => ({ type: actionType.POST_FORM_ERROR })
+const getFormRequest = () => ({type: actionType.GET_FORM_REQUEST})
+const getFormSuccess = (payload) => ({type: actionType.GET_FORM_SUCCESS, payload})
+const getFormError = () => ({type: actionType.GET_FORM_ERROR})
+const postFormRequest = () => ({type: actionType.POST_FORM_REQUEST})
+const postFormSuccess = (payload) => ({type: actionType.POST_FORM_SUCCESS, payload})
+const postFormError = () => ({type: actionType.POST_FORM_ERROR})
+
+const restaurantId = localStorage.getItem('restaurantId');
 
 const REGISTER_URL = '/api/createUser'
 const ORDERS_URL = '/api/orders'
+const PAYMENT_METHODS_URL = 'api/paymentMethods/' + restaurantId;
 
 export const getFormData = (payload) => {
+    console.log(payload.step);
     return (dispatch, getState) => {
         dispatch(getFormRequest())
         let URL = null
@@ -24,16 +28,19 @@ export const getFormData = (payload) => {
             case 'ORDERS':
                 URL = ORDERS_URL
                 break
+            case 'PAYMENT_METHODS':
+                URL = PAYMENT_METHODS_URL
+                break
             default:
                 break
         }
         if (URL) {
             const state = getState()
-            const headers = { Authorization: `bearer ${state.auth.token}` }
+            const headers = {Authorization: `bearer ${state.auth.token}`}
             let params = {}
-            axiosRequest.get(URL, { headers, params })
+            axiosRequest.get(URL, {headers, params})
                 .then(response => {
-                    // console.log(response)
+                    console.log(response)
                     dispatch(getFormSuccess({
                         data: response.data,
                         step: payload.step
@@ -41,7 +48,7 @@ export const getFormData = (payload) => {
                 })
                 .catch(error => {
                     const response = error.response
-                    // console.log(response)
+                    console.log(response)
                     dispatch(getFormError())
                     if (response && response.status === 401) {
                         logout(dispatch)
@@ -80,8 +87,8 @@ export const postFormData = (payload) => {
                 }
             })
 
-            const headers = { Authorization: `bearer ${state.auth.token}` }
-            axiosRequest.post(URL, formData, { headers })
+            const headers = {Authorization: `bearer ${state.auth.token}`}
+            axiosRequest.post(URL, formData, {headers})
                 .then(response => {
                     const data = response.data
                     console.log(data)

@@ -5,7 +5,8 @@ import auth from './authReducer';
 import form from './formReducer';
 import deliveryMethod from './deliveryMethodReducer';
 import restaurant from './restaurantReducer';
+import menuReducer from "./menuReducer";
 
 export default combineReducers({
-    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant
+    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menuReducer
 })

@@ -2,10 +2,10 @@ import React from 'react';
 import Switch from "react-switch";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import * as APITools from '../../util/apiX';
 import SimpleReactValidator from 'simple-react-validator';
-
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { getFormData, redirectToUrl, isUploadedPhotoAndID } from '../../actions'
 
 class PaymentMethods extends React.Component {
 
@@ -13,9 +13,8 @@ class PaymentMethods extends React.Component {
         super(props);
 
         this.state = {
-            width: 0
-        }
-        this.state = {
+            width: 0,
+            step: 'PAYMENT_METHODS',
             checked: false,
             errorMessage:"este campo es requerido",
             errors: {
@@ -111,6 +110,11 @@ class PaymentMethods extends React.Component {
         });
     };
 
+    componentWillMount() {
+        console.log(this.state)
+        this.props.getFormData(this.state)
+    }
+
     componentDidMount() {
         this.updateDimension();
     }
@@ -170,34 +174,32 @@ class PaymentMethods extends React.Component {
     }
 
     processSubmit() {
-        const url = endpointURL // dummy
-        const headers = {
-            'Content-Type': 'application/json, charset=UTF-8', // dummy
-        };
-        // const data = this.state.dataToPost;
-        // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
 
-        // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                this.handleSuccess("Login success.")
-                this.props.history.push('/orders')
-            }
-        }).catch(err => {
-            this.handleError(err)
-        })
     }
 
     render() {
         const { width } = this.state
+
+        let paymentMethods = {}
+        let transferencia = {}
+        let efectivoContraEntrega = {}
+        let sinpeMovil = {}
+        let tarjetaEnEntrega = {}
+        let tarjetaViaApp = {}
+
+        try {
+            const { form } = this.props
+            paymentMethods = form['PAYMENT_METHODS']
+            console.log(paymentMethods);
+            transferencia = paymentMethods.transferencia
+            efectivoContraEntrega = paymentMethods.efectivoContraEntrega
+            sinpeMovil = paymentMethods.sinpeMovil
+            tarjetaEnEntrega = paymentMethods.tarjetaEnEntrega
+            tarjetaViaApp = paymentMethods.tarjetaViaApp
+            // console.log(transferencia);
+        } catch (e) {
+            paymentMethods = {}
+        }
 
         return (
             <>
@@ -227,7 +229,7 @@ class PaymentMethods extends React.Component {
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.transferencia.checked}
+                                            checked={transferencia.enabled}
                                             onChange={(e) => this.handleChange(e, 'transferencia')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -244,27 +246,27 @@ class PaymentMethods extends React.Component {
                                         <div className="col">
                                             <label htmlFor="">DEPOSITAR A:</label><br />
                                             <label htmlFor="">Numero De Cuenta:</label>
-                                            <input type="text" className="uni-input" name="numeroDeCuenta" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.numeroDeCuenta} />
+                                            <input type="text" className="uni-input" name="numeroDeCuenta" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.numeroDeCuenta} />
                                             <p style={{color: "red"}}>
                                                 {this.state.errors.transferencia.numeroDeCuenta}
                                             </p>
                                             <label htmlFor="">Tipo De Cambio:</label>
-                                            <input type="text" className="uni-input" name="tipoDeCambio" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.tipoDeCambio}/>
+                                            <input type="text" className="uni-input" name="tipoDeCambio" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.tipoCambio}/>
                                             <p style={{color: "red"}}>
                                             {this.state.errors.transferencia.tipoDeCambio}
                                             </p>
                                             <label htmlFor="">Cuenta Bancaria:</label>
-                                            <input type="text" className="uni-input" name="cuentaBancaria" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.cuentaBancaria}/>
+                                            <input type="text" className="uni-input" name="cuentaBancaria" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.cuentaBancaria}/>
                                             <p style={{color: "red"}}>
                                                 {this.state.errors.transferencia.cuentaBancaria}
                                             </p>
                                             <label htmlFor="">Número De Cuenta IBAN:</label>
-                                            <input type="text" className="uni-input" name="numeroDeCuentaIBAN" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.numeroDeCuentaIBAN}/>
+                                            <input type="text" className="uni-input" name="numeroDeCuentaIBAN" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.iban}/>
                                             <p style={{color: "red"}}>
                                             {this.state.errors.transferencia.numeroDeCuentaIBAN}
                                             </p>
                                             <label htmlFor="">Nombrar:</label>
-                                            <input type="text" className="uni-input" name="nombrar" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={this.state.dataToPost.transferencia.nombrar}/>
+                                            <input type="text" className="uni-input" name="nombrar" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.nombrar}/>
                                             <p style={{color: "red"}}>
                                                 {this.state.errors.transferencia.nombrar}
                                             </p>
@@ -291,7 +293,7 @@ class PaymentMethods extends React.Component {
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.efectivoContraEntrega.checked}
+                                            checked={efectivoContraEntrega.enabled}
                                             onChange={(e) => this.handleChange(e, 'efectivoContraEntrega')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -329,7 +331,7 @@ class PaymentMethods extends React.Component {
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.tarjetaViaApp.checked}
+                                            checked={tarjetaViaApp.enabled}
                                             onChange={(e) => this.handleChange(e, 'tarjetaViaApp')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -407,7 +409,7 @@ class PaymentMethods extends React.Component {
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.tarjetaEnEntrega.checked}
+                                            checked={tarjetaEnEntrega.enabled}
                                             onChange={(e) => this.handleChange(e, 'tarjetaEnEntrega')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -443,7 +445,7 @@ class PaymentMethods extends React.Component {
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.SinpeMovil.checked}
+                                            checked={sinpeMovil.enabled}
                                             onChange={(e) => this.handleChange(e, 'SinpeMovil')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -460,12 +462,12 @@ class PaymentMethods extends React.Component {
                                         <div className="col">
                                             <label htmlFor="">DEPOSITAR A:</label><br />
                                             <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={this.state.dataToPost.SinpeMovil.numeroDeTelefono}/>
+                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={sinpeMovil.numero}/>
                                             <p style={{color: "red"}}>
                                                 {this.state.errors.SinpeMovil.numeroDeTelefono}
                                             </p>
                                             <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={this.state.dataToPost.SinpeMovil.aNombreDe}/>
+                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={sinpeMovil.name}/>
                                             <p style={{color: "red"}}>
                                                 {this.state.errors.SinpeMovil.aNombreDe}
                                             </p>
@@ -485,4 +487,20 @@ class PaymentMethods extends React.Component {
     }
 }
 
-export default PaymentMethods
+const mapStateToProps = ({ form }) => ({
+    form
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getFormData,
+            redirectToUrl
+        },
+        dispatch
+    )
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PaymentMethods)
