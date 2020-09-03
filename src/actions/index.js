@@ -21,6 +21,10 @@ import {
     updateDeliveryMethodFormData,
 } from './deliveryMethodAction'
 
+import {
+    getControlCenterMethodFormData,
+} from './controlCenterMethodAction'
+
 export {
     redirectToUrl,
     postLoginForm,
@@ -37,4 +41,6 @@ export {
 
     getDeliveryMethodFormData,
     updateDeliveryMethodFormData,
+
+    getControlCenterMethodFormData
 }

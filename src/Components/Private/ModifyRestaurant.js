@@ -19,7 +19,6 @@ class ModifyRestaurant extends React.Component {
         super(props);
         this.fileUpload = React.createRef();
         this.showFileUpload = this.showFileUpload.bind(this);
-
         this.state = {
             width: 0,
             mobile: false,
@@ -69,44 +68,7 @@ class ModifyRestaurant extends React.Component {
 
         };
 
-        if (props.restaurant.id) {
-            const restaurant = props.restaurant;
-            this.state.dataToPost =
-            {
-                name: restaurant.name,
-                administrator: restaurant.administrator,
-                fb: restaurant.facebook,
-                ig: restaurant.instragram,
-                province: restaurant.address.province,
-                canton: restaurant.address.canton,
-                district: restaurant.address.district,
-                neighborhood: restaurant.address.neighborhood,
-                otherSigns: restaurant.address.otherSigns,
-                mondayEnable: this.getBool(restaurant.schedule.monday.enabled),
-                mondayOpen: restaurant.schedule.monday.open,
-                mondayClose: restaurant.schedule.monday.close,
-                tuesdayEnable: this.getBool(restaurant.schedule.tuesday.enabled),
-                tuesdayOpen: restaurant.schedule.tuesday.open,
-                tuesdayClose: restaurant.schedule.tuesday.close,
-                wednesdayEnable: this.getBool(restaurant.schedule.wednesday.enabled),
-                wednesdayOpen: restaurant.schedule.wednesday.open,
-                wednesdayClose: restaurant.schedule.wednesday.close,
-                thursdayEnable: this.getBool(restaurant.schedule.thursday.enabled),
-                thursdayOpen: restaurant.schedule.thursday.open,
-                thursdayClose: restaurant.schedule.thursday.close,
-                fridayEnable: this.getBool(restaurant.schedule.friday.enabled),
-                fridayOpen: restaurant.schedule.friday.open,
-                fridayClose: restaurant.schedule.friday.close,
-                saturdayEnable: this.getBool(restaurant.schedule.saturday.enabled),
-                saturdayOpen: restaurant.schedule.saturday.open,
-                saturdayClose: restaurant.schedule.saturday.close,
-                sundayEnable: this.getBool(restaurant.schedule.sunday.enabled),
-                sundayOpen: restaurant.schedule.sunday.open,
-                sundayClose: restaurant.schedule.sunday.close,
-                owner: restaurant.owner,
-                id: restaurant.id
-            }
-        }
+        
 
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
 
@@ -156,6 +118,13 @@ class ModifyRestaurant extends React.Component {
         console.log(this.state.dataToPost)
     };
 
+    timeSelectChangeHandler = (e, fieldName) => {
+       
+        let obj = this.state.dataToPost;
+        obj[fieldName] = e;
+        this.setState({ dataToPost: obj });
+    };
+
     harioCheckboxChangeHandler = (e) => {
         let obj = this.state.dataToPost;
         console.log(e.target)
@@ -202,8 +171,53 @@ class ModifyRestaurant extends React.Component {
     }
 
     processSubmit() {
+        if(this.processScheduleValue("post")){
+            this.props.updateRestaurantFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+        }
+        
+    }
 
-        this.props.updateRestaurantFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+    processScheduleValue(type){
+
+        let returnType = false;
+       
+        const days = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+        let i = 0;
+
+        days.forEach(element => {
+            let obj = this.state.dataToPost;
+            let openValue = element+"Open";
+            let closeValue = element+"Close";
+            
+            if(type=="post"){
+                if(obj[openValue]!='-'){
+                    obj[openValue] = obj[openValue]['value']
+                }
+    
+                if(obj[closeValue]!='-'){
+                    obj[closeValue] = obj[closeValue]['value']
+                }
+            }else{
+                if(obj[openValue]!='-'){
+                    obj[openValue] = { value: obj[openValue], label: obj[openValue], name: 'time' }
+                }
+    
+                if(obj[closeValue]!='-'){
+                    obj[closeValue] = { value: obj[closeValue], label: obj[closeValue], name: 'time' }
+                }
+            }
+            
+            i++
+            if(i===days.length){
+                this.setState({
+                    dataToPost:obj
+                })
+
+                returnType =true;
+            }
+        });
+
+        return returnType;
     }
 
     activateTab(e, tabName) {
@@ -252,7 +266,7 @@ class ModifyRestaurant extends React.Component {
 
     componentDidUpdate(previousProps) {
 
-        if (!previousProps.restaurant.id && this.props.restaurant.id) {
+        if (previousProps.restaurant.loading && !this.props.restaurant.loading) {
             const restaurant = this.props.restaurant;
             this.setState({
                 dataToPost: {
@@ -289,7 +303,10 @@ class ModifyRestaurant extends React.Component {
                     owner: restaurant.owner,
                     id: restaurant.id
                 }
+            },() => {
+                this.processScheduleValue("get")
             });
+            
         }
     }
 
@@ -320,22 +337,22 @@ class ModifyRestaurant extends React.Component {
 
         const optionTime = [
             { value: "-", label: "select", name: 'time' },
-            { value: "8", label: "08.00 am", name: 'time' },
-            { value: "9", label: "09.00 am", name: 'time' },
-            { value: "10", label: "10.00 am", name: 'time' },
-            { value: "11", label: "11.00 am", name: 'time' },
-            { value: "12", label: "12.00 am", name: 'time' },
-            { value: "13", label: "01.00 pm", name: 'time' },
-            { value: "14", label: "02.00 pm", name: 'time' },
-            { value: "15", label: "03.00 pm", name: 'time' },
-            { value: "16", label: "04.00 pm", name: 'time' },
-            { value: "17", label: "05.00 pm", name: 'time' },
-            { value: "18", label: "06.00 pm", name: 'time' },
-            { value: "19", label: "07.00 pm", name: 'time' },
-            { value: "20", label: "08.00 pm", name: 'time' },
-            { value: "21", label: "09.00 pm", name: 'time' },
-            { value: "22", label: "10.00 pm", name: 'time' },
-            { value: "23", label: "11.00 pm", name: 'time' }
+            { value: "08.00 am", label: "08.00 am", name: 'time' },
+            { value: "09.00 am", label: "09.00 am", name: 'time' },
+            { value: "10.00 am", label: "10.00 am", name: 'time' },
+            { value: "11.00 am", label: "11.00 am", name: 'time' },
+            { value: "12.00 pm", label: "12.00 pm", name: 'time' },
+            { value: "01.00 pm", label: "01.00 pm", name: 'time' },
+            { value: "02.00 pm", label: "02.00 pm", name: 'time' },
+            { value: "03.00 pm", label: "03.00 pm", name: 'time' },
+            { value: "04.00 pm", label: "04.00 pm", name: 'time' },
+            { value: "05.00 pm", label: "05.00 pm", name: 'time' },
+            { value: "06.00 pm", label: "06.00 pm", name: 'time' },
+            { value: "07.00 pm", label: "07.00 pm", name: 'time' },
+            { value: "08.00 pm", label: "08.00 pm", name: 'time' },
+            { value: "09.00 pm", label: "09.00 pm", name: 'time' },
+            { value: "10.00 pm", label: "10.00 pm", name: 'time' },
+            { value: "11.00 pm", label: "11.00 pm", name: 'time' }
         ];
 
         return (
@@ -574,14 +591,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="mondayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={(e) => this.selectChangeHandler(e, 'mondayOpen')}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'mondayOpen')}
                                                     value={this.state.dataToPost.mondayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="mondayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={(e) => this.selectChangeHandler(e, 'mondayClose')}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'mondayClose')}
                                                     value={this.state.dataToPost.mondayClose}
                                                 />
                                             </div>
@@ -596,14 +613,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="tuesdayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'tuesdayOpen')}
                                                     value={this.state.dataToPost.tuesdayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="tuesdayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'tuesdayClose')}
                                                     value={this.state.dataToPost.tuesdayClose}
                                                 />
                                             </div>
@@ -618,14 +635,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="wednesdayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'wednesdayOpen')}
                                                     value={this.state.dataToPost.wednesdayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="wednesdayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'wednesdayClose')}
                                                     value={this.state.dataToPost.wednesdayClose}
                                                 />
                                             </div>
@@ -640,14 +657,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="thursdayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'thursdayOpen')}
                                                     value={this.state.dataToPost.thursdayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="thursdayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'thursdayClose')}
                                                     value={this.state.dataToPost.thursdayClose}
                                                 />
                                             </div>
@@ -662,14 +679,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="fridayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'fridayOpen')}
                                                     value={this.state.dataToPost.fridayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="fridayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'fridayClose')}
                                                     value={this.state.dataToPost.fridayClose}
                                                 />
                                             </div>
@@ -684,14 +701,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="saturdayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'saturdayOpen')}
                                                     value={this.state.dataToPost.saturdayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="saturdayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'saturdayClose')}
                                                     value={this.state.dataToPost.saturdayClose}
                                                 />
                                             </div>
@@ -706,14 +723,14 @@ class ModifyRestaurant extends React.Component {
                                                 <Select className="cstm-select mini float-left"
                                                     options={optionTime} name="sundayOpen"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'sundayOpen')}
                                                     value={this.state.dataToPost.sundayOpen}
                                                 />
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="sundayClose"
                                                     placeholder="Seleccionar"
-                                                    onChange={this.selectChangeHandler}
+                                                    onChange={(e) => this.timeSelectChangeHandler(e, 'sundayClose')}
                                                     value={this.state.dataToPost.sundayClose}
                                                 />
                                             </div>
