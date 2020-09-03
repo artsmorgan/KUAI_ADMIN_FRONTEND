@@ -30,7 +30,8 @@
     "redux": "4.0.4",
     "redux-thunk": "2.3.0",
     "sanitize.css": "7.0.3",
-    "simple-react-validator": "^1.5.0"
+    "simple-react-validator": "^1.5.0",
+    "uuidv4": "^6.2.3"
   },
   "scripts": {
     "start": "react-scripts start",

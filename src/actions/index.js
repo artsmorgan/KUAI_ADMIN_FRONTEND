@@ -21,6 +21,11 @@ import {
     updateDeliveryMethodFormData,
 } from './deliveryMethodAction'
 
+import {
+    getCategoryListData,
+    updateCategoryFormData,
+} from './menuAction'
+
 export {
     redirectToUrl,
     postLoginForm,
@@ -37,4 +42,7 @@ export {
 
     getDeliveryMethodFormData,
     updateDeliveryMethodFormData,
+
+    getCategoryListData,
+    updateCategoryFormData
 }
