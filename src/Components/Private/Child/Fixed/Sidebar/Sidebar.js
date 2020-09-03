@@ -15,7 +15,6 @@ class Sidebar extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             width: 0,
             show:false,
@@ -108,7 +107,7 @@ class Sidebar extends React.Component {
                     </div>
                     <ul className="menu-list">
                         <li>
-                            <a className="active" onClick={e => this.gotoStep(e, ROUTES.ORDERS)}>
+                            <Link to={ROUTES.ORDERS} className={ window.location.pathname === ROUTES.ORDERS ? 'active': '' }>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7" clipPath="url(#clip0)">
@@ -150,10 +149,10 @@ class Sidebar extends React.Component {
                                     </defs>
                                 </svg>
                                 Ordenes
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a onClick={e => this.gotoStep(e, ROUTES.MODIFY_RESTAURANT)}>
+                            <Link to={ROUTES.MODIFY_RESTAURANT} className={ window.location.pathname === ROUTES.MODIFY_RESTAURANT ? 'active': '' }>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7">
@@ -170,10 +169,10 @@ class Sidebar extends React.Component {
                                 </svg>
 
                                 Modificar Restaurante
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a onClick={e => this.gotoStep(e, ROUTES.MODIFY_MENU)}>
+                            <Link to={ROUTES.MODIFY_MENU} className={ window.location.pathname === ROUTES.MODIFY_MENU ? 'active': '' }>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7">
@@ -225,10 +224,10 @@ class Sidebar extends React.Component {
                                     </g>
                                 </svg>
                                 Modificar Menú
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a onClick={e => this.gotoStep(e, ROUTES.PAYMENT_METHODS)}>
+                            <Link to={ROUTES.PAYMENT_METHODS} className={ window.location.pathname === ROUTES.PAYMENT_METHODS ? 'active': '' }>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7" clipPath="url(#clip0)">
@@ -265,10 +264,10 @@ class Sidebar extends React.Component {
                                 </svg>
 
                                 Métodos de pago
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <a onClick={e => this.gotoStep(e, ROUTES.DELIVERY_METHODS)}>
+                            <Link to={ROUTES.DELIVERY_METHODS} className={ window.location.pathname === ROUTES.DELIVERY_METHODS ? 'active': '' }>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7">
@@ -282,14 +281,14 @@ class Sidebar extends React.Component {
                                 </svg>
 
                                 Métodos de entrega
-                            </a>
+                            </Link>
                         </li>
 
                         <li>
                             <hr></hr>
                         </li>
                         <li>
-                            <a onClick={e => this.gotoStep(e, ROUTES.CONTROL_CENTER)}>
+                            <Link to={ROUTES.CONTROL_CENTER} className={ window.location.pathname === ROUTES.CONTROL_CENTER ? 'active': '' }>
                                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g opacity="0.7" clipPath="url(#clip0)">
@@ -345,10 +344,10 @@ class Sidebar extends React.Component {
 
 
                                 Centro de Control
-                            </a>
+                            </Link>
                         </li>
                         <li>
-                            <Link to={'/control-center'} onClick={this.showSupportModal}>
+                            <Link onClick={this.showSupportModal}>
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <g clipPath="url(#clip0)">
