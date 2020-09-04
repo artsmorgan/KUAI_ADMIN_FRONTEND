@@ -3,7 +3,8 @@ import Select from 'react-select';
 import { Button, Nav } from 'react-bootstrap';
 import Checkbox from '@opuscapita/react-checkbox';
 import SimpleReactValidator from 'simple-react-validator';
-
+import bannerImage from "../../assets/images/banner-bg.png";
+import avatarImage from "../../assets/images/oval-avatar.png";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import * as APITools from '../../util/apiX';
@@ -455,7 +456,7 @@ class ModifyRestaurant extends React.Component {
                                         <div className="cover-pic">
                                             <label htmlFor="">Editar foto de perfil y </label>
                                             <div className="cvr">
-                                                <div className="cvr-main">
+                                                <div className="cvr-main" style={{background: "url(" + bannerImage + ")"}}>
                                                     <div className="overlay">
                                                         <button type="button" className="btn-cvr-change"
                                                             onClick={this.showFileUpload}>
@@ -479,7 +480,7 @@ class ModifyRestaurant extends React.Component {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="cvr-photo">
+                                                <div className="cvr-photo" style={{background: "url(" + avatarImage + ")"}}>
                                                     <div className="overlay">
                                                         <button type="button" className="btn-photo-change"
                                                             onClick={this.showFileUpload}>

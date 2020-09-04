@@ -656,6 +656,7 @@ body {
   }
   .cstm-select {
     margin-bottom: 20px;
+    width: 47%;
   }
   .uni-input {
     margin-bottom: 20px;
@@ -665,9 +666,10 @@ body {
       position: relative;
       width: 100%;
       &-main {
-        height: 200px;
+        height: 125px;
         position: relative;
         overflow: hidden;
+        background-size: cover !important;
         .overlay {
           position: absolute;
           width: 100%;
@@ -699,6 +701,8 @@ body {
         overflow: hidden;
         margin-top: -40px;
         margin-left: 20px;
+        background-size: cover !important;
+        
         .overlay {
           position: absolute;
           width: 100%;
@@ -786,14 +790,14 @@ body {
       border: 1px solid #fff !important;
       border-radius: 50px !important;
       height: 35px !important;
-      width: 120px;
+      width: 100%;
     }
     .css-1pahdxg-control {
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
       border: 1px solid #650add !important;
       border-radius: 50px !important;
       height: 35px !important;
-      width: 100px;
+      width: 100%;
     }
   }
   .css-yk16xz-control {
@@ -824,7 +828,7 @@ body {
 .oc-checkbox {
   display: inline-block;
   .icon {
-    width: 20px !important;
+    width: 38px !important;
     svg {
       border: 0px !important;
       border-radius: 6px;
@@ -852,16 +856,16 @@ body {
   margin-bottom: 4px;
   .chk-label {
     font-size: 12px;
-    margin-left: 22px;
+    margin-left: 5px;
   }
   .time-block {
-    width: 260px;
+    width: 300px;
     float: right;
     margin-top: 3px;
     position: relative;
     .dash {
       position: absolute;
-      left: 126px;
+      left: 49%;
       top: 5px;
     }
   }
