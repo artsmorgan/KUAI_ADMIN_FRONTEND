@@ -12,6 +12,7 @@ import { bindActionCreators } from 'redux'
 import { getRestaurantFormData, updateRestaurantFormData } from '../../actions';
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
 class ModifyRestaurant extends React.Component {
 
@@ -32,6 +33,32 @@ class ModifyRestaurant extends React.Component {
             horario0: false,
 
             submitLoading: false,
+
+            customErrorMessage: "este campo es requerido",
+            customErrors: {
+                mondayEnable: false,
+                mondayOpen: "",
+                mondayClose: "",
+                tuesdayEnable: false,
+                tuesdayOpen: "",
+                tuesdayClose: "",
+                wednesdayEnable: false,
+                wednesdayOpen: "",
+                wednesdayClose: "",
+                thursdayEnable: false,
+                thursdayOpen: "",
+                thursdayClose: "",
+                fridayEnable: false,
+                fridayOpen: "",
+                fridayClose: "",
+                saturdayEnable: false,
+                saturdayOpen: "",
+                saturdayClose: "",
+                sundayEnable: false,
+                sundayOpen: "",
+                sundayClose: "",
+            },
+
             dataToPost: {
                 name: null,
                 administrator: null,
@@ -65,10 +92,7 @@ class ModifyRestaurant extends React.Component {
                 sundayClose: null,
                 owner: null,
             },
-
         };
-
-        
 
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
 
@@ -86,22 +110,9 @@ class ModifyRestaurant extends React.Component {
         let obj = this.state.dataToPost;
         obj[e.target.name] = !obj[e.target.name];
         this.setState({ dataToPost: obj });
+
+        this.handleCustomValidation()
     };
-
-
-    handleSuccess(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'success',
-            autoHideDuration: 3000,
-        });
-    }
-
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
 
     inputChangeHandler = (e) => {
         let obj = this.state.dataToPost;
@@ -119,32 +130,82 @@ class ModifyRestaurant extends React.Component {
     };
 
     timeSelectChangeHandler = (e, fieldName) => {
-       
         let obj = this.state.dataToPost;
         obj[fieldName] = e;
         this.setState({ dataToPost: obj });
+        this.handleCustomValidation()
     };
 
-    harioCheckboxChangeHandler = (e) => {
-        let obj = this.state.dataToPost;
-        console.log(e.target)
-        obj['horario'][e.target.name]['checkbox'] = !obj['horario'][e.target.name]['checkbox'];
-        this.setState({ dataToPost: obj });
+
+
+
+    handleSuccess(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'success',
+            autoHideDuration: 3000,
+        });
     }
 
-    horarioSelectChangeHander = (e, fieldName) => {
-        console.log(e)
-        console.log(fieldName)
-        // let obj = this.state.dataToPost;
-        // console.log(!obj['horario'][e.target.name]['checkbox'])
-        // console.log(e.target)
-        // obj['horario'][e.target.name]['checkbox'] = !obj['horario'][e.target.name]['checkbox']; 
-        // this.setState({dataToPost: obj});
+    handleError(msg) {
+        this.key = this.props.enqueueSnackbar(msg, {
+            variant: 'error',
+            autoHideDuration: 3000,
+        });
     }
+
+    handleCustomValidation() {
+
+        let days = weekDays;
+        let errors = this.state.customErrors;
+        let formIsValid = true;
+        let obj = this.state.dataToPost;
+
+        for (const [key, value] of Object.entries(days)) {
+
+            let field = value + "Enable";
+            if (field in errors) {
+                let openValue = value + "Open";
+                let closeValue = value + "Close";
+                
+                if (obj[field]) {
+                    console.log(obj[openValue])
+                    console.log(obj[closeValue])
+                    if (obj[openValue] === "-" ||obj[openValue]['value'] === "-") {
+                        console.log(obj[openValue]);
+                        errors[openValue] = this.state.customErrorMessage;
+                        formIsValid = false;
+                    } else {
+                        errors[openValue] = '';
+                    }
+
+                    if (obj[closeValue] === "-"||obj[closeValue]['value'] === "-") {
+                        console.log(obj[closeValue]);
+                        errors[closeValue] = this.state.customErrorMessage;
+                        formIsValid = false;
+                    } else {
+                        errors[closeValue] = '';
+                    }
+                } else {
+                    errors[openValue] = '';
+                    errors[closeValue] = '';
+                }
+            }
+        }
+
+        console.log(errors)
+        this.setState({ customErrors: errors });
+
+        // console.log(this.state.errors)
+        return formIsValid;
+        //console.log(`${key}: ${value}`);
+    }
+
+
+
 
     formSubmitHandler = (e) => {
         e.preventDefault();
-        if (this.validator.allValid()) {
+        if (this.validator.allValid() && this.handleCustomValidation()) {
             console.log(this.state.dataToPost);
             // return false;
             this.processSubmit();
@@ -153,14 +214,6 @@ class ModifyRestaurant extends React.Component {
             this.validator.showMessages();
         }
     };
-
-    // showAndHideSubmitLoader() {
-    //     this.setState({ submitLoading: true });
-    //     setTimeout(() => {
-    //         this.setState({ submitLoading: false });
-    //         this.processSubmit();
-    //     }, 1000);
-    // }
 
     showFileUpload() {
         this.fileUpload.current.click();
@@ -171,52 +224,66 @@ class ModifyRestaurant extends React.Component {
     }
 
     processSubmit() {
-        if(this.processScheduleValue("post")){
+        if (this.processScheduleValue("post")) {
             this.props.updateRestaurantFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
         }
-        
+
     }
 
-    processScheduleValue(type){
+    // processCustomError() {
+    //     let obj = this.state.dataToPost;
+    //     let errors = this.state.customErrors;
+    //     let i=0;
+    //     for (const [key, value] of Object.entries(obj)) {
+    //         if (key in errors) {
+    //             errors[key] = value;
+    //         }
+    //         i++;
+    //         if(i==obj.length){
+    //             this.setState({customErrorMessage:errors})
+    //         }
+    //     }
+    // }
 
+    processScheduleValue(type) {
         let returnType = false;
-       
-        const days = ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"];
+        // const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        const days = weekDays;
         let i = 0;
 
         days.forEach(element => {
             let obj = this.state.dataToPost;
-            let openValue = element+"Open";
-            let closeValue = element+"Close";
-            
-            if(type=="post"){
-                if(obj[openValue]!='-'){
+            let openValue = element + "Open";
+            let closeValue = element + "Close";
+
+            if (type == "post") {
+                if (obj[openValue] != '-') {
                     obj[openValue] = obj[openValue]['value']
                 }
-    
-                if(obj[closeValue]!='-'){
+
+                if (obj[closeValue] != '-') {
                     obj[closeValue] = obj[closeValue]['value']
                 }
-            }else{
-                if(obj[openValue]!='-'){
+            } else {
+                if (obj[openValue] != '-') {
                     obj[openValue] = { value: obj[openValue], label: obj[openValue], name: 'time' }
                 }
-    
-                if(obj[closeValue]!='-'){
+
+                if (obj[closeValue] != '-') {
                     obj[closeValue] = { value: obj[closeValue], label: obj[closeValue], name: 'time' }
                 }
             }
-            
+
             i++
-            if(i===days.length){
+            if (i === days.length) {
                 this.setState({
-                    dataToPost:obj
+                    dataToPost: obj
                 })
 
-                returnType =true;
+                returnType = true;
             }
         });
-
+        // this.processCustomError();
         return returnType;
     }
 
@@ -265,7 +332,6 @@ class ModifyRestaurant extends React.Component {
     }
 
     componentDidUpdate(previousProps) {
-
         if (previousProps.restaurant.loading && !this.props.restaurant.loading) {
             const restaurant = this.props.restaurant;
             this.setState({
@@ -303,10 +369,10 @@ class ModifyRestaurant extends React.Component {
                     owner: restaurant.owner,
                     id: restaurant.id
                 }
-            },() => {
-                this.processScheduleValue("get")
+            }, () => {
+                this.processScheduleValue("get");
             });
-            
+
         }
     }
 
@@ -592,15 +658,24 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="mondayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'mondayOpen')}
-                                                    value={this.state.dataToPost.mondayOpen}
+                                                    value={this.state.dataToPost.mondayOpen} isDisabled={!this.state.dataToPost.mondayEnable}
                                                 />
+                                                
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="mondayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'mondayClose')}
-                                                    value={this.state.dataToPost.mondayClose}
+                                                    value={this.state.dataToPost.mondayClose} isDisabled={!this.state.dataToPost.mondayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.mondayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.mondayClose}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -614,15 +689,24 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="tuesdayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'tuesdayOpen')}
-                                                    value={this.state.dataToPost.tuesdayOpen}
+                                                    value={this.state.dataToPost.tuesdayOpen} isDisabled={!this.state.dataToPost.tuesdayEnable}
                                                 />
+                                                
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="tuesdayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'tuesdayClose')}
-                                                    value={this.state.dataToPost.tuesdayClose}
+                                                    value={this.state.dataToPost.tuesdayClose} isDisabled={!this.state.dataToPost.tuesdayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.tuesdayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.tuesdayClose}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -636,15 +720,25 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="wednesdayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'wednesdayOpen')}
-                                                    value={this.state.dataToPost.wednesdayOpen}
+                                                    value={this.state.dataToPost.wednesdayOpen} isDisabled={!this.state.dataToPost.wednesdayEnable}
                                                 />
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="wednesdayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'wednesdayClose')}
-                                                    value={this.state.dataToPost.wednesdayClose}
+                                                    value={this.state.dataToPost.wednesdayClose} isDisabled={!this.state.dataToPost.wednesdayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.wednesdayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.wednesdayClose}
+                                                    </p>
+                                                </div>
+
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -658,15 +752,24 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="thursdayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'thursdayOpen')}
-                                                    value={this.state.dataToPost.thursdayOpen}
+                                                    value={this.state.dataToPost.thursdayOpen} isDisabled={!this.state.dataToPost.thursdayEnable}
                                                 />
+                                                
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="thursdayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'thursdayClose')}
-                                                    value={this.state.dataToPost.thursdayClose}
+                                                    value={this.state.dataToPost.thursdayClose} isDisabled={!this.state.dataToPost.thursdayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.thursdayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.thursdayClose}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -680,15 +783,24 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="fridayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'fridayOpen')}
-                                                    value={this.state.dataToPost.fridayOpen}
+                                                    value={this.state.dataToPost.fridayOpen} isDisabled={!this.state.dataToPost.fridayEnable}
                                                 />
+                                                
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="fridayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'fridayClose')}
-                                                    value={this.state.dataToPost.fridayClose}
+                                                    value={this.state.dataToPost.fridayClose} isDisabled={!this.state.dataToPost.fridayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.fridayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.fridayClose}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -702,15 +814,24 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="saturdayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'saturdayOpen')}
-                                                    value={this.state.dataToPost.saturdayOpen}
+                                                    value={this.state.dataToPost.saturdayOpen} isDisabled={!this.state.dataToPost.saturdayEnable}
                                                 />
+                                                
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="saturdayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'saturdayClose')}
-                                                    value={this.state.dataToPost.saturdayClose}
+                                                    value={this.state.dataToPost.saturdayClose} isDisabled={!this.state.dataToPost.saturdayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.saturdayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.saturdayClose}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -724,15 +845,24 @@ class ModifyRestaurant extends React.Component {
                                                     options={optionTime} name="sundayOpen"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'sundayOpen')}
-                                                    value={this.state.dataToPost.sundayOpen}
+                                                    value={this.state.dataToPost.sundayOpen} isDisabled={!this.state.dataToPost.sundayEnable}
                                                 />
+                                                
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="sundayClose"
                                                     placeholder="Seleccionar"
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'sundayClose')}
-                                                    value={this.state.dataToPost.sundayClose}
+                                                    value={this.state.dataToPost.sundayClose} isDisabled={!this.state.dataToPost.sundayEnable}
                                                 />
+                                                <div className="error-show">
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.sundayOpen}
+                                                    </p>
+                                                    <p style={{ color: "red" }}>
+                                                        {this.state.customErrors.sundayClose}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
 
