@@ -23,8 +23,8 @@ class App extends React.Component {
     }
 
     render() {
-        const {auth, form} = this.props
-        const loading = auth.loading || form.loading
+        const {auth, form, menuReducer} = this.props
+        const loading = auth.loading || form.loading || menuReducer.loading
         return (
             <React.Fragment>
                 <Switch>
@@ -59,8 +59,8 @@ class App extends React.Component {
     }
 }
 
-const mapStateToProps = ({auth, form}) => ({
-    auth, form
+const mapStateToProps = ({auth, form, menuReducer}) => ({
+    auth, form, menuReducer
 })
 
 const mapDispatchToProps = dispatch =>
