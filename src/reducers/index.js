@@ -7,7 +7,8 @@ import deliveryMethod from './deliveryMethodReducer';
 import restaurant from './restaurantReducer';
 import menuReducer from "./menuReducer";
 import controlCenter from './controlCenterMethodReducer';
+import defaultConfigReducer from "./defaultConfigReducer";
 
 export default combineReducers({
-    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menuReducer, controlCenter
+    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menuReducer, controlCenter, defaultConfig: defaultConfigReducer
 })

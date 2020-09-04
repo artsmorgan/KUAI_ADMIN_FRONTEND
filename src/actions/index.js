@@ -29,6 +29,10 @@ import {
     getControlCenterMethodFormData,
 } from './controlCenterMethodAction'
 
+import {
+    getDefaultConfigData,
+} from './defaultConfigAction'
+
 export {
     redirectToUrl,
     postLoginForm,
@@ -48,5 +52,7 @@ export {
 
     getCategoryListData,
     updateCategoryFormData,
-    getControlCenterMethodFormData
+    getControlCenterMethodFormData,
+
+    getDefaultConfigData
 }

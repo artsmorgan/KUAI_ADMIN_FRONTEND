@@ -4,10 +4,10 @@ import {Dropdown} from 'react-bootstrap';
 
 import Avatar from "../../../../../assets/images/avatar.svg";
 import $ from "jquery";
-import * as APITools from "../../../../../util/apiX";
-import myOrders from "../../../../../util/data/myOrders.json";
 
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {getCategoryListData, getDefaultConfigData, redirectToUrl, updateCategoryFormData} from '../../../../../actions'
 
 class Navbar extends React.Component {
 
@@ -22,6 +22,10 @@ class Navbar extends React.Component {
         }
 
         window.addEventListener("resize", this.updateDimension);
+    }
+
+    componentWillMount() {
+        this.props.getDefaultConfigData()
     }
 
     updateDimension = () => {
@@ -63,6 +67,14 @@ class Navbar extends React.Component {
     }
 
     render() {
+        try {
+            const {defaultConfig} = this.props
+            // console.log(defaultConfig['DEFAULT_CONFIG'])
+            this.setState({totalOrders: defaultConfig['DEFAULT_CONFIG'].totalTodayOrders})
+            this.setState({totalSales: defaultConfig['DEFAULT_CONFIG'].totalTodaySales})
+        } catch (e) {
+
+        }
         const {width, totalOrders, totalSales} = this.state
         if (width > 1024) {
             return (
@@ -122,4 +134,19 @@ class Navbar extends React.Component {
     }
 }
 
-export default Navbar
+const mapStateToProps = ({defaultConfig}) => ({
+    defaultConfig
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getDefaultConfigData
+        },
+        dispatch
+    )
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Navbar)
