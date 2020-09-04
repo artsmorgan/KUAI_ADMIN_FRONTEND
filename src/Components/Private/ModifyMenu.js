@@ -74,6 +74,10 @@ class ModifyMenu extends React.Component {
         categoryListToSend.push(categoryDataToPost)
         console.log(categoryListToSend)
         this.props.updateCategoryFormData(categoryListToSend)
+        this.setState({
+            show: false,
+            categoryDataToPost: {}
+        })
     }
 
 
@@ -129,22 +133,21 @@ class ModifyMenu extends React.Component {
     }
 
     componentDidMount() {
-      window.setTimeout(this.displayCategoryList, 700)
+        window.setTimeout(this.displayCategoryList, 800)
         this.setState({
             width: window.innerWidth
         }, () => {
             if (this.state.width < 1024) {
                 let obj = this.state.formTab
                 obj.categoriesTab = false;
-
                 this.setState({formTab: obj, mobile: true});
             }
         });
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log("componentDidUpdate")
-        console.log(this.state.categoryListToUpdate)
+        // console.log("componentDidUpdate")
+        // console.log(this.state.categoryListToUpdate)
     }
 
     showCategoryModal = () => {
@@ -156,25 +159,39 @@ class ModifyMenu extends React.Component {
     }
 
     categoryInputChangeHandler = (e) => {
-        const categoryId = e.target.id
-        const categoryName = e.target.name
-        $("svg[id="+categoryId+"].trash").hide()
-        $("#categories-list svg[id="+categoryId+"].tik").show()
+        let categoryId = e.target.id
+        let categoryName = e.target.value
+        let categoryObj = {id: categoryId, name: categoryName}
+        $("svg[id=" + categoryId + "].trash").hide()
+        $("#categories-list svg[id=" + categoryId + "].tik").show()
 
         let categoryListToUpdate = this.state.categoryListToUpdate
-        console.log(categoryListToUpdate)
+        // console.log(categoryListToUpdate)
         let foundIndex = categoryListToUpdate.findIndex(x => x.id == categoryId);
-        categoryListToUpdate[foundIndex] = {id: categoryId, name: categoryName};
+        // console.log(categoryObj)
+        categoryListToUpdate[foundIndex] = categoryObj;
+        this.state.categoryListToUpdate = categoryListToUpdate
         this.setState({categoryListToUpdate: categoryListToUpdate}, () => {
+            // console.log(this.state.categoryListToUpdate)
+        })
+    }
+
+    deleteCategory = (id) => {
+        let categoryListToUpdate = this.state.categoryListToUpdate
+        let result = categoryListToUpdate.filter(function(el) { return el.id != id; })
+        console.log(result)
+        this.setState({categoryListToUpdate: result}, () => {
             console.log(this.state.categoryListToUpdate)
+            this.props.updateCategoryFormData(this.state.categoryListToUpdate)
         })
     }
 
     categoryFocusOutHandler = (e) => {
         const categoryId = e.target.id
-        $("svg[id="+categoryId+"].trash").show()
-        $("#categories-list svg[id="+categoryId+"].tik").hide()
-
+        $("svg[id=" + categoryId + "].trash").show()
+        $("#categories-list svg[id=" + categoryId + "].tik").hide()
+        // console.log(this.state.categoryListToUpdate)
+        this.props.updateCategoryFormData(this.state.categoryListToUpdate)
     }
 
     render() {
@@ -228,7 +245,7 @@ class ModifyMenu extends React.Component {
                                                         <input type="text" className={"uni-input"} name="name"
                                                                placeholder="Category name"
                                                                onChange={this.inputChangeHandler}
-                                                               value={this.state.categoryDataToPost.name}/>
+                                                               value={this.state.categoryDataToPost.name} autoComplete={"off"}/>
                                                         <p style={{color: "red"}}>
                                                             {this.validator.message('name', this.state.categoryDataToPost.name, 'required')}
                                                         </p>
@@ -240,7 +257,8 @@ class ModifyMenu extends React.Component {
                                             </Modal.Body>
                                         </Modal>
 
-                                        <div className="rotator-scroll" style={{paddingTop: '25px'}} id="categories-list">
+                                        <div className="rotator-scroll" style={{paddingTop: '25px'}}
+                                             id="categories-list">
                                             {
                                                 this.state.categoryListToUpdate.map(category =>
                                                     <div className="rotator" key={category.id}>
@@ -261,17 +279,21 @@ class ModifyMenu extends React.Component {
                                                             </svg>
                                                         </div>
                                                         <input type="text" value={category.name} id={category.id}
-                                                               onChange={this.categoryInputChangeHandler} onBlur={this.categoryFocusOutHandler}/>
+                                                               onChange={this.categoryInputChangeHandler}
+                                                               onBlur={this.categoryFocusOutHandler}/>
                                                         <div className="action">
                                                             <svg className="trash" width="15" height="16"
                                                                  viewBox="0 0 15 16"
-                                                                 fill="none" xmlns="http://www.w3.org/2000/svg" id={category.id}>
+                                                                 fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                                 id={category.id} onClick={() => this.deleteCategory(category.id)}>
                                                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                                                       d="M13.5393 2.66665H10.0121V0.666661C10.0121 0.298474 9.74885 0 9.42418 0H4.72118C4.39651 0 4.13331 0.298474 4.13331 0.666661V2.66665H0.606063C0.281389 2.66665 0.0181885 2.96512 0.0181885 3.33331C0.0181885 3.70149 0.281389 3.99997 0.606063 3.99997H13.5393C13.864 3.99997 14.1272 3.70149 14.1272 3.33331C14.1272 2.96512 13.864 2.66665 13.5393 2.66665ZM5.30905 1.33332H8.8363V2.66665H5.30905V1.33332ZM1.78181 5.33329V13.9999C1.78181 15.1045 2.57141 15.9999 3.54543 15.9999H10.5999C11.5739 15.9999 12.3635 15.1045 12.3635 13.9999V5.33329H1.78181ZM5.30904 12.6664H4.13329V7.99973H5.30904V12.6664ZM6.48479 12.6664H7.66054V7.99973H6.48479V12.6664ZM10.012 12.6664H8.83629V7.99973H10.012V12.6664Z"
                                                                       fill="#41404D"/>
                                                             </svg>
-                                                            <svg className="tik" width="14" height="12" viewBox="0 0 14 12" fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg" id={category.id} style={{display: "none"}}>
+                                                            <svg className="tik" width="14" height="12"
+                                                                 viewBox="0 0 14 12" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg" id={category.id}
+                                                                 style={{display: "none"}}>
                                                                 <path
                                                                     d="M11.694 1.13765C12.1498 0.620782 12.8888 0.620782 13.3445 1.13765C13.8003 1.65452 13.8003 2.49254 13.3445 3.00941L6.34187 10.9506C5.88608 11.4675 5.14711 11.4675 4.69132 10.9506L0.800946 6.53882C0.34516 6.02195 0.34516 5.18394 0.800946 4.66706C1.25673 4.15019 1.99571 4.15019 2.45149 4.66706L5.51659 8.14295L11.694 1.13765Z"
                                                                     fill="#37DBE4"/>
