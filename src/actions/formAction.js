@@ -98,7 +98,7 @@ export const postFormData = (payload) => {
                         dispatch(push(nextForm))
                     } else {
                         const response = data.data
-                        toastr.error(language[lang].error, response.message)
+                        toastr.error(language[lang].error, data.error.message)
                         dispatch(postFormError())
                     }
                 })
