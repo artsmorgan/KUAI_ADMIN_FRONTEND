@@ -8,7 +8,8 @@ import paymentMethod from './paymentMethodReducer';
 import restaurant from './restaurantReducer';
 import menuReducer from "./menuReducer";
 import controlCenter from './controlCenterMethodReducer';
+import defaultConfigReducer from "./defaultConfigReducer";
 
 export default combineReducers({
-    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menuReducer, controlCenter, payment:paymentMethod
+    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menuReducer, controlCenter, payment:paymentMethod, defaultConfig: defaultConfigReducer
 })

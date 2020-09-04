@@ -55,16 +55,11 @@ export const updateCategoryFormData = (payload) => {
         if (URL) {
             const state = getState()
             const lang = 'en'
-            let formData = new URLSearchParams()
-            Object.keys(payload).forEach(field => {
-                formData.set(field, payload[field])
-            })
-
             const headers = { Authorization: `bearer ${state.auth.token}` }
-            axiosRequest.put(URL, formData, { headers })
+            axiosRequest.put(URL, {categories: JSON.stringify(payload)}, { headers })
                 .then(response => {
                     const data = response.data
-                    console.log(data)
+                    console.log(response)
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postCategoryFormSuccess(data))
