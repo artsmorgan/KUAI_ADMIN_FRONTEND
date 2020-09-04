@@ -728,6 +728,7 @@ body {
 
 .mod-rest-container .cstm-select {
   margin-bottom: 20px;
+  width: 47%;
 }
 
 .mod-rest-container .uni-input {
@@ -740,9 +741,10 @@ body {
 }
 
 .mod-rest-container .cover-pic .cvr-main {
-  height: 200px;
+  height: 125px;
   position: relative;
   overflow: hidden;
+  background-size: cover !important;
 }
 
 .mod-rest-container .cover-pic .cvr-main .overlay {
@@ -784,6 +786,7 @@ body {
   overflow: hidden;
   margin-top: -40px;
   margin-left: 20px;
+  background-size: cover !important;
 }
 
 .mod-rest-container .cover-pic .cvr-photo .overlay {
@@ -885,7 +888,7 @@ body {
   border: 1px solid #fff !important;
   border-radius: 50px !important;
   height: 35px !important;
-  width: 120px;
+  width: 100%;
 }
 
 .cstm-select.mini .css-1pahdxg-control {
@@ -894,7 +897,7 @@ body {
   border: 1px solid #650add !important;
   border-radius: 50px !important;
   height: 35px !important;
-  width: 100px;
+  width: 100%;
 }
 
 .cstm-select .css-yk16xz-control {
@@ -928,7 +931,7 @@ body {
 }
 
 .oc-checkbox .icon {
-  width: 20px !important;
+  width: 38px !important;
 }
 
 .oc-checkbox .icon svg {
@@ -961,11 +964,11 @@ body {
 
 .hor-inline .chk-label {
   font-size: 12px;
-  margin-left: 22px;
+  margin-left: 5px;
 }
 
 .hor-inline .time-block {
-  width: 260px;
+  width: 300px;
   float: right;
   margin-top: 3px;
   position: relative;
@@ -973,7 +976,7 @@ body {
 
 .hor-inline .time-block .dash {
   position: absolute;
-  left: 126px;
+  left: 49%;
   top: 5px;
 }
 
@@ -1691,7 +1694,7 @@ body {
 }
 
 .hidden {
-  display: none !important;
+  display: none;
 }
 
 .mb-visible {
