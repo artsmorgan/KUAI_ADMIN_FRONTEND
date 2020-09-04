@@ -20,27 +20,15 @@ class DeliveryMethods extends React.Component {
             checked: false,
             errorMessage: "este campo es requerido",
             errors: {
-                comerEnRestaurante: {
-                    checked: false,
-                    // aceptarReservaciones:false
+                paraLlevarEnabled:{
+                    deliveryOptions:"",
                 },
-                paraLlevar: {
-                    checked: false,
-                    entrega: ''
+                entregaParqueoEnabled:{
+                    entregaParqueoOptions:"",
                 },
-                servicioALaHabitacion: {
-                    checked: false
-                },
-                entregaEnParqueo: {
-                    checked: false,
-                    entrega: ''
-                },
-                tarjetaEnEntrega: {
-                    checked: false,
-                    precioDeEnvio: '',
-                    cada: '',
-                    compraMiinima: ''
-                    // envioGratis:false
+                expressEnabled:{
+                    expressPrecioEnvio:"",
+                    expressCada:"",
                 }
             },
             dataToPost: {
@@ -60,26 +48,7 @@ class DeliveryMethods extends React.Component {
             }
         };
 
-        if (props.delivery.id) {
-            const delivery = props.delivery;
-            this.state.dataToPost =
-            {
-                comerRestauranteEnabled: this.getBool(delivery.comerRestaurante.enabled),
-                acceptReservations: this.getBool(delivery.comerRestaurante.acceptReservations),
-                paraLlevarEnabled: this.getBool(delivery.paraLlevar.enabled),
-                deliveryOptions: delivery.paraLlevar.deliveryOptions,
-                servicioHabitacionEnabled: this.getBool(delivery.servicioHabitacion),
-                entregaParqueoEnabled: this.getBool(delivery.entregaParqueo.enabled),
-                entregaParqueoOptions: delivery.entregaParqueo.entregaParqueoOptions,
-                expressEnabled: this.getBool(delivery.express.enabled),
-                expressPrecioEnvio: delivery.express.precioEnvio,
-                expressCada: delivery.express.cada,
-                expressEnvioGratisEnabled: this.getBool(delivery.express.envioGratis),
-                id: delivery.id,
-                restaurantId: localStorage.getItem('restaurantId')
-            }
-
-        }
+        
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -106,7 +75,7 @@ class DeliveryMethods extends React.Component {
         obj[switchName] = value;
         this.setState({ dataToPost: obj });
         // console.log(this.state.dataToPost)
-        // this.handleValidation()
+        this.handleCustomValidation()
     }
 
 
@@ -121,11 +90,13 @@ class DeliveryMethods extends React.Component {
     };
 
     processSubmit() {
-
-        this.props.updateDeliveryMethodFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+        if(this.handleCustomValidation()){
+            this.props.updateDeliveryMethodFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+        }
+        
     }
 
-    handleValidation() {
+    handleCustomValidation() {
         let errors = this.state.errors;
         let formIsValid = true;
 
@@ -133,20 +104,17 @@ class DeliveryMethods extends React.Component {
         let length = obj.length;
         // console.log(obj)
         for (const [key, value] of Object.entries(obj)) {
-            if (value.checked) {
-                for (const [k, v] of Object.entries(value)) {
-                    if (k != 'checked') {
-                        // console.log(k)
-                        if (!v && typeof (v) != 'boolean') {
-                            // console.log(k)
-                            // console.log(typeof(v))
-                            formIsValid = false;
-                            errors[key][k] = this.state.errorMessage
-                        } else {
-                            errors[key][k] = '';
-                        }
+            let field = key;
+            if (field in errors && value) {
+                console.log(field)
+                for (const [k, v] of Object.entries(errors[field])) {
+                    console.log(obj[k]);
+                    if(!obj[k]){
+                        errors[field][k]= this.state.errorMessage
+                        formIsValid = false
+                    }else{
+                        errors[field][k]="";
                     }
-
                 }
             }
         }
@@ -169,7 +137,7 @@ class DeliveryMethods extends React.Component {
     }
 
     componentDidUpdate(previousProps) {
-        if (!previousProps.delivery.id && this.props.delivery.id) {
+        if (previousProps.delivery.loading && !this.props.delivery.loading) {
             const delivery = this.props.delivery;
             this.setState({
                 dataToPost: {
@@ -303,7 +271,7 @@ class DeliveryMethods extends React.Component {
                                                 onChange={(e) => this.inputChangeHandler(e, 'deliveryOptions')}
                                                 value={this.state.dataToPost.deliveryOptions}></textarea>
                                             <p style={{ color: "red" }}>
-                                                {this.state.errors.paraLlevar.entrega}
+                                                {this.state.errors.paraLlevarEnabled.deliveryOptions}
                                             </p>
                                         </div>
                                     </div>
@@ -418,7 +386,7 @@ class DeliveryMethods extends React.Component {
                                                 onChange={(e) => this.inputChangeHandler(e, 'entregaParqueoOptions')}
                                                 value={this.state.dataToPost.entregaParqueoOptions}></textarea>
                                             <p style={{ color: "red" }}>
-                                                {this.state.errors.entregaEnParqueo.entrega}
+                                                {this.state.errors.entregaParqueoEnabled.entregaParqueoOptions}
                                             </p>
                                         </div>
                                     </div>
@@ -467,7 +435,7 @@ class DeliveryMethods extends React.Component {
                                                     <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'expressPrecioEnvio')}
                                                         value={this.state.dataToPost.expressPrecioEnvio} name="expressPrecioEnvio" />
                                                     <p style={{ color: "red" }}>
-                                                        {this.state.errors.tarjetaEnEntrega.precioDeEnvio}
+                                                        {this.state.errors.expressEnabled.expressPrecioEnvio}
                                                     </p>
                                                 </div>
                                                 <div className="col">
@@ -475,7 +443,7 @@ class DeliveryMethods extends React.Component {
                                                     <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'expressCada')}
                                                         value={this.state.dataToPost.expressCada} name="expressCada" />
                                                     <p style={{ color: "red" }}>
-                                                        {this.state.errors.tarjetaEnEntrega.cada}
+                                                        {this.state.errors.expressEnabled.expressCada}
                                                     </p>
                                                 </div>
                                             </div>
@@ -515,9 +483,9 @@ class DeliveryMethods extends React.Component {
                                                 <label htmlFor="" style={{ fontSize: '14px', fontWeight: '500' }}>COMPRA MIÍNIMA</label>
                                                 <input type="text" className="uni-input" style={{ width: '50%', display: 'block' }} onChange={(e) => this.inputChangeHandler(e, 'tarjetaEnEntrega')}
                                                     value="" name="compraMiinima" />
-                                                <p style={{ color: "red" }}>
+                                                {/* <p style={{ color: "red" }}>
                                                     {this.state.errors.tarjetaEnEntrega.compraMiinima}
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </div>
                                     </div>

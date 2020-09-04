@@ -3,9 +3,9 @@ import Switch from "react-switch";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import SimpleReactValidator from 'simple-react-validator';
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { getFormData, redirectToUrl, isUploadedPhotoAndID } from '../../actions'
+import { bindActionCreators } from 'redux'
+import { getPaymentMethodFormData, updatePaymentMethodFormData, } from '../../actions';
 
 class PaymentMethods extends React.Component {
 
@@ -16,62 +16,34 @@ class PaymentMethods extends React.Component {
             width: 0,
             step: 'PAYMENT_METHODS',
             checked: false,
-            errorMessage:"este campo es requerido",
+            errorMessage: "este campo es requerido",
             errors: {
-                transferencia: {
-                    checked: false,
-                    numeroDeCuenta: '',
-                    tipoDeCambio: '',
-                    cuentaBancaria: '',
-                    numeroDeCuentaIBAN: '',
-                    nombrar: ''
+                transferenceEnabled: {
+                    transferenceNoCuenta: "",
+                    transferenceTipoCambio: "",
+                    transferenceCuentaBancaria: "",
+                    transferenceIban: "",
+                    transferenceNombrar: ""
                 },
-                efectivoContraEntrega: {
-                    checked: false
+                sinpeMovilEnabled: {
+                    sinpeMovilNumero: "",
+                    sinpeMovilName: ""
                 },
-                tarjetaViaApp: {
-                    checked: false
-                },
-                tarjetaViaTelefono: {
-                    checked: false,
-                    numeroDeTelefonoDesdeElqueLlama:''
-                },
-                tarjetaEnEntrega: {
-                    checked: false
-                },
-                SinpeMovil: {
-                    checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
-                }
             },
             dataToPost: {
-                transferencia: {
-                    checked: false,
-                    numeroDeCuenta: '',
-                    tipoDeCambio: '',
-                    cuentaBancaria: '',
-                    numeroDeCuentaIBAN: '',
-                    nombrar: ''
-                },
-                efectivoContraEntrega: {
-                    checked: false
-                },
-                tarjetaViaApp: {
-                    checked: false
-                },
-                tarjetaViaTelefono: {
-                    checked: false,
-                    numeroDeTelefonoDesdeElqueLlama:''
-                },
-                tarjetaEnEntrega: {
-                    checked: false
-                },
-                SinpeMovil: {
-                    checked: false,
-                    numeroDeTelefono: '',
-                    aNombreDe: ''
-                }
+                restaurantId: null,
+                transferenceEnabled: null,
+                transferenceNoCuenta: null,
+                transferenceTipoCambio: null,
+                transferenceCuentaBancaria: null,
+                transferenceIban: null,
+                transferenceNombrar: null,
+                efectivoEnabled: null,
+                tarjetaViaAppEnabled: null,
+                tarjetaEnEntregaEnabled: null,
+                sinpeMovilEnabled: null,
+                sinpeMovilNumero: null,
+                sinpeMovilName: null,
             }
         };
         this.handleChange = this.handleChange.bind(this);
@@ -90,7 +62,7 @@ class PaymentMethods extends React.Component {
 
     handleChange(e, switchName) {
         let obj = this.state.dataToPost;
-        obj[switchName]['checked'] = e;
+        obj[switchName] = e;
         this.setState({ dataToPost: obj });
         // this.handleValidation()
     }
@@ -98,10 +70,10 @@ class PaymentMethods extends React.Component {
     paymentInputChangeHandler(e, switchName) {
         let obj = this.state.dataToPost;
         console.log(obj)
-        obj[switchName][e.target.name] = e.target.value;
-        
+        obj[e.target.name] = e.target.value;
+
         this.setState({ dataToPost: obj });
-        this.handleValidation()
+        this.handleCustomValidation()
     }
 
     updateDimension = () => {
@@ -110,70 +82,93 @@ class PaymentMethods extends React.Component {
         });
     };
 
-    componentWillMount() {
-        console.log(this.state)
-        this.props.getFormData(this.state)
-    }
-
     componentDidMount() {
         this.updateDimension();
+
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimension);
     }
 
+    componentWillMount() {
+        this.props.getPaymentMethodFormData({ restaurantId: localStorage.getItem('restaurantId') })
+    }
+
+    getBool(val) {
+        return !!JSON.parse(String(val).toLowerCase());
+    }
+
+    componentDidUpdate(previousProps) {
+        if (previousProps.payment.loading && !this.props.payment.loading) {
+            const payment = this.props.payment;
+            this.setState({
+                dataToPost: {
+                    restaurantId: payment.restaurantId,
+                    transferenceEnabled: this.getBool(payment.transferencia.enabled),
+                    transferenceNoCuenta: payment.transferencia.numeroDeCuenta,
+                    transferenceTipoCambio: payment.transferencia.tipoCambio,
+                    transferenceCuentaBancaria: payment.transferencia.cuentaBancaria,
+                    transferenceIban: payment.transferencia.iban,
+                    transferenceNombrar: payment.transferencia.nombrar,
+                    efectivoEnabled: this.getBool(payment.efectivoContraEntrega.enabled),
+                    tarjetaViaAppEnabled: this.getBool(payment.tarjetaViaApp.enabled),
+                    tarjetaEnEntregaEnabled: this.getBool(payment.tarjetaEnEntrega.enabled),
+                    sinpeMovilEnabled: this.getBool(payment.sinpeMovil.enabled),
+                    sinpeMovilNumero: payment.sinpeMovil.numero,
+                    sinpeMovilName: payment.sinpeMovil.name,
+                }
+            });
+
+        }
+    }
+
+
+
     formSubmitHandler = (e) => {
         e.preventDefault();
-        if(this.handleValidation()){
-            alert("Form submitted");
-         }else{
-            // alert("Form has errors.")
-         }
+        this.processSubmit();
     };
 
-    handleValidation(){
+
+
+    handleCustomValidation() {
         let errors = this.state.errors;
         let formIsValid = true;
 
-        let obj =this.state.dataToPost;
+        let obj = this.state.dataToPost;
         let length = obj.length;
-        console.log(obj)
+        // console.log(obj)
         for (const [key, value] of Object.entries(obj)) {
-            console.log(value)
-            if(value.checked){
-                console.log(value)
-                for (const [k, v] of Object.entries(value)){
-                    if(k!='checked'){
-                        console.log(k)
-                        if(!v){
-                            
-                            formIsValid = false;
-                            errors[key][k] = this.state.errorMessage
-                         }else{
-                            errors[key][k] = '';
-                         }
+            let field = key;
+            if (field in errors && value) {
+                console.log(field)
+                for (const [k, v] of Object.entries(errors[field])) {
+                    console.log(obj[k]);
+                    if (!obj[k]) {
+                        errors[field][k] = this.state.errorMessage
+                        formIsValid = false
+                    } else {
+                        errors[field][k] = "";
                     }
-                    
                 }
             }
         }
-        this.setState({errors: errors});
 
-            // console.log(this.state.errors)
-            return formIsValid;
-            //console.log(`${key}: ${value}`);
+        // console.log(errors)
+        this.setState({ errors: errors });
+
+        // console.log(this.state.errors)
+        return formIsValid;
+        //console.log(`${key}: ${value}`);
     }
 
-    showAndHideSubmitLoader() {
-        this.setState({submitLoading: true});
-        setTimeout(() => {
-            this.setState({submitLoading: false});
-            this.processSubmit();
-        }, 1000);
-    }
+
 
     processSubmit() {
+        if (this.handleCustomValidation()) {
+            this.props.updatePaymentMethodFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+        }
 
     }
 
@@ -209,10 +204,10 @@ class PaymentMethods extends React.Component {
                     <div className="flex-area content container-fluid">
                         <h3 className="text-center" style={{ marginBottom: '35px' }}>Métodos de pago</h3>
                         <div className="row">
-                        {/* <form onSubmit={this.formSubmitHandler}> */}
+                            {/* <form onSubmit={this.formSubmitHandler}> */}
                             <div className="collapse-area col col-md-6 col-lg-6 col-sm-12 col-xs-12">
                                 <div className="collapse-container">
-                                    <div className={"collapse-header " + (this.state.dataToPost.transferencia.checked ? 'active' : '')}>
+                                    <div className={"collapse-header " + (this.state.dataToPost.transferenceEnabled ? 'active' : '')}>
                                         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21.9333 7.93339C20.9039 7.93339 20.0667 7.0962 20.0667 6.06676C20.0667 5.80869 19.8581 5.6001 19.6001 5.6001H4.66701C4.40895 5.6001 4.20035 5.80869 4.20035 6.06676C4.20035 7.0962 3.36317 7.93339 2.33372 7.93339C2.07566 7.93339 1.86707 8.14198 1.86707 8.40004V12.1333C1.86707 12.3914 2.07566 12.6 2.33372 12.6C3.36317 12.6 4.20035 13.4371 4.20035 14.4666C4.20035 14.7247 4.40895 14.9332 4.66701 14.9332H19.6001C19.8581 14.9332 20.0667 14.7247 20.0667 14.4666C20.0667 13.4371 20.9039 12.6 21.9333 12.6C22.1914 12.6 22.4 12.3914 22.4 12.1333V8.40004C22.4 8.14198 22.1914 7.93339 21.9333 7.93339ZM21.4667 11.7054C20.2958 11.9028 19.3695 12.8291 19.1721 13.9999H5.09494C4.89754 12.8291 3.97122 11.9028 2.80038 11.7054V8.82797C3.97122 8.63057 4.89754 7.70426 5.09494 6.53341H19.1721C19.3695 7.70426 20.2958 8.63057 21.4667 8.82797V11.7054Z" fill="#3F3356" />
                                             <path d="M12.1333 7.93286C10.8468 7.93286 9.80005 8.97957 9.80005 10.2661C9.80005 11.5527 10.8468 12.5994 12.1333 12.5994C13.4199 12.5994 14.4666 11.5527 14.4666 10.2661C14.4666 8.97957 13.4199 7.93286 12.1333 7.93286ZM12.1333 11.6661C11.3615 11.6661 10.7334 11.038 10.7334 10.2661C10.7334 9.4943 11.3615 8.86618 12.1333 8.86618C12.9052 8.86618 13.5333 9.4943 13.5333 10.2661C13.5333 11.038 12.9052 11.6661 12.1333 11.6661Z" fill="#3F3356" />
@@ -223,14 +218,14 @@ class PaymentMethods extends React.Component {
                                             <path d="M2.33365 20.5327H0.467024C0.208962 20.5327 0.000366211 20.7413 0.000366211 20.9994V24.7326C0.000366211 24.9907 0.208962 25.1993 0.467024 25.1993H2.33365C2.59172 25.1993 2.80031 24.9907 2.80031 24.7326V20.9994C2.80031 20.7413 2.59172 20.5327 2.33365 20.5327ZM1.867 24.266H0.933681V21.466H1.867V24.266Z" fill="#3F3356" />
                                         </svg>
                                         <span>
-                                                Transferencia
+                                            Transferencia
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={transferencia.enabled}
-                                            onChange={(e) => this.handleChange(e, 'transferencia')}
+                                            checked={this.state.dataToPost.transferenceEnabled}
+                                            onChange={(e) => this.handleChange(e, 'transferenceEnabled')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
                                             onColor="#f5f5f5"
@@ -242,39 +237,39 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className={"collapse-content " + (this.state.dataToPost.transferencia.checked ? '' : 'collapse')}>
+                                    <div className={"collapse-content " + (this.state.dataToPost.transferenceEnabled ? '' : 'collapse')}>
                                         <div className="col">
                                             <label htmlFor="">DEPOSITAR A:</label><br />
                                             <label htmlFor="">Numero De Cuenta:</label>
-                                            <input type="text" className="uni-input" name="numeroDeCuenta" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.numeroDeCuenta} />
-                                            <p style={{color: "red"}}>
-                                                {this.state.errors.transferencia.numeroDeCuenta}
+                                            <input type="text" className="uni-input" name="transferenceNoCuenta" onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNoCuenta')} value={this.state.dataToPost.transferenceNoCuenta} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.transferenceEnabled.transferenceNoCuenta}
                                             </p>
                                             <label htmlFor="">Tipo De Cambio:</label>
-                                            <input type="text" className="uni-input" name="tipoDeCambio" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.tipoCambio}/>
-                                            <p style={{color: "red"}}>
-                                            {this.state.errors.transferencia.tipoDeCambio}
+                                            <input type="text" className="uni-input" name="transferenceTipoCambio" onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceTipoCambio')} value={this.state.dataToPost.transferenceTipoCambio} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.transferenceEnabled.transferenceTipoCambio}
                                             </p>
                                             <label htmlFor="">Cuenta Bancaria:</label>
-                                            <input type="text" className="uni-input" name="cuentaBancaria" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.cuentaBancaria}/>
-                                            <p style={{color: "red"}}>
-                                                {this.state.errors.transferencia.cuentaBancaria}
+                                            <input type="text" className="uni-input" name="transferenceCuentaBancaria" onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceCuentaBancaria')} value={this.state.dataToPost.transferenceCuentaBancaria} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
                                             </p>
                                             <label htmlFor="">Número De Cuenta IBAN:</label>
-                                            <input type="text" className="uni-input" name="numeroDeCuentaIBAN" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.iban}/>
-                                            <p style={{color: "red"}}>
-                                            {this.state.errors.transferencia.numeroDeCuentaIBAN}
+                                            <input type="text" className="uni-input" name="transferenceIban" onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceIban')} value={this.state.dataToPost.transferenceIban} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
                                             </p>
                                             <label htmlFor="">Nombrar:</label>
-                                            <input type="text" className="uni-input" name="nombrar" onChange={(e) => this.paymentInputChangeHandler(e, 'transferencia')} value={transferencia.nombrar}/>
-                                            <p style={{color: "red"}}>
-                                                {this.state.errors.transferencia.nombrar}
+                                            <input type="text" className="uni-input" name="transferenceNombrar" onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNombrar')} value={this.state.dataToPost.transferenceNombrar} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.transferenceEnabled.transferenceNombrar}
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className="collapse-container">
-                                    <div className={"collapse-header " + (this.state.dataToPost.efectivoContraEntrega.checked ? 'active' : '')}>
+                                    <div className={"collapse-header " + (this.state.dataToPost.efectivoEnabled ? 'active' : '')}>
                                         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M27.8294 9.50413L18.4959 0.170629C18.2684 -0.0568763 17.8985 -0.0568763 17.671 0.170629L0.170629 17.671C-0.0568762 17.8985 -0.0568762 18.2684 0.170629 18.4959L9.50418 27.8294C9.61853 27.9426 9.76783 27.9998 9.91719 27.9998C10.0665 27.9998 10.2158 27.9427 10.329 27.8294L27.8294 10.3291C28.0569 10.1015 28.0569 9.73164 27.8294 9.50413ZM9.91719 26.5915L1.40851 18.0828L18.084 1.4073L26.5927 9.91599L9.91719 26.5915Z" fill="white" />
                                             <path d="M9.20909 25.958C9.09708 25.6558 8.76223 25.4983 8.46007 25.6126L5.59936 26.6661L3.13295 19.883C3.0233 19.5797 2.68844 19.4234 2.38508 19.5342C2.08293 19.6438 1.92542 19.9787 2.03622 20.282L4.70334 27.6159C4.75584 27.7617 4.86434 27.8795 5.00549 27.9449C5.0825 27.981 5.1665 27.9997 5.2505 27.9997C5.31935 27.9997 5.387 27.9881 5.4535 27.9636L8.86373 26.707C9.16594 26.5962 9.31994 26.2602 9.20909 25.958Z" fill="white" />
@@ -287,14 +282,14 @@ class PaymentMethods extends React.Component {
                                         </svg>
 
                                         <span>
-                                                Efectivo contra entrega
+                                            Efectivo contra entrega
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={efectivoContraEntrega.enabled}
-                                            onChange={(e) => this.handleChange(e, 'efectivoContraEntrega')}
+                                            checked={this.state.dataToPost.efectivoEnabled}
+                                            onChange={(e) => this.handleChange(e, 'efectivoEnabled')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
                                             onColor="#f5f5f5"
@@ -308,7 +303,7 @@ class PaymentMethods extends React.Component {
                                     </div>
                                 </div>
                                 <div className="collapse-container">
-                                    <div className={"collapse-header " + (this.state.dataToPost.tarjetaViaApp.checked ? 'active' : '')}>
+                                    <div className={"collapse-header " + (this.state.dataToPost.tarjetaViaAppEnabled ? 'active' : '')}>
                                         <svg width="23" height="28" viewBox="0 0 23 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M3 1H13.2105C14.3151 1 15.2105 1.89543 15.2105 3V5.15789H16.2105V3C16.2105 1.34315 14.8674 0 13.2105 0H3C1.34315 0 0 1.34315 0 3V25C0 26.6569 1.34315 28 3 28H13.2105C14.8674 28 16.2105 26.6569 16.2105 25V17.6842H15.2105V25C15.2105 26.1046 14.3151 27 13.2105 27H3C1.89543 27 1 26.1046 1 25V3C1 1.89543 1.89543 1 3 1Z" fill="white" />
                                             <rect x="9.57922" y="19.1582" width="0.736842" height="0.736842" fill="white" />
@@ -325,14 +320,14 @@ class PaymentMethods extends React.Component {
                                         </svg>
 
                                         <span>
-                                                Tarjeta vía app +16%
+                                            Tarjeta vía app +16%
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={tarjetaViaApp.enabled}
-                                            onChange={(e) => this.handleChange(e, 'tarjetaViaApp')}
+                                            checked={this.state.dataToPost.tarjetaViaAppEnabled}
+                                            onChange={(e) => this.handleChange(e, 'tarjetaViaAppEnabled')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
                                             onColor="#f5f5f5"
@@ -344,10 +339,10 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    
+
                                 </div>
-                                <div className="collapse-container">
-                                    <div className={"collapse-header " + (this.state.dataToPost.tarjetaViaTelefono.checked ? 'active' : '')}>
+                                {/* <div className="collapse-container">
+                                    <div className={"collapse-header " + (this.state.dataToPost.tarjetaViaTelefono ? 'active' : '')}>
                                         <svg width="23" height="28" viewBox="0 0 23 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" clip-rule="evenodd" d="M3 1H13.2105C14.3151 1 15.2105 1.89543 15.2105 3V5.15789H16.2105V3C16.2105 1.34315 14.8674 0 13.2105 0H3C1.34315 0 0 1.34315 0 3V25C0 26.6569 1.34315 28 3 28H13.2105C14.8674 28 16.2105 26.6569 16.2105 25V17.6842H15.2105V25C15.2105 26.1046 14.3151 27 13.2105 27H3C1.89543 27 1 26.1046 1 25V3C1 1.89543 1.89543 1 3 1Z" fill="white" />
                                             <rect x="9.57922" y="19.1582" width="0.736842" height="0.736842" fill="white" />
@@ -364,13 +359,13 @@ class PaymentMethods extends React.Component {
                                         </svg>
 
                                         <span>
-                                                Tarjeta vía telefono +5%
+                                            Tarjeta vía telefono +5%
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={this.state.dataToPost.tarjetaViaTelefono.checked}
+                                            checked={this.state.dataToPost.tarjetaViaTelefono}
                                             onChange={(e) => this.handleChange(e, 'tarjetaViaTelefono')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
@@ -383,18 +378,18 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className={"collapse-content " + (this.state.dataToPost.tarjetaViaTelefono.checked ? '' : 'collapse')}>
-                                        <div className="col">                                        
+                                    <div className={"collapse-content " + (this.state.dataToPost.tarjetaEnEntregaEnabled ? '' : 'collapse')}>
+                                        <div className="col">
                                             <label htmlFor="">Número de teléfono desde el que llama:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefonoDesdeElqueLlama" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaTelefono')} value={this.state.dataToPost.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama}/>
-                                            <p style={{color: "red"}}>
+                                            <input type="text" className="uni-input" name="numeroDeTelefonoDesdeElqueLlama" onChange={(e) => this.paymentInputChangeHandler(e, 'tarjetaViaTelefono')} value="" />
+                                            <p style={{ color: "red" }}>
                                                 {this.state.errors.tarjetaViaTelefono.numeroDeTelefonoDesdeElqueLlama}
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="collapse-container">
-                                    <div className={"collapse-header " + (this.state.dataToPost.tarjetaEnEntrega.checked ? 'active' : '')}>
+                                    <div className={"collapse-header " + (this.state.dataToPost.tarjetaEnEntregaEnabled ? 'active' : '')}>
                                         <svg width="28" height="20" viewBox="0 0 28 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M25.0833 0.666504H2.91665C1.309 0.666504 0 1.9755 0 3.5832V16.4165C0 18.0242 1.309 19.3332 2.91665 19.3332H25.0833C26.6909 19.3332 27.9999 18.0242 27.9999 16.4165V3.5832C28 1.9755 26.691 0.666504 25.0833 0.666504ZM26.8333 16.4165C26.8333 17.3813 26.0482 18.1665 25.0833 18.1665H2.91665C1.9518 18.1665 1.16665 17.3813 1.16665 16.4165V3.5832C1.16665 2.61835 1.9518 1.83321 2.91665 1.83321H25.0833C26.0481 1.83321 26.8333 2.61835 26.8333 3.5832V16.4165H26.8333Z" fill="white" />
                                             <path d="M27.4166 4.1665H0.583352C0.261352 4.1665 0 4.42786 0 4.74986V8.24985C0 8.57185 0.261352 8.83321 0.583352 8.83321H27.4167C27.7387 8.83321 28.0001 8.57185 28.0001 8.24985V4.74986C28 4.42786 27.7386 4.1665 27.4166 4.1665Z" fill="white" />
@@ -403,14 +398,14 @@ class PaymentMethods extends React.Component {
                                             <path d="M22.7501 11.1665H21.5835C20.6186 11.1665 19.8335 11.9517 19.8335 12.9165V14.0832C19.8335 15.048 20.6186 15.8332 21.5835 15.8332H22.7501C23.715 15.8332 24.5001 15.048 24.5001 14.0832V12.9165C24.5001 11.9517 23.715 11.1665 22.7501 11.1665ZM23.3335 14.0832C23.3335 14.4052 23.0721 14.6666 22.7501 14.6666H21.5835C21.2615 14.6666 21.0001 14.4052 21.0001 14.0832V12.9166C21.0001 12.5946 21.2615 12.3332 21.5835 12.3332H22.7501C23.0721 12.3332 23.3335 12.5946 23.3335 12.9166V14.0832Z" fill="white" />
                                         </svg>
                                         <span>
-                                                Tarjeta en entrega +5%
+                                            Tarjeta en entrega +5%
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={tarjetaEnEntrega.enabled}
-                                            onChange={(e) => this.handleChange(e, 'tarjetaEnEntrega')}
+                                            checked={this.state.dataToPost.tarjetaEnEntregaEnabled}
+                                            onChange={(e) => this.handleChange(e, 'tarjetaEnEntregaEnabled')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
                                             onColor="#f5f5f5"
@@ -422,10 +417,10 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    
+
                                 </div>
                                 <div className="collapse-container">
-                                    <div className={"collapse-header " + (this.state.dataToPost.SinpeMovil.checked ? 'active' : '')}>
+                                    <div className={"collapse-header " + (this.state.dataToPost.sinpeMovilEnabled ? 'active' : '')}>
                                         <svg width="22" height="29" viewBox="0 0 22 29" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M21.0625 22.4292V18.9292C21.0616 18.1173 20.7386 17.3388 20.1645 16.7647C19.5904 16.1906 18.812 15.8676 18 15.8667H14.9375V12.3667C14.9375 11.9026 14.7531 11.4575 14.425 11.1293C14.0968 10.8011 13.6517 10.6167 13.1875 10.6167C12.7234 10.6167 12.2783 10.8011 11.9501 11.1293C11.6219 11.4575 11.4375 11.9026 11.4375 12.3667V17.4959L10.9296 16.8909C10.7863 16.7022 10.6063 16.5446 10.4003 16.4276C10.1944 16.3106 9.96679 16.2367 9.7314 16.2102C9.496 16.1837 9.25769 16.2053 9.03089 16.2737C8.8041 16.342 8.59354 16.4557 8.41197 16.6078C8.23041 16.76 8.08162 16.9474 7.97461 17.1587C7.86761 17.37 7.80463 17.6009 7.78947 17.8373C7.77432 18.0737 7.80731 18.3107 7.88646 18.5339C7.9656 18.7572 8.08925 18.9621 8.2499 19.1361L11.4375 22.938V23.3042C11.4386 23.5747 11.5233 23.8382 11.6799 24.0588C11.8366 24.2793 12.0575 24.446 12.3125 24.5362V25.4917C12.1965 25.4917 12.0852 25.5378 12.0032 25.6198C11.9211 25.7019 11.875 25.8132 11.875 25.9292V27.6792C11.875 27.7952 11.9211 27.9065 12.0032 27.9886C12.0852 28.0706 12.1965 28.1167 12.3125 28.1167H20.1875C20.3036 28.1167 20.4148 28.0706 20.4969 27.9886C20.5789 27.9065 20.625 27.7952 20.625 27.6792V25.9292C20.625 25.8132 20.5789 25.7019 20.4969 25.6198C20.4148 25.5378 20.3036 25.4917 20.1875 25.4917V24.1678C20.4582 23.9658 20.6782 23.7035 20.8301 23.4017C20.982 23.1 21.0615 22.767 21.0625 22.4292ZM12.3125 12.3667C12.3125 12.1346 12.4047 11.9121 12.5688 11.748C12.7329 11.5839 12.9555 11.4917 13.1875 11.4917C13.4196 11.4917 13.6421 11.5839 13.8062 11.748C13.9703 11.9121 14.0625 12.1346 14.0625 12.3667V18.0542H14.9375V16.7417H16.25V18.0542H17.125V16.7417H18C18.147 16.7416 18.2935 16.7562 18.4375 16.7854V18.4917H19.3125V17.1906C19.5832 17.3926 19.8032 17.6549 19.9551 17.9567C20.107 18.2584 20.1865 18.5914 20.1875 18.9292V22.4292C20.1875 22.7773 20.0492 23.1111 19.8031 23.3573C19.557 23.6034 19.2231 23.7417 18.875 23.7417H12.75C12.634 23.7417 12.5227 23.6956 12.4407 23.6136C12.3586 23.5315 12.3125 23.4202 12.3125 23.3042V12.3667ZM8.91971 18.5731C8.84575 18.4854 8.78986 18.3839 8.75527 18.2746C8.72067 18.1652 8.70805 18.0501 8.71814 17.9358C8.72822 17.8215 8.76081 17.7104 8.81403 17.6088C8.86724 17.5072 8.94004 17.4171 9.02821 17.3437C9.20805 17.2008 9.43586 17.1324 9.66467 17.1525C9.89349 17.1726 10.1059 17.2797 10.258 17.4518L11.4375 18.857V21.5765L8.91971 18.5731ZM19.75 27.2417H12.75V26.3667H19.75V27.2417ZM19.3125 25.4917H13.1875V24.6167H18.875C19.022 24.6168 19.1685 24.6022 19.3125 24.5729V25.4917Z" fill="white" />
                                             <path d="M12.7286 9.78998L13.5983 9.69373C13.4969 8.7924 13.1177 7.94492 12.5132 7.26872C11.9087 6.59251 11.1088 6.12105 10.2245 5.91967C9.34009 5.71829 8.41498 5.79695 7.5773 6.14475C6.73962 6.49256 6.03086 7.09229 5.54921 7.86085C5.06755 8.62941 4.83686 9.52874 4.88909 10.4343C4.94133 11.3398 5.27389 12.2066 5.84072 12.9147C6.40755 13.6228 7.18058 14.137 8.05269 14.3862C8.9248 14.6354 9.85283 14.6071 10.7082 14.3054L10.4168 13.4803C9.73207 13.7223 8.989 13.7453 8.29059 13.5462C7.59219 13.347 6.97303 12.9355 6.51893 12.3688C6.06484 11.802 5.7983 11.108 5.75626 10.383C5.71423 9.65792 5.89877 8.93777 6.28432 8.32231C6.66987 7.70684 7.23732 7.22656 7.90804 6.94802C8.57875 6.66948 9.3195 6.60648 10.0276 6.76775C10.7357 6.92903 11.3761 7.30659 11.8601 7.8481C12.344 8.38961 12.6475 9.06826 12.7286 9.78998Z" fill="white" />
@@ -439,14 +434,14 @@ class PaymentMethods extends React.Component {
                                         </svg>
 
                                         <span>
-                                                SINPE Móvil
+                                            SINPE Móvil
                                 </span>
                                         <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z" fill="#3F3356" />
                                         </svg>
                                         <Switch
-                                            checked={sinpeMovil.enabled}
-                                            onChange={(e) => this.handleChange(e, 'SinpeMovil')}
+                                            checked={this.state.dataToPost.sinpeMovilEnabled}
+                                            onChange={(e) => this.handleChange(e, 'sinpeMovilEnabled')}
                                             handleDiameter={28}
                                             offColor="#E0E0E0"
                                             onColor="#f5f5f5"
@@ -458,18 +453,18 @@ class PaymentMethods extends React.Component {
                                             id="small-radius-switch"
                                         />
                                     </div>
-                                    <div className={"collapse-content " + (this.state.dataToPost.SinpeMovil.checked ? '' : 'collapse')}>
+                                    <div className={"collapse-content " + (this.state.dataToPost.sinpeMovilEnabled ? '' : 'collapse')}>
                                         <div className="col">
                                             <label htmlFor="">DEPOSITAR A:</label><br />
                                             <label htmlFor="">NUMERO DE TELEFONO:</label>
-                                            <input type="text" className="uni-input" name="numeroDeTelefono" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={sinpeMovil.numero}/>
-                                            <p style={{color: "red"}}>
-                                                {this.state.errors.SinpeMovil.numeroDeTelefono}
+                                            <input type="text" className="uni-input" name="sinpeMovilNumero" onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilNumero')} value={this.state.dataToPost.sinpeMovilNumero} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.sinpeMovilEnabled.sinpeMovilNumero}
                                             </p>
                                             <label htmlFor="">A NOMBRE DE:</label>
-                                            <input type="text" className="uni-input" name="aNombreDe" onChange={(e) => this.paymentInputChangeHandler(e, 'SinpeMovil')} value={sinpeMovil.name}/>
-                                            <p style={{color: "red"}}>
-                                                {this.state.errors.SinpeMovil.aNombreDe}
+                                            <input type="text" className="uni-input" name="sinpeMovilName" onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilName')} value={this.state.dataToPost.sinpeMovilName} />
+                                            <p style={{ color: "red" }}>
+                                                {this.state.errors.sinpeMovilEnabled.sinpeMovilName}
                                             </p>
                                         </div>
                                     </div>
@@ -478,29 +473,29 @@ class PaymentMethods extends React.Component {
                                     <button className="btn-theme" onClick={this.formSubmitHandler}>GUARDAR</button>
                                 </div>
                             </div>
-                        {/* </form> */}
+                            {/* </form> */}
                         </div>
                     </div>
                 </div>
+
             </>
         );
     }
 }
 
-const mapStateToProps = ({ form }) => ({
-    form
-})
-
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
-            getFormData,
-            redirectToUrl
+            getPaymentMethodFormData, updatePaymentMethodFormData,
         },
         dispatch
+    );
+
+const mapStateToProps = store =>
+    (
+        {
+            payment: store.payment
+        }
     )
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PaymentMethods)
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentMethods)

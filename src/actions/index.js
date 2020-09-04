@@ -22,6 +22,11 @@ import {
 } from './deliveryMethodAction'
 
 import {
+    getPaymentMethodFormData,
+    updatePaymentMethodFormData,
+} from './paymentMethodAction'
+
+import {
     getCategoryListData,
     updateCategoryFormData,
 } from './menuAction'
@@ -45,6 +50,9 @@ export {
 
     getDeliveryMethodFormData,
     updateDeliveryMethodFormData,
+
+    getPaymentMethodFormData,
+    updatePaymentMethodFormData,
 
     getCategoryListData,
     updateCategoryFormData,
