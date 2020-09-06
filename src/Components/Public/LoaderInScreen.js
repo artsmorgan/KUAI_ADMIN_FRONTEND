@@ -11,12 +11,3 @@ const LoaderInScreen = (props) => {
 }
 
 export default LoaderInScreen
-
-
-// export const Loader2 = (props) => {
-//   const override = css`margin:10px auto; width:45px;`;
-//   const { loading } = props
-//   return (
-//     <PulseLoader loading={ loading } css={override} sizeUnit={"px"} size={120} color={'#92491e'}/>
-//   )
-// }
