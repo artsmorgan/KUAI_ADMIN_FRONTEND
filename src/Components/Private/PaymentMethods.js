@@ -189,7 +189,6 @@ class PaymentMethods extends React.Component {
 
   processSubmit() {
     if (this.handleCustomValidation()) {
-      this.setState({...this.state, errors: []})
       this.props.updatePaymentMethodFormData({
         restaurantId: localStorage.getItem('restaurantId'),
         form: this.state.dataToPost
