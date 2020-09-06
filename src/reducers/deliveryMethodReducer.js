@@ -1,7 +1,7 @@
 import actionType from '../actions/actionTypes'
 
 const initialState = {
-    loading: false
+    loading: true
 }
 
 export default (state = initialState, action) => {
