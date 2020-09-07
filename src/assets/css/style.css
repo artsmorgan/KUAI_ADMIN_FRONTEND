@@ -6,6 +6,11 @@ body {
   padding-top: 60px;
 }
 
+.error-show {
+  display: block;
+  width: 100%;
+}
+
 .container-login {
   position: relative;
   display: block;
@@ -177,6 +182,7 @@ body {
   line-height: 52px;
   text-indent: 35px;
   border-left: 8px solid #fff;
+  cursor: pointer;
 }
 
 .sidebar-wrapper .menu-list a svg {
@@ -843,11 +849,12 @@ body {
 }
 
 .uni-input.tarea {
-  height: 75px;
+  height: 90px;
   border-radius: 50px;
   overflow: auto;
   resize: none;
-  padding-left: 20px;
+  padding-left: 16px;
+  padding-top: 15px;
 }
 
 .modal-contact {
@@ -891,6 +898,10 @@ body {
   width: 100%;
 }
 
+.cstm-select.mini .css-1fhf3k1-control {
+  border-radius: 35px;
+}
+
 .cstm-select.mini .css-1pahdxg-control {
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
@@ -906,6 +917,10 @@ body {
   border: 1px solid #fff !important;
   border-radius: 50px !important;
   height: 48px !important;
+}
+
+.cstm-select .css-1fhf3k1-control {
+  border-radius: 35px;
 }
 
 .cstm-select .css-1pahdxg-control {
@@ -1612,7 +1627,7 @@ body {
 
 .menu-elements .photo-area .chk-area .chk-label {
   font-size: 11px;
-  margin-left: 25px;
+  margin-left: 10px;
 }
 
 .menu-elements .photo-area .promo-area {
@@ -1621,7 +1636,7 @@ body {
 
 .menu-elements .photo-area .promo-area .chk-label {
   font-size: 11px;
-  margin-left: 25px;
+  margin-left: 7px;
 }
 
 .menu-elements .photo-area .promo-area .promo-code {
@@ -1768,6 +1783,7 @@ body {
   }
   .sidebar-wrapper .menu-list a {
     border-left: 0px;
+    cursor: pointer;
   }
   .container-login {
     width: 90%;
@@ -1867,6 +1883,7 @@ body {
   }
   .sidebar-wrapper .menu-list a {
     border-left: 0px;
+    cursor: pointer;
   }
   .container-login {
     width: 90%;
@@ -2080,6 +2097,10 @@ body {
   }
 }
 
+.f-w {
+  width: 100% !important;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (device-aspect-ratio: 40 / 71) {
   .hor-inline .time-block {
     width: 100%;
@@ -2097,5 +2118,9 @@ body {
   .mb-navigator {
     display: block;
   }
+}
+
+.collapse-content textarea {
+  padding: 10px;
 }
 /*# sourceMappingURL=style.css.map */

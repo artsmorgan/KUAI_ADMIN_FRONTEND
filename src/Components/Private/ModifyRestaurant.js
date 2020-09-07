@@ -537,7 +537,7 @@ class ModifyRestaurant extends React.Component {
                                                 &nbsp;&nbsp;
                                                 FACEBOOK:
                                             </label>
-                                            <input className="uni-input md" type="text" name="fb"
+                                            <input className="uni-input" type="text" name="fb"
                                                 placeholder="facebook"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.fb} />
@@ -554,7 +554,7 @@ class ModifyRestaurant extends React.Component {
                                                 &nbsp;&nbsp;
                                                 INSTAGRAM:
                                             </label>
-                                            <input className="uni-input md" type="text" name="ig"
+                                            <input className="uni-input" type="text" name="ig"
                                                 placeholder="instagram"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.ig} />
@@ -581,7 +581,7 @@ class ModifyRestaurant extends React.Component {
                                             {/*    {this.validator.message('province', this.state.dataToPost.province, 'required')}*/}
                                             {/*</p>*/}
 
-                                            <Select className="cstm-select" options={optionProvince}
+                                            <Select className="cstm-select f-w"  options={optionProvince}
                                                 name="province" placeholder="Provincia"
                                                 onChange={this.selectChangeHandler}
                                                 value={this.state.dataToPost.province} />
@@ -589,7 +589,7 @@ class ModifyRestaurant extends React.Component {
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p>
                                             <label htmlFor="">CANTON:</label>
-                                            <input className="uni-input md" type="text" name="canton"
+                                            <input className="uni-input" type="text" name="canton"
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.canton} />
@@ -607,7 +607,7 @@ class ModifyRestaurant extends React.Component {
                                             </p> */}
                                             <label htmlFor="">DISTRITO:</label>
 
-                                            <input className="uni-input md" type="text" name="district"
+                                            <input className="uni-input" type="text" name="district"
                                                 placeholder="district"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.district} />
@@ -622,7 +622,7 @@ class ModifyRestaurant extends React.Component {
                                                 {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                             </p> */}
                                             <label htmlFor="">BARRIO:</label>
-                                            <input className="uni-input md" type="text" name="neighborhood"
+                                            <input className="uni-input" type="text" name="neighborhood"
                                                 placeholder="neighborhood"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.neighborhood} />

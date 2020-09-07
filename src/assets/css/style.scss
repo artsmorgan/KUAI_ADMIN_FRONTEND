@@ -168,6 +168,7 @@ body {
       line-height: 52px;
       text-indent: 35px;
       border-left: 8px solid #fff;
+      cursor: pointer;
       svg {
         position: absolute;
         left: 25px;
@@ -748,11 +749,12 @@ body {
     border-radius: 50px;
   }
   &.tarea {
-    height: 75px;
+    height: 90px;
     border-radius: 50px;
     overflow: auto;
     resize: none;
-    padding-left: 20px;
+    padding-left: 16px;
+    padding-top: 15px;
   }
 }
 
@@ -792,6 +794,9 @@ body {
       height: 35px !important;
       width: 100%;
     }
+    .css-1fhf3k1-control{
+      border-radius: 35px;
+    }
     .css-1pahdxg-control {
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
       border: 1px solid #650add !important;
@@ -805,6 +810,9 @@ body {
     border: 1px solid #fff !important;
     border-radius: 50px !important;
     height: 48px !important;
+  }
+  .css-1fhf3k1-control{
+    border-radius: 35px;
   }
   .css-1pahdxg-control {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
@@ -1429,7 +1437,7 @@ body {
       }
       .chk-label{
         font-size: 11px;
-        margin-left: 25px;
+        margin-left: 10px;
       }
     }
 
@@ -1437,7 +1445,7 @@ body {
       margin-top: 20px;
       .chk-label{
         font-size: 11px;
-        margin-left: 25px;
+        margin-left: 7px;
       }
       .promo-code{
         padding-left: 45px;
@@ -1575,6 +1583,7 @@ body {
         margin-top: 20px;
         a{
           border-left: 0px;
+          cursor: pointer;
         }
       }
     }
@@ -1679,6 +1688,7 @@ body {
         margin-top: 20px;
         a{
           border-left: 0px;
+          cursor: pointer;
         }
       }
     }
@@ -1922,6 +1932,10 @@ body {
     .mb-navigator{
       display: block;
     }
+}
+
+.f-w{
+  width: 100% !important;
 }
 
 @media only screen
