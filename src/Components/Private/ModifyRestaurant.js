@@ -691,25 +691,6 @@ class ModifyRestaurant extends React.Component {
                                     <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.formTab.informationTab ? '' : 'hidden')}>
                                         <h3 className="mb-hidden">Información</h3>
                                         <div>
-<<<<<<< HEAD
-                                            <label htmlFor="">PROVINCIA:</label> <br />
-                                            {/* <input className="uni-input md" type="text" name="province"
-                                                placeholder="province"
-                                                onChange={this.inputChangeHandler}
-                                                value={this.state.dataToPost.province} /> */}
-                                            <Select className="cstm-select full-width mini float-left"
-                                                    options={optionProvince} name="province"
-                                                    style={{"width": "100"}}
-                                                    placeholder={this.state.dataToPost.province}
-                                                    onChange={(e) => this.provinceChangeHandler(e, 'province')}
-                                                    value={this.state.dataToPost.province} isDisabled={false}
-                                                />
-                                            <p style={{ color: "red" }}>
-                                                {this.validator.message('province', this.state.dataToPost.province, 'required')}
-                                            </p>
-                                            <br />
-                                            {/* <Select className="cstm-select" options={optionProvince}
-=======
                                             <label htmlFor="">PROVINCIA:</label>
                                             {/*<input className="uni-input md" type="text" name="province"*/}
                                             {/*    placeholder="province"*/}
@@ -720,25 +701,17 @@ class ModifyRestaurant extends React.Component {
                                             {/*</p>*/}
 
                                             <Select className="cstm-select" options={optionProvince}
->>>>>>> cf34eadc70d61ee7ee5e388503c989fd226fc623
                                                 name="province" placeholder="Provincia"
                                                 onChange={this.selectChangeHandler}
                                                 value={this.state.dataToPost.province} />
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
-<<<<<<< HEAD
-                                            </p> */}
-                                            <label htmlFor="">CANTON:</label><br />
-                                            {/* <input className="uni-input md" type="text" name="canton"
-=======
                                             </p>
                                             <label htmlFor="">CANTON:</label>
                                             <input className="uni-input md" type="text" name="canton"
->>>>>>> cf34eadc70d61ee7ee5e388503c989fd226fc623
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.canton} />
-                                                 */}
                                             <Select className="cstm-select full-width mini float-left"
                                                 options={this.state.optionCanton} name="canton"
                                                 style={{"width": "100"}}
