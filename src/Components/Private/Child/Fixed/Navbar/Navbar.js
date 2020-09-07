@@ -25,7 +25,7 @@ class Navbar extends React.Component {
     }
 
     componentWillMount() {
-        this.props.getDefaultConfigData()
+        this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
     }
 
     updateDimension = () => {

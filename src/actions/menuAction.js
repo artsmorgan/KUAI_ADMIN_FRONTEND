@@ -40,7 +40,7 @@ export const getCategoryListData = () => {
             let params = {}
             axiosRequest.get(URL, { headers, params })
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     dispatch(getCategoryListSuccess(response.data))
                 })
                 .catch(error => {

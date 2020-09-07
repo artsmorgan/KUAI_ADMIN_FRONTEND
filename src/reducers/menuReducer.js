@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
             return {...state, loading: true}
 
         case actionType.GET_CATEGORY_LIST_SUCCESS:
-            console.log(action.payload)
+            // console.log(action.payload)
             state['CATEGORY_LIST'] = action.payload
             return {...state, loading: false}
 

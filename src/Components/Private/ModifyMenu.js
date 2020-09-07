@@ -96,7 +96,7 @@ class ModifyMenu extends React.Component {
         let obj = this.state.menuDataToPost;
         obj['id'] = uuid();
         this.setState({ menuDataToPost: obj }, () => {
-            console.log(this.state.menuDataToPost)
+            // console.log(this.state.menuDataToPost)
             this.props.postMenuFormData(this.state.menuDataToPost)
         });
     }
@@ -106,10 +106,10 @@ class ModifyMenu extends React.Component {
         // console.log(form)
         categoryDataToPost['id'] = uuid()
         this.setState({categoryDataToPost: categoryDataToPost})
-        console.log(this.state.categoryDataToPost)
+        // console.log(this.state.categoryDataToPost)
         let categoryListToSend = this.state.categoryList;
         categoryListToSend.push(categoryDataToPost)
-        console.log(categoryListToSend)
+        // console.log(categoryListToSend)
         this.props.updateCategoryFormData(categoryListToSend)
         this.setState({
             show: false,
@@ -152,7 +152,7 @@ class ModifyMenu extends React.Component {
         let categoryList = []
         try {
             const {menuReducer} = this.props
-            console.log(menuReducer['CATEGORY_LIST'])
+            // console.log(menuReducer['CATEGORY_LIST'])
             categoryList = JSON.parse(menuReducer['CATEGORY_LIST'].categories);
             // console.log(categoryList)
             if (categoryList) {
@@ -172,8 +172,8 @@ class ModifyMenu extends React.Component {
         } catch (e) {
             categoryList = []
         }
-        console.log(this.state.categoryListToUpdate)
-        console.log(this.state.categoryOptions)
+        // console.log(this.state.categoryListToUpdate)
+        // console.log(this.state.categoryOptions)
     }
 
     displayMenuList = () => {
@@ -191,7 +191,7 @@ class ModifyMenu extends React.Component {
         } catch (e) {
             menuList = []
         }
-        console.log(this.state.menuList)
+        // console.log(this.state.menuList)
     }
 
     componentWillMount() {
@@ -251,9 +251,9 @@ class ModifyMenu extends React.Component {
         let result = categoryListToUpdate.filter(function (el) {
             return el.id != id;
         })
-        console.log(result)
+        // console.log(result)
         this.setState({categoryListToUpdate: result}, () => {
-            console.log(this.state.categoryListToUpdate)
+            // console.log(this.state.categoryListToUpdate)
             this.props.updateCategoryFormData(this.state.categoryListToUpdate)
         })
     }
@@ -267,11 +267,11 @@ class ModifyMenu extends React.Component {
     }
 
     selectHandleChange = categorySelectedOption => {
-        console.log(categorySelectedOption)
+        // console.log(categorySelectedOption)
         this.setState(
             { categorySelectedOption },
             () => {
-                console.log(`Option selected:`, this.state.categorySelectedOption)
+                // console.log(`Option selected:`, this.state.categorySelectedOption)
                 let obj = this.state.menuDataToPost
                 obj['categoryId'] = categorySelectedOption.id
                 this.setState({menuDataToPost: obj})
@@ -346,7 +346,13 @@ class ModifyMenu extends React.Component {
                                         <div className="rotator-scroll" style={{paddingTop: '25px'}}
                                              id="categories-list">
                                             {
-                                                this.state.categoryListToUpdate.map(category =>
+                                                this.state.categoryListToUpdate.length === 0 &&
+                                                <>
+                                                    <h6 className="lead" style={{color: "grey"}}><b>No se encontró ninguna categoría.</b></h6>
+                                                </>
+                                            }
+                                            {
+                                                this.state.categoryListToUpdate.length > 0 && this.state.categoryListToUpdate.map(category =>
                                                     <div className="rotator" key={category.id}>
                                                         <div className="directional">
                                                             <svg className="top" width="9" height="7" viewBox="0 0 9 7"
@@ -420,7 +426,7 @@ class ModifyMenu extends React.Component {
                                                 {
                                                     this.state.menuList.length === 0 &&
                                                     <>
-                                                        <h6 className="lead" style={{color: "grey"}}><b>No menu added yet!</b></h6>
+                                                        <h6 className="lead" style={{color: "grey"}}><b>¡Aún no se agregó ningún menú!</b></h6>
                                                     </>
                                                 }
 
