@@ -708,39 +708,22 @@ class ModifyRestaurant extends React.Component {
                                             </p>
                                             <br />
                                             {/* <Select className="cstm-select" options={optionProvince}
-=======
-                                            <label htmlFor="">PROVINCIA:</label>
-                                            {/*<input className="uni-input md" type="text" name="province"*/}
-                                            {/*    placeholder="province"*/}
-                                            {/*    onChange={this.inputChangeHandler}*/}
-                                            {/*    value={this.state.dataToPost.province} />*/}
-                                            {/*<p style={{ color: "red" }}>*/}
-                                            {/*    {this.validator.message('province', this.state.dataToPost.province, 'required')}*/}
-                                            {/*</p>*/}
-
-                                            <Select className="cstm-select" options={optionProvince}
-                                                name="province" placeholder="Provincia"
-                                                onChange={this.selectChangeHandler}
-                                                value={this.state.dataToPost.province} />
-                                            <p style={{ color: "red" }}>
-                                                {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p> */}
-                                            <label htmlFor="">CANTON:</label><br />
-                                            {/* <input className="uni-input md" type="text" name="canton"
-                                            </p>
+                                            {/*<label htmlFor="">CANTON:</label><br />*/}
+                                            {/*<input className="uni-input md" type="text" name="canton"*/}
+                                            {/*</p>*/}
                                             <label htmlFor="">CANTON:</label>
                                             <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.canton} />
-                                                 */}
-                                            <Select className="cstm-select full-width mini float-left"
-                                                options={this.state.optionCanton} name="canton"
-                                                style={{"width": "100"}}
-                                                placeholder={this.state.dataToPost.canton}
-                                                onChange={(e) => this.cantonChangeHandler(e, 'canton')}
-                                                value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled}
-                                            />
+                                            {/*<Select className="cstm-select full-width mini float-left"*/}
+                                            {/*    options={this.state.optionCanton} name="canton"*/}
+                                            {/*    style={{"width": "100"}}*/}
+                                            {/*    placeholder={this.state.dataToPost.canton}*/}
+                                            {/*    onChange={(e) => this.cantonChangeHandler(e, 'canton')}*/}
+                                            {/*    value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled}*/}
+                                            {/*/>*/}
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('canton', this.state.dataToPost.canton, 'required')}
                                             </p>
@@ -755,17 +738,17 @@ class ModifyRestaurant extends React.Component {
                                             </p> */}
                                             <label htmlFor="">DISTRITO:</label><br />
 
-                                            {/* <input className="uni-input md" type="text" name="district"
+                                            <input className="uni-input md" type="text" name="district"
                                                 placeholder="district"
                                                 onChange={this.inputChangeHandler}
-                                                value={this.state.dataToPost.district} /> */}
-                                            <Select className="cstm-select full-width mini float-left"
-                                                options={this.state.optionDistrito} name="district"
-                                                style={{"width": "100"}}
-                                                placeholder={this.state.dataToPost.district}
-                                                onChange={(e) => this.distritoChangeHandler(e, 'district')}
-                                                value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}
-                                            />
+                                                value={this.state.dataToPost.district} />
+                                            {/*<Select className="cstm-select full-width mini float-left"*/}
+                                            {/*    options={this.state.optionDistrito} name="district"*/}
+                                            {/*    style={{"width": "100"}}*/}
+                                            {/*    placeholder={this.state.dataToPost.district}*/}
+                                            {/*    onChange={(e) => this.distritoChangeHandler(e, 'district')}*/}
+                                            {/*    value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}*/}
+                                            {/*/>*/}
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                             </p>
