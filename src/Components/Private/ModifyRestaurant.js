@@ -708,11 +708,23 @@ class ModifyRestaurant extends React.Component {
                                             </p>
                                             <br />
                                             {/* <Select className="cstm-select" options={optionProvince}
-                                            </p> */}
-                                            {/*<label htmlFor="">CANTON:</label><br />*/}
-                                            {/*<input className="uni-input md" type="text" name="canton"*/}
+                                            <label htmlFor="">PROVINCIA:</label>
+                                            {/*<input className="uni-input md" type="text" name="province"*/}
+                                            {/*    placeholder="province"*/}
+                                            {/*    onChange={this.inputChangeHandler}*/}
+                                            {/*    value={this.state.dataToPost.province} />*/}
+                                            {/*<p style={{ color: "red" }}>*/}
+                                            {/*    {this.validator.message('province', this.state.dataToPost.province, 'required')}*/}
                                             {/*</p>*/}
-                                            <label htmlFor="">CANTON:</label>
+
+                                            <Select className="cstm-select f-w"  options={optionProvince}
+                                                name="province" placeholder="Provincia"
+                                                onChange={this.selectChangeHandler}
+                                                value={this.state.dataToPost.province} />
+                                            <p style={{ color: "red" }}>
+                                                {this.validator.message('province', this.state.dataToPost.province, 'required')}
+                                            </p>
+                                            <label htmlFor="">CANTON:</label><br />
                                             <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
