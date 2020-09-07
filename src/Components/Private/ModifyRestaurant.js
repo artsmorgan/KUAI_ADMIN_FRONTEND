@@ -526,22 +526,30 @@ class ModifyRestaurant extends React.Component {
         ];
 
         const optionTime = [
+            { value: "12:00 am", label: "12:00 am", name: 'time' },
+            { value: "01:00 am", label: "01:00 am", name: 'time' },
+            { value: "02:00 am", label: "02:00 am", name: 'time' },
+            { value: "03:00 am", label: "03:00 am", name: 'time' },
+            { value: "04:00 am", label: "04:00 am", name: 'time' },
+            { value: "05:00 am", label: "05:00 am", name: 'time' },
+            { value: "06:00 am", label: "06:00 am", name: 'time' },
+            { value: "07:00 am", label: "07:00 am", name: 'time' },
             { value: "08:00 am", label: "08:00 am", name: 'time' },
             { value: "09:00 am", label: "09:00 am", name: 'time' },
             { value: "10:00 am", label: "10:00 am", name: 'time' },
             { value: "11:00 am", label: "11:00 am", name: 'time' },
             { value: "12:00 pm", label: "12:00 pm", name: 'time' },
-            { value: "01:00 pm", label: "01:00 pm", name: 'time' },
-            { value: "02:00 pm", label: "02:00 pm", name: 'time' },
-            { value: "03:00 pm", label: "03:00 pm", name: 'time' },
-            { value: "04:00 pm", label: "04:00 pm", name: 'time' },
-            { value: "05:00 pm", label: "05:00 pm", name: 'time' },
-            { value: "06:00 pm", label: "06:00 pm", name: 'time' },
-            { value: "07:00 pm", label: "07:00 pm", name: 'time' },
-            { value: "08:00 pm", label: "08:00 pm", name: 'time' },
-            { value: "09:00 pm", label: "09:00 pm", name: 'time' },
-            { value: "10:00 pm", label: "10:00 pm", name: 'time' },
-            { value: "11:00 pm", label: "11:00 pm", name: 'time' }
+            // { value: "01:00 pm", label: "01:00 pm", name: 'time' },
+            // { value: "02:00 pm", label: "02:00 pm", name: 'time' },
+            // { value: "03:00 pm", label: "03:00 pm", name: 'time' },
+            // { value: "04:00 pm", label: "04:00 pm", name: 'time' },
+            // { value: "05:00 pm", label: "05:00 pm", name: 'time' },
+            // { value: "06:00 pm", label: "06:00 pm", name: 'time' },
+            // { value: "07:00 pm", label: "07:00 pm", name: 'time' },
+            // { value: "08:00 pm", label: "08:00 pm", name: 'time' },
+            // { value: "09:00 pm", label: "09:00 pm", name: 'time' },
+            // { value: "10:00 pm", label: "10:00 pm", name: 'time' },
+            // { value: "11:00 pm", label: "11:00 pm", name: 'time' }
         ];
 
 
@@ -638,7 +646,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="nombre"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.name} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('name', this.state.dataToPost.name, 'required')}
                                             </p>
                                             <label htmlFor="">ADMINISTRADOR:</label>
@@ -646,7 +654,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="administrador"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.administrator} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('administrator', this.state.dataToPost.administrator, 'required')}
                                             </p>
                                             <label htmlFor="">
@@ -663,7 +671,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="facebook"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.fb} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('fb', this.state.dataToPost.fb, 'required')}
                                             </p>
                                             <label htmlFor="">
@@ -680,7 +688,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="instagram"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.ig} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('ig', this.state.dataToPost.ig, 'required')}
                                             </p>
                                         </div>
@@ -699,34 +707,20 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="province"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.province} /> */}
-                                            <Select className="cstm-select full-width mini float-left"
+                                            {/*<div className="row" >*/}
+                                            {/*<div className="col-md-6 col-sm-6 col-lg-6 col-xs-6">*/}
+                                            <Select className="cstm-select f-w"
                                                 options={optionProvince} name="province"
                                                 style={{ "width": "100" }}
                                                 placeholder={this.state.dataToPost.province}
                                                 onChange={(e) => this.provinceChangeHandler(e, 'province')}
                                                 value={this.state.dataToPost.province} isDisabled={false}
                                             />
-                                            <p style={{ color: "red" }}>
+                                            <p className="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p>
-                                            <br />
-                                            {/* <Select className="cstm-select" options={optionProvince}
-                                            <label htmlFor="">PROVINCIA:</label>
-                                            {/*<input className="uni-input md" type="text" name="province"*/}
-                                            {/*    placeholder="province"*/}
-                                            {/*    onChange={this.inputChangeHandler}*/}
-                                            {/*    value={this.state.dataToPost.province} />*/}
-                                            {/*<p style={{ color: "red" }}>*/}
-                                            {/*    {this.validator.message('province', this.state.dataToPost.province, 'required')}*/}
-                                            {/*</p>*/}
-
-                                            <Select className="cstm-select f-w"  options={optionProvince}
-                                                name="province" placeholder="Provincia"
-                                                onChange={this.selectChangeHandler}
-                                                value={this.state.dataToPost.province} />
-                                            <p style={{ color: "red" }}>
-                                                {this.validator.message('province', this.state.dataToPost.province, 'required')}
-                                            </p>
+                                            {/*</div>*/}
+                                            {/*</div>*/}
                                             <label htmlFor="">CANTON:</label><br />
                                             <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
@@ -739,7 +733,7 @@ class ModifyRestaurant extends React.Component {
                                             {/*    onChange={(e) => this.cantonChangeHandler(e, 'canton')}*/}
                                             {/*    value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled}*/}
                                             {/*/>*/}
-                                            <p style={{ color: "red" }}>
+                                            <p className="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('canton', this.state.dataToPost.canton, 'required')}
                                             </p>
                                             <br />
@@ -764,7 +758,7 @@ class ModifyRestaurant extends React.Component {
                                             {/*    onChange={(e) => this.distritoChangeHandler(e, 'district')}*/}
                                             {/*    value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}*/}
                                             {/*/>*/}
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                             </p>
                                             <br />
@@ -787,7 +781,7 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={(e) => this.timeSelectChangeHandler(e, 'neighborhood')}
                                                 value={this.state.dataToPost.neighborhood} isDisabled={false}
                                             /> */}
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('neighborhood', this.state.dataToPost.neighborhood, 'required')}
                                             </p>
                                             <br />
@@ -797,7 +791,7 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.otherSigns} id="" cols="30"
                                                 rows="10"></textarea>
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('otherSigns', this.state.dataToPost.otherSigns, 'required')}
                                             </p>
                                         </div>
