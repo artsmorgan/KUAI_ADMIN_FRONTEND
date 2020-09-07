@@ -14,6 +14,8 @@ import {
 import {
     getRestaurantFormData,
     updateRestaurantFormData,
+    getCantonesFromAPI,
+    getDistritosFromAPI
 } from './restaurantAction'
 
 import {
@@ -51,6 +53,8 @@ export {
     
     getRestaurantFormData,
     updateRestaurantFormData,
+    getCantonesFromAPI,
+    getDistritosFromAPI,
 
     getDeliveryMethodFormData,
     updateDeliveryMethodFormData,
