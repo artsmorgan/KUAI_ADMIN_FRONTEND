@@ -103,7 +103,7 @@ class ModifyMenu extends React.Component {
 
     processSubmit() {
         let {categoryDataToPost} = this.state
-        // console.log(form)
+        console.log(categoryDataToPost)
         categoryDataToPost['id'] = uuid()
         this.setState({categoryDataToPost: categoryDataToPost})
         // console.log(this.state.categoryDataToPost)
