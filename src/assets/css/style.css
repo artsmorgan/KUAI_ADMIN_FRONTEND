@@ -857,13 +857,8 @@ body {
   border-radius: 50px;
   overflow: auto;
   resize: none;
-<<<<<<< HEAD
   padding-left: 16px;
   padding-top: 15px;
-=======
-  padding-left: 20px;
-  padding-top: 
->>>>>>> 506629fcb120c16e73f6220c8f2a367c4cd58dad
 }
 
 .modal-contact {
