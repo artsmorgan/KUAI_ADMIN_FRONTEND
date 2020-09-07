@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
             return {...state, loading: true}
 
         case actionType.GET_DEFAULT_CONFIG_SUCCESS:
-            console.log(action.payload)
+            // console.log(action.payload)
             state['DEFAULT_CONFIG'] = action.payload
             return {...state, loading: false}
 

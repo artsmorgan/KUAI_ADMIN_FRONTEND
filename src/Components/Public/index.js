@@ -6,7 +6,7 @@ import ForgotPasswordSuccess from "./ForgotPasswordSuccess";
 import ChangePassword from "./ChangePassword";
 import ChangePasswordSuccess from "./ChangePasswordSuccess";
 import Toaster from "./Toaster"
-import Loader from "./Loader";
+import Loader from "./LoaderInScreen";
 
 
 export {

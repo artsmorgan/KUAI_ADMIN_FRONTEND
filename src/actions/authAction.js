@@ -64,12 +64,14 @@ export const checkStorageLoginCred = () => {
         const token = localStorage.getItem('token')
         const restaurantId = localStorage.getItem('restaurantId')
         const loading = false
-        if (token && accessToken && refreshToken && tokenExpiredAt && tokenExpiredAt > new Date()) {
+        if (token && accessToken && refreshToken && restaurantId && tokenExpiredAt && tokenExpiredAt > new Date()) {
             // console.log("going to setLoginCred")
             dispatch(setLoginCred({ accessToken, refreshToken, tokenExpiredAt, token, restaurantId, loading }))
             setTimeout(() => {
                 dispatch(push(state.router.location.pathname))
             }, 100)
+        } else {
+            logout()
         }
     }
 }
@@ -82,6 +84,7 @@ export const redirectToLogin = () => {
 }
 
 export const logout = () => dispatch => {
+    console.log("logout req")
     localStorage.removeItem('accessToken')
     localStorage.removeItem('tokenExpiredAt')
     localStorage.removeItem('refreshToken')

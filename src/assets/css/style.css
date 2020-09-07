@@ -6,6 +6,24 @@ body {
   padding-top: 60px;
 }
 
+.error-show {
+  display: block;
+  width: 100%;
+}
+
+.error-show p {
+  width: 50%;
+  display: inline-block;
+  font-size: 11px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-txt {
+  font-size: 11px;
+  font-weight: 500;
+}
+
 .container-login {
   position: relative;
   display: block;
@@ -28,10 +46,6 @@ body {
   padding: 30px 50px;
   margin-top: -25px;
   border-radius: 14px;
-}
-
-.full-width{
-  width: 100% !important;
 }
 
 .container-login .ls-panel h3 {
@@ -181,6 +195,7 @@ body {
   line-height: 52px;
   text-indent: 35px;
   border-left: 8px solid #fff;
+  cursor: pointer;
 }
 
 .sidebar-wrapper .menu-list a svg {
@@ -735,6 +750,11 @@ body {
   width: 47%;
 }
 
+.mod-rest-container .cstm-select-full {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
 .mod-rest-container .uni-input {
   margin-bottom: 20px;
 }
@@ -847,12 +867,12 @@ body {
 }
 
 .uni-input.tarea {
-  height: 75px;
+  height: 90px;
   border-radius: 50px;
   overflow: auto;
   resize: none;
-  padding-left: 20px;
-  padding-top: 
+  padding-left: 16px;
+  padding-top: 15px;
 }
 
 .modal-contact {
@@ -887,6 +907,10 @@ body {
   padding-bottom: 50px;
 }
 
+.cstm-select-full {
+  width: 100%;
+}
+
 .cstm-select.mini .css-yk16xz-control {
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07) !important;
@@ -894,6 +918,10 @@ body {
   border-radius: 50px !important;
   height: 35px !important;
   width: 100%;
+}
+
+.cstm-select.mini .css-1fhf3k1-control {
+  border-radius: 35px;
 }
 
 .cstm-select.mini .css-1pahdxg-control {
@@ -911,6 +939,10 @@ body {
   border: 1px solid #fff !important;
   border-radius: 50px !important;
   height: 48px !important;
+}
+
+.cstm-select .css-1fhf3k1-control {
+  border-radius: 35px;
 }
 
 .cstm-select .css-1pahdxg-control {
@@ -1617,7 +1649,7 @@ body {
 
 .menu-elements .photo-area .chk-area .chk-label {
   font-size: 11px;
-  margin-left: 25px;
+  margin-left: 10px;
 }
 
 .menu-elements .photo-area .promo-area {
@@ -1626,7 +1658,7 @@ body {
 
 .menu-elements .photo-area .promo-area .chk-label {
   font-size: 11px;
-  margin-left: 25px;
+  margin-left: 7px;
 }
 
 .menu-elements .photo-area .promo-area .promo-code {
@@ -1773,6 +1805,7 @@ body {
   }
   .sidebar-wrapper .menu-list a {
     border-left: 0px;
+    cursor: pointer;
   }
   .container-login {
     width: 90%;
@@ -1872,6 +1905,7 @@ body {
   }
   .sidebar-wrapper .menu-list a {
     border-left: 0px;
+    cursor: pointer;
   }
   .container-login {
     width: 90%;
@@ -2085,6 +2119,10 @@ body {
   }
 }
 
+.f-w {
+  width: 100% !important;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-min-device-pixel-ratio: 2) and (device-aspect-ratio: 40 / 71) {
   .hor-inline .time-block {
     width: 100%;
@@ -2102,5 +2140,9 @@ body {
   .mb-navigator {
     display: block;
   }
+}
+
+.collapse-content textarea {
+  padding: 10px;
 }
 /*# sourceMappingURL=style.css.map */

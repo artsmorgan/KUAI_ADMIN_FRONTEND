@@ -8,11 +8,22 @@ export default (state = initialState, action) => {
             return {...state, loading: true}
 
         case actionType.GET_CATEGORY_LIST_SUCCESS:
-            console.log(action.payload)
+            // console.log(action.payload)
             state['CATEGORY_LIST'] = action.payload
             return {...state, loading: false}
 
         case actionType.GET_CATEGORY_LIST_ERROR:
+            return {...state, loading: false}
+
+        case actionType.GET_MENU_LIST_REQUEST:
+            return {...state, loading: true}
+
+        case actionType.GET_MENU_LIST_SUCCESS:
+            console.log(action.payload)
+            state['MENU_LIST'] = action.payload
+            return {...state, loading: false}
+
+        case actionType.GET_MENU_LIST_ERROR:
             return {...state, loading: false}
 
         case actionType.POST_CATEGORY_FORM_REQUEST:
@@ -22,6 +33,15 @@ export default (state = initialState, action) => {
             return {...state, loading: false}
 
         case actionType.POST_CATEGORY_FORM_ERROR:
+            return {...state, loading: false}
+
+        case actionType.POST_MENU_FORM_REQUEST:
+            return {...state, loading: true}
+
+        case actionType.POST_MENU_FORM_SUCCESS:
+            return {...state, loading: false}
+
+        case actionType.POST_MENU_FORM_ERROR:
             return {...state, loading: false}
 
         default:

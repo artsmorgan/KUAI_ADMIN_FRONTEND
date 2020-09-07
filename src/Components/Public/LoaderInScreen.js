@@ -5,8 +5,9 @@ import {DotLoader} from 'react-spinners'
 
 const LoaderInScreen = (props) => {
     const override=css`display:block; margin:auto;`;
+    const { loading } = props
     return (
-        <DotLoader loading={ true } size={50} css={override} color={'#B40DFF'}/>
+        <DotLoader loading={ loading } size={50} css={override} color={'#B40DFF'}/>
     )
 }
 

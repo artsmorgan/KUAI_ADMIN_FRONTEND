@@ -8,7 +8,7 @@ import menuImage from "../../assets/images/food.png";
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {getCategoryListData, getFormData, redirectToUrl, updateCategoryFormData} from '../../actions'
+import {getCategoryListData, getMenuListData, postMenuFormData, redirectToUrl, updateCategoryFormData} from '../../actions'
 import Modal from "react-bootstrap/Modal";
 import SupportModal from "./Child/Fixed/Sidebar/SupportModal";
 import SimpleReactValidator from "simple-react-validator";
@@ -32,7 +32,20 @@ class ModifyMenu extends React.Component {
                 newMenuItem: false
             },
             categoryList: [],
-            categoryListToUpdate: []
+            categoryListToUpdate: [],
+
+            categorySelectedOption: null,
+            categoryOptions: [],
+
+            menuDataToPost: {
+                id: '',
+                name: '',
+                description: '',
+                categoryId: '',
+                price: '',
+                isAvailable: "true"
+            },
+            menuList: []
 
         }
 
@@ -64,15 +77,39 @@ class ModifyMenu extends React.Component {
         }
     };
 
+    addMenuInputChangeHandler = (e) => {
+        let obj = this.state.menuDataToPost
+        obj[e.target.name] = e.target.value
+        this.setState({menuDataToPost: obj})
+    }
+
+    addMenuFormSubmitHandler = (e) => {
+        e.preventDefault();
+        if (this.validator.allValid()) {
+            this.addMenuProcessSubmit();
+        } else {
+            this.validator.showMessages();
+        }
+    };
+
+    addMenuProcessSubmit() {
+        let obj = this.state.menuDataToPost;
+        obj['id'] = uuid();
+        this.setState({ menuDataToPost: obj }, () => {
+            // console.log(this.state.menuDataToPost)
+            this.props.postMenuFormData(this.state.menuDataToPost)
+        });
+    }
+
     processSubmit() {
         let {categoryDataToPost} = this.state
         // console.log(form)
         categoryDataToPost['id'] = uuid()
         this.setState({categoryDataToPost: categoryDataToPost})
-        console.log(this.state.categoryDataToPost)
+        // console.log(this.state.categoryDataToPost)
         let categoryListToSend = this.state.categoryList;
         categoryListToSend.push(categoryDataToPost)
-        console.log(categoryListToSend)
+        // console.log(categoryListToSend)
         this.props.updateCategoryFormData(categoryListToSend)
         this.setState({
             show: false,
@@ -115,25 +152,57 @@ class ModifyMenu extends React.Component {
         let categoryList = []
         try {
             const {menuReducer} = this.props
-            console.log(menuReducer['CATEGORY_LIST'])
+            // console.log(menuReducer['CATEGORY_LIST'])
             categoryList = JSON.parse(menuReducer['CATEGORY_LIST'].categories);
             // console.log(categoryList)
             if (categoryList) {
                 this.setState({categoryList: categoryList})
                 this.setState({categoryListToUpdate: categoryList})
+                let categoryArrList = []
+                categoryList.map(el => {
+                    let catObj = {
+                        id: el.id,
+                        value: el.name,
+                        label: el.name
+                    }
+                    categoryArrList.push(catObj)
+                })
+                this.setState({categoryOptions: categoryArrList})
             }
         } catch (e) {
             categoryList = []
         }
-        console.log(this.state.categoryListToUpdate)
+        // console.log(this.state.categoryListToUpdate)
+        // console.log(this.state.categoryOptions)
+    }
+
+    displayMenuList = () => {
+        let menuList = []
+        try {
+            const {menuReducer} = this.props
+            console.log(menuReducer['MENU_LIST'])
+            menuList = JSON.parse(menuReducer['CATEGORY_LIST'].response);
+            // console.log(categoryList)
+            if (Object.keys(menuList).length === 0 && menuList.constructor === Object) {
+                this.setState({menuList: []})
+            } else {
+                this.setState({menuList: menuList})
+            }
+        } catch (e) {
+            menuList = []
+        }
+        // console.log(this.state.menuList)
     }
 
     componentWillMount() {
         this.props.getCategoryListData()
+        this.props.getMenuListData()
     }
 
     componentDidMount() {
         window.setTimeout(this.displayCategoryList, 800)
+        // window.setTimeout(this.displayMenuList, 800)
+        this.displayMenuList()
         this.setState({
             width: window.innerWidth
         }, () => {
@@ -164,6 +233,7 @@ class ModifyMenu extends React.Component {
         let categoryObj = {id: categoryId, name: categoryName}
         $("svg[id=" + categoryId + "].trash").hide()
         $("#categories-list svg[id=" + categoryId + "].tik").show()
+        $("input[id=" + categoryId + "]").parent().addClass('active')
 
         let categoryListToUpdate = this.state.categoryListToUpdate
         // console.log(categoryListToUpdate)
@@ -178,21 +248,36 @@ class ModifyMenu extends React.Component {
 
     deleteCategory = (id) => {
         let categoryListToUpdate = this.state.categoryListToUpdate
-        let result = categoryListToUpdate.filter(function(el) { return el.id != id; })
-        console.log(result)
+        let result = categoryListToUpdate.filter(function (el) {
+            return el.id != id;
+        })
+        // console.log(result)
         this.setState({categoryListToUpdate: result}, () => {
-            console.log(this.state.categoryListToUpdate)
+            // console.log(this.state.categoryListToUpdate)
             this.props.updateCategoryFormData(this.state.categoryListToUpdate)
         })
     }
 
-    categoryFocusOutHandler = (e) => {
-        const categoryId = e.target.id
+    categoryUpdateHandler = (id) => {
+        const categoryId = id
         $("svg[id=" + categoryId + "].trash").show()
         $("#categories-list svg[id=" + categoryId + "].tik").hide()
-        // console.log(this.state.categoryListToUpdate)
+        $("input[id=" + categoryId + "]").parent().removeClass('active')
         this.props.updateCategoryFormData(this.state.categoryListToUpdate)
     }
+
+    selectHandleChange = categorySelectedOption => {
+        // console.log(categorySelectedOption)
+        this.setState(
+            { categorySelectedOption },
+            () => {
+                // console.log(`Option selected:`, this.state.categorySelectedOption)
+                let obj = this.state.menuDataToPost
+                obj['categoryId'] = categorySelectedOption.id
+                this.setState({menuDataToPost: obj})
+            }
+        );
+    };
 
     render() {
         return (
@@ -245,7 +330,8 @@ class ModifyMenu extends React.Component {
                                                         <input type="text" className={"uni-input"} name="name"
                                                                placeholder="Category name"
                                                                onChange={this.inputChangeHandler}
-                                                               value={this.state.categoryDataToPost.name} autoComplete={"off"}/>
+                                                               value={this.state.categoryDataToPost.name}
+                                                               autoComplete={"off"}/>
                                                         <p style={{color: "red"}}>
                                                             {this.validator.message('name', this.state.categoryDataToPost.name, 'required')}
                                                         </p>
@@ -260,7 +346,13 @@ class ModifyMenu extends React.Component {
                                         <div className="rotator-scroll" style={{paddingTop: '25px'}}
                                              id="categories-list">
                                             {
-                                                this.state.categoryListToUpdate.map(category =>
+                                                this.state.categoryListToUpdate.length === 0 &&
+                                                <>
+                                                    <h6 className="lead" style={{color: "grey"}}><b>No se encontró ninguna categoría.</b></h6>
+                                                </>
+                                            }
+                                            {
+                                                this.state.categoryListToUpdate.length > 0 && this.state.categoryListToUpdate.map(category =>
                                                     <div className="rotator" key={category.id}>
                                                         <div className="directional">
                                                             <svg className="top" width="9" height="7" viewBox="0 0 9 7"
@@ -279,13 +371,13 @@ class ModifyMenu extends React.Component {
                                                             </svg>
                                                         </div>
                                                         <input type="text" value={category.name} id={category.id}
-                                                               onChange={this.categoryInputChangeHandler}
-                                                               onBlur={this.categoryFocusOutHandler}/>
+                                                               onChange={this.categoryInputChangeHandler}/>
                                                         <div className="action">
                                                             <svg className="trash" width="15" height="16"
                                                                  viewBox="0 0 15 16"
                                                                  fill="none" xmlns="http://www.w3.org/2000/svg"
-                                                                 id={category.id} onClick={() => this.deleteCategory(category.id)}>
+                                                                 id={category.id}
+                                                                 onClick={() => this.deleteCategory(category.id)}>
                                                                 <path fill-rule="evenodd" clip-rule="evenodd"
                                                                       d="M13.5393 2.66665H10.0121V0.666661C10.0121 0.298474 9.74885 0 9.42418 0H4.72118C4.39651 0 4.13331 0.298474 4.13331 0.666661V2.66665H0.606063C0.281389 2.66665 0.0181885 2.96512 0.0181885 3.33331C0.0181885 3.70149 0.281389 3.99997 0.606063 3.99997H13.5393C13.864 3.99997 14.1272 3.70149 14.1272 3.33331C14.1272 2.96512 13.864 2.66665 13.5393 2.66665ZM5.30905 1.33332H8.8363V2.66665H5.30905V1.33332ZM1.78181 5.33329V13.9999C1.78181 15.1045 2.57141 15.9999 3.54543 15.9999H10.5999C11.5739 15.9999 12.3635 15.1045 12.3635 13.9999V5.33329H1.78181ZM5.30904 12.6664H4.13329V7.99973H5.30904V12.6664ZM6.48479 12.6664H7.66054V7.99973H6.48479V12.6664ZM10.012 12.6664H8.83629V7.99973H10.012V12.6664Z"
                                                                       fill="#41404D"/>
@@ -293,7 +385,8 @@ class ModifyMenu extends React.Component {
                                                             <svg className="tik" width="14" height="12"
                                                                  viewBox="0 0 14 12" fill="none"
                                                                  xmlns="http://www.w3.org/2000/svg" id={category.id}
-                                                                 style={{display: "none"}}>
+                                                                 style={{display: "none"}}
+                                                                 onClick={() => this.categoryUpdateHandler(category.id)}>
                                                                 <path
                                                                     d="M11.694 1.13765C12.1498 0.620782 12.8888 0.620782 13.3445 1.13765C13.8003 1.65452 13.8003 2.49254 13.3445 3.00941L6.34187 10.9506C5.88608 11.4675 5.14711 11.4675 4.69132 10.9506L0.800946 6.53882C0.34516 6.02195 0.34516 5.18394 0.800946 4.66706C1.25673 4.15019 1.99571 4.15019 2.45149 4.66706L5.51659 8.14295L11.694 1.13765Z"
                                                                     fill="#37DBE4"/>
@@ -329,7 +422,15 @@ class ModifyMenu extends React.Component {
                                         <div className="rotator-scroll">
                                             <div className="rotator-stripe">
                                                 <p className="rotator-title">PLATO FUERTE</p>
-                                                <div className="rotator">
+
+                                                {
+                                                    this.state.menuList.length === 0 &&
+                                                    <>
+                                                        <h6 className="lead" style={{color: "grey"}}><b>¡Aún no se agregó ningún menú!</b></h6>
+                                                    </>
+                                                }
+
+{/*                                                <div className="rotator">
                                                     <div className="directional">
                                                         <svg className="top" width="9" height="7" viewBox="0 0 9 7"
                                                              fill="none"
@@ -360,8 +461,9 @@ class ModifyMenu extends React.Component {
                                                             Editor
                                                         </button>
                                                     </div>
-                                                </div>
-                                                <div className="rotator">
+                                                </div>*/}
+
+{/*                                                <div className="rotator">
                                                     <div className="directional">
                                                         <svg className="top" width="9" height="7" viewBox="0 0 9 7"
                                                              fill="none"
@@ -422,7 +524,7 @@ class ModifyMenu extends React.Component {
                                                             Editor
                                                         </button>
                                                     </div>
-                                                </div>
+                                                </div>*/}
                                             </div>
                                         </div>
                                     </div>
@@ -467,16 +569,29 @@ class ModifyMenu extends React.Component {
                                             </ul>
 
                                             <label htmlFor="">NOMBRE DEL iteM:</label>
-                                            <input type="text" className="uni-input"/>
+                                            <input type="text" className="uni-input" name="name" onChange={this.addMenuInputChangeHandler} value={this.state.menuDataToPost.name}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('name', this.state.menuDataToPost.name, 'required')}
+                                            </p>
                                             <label htmlFor="">DescripciÓn:</label>
-                                            <textarea name="" className="uni-input" id="" cols="30"
-                                                      rows="10"></textarea>
+                                            <textarea name="description" className="uni-input" id="" cols="30"
+                                                      rows="10" onChange={this.addMenuInputChangeHandler}>{this.state.menuDataToPost.description}</textarea>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('name', this.state.menuDataToPost.description, 'required')}
+                                            </p>
                                             <label htmlFor="">CATEGORIA:</label>
-                                            <Select className="cstm-select" name="distrito"
-                                                    placeholder="Distrito"
+                                            <Select className="cstm-select" value={this.state.categorySelectedOption}
+                                                    onChange={this.selectHandleChange}
+                                                    placeholder="Distrito" options={this.state.categoryOptions}
                                             />
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('name', this.state.menuDataToPost.categoryId, 'required')}
+                                            </p>
                                             <label htmlFor="">PRECIO:</label>
-                                            <input type="text" className="uni-input"/>
+                                            <input type="text" className="uni-input" name="price" onChange={this.addMenuInputChangeHandler} value={this.state.menuDataToPost.price}/>
+                                            <p style={{color: "red"}}>
+                                                {this.validator.message('name', this.state.menuDataToPost.price, 'required')}
+                                            </p>
 
                                             <div className="photo-area">
                                                 <div className="upload">
@@ -588,7 +703,7 @@ class ModifyMenu extends React.Component {
                                                 </div>
 
                                                 <div className="row" style={{marginTop: '40px'}}>
-                                                    <button className="btn-theme">GUARDAR</button>
+                                                    <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -616,7 +731,9 @@ const mapDispatchToProps = dispatch =>
         {
             getCategoryListData,
             updateCategoryFormData,
-            redirectToUrl
+            redirectToUrl,
+            getMenuListData,
+            postMenuFormData
         },
         dispatch
     )

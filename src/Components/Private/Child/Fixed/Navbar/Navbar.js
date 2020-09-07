@@ -25,7 +25,7 @@ class Navbar extends React.Component {
     }
 
     componentWillMount() {
-        this.props.getDefaultConfigData()
+        this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
     }
 
     updateDimension = () => {
@@ -97,15 +97,15 @@ class Navbar extends React.Component {
                                 <img src={Avatar} alt="User Avatar"/>
                             </div>
                             <Dropdown className="cstm-drop">
-                                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                <Dropdown.Toggle  id="dropdown-basic">
                                     Costa Rica
                                     Beer factory
                                 </Dropdown.Toggle>
 
-                                <Dropdown.Menu>
+                                {/* <Dropdown.Menu>
                                     <Dropdown.Item><Link to={'/orders'}>Action</Link></Dropdown.Item>
                                     <Dropdown.Item><Link to={'/orders'}>Another Action</Link></Dropdown.Item>
-                                </Dropdown.Menu>
+                                </Dropdown.Menu> */}
                             </Dropdown>
                         </div>
                     </div>

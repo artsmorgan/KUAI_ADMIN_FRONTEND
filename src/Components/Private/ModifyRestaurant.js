@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  { useState }  from 'react';
 import Select from 'react-select';
 import { Button, Nav } from 'react-bootstrap';
 import Checkbox from '@opuscapita/react-checkbox';
@@ -10,7 +10,10 @@ import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import * as APITools from '../../util/apiX';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { getRestaurantFormData, updateRestaurantFormData, getCantonesFromAPI, getDistritosFromAPI} from '../../actions';
+import { getRestaurantFormData, updateRestaurantFormData, getCantonesFromAPI, getDistritosFromAPI } from '../../actions';
+import { storage, db } from "../firebase";
+import { toastr } from 'react-redux-toastr'
+
 
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
@@ -20,8 +23,17 @@ class ModifyRestaurant extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.fileUpload = React.createRef();
+
+        this.profilePictRefUpload = React.createRef();
+        this.showProfileUpload = this.showProfileUpload.bind(this);
+
+        this.coverPictRefUpload = React.createRef();
+        // this.showCoverUpload = this.showCoverUpload.bind(this);
+
         this.showFileUpload = this.showFileUpload.bind(this);
+
         this.state = {
             width: 0,
             mobile: false,
@@ -30,23 +42,32 @@ class ModifyRestaurant extends React.Component {
                 informationTab: true,
                 scheduleTab: true,
             },
+
+            profileImage: '',
+            profileImageUrl: '',
+            coverImage: '',
+            coverImageUrl: '',
+            profileImageProgress: '',
+
             form: {},
             checked: false,
             horario0: false,
 
             submitLoading: false,
 
-            cantonIsDisabled : true,
-            distritoIsDisabled : true,
+            cantonIsDisabled: true,
+            distritoIsDisabled: true,
 
-            optionCanton : [ ],
+            optionCanton: [],
             cantonSelected: 1,
             provinciaSelected: 0,
 
-            optionDistrito : [],
+            optionDistrito: [],
             distritoSelected: 0,
 
             customErrorMessage: "este campo es requerido",
+            customErrorMessageOpen: "Horario de apertura requerido",
+            customErrorMessageClose: "Horario de cierre requerido",
             customErrors: {
                 mondayEnable: false,
                 mondayOpen: "",
@@ -126,6 +147,99 @@ class ModifyRestaurant extends React.Component {
         this.handleCustomValidation()
     };
 
+    handleProfileImageChange = e => {
+        if (e.target.files[0]) {          
+          this.setState({ profileImage: e.target.files[0] });
+        }
+      };
+
+    
+    getFileExtension = filename =>  filename.split('.').pop();  
+
+    handleProfileImageUpload = (e) => {
+        // console.log('handleProfileImageUpload',e.target.files[0]);
+        if (e && e.target.files[0]) {      
+            const _files = e.target.files[0];
+            // this.setState({ profileImage: e.target.files[0] });
+            const  fileExtension = this.getFileExtension(e.target.files[0].name)
+            const  filename = `${Date.now()}.${fileExtension}`;
+            const uploadTask = storage.ref(`restaurants/${localStorage.getItem('restaurantId')}/images/profile/${filename}`).put(e.target.files[0]);
+            
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    this.setState({ progress: progress });
+                },
+                error => {
+                    console.log(error);
+                },
+                () => {
+                    storage
+                    .ref(`restaurants/${localStorage.getItem('restaurantId')}/images/profile/`)
+                    .child(filename)
+                    .getDownloadURL()
+                    .then(url => {
+                        this.setState({ profileImageUrl: url });
+                        const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                                docRef.update({
+                                    profilePicture: url
+                                }).then(() => {
+                                    toastr.success("Éxito", 'La imágen de perfil fue subida con éxito')
+                                }).catch((error) => {
+                                    console.log('Error updating the document:', error);
+                                })
+                    });
+                }
+            );
+        }
+        
+    };
+
+    handleCoverImageUpload = (e) => {
+        // console.log('handleProfileImageUpload',e.target.files[0]);
+        if (e && e.target.files[0]) {      
+            const _files = e.target.files[0];
+            // this.setState({ profileImage: e.target.files[0] });
+            const  fileExtension = this.getFileExtension(e.target.files[0].name)
+            const  filename = `${Date.now()}.${fileExtension}`;
+            const uploadTask = storage.ref(`restaurants/${localStorage.getItem('restaurantId')}/images/cover/${filename}`).put(e.target.files[0]);
+            
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    this.setState({ progress: progress });
+                },
+                error => {
+                    console.log(error);
+                },
+                () => {
+                    storage
+                    .ref(`restaurants/${localStorage.getItem('restaurantId')}/images/cover/`)
+                    .child(filename)
+                    .getDownloadURL()
+                    .then(url => {
+                        this.setState({ coverImageUrl: url });
+                        const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                                docRef.update({
+                                    coverPicture: url
+                                }).then(() => {
+                                    toastr.success("Éxito", 'La imágen de portada fue subida con éxito')
+                                }).catch((error) => {
+                                    console.log('Error updating the document:', error);
+                                })
+                    });
+                }
+            );
+        }
+        
+    };
+
     inputChangeHandler = (e) => {
         let obj = this.state.dataToPost;
         obj[e.target.name] = e.target.value;
@@ -148,7 +262,7 @@ class ModifyRestaurant extends React.Component {
         this.handleCustomValidation()
     };
 
-    
+
 
     provinceChangeHandler = async (e, fieldName) => {
         console.log('e', e)
@@ -159,62 +273,62 @@ class ModifyRestaurant extends React.Component {
         //this.state.dataToPost.canton
         //Get Canton List
         const cantonesData = await getCantonesFromAPI(e);
-        
-    
+
+
         //parse to the correct  format
         // const cantones = this.formatSelectData(cantonesData);
         console.log(cantonesData)
         const cantonesObj = [];
-        for( const canton  in cantonesData.cantones ){
-            console.log('canton',canton)
-            console.log('canton',cantonesData.cantones[canton])
-            cantonesObj.push({ value: canton, label: cantonesData.cantones[canton], name: "canton" },)
+        for (const canton in cantonesData.cantones) {
+            console.log('canton', canton)
+            console.log('canton', cantonesData.cantones[canton])
+            cantonesObj.push({ value: canton, label: cantonesData.cantones[canton], name: "canton" })
         }
 
         this.setState({ optionCanton: cantonesObj })
         this.setState({ provinciaSelected: e.value })
         // this.setState({ provinciaSelected: e.value })
 
-        if(cantonesData.success){
+        if (cantonesData.success) {
             let obj = this.state.dataToPost;
-                obj['canton'] = cantonesData.cantones[1]; //Every time that "Provincia change" set canton to the first in the list
+            obj['canton'] = cantonesData.cantones[1]; //Every time that "Provincia change" set canton to the first in the list
             this.setState({ dataToPost: obj });
             this.setState({ cantonIsDisabled: false })
         }
 
     };
-    
+
     cantonChangeHandler = async (e, fieldName) => {
         let obj = this.state.dataToPost;
         obj[fieldName] = e.label;
         this.setState({ dataToPost: obj });
         this.handleCustomValidation()
         console.log(this.state.provinciaSelected)
-        console.log('cantonChangeHandler e',e)
+        console.log('cantonChangeHandler e', e)
 
         this.setState({ cantonSelected: e.value })
 
 
         //Get Canton List
         const distritosData = await getDistritosFromAPI(this.state.provinciaSelected, e.value);
-        
-        console.log('distritosData',distritosData)
-        
+
+        console.log('distritosData', distritosData)
+
 
         // //parse to the correct  format
         // // const cantones = this.formatSelectData(cantonesData);
         // console.log(cantonesData)
         const distritosObj = [];
-        for( const distrito  in distritosData.distritos ){
-            console.log('canton',distrito)
-            console.log('canton',distritosData.distritos[distrito])
-            distritosObj.push({ value: distrito, label: distritosData.distritos[distrito], name: "district" },)
+        for (const distrito in distritosData.distritos) {
+            console.log('canton', distrito)
+            console.log('canton', distritosData.distritos[distrito])
+            distritosObj.push({ value: distrito, label: distritosData.distritos[distrito], name: "district" })
         }
 
         this.setState({ optionDistrito: distritosObj })
 
-        if(distritosData.success){
-            
+        if (distritosData.success) {
+
             this.setState({ distritoIsDisabled: false })
         }
 
@@ -228,9 +342,9 @@ class ModifyRestaurant extends React.Component {
         // console.log(this.state.provinciaSelected)
         // //Get Canton List
         // const distritosData = await getDistritosFromAPI(this.state.provinciaSelected, this.state.cantonSelected);
-        
+
         // console.log('distritosData',distritosData)
-        
+
 
         // // //parse to the correct  format
         // // // const cantones = this.formatSelectData(cantonesData);
@@ -245,7 +359,7 @@ class ModifyRestaurant extends React.Component {
         // this.setState({ optionDistrito: distritosObj })
 
         // if(distritosData.success){
-            
+
         //     this.setState({ distritoIsDisabled: false })
         // }
 
@@ -274,26 +388,26 @@ class ModifyRestaurant extends React.Component {
         let obj = this.state.dataToPost;
 
         for (const [key, value] of Object.entries(days)) {
-
+            
             let field = value + "Enable";
             if (field in errors) {
                 let openValue = value + "Open";
                 let closeValue = value + "Close";
-                
+
                 if (obj[field]) {
                     console.log(obj[openValue])
                     console.log(obj[closeValue])
-                    if (obj[openValue] === "-" ||obj[openValue]['value'] === "-") {
+                    if (obj[openValue] === "-" || obj[openValue]['value'] === "-") {
                         console.log(obj[openValue]);
-                        errors[openValue] = this.state.customErrorMessage;
+                        errors[openValue] = this.state.customErrorMessageOpen;
                         formIsValid = false;
                     } else {
                         errors[openValue] = '';
                     }
 
-                    if (obj[closeValue] === "-"||obj[closeValue]['value'] === "-") {
+                    if (obj[closeValue] === "-" || obj[closeValue]['value'] === "-") {
                         console.log(obj[closeValue]);
-                        errors[closeValue] = this.state.customErrorMessage;
+                        errors[closeValue] = this.state.customErrorMessageClose;
                         formIsValid = false;
                     } else {
                         errors[closeValue] = '';
@@ -329,7 +443,11 @@ class ModifyRestaurant extends React.Component {
     };
 
     showFileUpload() {
-        this.fileUpload.current.click();
+        this.coverPictRefUpload.current.click();
+    }
+
+    showProfileUpload() {
+        this.profilePictRefUpload.current.click();
     }
 
     fileUploadOnchange(e) {
@@ -440,14 +558,21 @@ class ModifyRestaurant extends React.Component {
     }
 
 
-    getBool(val) {
-        return !!JSON.parse(String(val).toLowerCase());
+    getBool(string) {
+        switch (string.toLowerCase().trim()) {
+            case "true": case "yes": case "1": return true;
+            case "false": case "no": case "0": case null: return false;
+            default: return Boolean(string);
+        }
+        // return !!JSON.parse(String(val).toLowerCase());
     }
 
     componentDidUpdate(previousProps) {
         if (previousProps.restaurant.loading && !this.props.restaurant.loading) {
             const restaurant = this.props.restaurant;
             this.setState({
+                profileImageUrl: restaurant.profilePicture,
+                coverImageUrl: restaurant.coverPicture,
                 dataToPost: {
                     name: restaurant.name,
                     administrator: restaurant.administrator,
@@ -493,11 +618,15 @@ class ModifyRestaurant extends React.Component {
 
     render() {
         const { width } = this.state
-        // const optionProvince = [
-        //     { value: "chocolate", label: "Chocolate", name: "province" },
-        //     { value: "strawberry", label: "Strawberry", name: "province" },
-        //     { value: "vanilla", label: "Vanilla", name: "province" },
-        // ];
+        const optionProvince = [
+            { value: 1, label: "San Jose", name: "province" },
+            { value: 2, label: "Alajuela", name: "province" },
+            { value: 3, label: "Cartago", name: "province" },
+            { value: 4, label: "Heredia", name: "province" },
+            { value: 5, label: "Guanacaste", name: "province" },
+            { value: 6, label: "Puntarenas", name: "province" },
+            { value: 7, label: "Limon", name: "province" }
+        ]
         // const optionCanton = [
         //     { value: "chocolate", label: "Chocolate", name: "canton" },
         //     { value: "strawberry", label: "Strawberry", name: "canton" },
@@ -514,36 +643,36 @@ class ModifyRestaurant extends React.Component {
             { value: "vanilla", label: "Vanilla", name: "barrio" },
         ];
 
-        const optionTime = [           
+        const optionTime = [
+            { value: "12:00 am", label: "12:00 am", name: 'time' },
+            { value: "01:00 am", label: "01:00 am", name: 'time' },
+            { value: "02:00 am", label: "02:00 am", name: 'time' },
+            { value: "03:00 am", label: "03:00 am", name: 'time' },
+            { value: "04:00 am", label: "04:00 am", name: 'time' },
+            { value: "05:00 am", label: "05:00 am", name: 'time' },
+            { value: "06:00 am", label: "06:00 am", name: 'time' },
+            { value: "07:00 am", label: "07:00 am", name: 'time' },
             { value: "08:00 am", label: "08:00 am", name: 'time' },
             { value: "09:00 am", label: "09:00 am", name: 'time' },
             { value: "10:00 am", label: "10:00 am", name: 'time' },
             { value: "11:00 am", label: "11:00 am", name: 'time' },
             { value: "12:00 pm", label: "12:00 pm", name: 'time' },
-            { value: "01:00 pm", label: "01:00 pm", name: 'time' },
-            { value: "02:00 pm", label: "02:00 pm", name: 'time' },
-            { value: "03:00 pm", label: "03:00 pm", name: 'time' },
-            { value: "04:00 pm", label: "04:00 pm", name: 'time' },
-            { value: "05:00 pm", label: "05:00 pm", name: 'time' },
-            { value: "06:00 pm", label: "06:00 pm", name: 'time' },
-            { value: "07:00 pm", label: "07:00 pm", name: 'time' },
-            { value: "08:00 pm", label: "08:00 pm", name: 'time' },
-            { value: "09:00 pm", label: "09:00 pm", name: 'time' },
-            { value: "10:00 pm", label: "10:00 pm", name: 'time' },
-            { value: "11:00 pm", label: "11:00 pm", name: 'time' }
+            // { value: "01:00 pm", label: "01:00 pm", name: 'time' },
+            // { value: "02:00 pm", label: "02:00 pm", name: 'time' },
+            // { value: "03:00 pm", label: "03:00 pm", name: 'time' },
+            // { value: "04:00 pm", label: "04:00 pm", name: 'time' },
+            // { value: "05:00 pm", label: "05:00 pm", name: 'time' },
+            // { value: "06:00 pm", label: "06:00 pm", name: 'time' },
+            // { value: "07:00 pm", label: "07:00 pm", name: 'time' },
+            // { value: "08:00 pm", label: "08:00 pm", name: 'time' },
+            // { value: "09:00 pm", label: "09:00 pm", name: 'time' },
+            // { value: "10:00 pm", label: "10:00 pm", name: 'time' },
+            // { value: "11:00 pm", label: "11:00 pm", name: 'time' }
         ];
 
-        const optionProvince = [
-            {value: 1, label: "San Jose", name: "province"},
-            {value: 2, label: "Alajuela", name: "province"},
-            {value: 3, label: "Cartago", name: "province"},
-            {value: 4, label: "Heredia", name: "province"},
-            {value: 5, label: "Guanacaste", name: "province"},
-            {value: 6, label: "Puntarenas", name: "province"},            
-            {value: 7, label: "Limon", name: "province"}
-        ]
 
-       
+
+
 
         return (
             <>
@@ -574,15 +703,19 @@ class ModifyRestaurant extends React.Component {
                                         <h3 className="mb-hidden">
                                             General
                                         </h3>
-                                        <input type="file" id="my_file" style={{ display: "none" }}
-                                            onChange={this.fileUploadOnchange} ref={this.fileUpload} />
+                                       
+                                        <input type="file" id="my_file" style={{ display: "none" }} accept="image/*"
+                                            onChange={this.handleCoverImageUpload} ref={this.coverPictRefUpload} />
+
                                         <div className="cover-pic">
                                             <label htmlFor="">Editar foto de perfil y foto de portada</label>
                                             <div className="cvr">
-                                                <div className="cvr-main" style={{background: "url(" + bannerImage + ")"}}>
+                                                <div className="cvr-main" style={{ background: "url(" + this.state.coverImageUrl + ")" }}>
                                                     <div className="overlay">
+                                                        
                                                         <button type="button" className="btn-cvr-change"
                                                             onClick={this.showFileUpload}>
+
                                                             <svg width="13" height="13" viewBox="0 0 13 13"
                                                                 fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -603,10 +736,15 @@ class ModifyRestaurant extends React.Component {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="cvr-photo" style={{background: "url(" + avatarImage + ")"}}>
+                                                <div className="cvr-photo" style={{ background: "url(" + this.state.profileImageUrl + ")" }}>
                                                     <div className="overlay">
+                                                    
+                                                    <input type="file" id="profile-picture" accept="image/*"  style={{ display: "none" }}
+                                                        onChange={this.handleProfileImageUpload} ref={this.profilePictRefUpload} />
+
                                                         <button type="button" className="btn-photo-change"
-                                                            onClick={this.showFileUpload}>
+                                                            onClick={this.showProfileUpload}>
+
                                                             <svg width="13" height="13" viewBox="0 0 13 13"
                                                                 fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -635,7 +773,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="nombre"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.name} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('name', this.state.dataToPost.name, 'required')}
                                             </p>
                                             <label htmlFor="">ADMINISTRADOR:</label>
@@ -643,7 +781,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="administrador"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.administrator} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('administrator', this.state.dataToPost.administrator, 'required')}
                                             </p>
                                             <label htmlFor="">
@@ -660,7 +798,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="facebook"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.fb} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('fb', this.state.dataToPost.fb, 'required')}
                                             </p>
                                             <label htmlFor="">
@@ -677,7 +815,7 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="instagram"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.ig} />
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('ig', this.state.dataToPost.ig, 'required')}
                                             </p>
                                         </div>
@@ -696,14 +834,16 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="province"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.province} /> */}
-                                            <Select className="cstm-select full-width mini float-left"
-                                                    options={optionProvince} name="province"
-                                                    style={{"width": "100"}}
-                                                    placeholder={this.state.dataToPost.province}
-                                                    onChange={(e) => this.provinceChangeHandler(e, 'province')}
-                                                    value={this.state.dataToPost.province} isDisabled={false}
-                                                />
-                                            <p style={{ color: "red" }}>
+                                            {/*<div className="row" >*/}
+                                            {/*<div className="col-md-6 col-sm-6 col-lg-6 col-xs-6">*/}
+                                            <Select className="cstm-select f-w"
+                                                options={optionProvince} name="province"
+                                                style={{ "width": "100" }}
+                                                placeholder={this.state.dataToPost.province}
+                                                onChange={(e) => this.provinceChangeHandler(e, 'province')}
+                                                value={this.state.dataToPost.province} isDisabled={false}
+                                            />
+                                            <p className="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p>
                                             <br />
@@ -715,19 +855,18 @@ class ModifyRestaurant extends React.Component {
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p> */}
                                             <label htmlFor="">CANTON:</label><br />
-                                            {/* <input className="uni-input md" type="text" name="canton"
+                                            {/* {/* <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
-                                                value={this.state.dataToPost.canton} />
-                                                 */}
-                                            <Select className="cstm-select full-width mini float-left"
+                                                value={this.state.dataToPost.canton} /> */}
+                                            <Select className="cstm-select f-w"
                                                 options={this.state.optionCanton} name="canton"
-                                                style={{"width": "100"}}
-                                                placeholder={this.state.dataToPost.canton}
-                                                onChange={(e) => this.cantonChangeHandler(e, 'canton')}
-                                                value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled}
+                                                style={{"width": "100"}} 
+                                                placeholder={this.state.dataToPost.canton} 
+                                                onChange={(e) => this.cantonChangeHandler(e, 'canton')} 
+                                                value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled} 
                                             />
-                                            <p style={{ color: "red" }}>
+                                            <p className="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('canton', this.state.dataToPost.canton, 'required')}
                                             </p>
                                             <br />
@@ -745,14 +884,14 @@ class ModifyRestaurant extends React.Component {
                                                 placeholder="district"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.district} /> */}
-                                            <Select className="cstm-select full-width mini float-left"
+                                            <Select className="cstm-select f-w"
                                                 options={this.state.optionDistrito} name="district"
                                                 style={{"width": "100"}}
                                                 placeholder={this.state.dataToPost.district}
                                                 onChange={(e) => this.distritoChangeHandler(e, 'district')}
-                                                value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}
-                                            />
-                                            <p style={{ color: "red" }}>
+                                                 value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}
+                                             />
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                             </p>
                                             <br />
@@ -775,7 +914,7 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={(e) => this.timeSelectChangeHandler(e, 'neighborhood')}
                                                 value={this.state.dataToPost.neighborhood} isDisabled={false}
                                             /> */}
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('neighborhood', this.state.dataToPost.neighborhood, 'required')}
                                             </p>
                                             <br />
@@ -785,7 +924,7 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.otherSigns} id="" cols="30"
                                                 rows="10"></textarea>
-                                            <p style={{ color: "red" }}>
+                                            <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('otherSigns', this.state.dataToPost.otherSigns, 'required')}
                                             </p>
                                         </div>
@@ -811,7 +950,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'mondayOpen')}
                                                     value={this.state.dataToPost.mondayOpen} isDisabled={!this.state.dataToPost.mondayEnable}
                                                 />
-                                                
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="mondayClose"
@@ -819,14 +958,14 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'mondayClose')}
                                                     value={this.state.dataToPost.mondayClose} isDisabled={!this.state.dataToPost.mondayEnable}
                                                 />
-                                                {/* <div className="error-show">
+                                                <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.mondayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.mondayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -842,7 +981,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'tuesdayOpen')}
                                                     value={this.state.dataToPost.tuesdayOpen} isDisabled={!this.state.dataToPost.tuesdayEnable}
                                                 />
-                                                
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="tuesdayClose"
@@ -850,14 +989,14 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'tuesdayClose')}
                                                     value={this.state.dataToPost.tuesdayClose} isDisabled={!this.state.dataToPost.tuesdayEnable}
                                                 />
-                                                {/* <div className="error-show">
+                                                <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.tuesdayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.tuesdayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -881,14 +1020,14 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'wednesdayClose')}
                                                     value={this.state.dataToPost.wednesdayClose} isDisabled={!this.state.dataToPost.wednesdayEnable}
                                                 />
-                                                {/* <div className="error-show">
+                                                <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.wednesdayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.wednesdayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
 
                                             </div>
                                         </div>
@@ -905,7 +1044,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'thursdayOpen')}
                                                     value={this.state.dataToPost.thursdayOpen} isDisabled={!this.state.dataToPost.thursdayEnable}
                                                 />
-                                                
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="thursdayClose"
@@ -913,14 +1052,14 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'thursdayClose')}
                                                     value={this.state.dataToPost.thursdayClose} isDisabled={!this.state.dataToPost.thursdayEnable}
                                                 />
-                                                {/* <div className="error-show">
+                                                <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.thursdayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.thursdayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -936,7 +1075,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'fridayOpen')}
                                                     value={this.state.dataToPost.fridayOpen} isDisabled={!this.state.dataToPost.fridayEnable}
                                                 />
-                                                
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="fridayClose"
@@ -967,7 +1106,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'saturdayOpen')}
                                                     value={this.state.dataToPost.saturdayOpen} isDisabled={!this.state.dataToPost.saturdayEnable}
                                                 />
-                                                
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="saturdayClose"
@@ -975,14 +1114,14 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'saturdayClose')}
                                                     value={this.state.dataToPost.saturdayClose} isDisabled={!this.state.dataToPost.saturdayEnable}
                                                 />
-                                                {/* <div className="error-show">
+                                                <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.saturdayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.saturdayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         </div>
                                         <div className="hor-inline">
@@ -998,7 +1137,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'sundayOpen')}
                                                     value={this.state.dataToPost.sundayOpen} isDisabled={!this.state.dataToPost.sundayEnable}
                                                 />
-                                                
+
                                                 <span className="dash">-</span>
                                                 <Select className="cstm-select mini float-right"
                                                     options={optionTime} name="sundayClose"
@@ -1006,14 +1145,14 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={(e) => this.timeSelectChangeHandler(e, 'sundayClose')}
                                                     value={this.state.dataToPost.sundayClose} isDisabled={!this.state.dataToPost.sundayEnable}
                                                 />
-                                                {/* <div className="error-show">
+                                                <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.sundayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.sundayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
                                             </div>
                                         </div>
 
