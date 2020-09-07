@@ -4,6 +4,7 @@ import ROUTES from '../util/routes'
 import { toastr } from 'react-redux-toastr'
 import { push } from 'connected-react-router'
 import language from '../constants/error-msg-definitions'
+import {logout} from "./authAction";
 
 const getCategoryListRequest = () => ({ type: actionType.GET_CATEGORY_LIST_REQUEST })
 const getCategoryListSuccess = (payload) => ({ type: actionType.GET_CATEGORY_LIST_SUCCESS, payload })
@@ -23,39 +24,45 @@ const postMenuFormError = () => ({ type: actionType.POST_MENU_FORM_ERROR })
 
 const restaurantId = localStorage.getItem('restaurantId');
 
-const GET_CATEGORY_LIST_URL = '/api/menu/categories/' + restaurantId;
+const GET_CATEGORY_LIST_URL = '/api/menu/categories/';
 const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId;
 
 const GET_MENU_LIST_URL = 'api/menu/item/' + restaurantId;
 const UPDATE_MENU_URL = '/api/menu/item/';
 
-export const getCategoryListData = () => {
+export const getCategoryListData = (payload) => {
     return (dispatch, getState) => {
-        dispatch(getCategoryListRequest())
-        let URL = GET_CATEGORY_LIST_URL
-
-        if (URL) {
-            const state = getState()
-            const headers = { Authorization: `bearer ${state.auth.token}` }
-            let params = {}
-            axiosRequest.get(URL, { headers, params })
-                .then(response => {
-                    // console.log(response)
-                    dispatch(getCategoryListSuccess(response.data))
-                })
-                .catch(error => {
-                    const response = error.response
-                    console.log(error)
-                    dispatch(getCategoryListError())
-                    if (response && response.status === 401) {
-                        // logout(dispatch)
-                    }
-                })
+        if (!payload.restaurantId) {
+            // dispatch(logout())
+            logout(dispatch)
+            const lang = 'en'
+            toastr.error(language[lang].error, "Unauthorized access")
         } else {
-            dispatch(getCategoryListError())
+            dispatch(getCategoryListRequest())
+            let URL = GET_CATEGORY_LIST_URL + payload.restaurantId
+
+            if (URL) {
+                const state = getState()
+                const headers = { Authorization: `bearer ${state.auth.token}` }
+                let params = {}
+                axiosRequest.get(URL, { headers, params })
+                    .then(response => {
+                        // console.log(response)
+                        dispatch(getCategoryListSuccess(response.data))
+                    })
+                    .catch(error => {
+                        const response = error.response
+                        console.log(error)
+                        dispatch(getCategoryListError())
+                        if (response && response.status === 401) {
+                            // logout(dispatch)
+                        }
+                    })
+            } else {
+                dispatch(getCategoryListError())
+            }
         }
     }
-
 }
 
 export const getMenuListData = () => {

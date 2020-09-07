@@ -195,7 +195,7 @@ class ModifyMenu extends React.Component {
     }
 
     componentWillMount() {
-        this.props.getCategoryListData()
+        this.props.getCategoryListData({ restaurantId: localStorage.getItem('restaurantId') })
         this.props.getMenuListData()
     }
 
