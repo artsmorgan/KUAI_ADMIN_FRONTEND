@@ -82,6 +82,7 @@ export const redirectToLogin = () => {
 }
 
 export const logout = () => dispatch => {
+    console.log("logout req")
     localStorage.removeItem('accessToken')
     localStorage.removeItem('tokenExpiredAt')
     localStorage.removeItem('refreshToken')
