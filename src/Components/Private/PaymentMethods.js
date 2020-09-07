@@ -303,14 +303,14 @@ class PaymentMethods extends React.Component {
             <p style={{color: "red"}}>
               {this.state.errors.transferenceEnabled.transferenceNoCuenta}
             </p>
-            <label htmlFor="">Tipo De Cambio:</label>
+            <label htmlFor="">Moneda:</label>
             <input type="text" className="uni-input" name="transferenceTipoCambio"
                    onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceTipoCambio')}
                    value={this.state.dataToPost.transferenceTipoCambio}/>
             <p style={{color: "red"}}>
               {this.state.errors.transferenceEnabled.transferenceTipoCambio}
             </p>
-            <label htmlFor="">Cuenta Bancaria:</label>
+            <label htmlFor="">Banco Emisor:</label>
             <input type="text" className="uni-input" name="transferenceCuentaBancaria"
                    onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceCuentaBancaria')}
                    value={this.state.dataToPost.transferenceCuentaBancaria}/>
@@ -324,7 +324,7 @@ class PaymentMethods extends React.Component {
             <p style={{color: "red"}}>
               {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
             </p>
-            <label htmlFor="">Nombrar:</label>
+            <label htmlFor="">A nombre de:</label>
             <input type="text" className="uni-input" name="transferenceNombrar"
                    onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNombrar')}
                    value={this.state.dataToPost.transferenceNombrar}/>
