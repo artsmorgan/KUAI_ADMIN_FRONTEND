@@ -31,6 +31,8 @@ import {
 import {
     getCategoryListData,
     updateCategoryFormData,
+    getMenuListData,
+    postMenuFormData
 } from './menuAction'
 import {
     getControlCenterMethodFormData,
@@ -64,6 +66,9 @@ export {
 
     getCategoryListData,
     updateCategoryFormData,
+    getMenuListData,
+    postMenuFormData,
+
     getControlCenterMethodFormData,
 
     getDefaultConfigData
