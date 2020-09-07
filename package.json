@@ -13,6 +13,7 @@
     "bootstrap": "^4.5.1",
     "bootstrap-switch-button-react": "^1.2.0",
     "connected-react-router": "^4.5.0",
+    "firebase": "^7.19.1",
     "history": "^4.10.1",
     "jquery": "^3.5.1",
     "react": "^16.9.0",
