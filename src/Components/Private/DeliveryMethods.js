@@ -147,8 +147,12 @@ class DeliveryMethods extends React.Component {
 
   }
 
-  getBool(val) {
-    return !!JSON.parse(String(val).toLowerCase());
+  getBool(string) {
+    switch(string.toLowerCase().trim()){
+      case "true": case "yes": case "1": return true;
+      case "false": case "no": case "0": case null: return false;
+      default: return Boolean(string);
+    }
   }
 
   componentDidUpdate(previousProps) {
@@ -293,7 +297,7 @@ class DeliveryMethods extends React.Component {
         </div>
         <div className={"collapse-content " + (this.state.dataToPost.paraLlevarEnabled ? '' : 'collapse')}>
           <div className="col">
-            <label htmlFor="">Delivery</label>
+            <label htmlFor="">Zona de Entrega</label>
             <textarea name="" id="" cols="30" rows="10" className="uni-input tarea" name="entrega"
                       onChange={(e) => this.inputChangeHandler(e, 'deliveryOptions')}
                       value={this.state.dataToPost.deliveryOptions}></textarea>
@@ -408,7 +412,7 @@ class DeliveryMethods extends React.Component {
         </div>
         <div className={"collapse-content " + (this.state.dataToPost.entregaParqueoEnabled ? '' : 'collapse')}>
           <div className="col">
-            <label htmlFor="">Delivery</label>
+            <label htmlFor="">Zona de Entrega</label>
             <textarea name="" id="" cols="30" rows="10" className="uni-input tarea" name="entrega"
                       onChange={(e) => this.inputChangeHandler(e, 'entregaParqueoOptions')}
                       value={this.state.dataToPost.entregaParqueoOptions}></textarea>
