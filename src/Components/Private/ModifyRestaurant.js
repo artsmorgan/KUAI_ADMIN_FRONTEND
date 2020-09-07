@@ -526,22 +526,30 @@ class ModifyRestaurant extends React.Component {
         ];
 
         const optionTime = [
+            { value: "12:00 am", label: "12:00 am", name: 'time' },
+            { value: "01:00 am", label: "01:00 am", name: 'time' },
+            { value: "02:00 am", label: "02:00 am", name: 'time' },
+            { value: "03:00 am", label: "03:00 am", name: 'time' },
+            { value: "04:00 am", label: "04:00 am", name: 'time' },
+            { value: "05:00 am", label: "05:00 am", name: 'time' },
+            { value: "06:00 am", label: "06:00 am", name: 'time' },
+            { value: "07:00 am", label: "07:00 am", name: 'time' },
             { value: "08:00 am", label: "08:00 am", name: 'time' },
             { value: "09:00 am", label: "09:00 am", name: 'time' },
             { value: "10:00 am", label: "10:00 am", name: 'time' },
             { value: "11:00 am", label: "11:00 am", name: 'time' },
             { value: "12:00 pm", label: "12:00 pm", name: 'time' },
-            { value: "01:00 pm", label: "01:00 pm", name: 'time' },
-            { value: "02:00 pm", label: "02:00 pm", name: 'time' },
-            { value: "03:00 pm", label: "03:00 pm", name: 'time' },
-            { value: "04:00 pm", label: "04:00 pm", name: 'time' },
-            { value: "05:00 pm", label: "05:00 pm", name: 'time' },
-            { value: "06:00 pm", label: "06:00 pm", name: 'time' },
-            { value: "07:00 pm", label: "07:00 pm", name: 'time' },
-            { value: "08:00 pm", label: "08:00 pm", name: 'time' },
-            { value: "09:00 pm", label: "09:00 pm", name: 'time' },
-            { value: "10:00 pm", label: "10:00 pm", name: 'time' },
-            { value: "11:00 pm", label: "11:00 pm", name: 'time' }
+            // { value: "01:00 pm", label: "01:00 pm", name: 'time' },
+            // { value: "02:00 pm", label: "02:00 pm", name: 'time' },
+            // { value: "03:00 pm", label: "03:00 pm", name: 'time' },
+            // { value: "04:00 pm", label: "04:00 pm", name: 'time' },
+            // { value: "05:00 pm", label: "05:00 pm", name: 'time' },
+            // { value: "06:00 pm", label: "06:00 pm", name: 'time' },
+            // { value: "07:00 pm", label: "07:00 pm", name: 'time' },
+            // { value: "08:00 pm", label: "08:00 pm", name: 'time' },
+            // { value: "09:00 pm", label: "09:00 pm", name: 'time' },
+            // { value: "10:00 pm", label: "10:00 pm", name: 'time' },
+            // { value: "11:00 pm", label: "11:00 pm", name: 'time' }
         ];
 
 
@@ -720,13 +728,13 @@ class ModifyRestaurant extends React.Component {
                                             {/*    {this.validator.message('province', this.state.dataToPost.province, 'required')}*/}
                                             {/*</p>*/}
 
-                                            <Select className="cstm-select f-w"  options={optionProvince}
+                                            {/* <Select className="cstm-select f-w"  options={optionProvince}
                                                 name="province" placeholder="Provincia"
                                                 onChange={this.selectChangeHandler}
                                                 value={this.state.dataToPost.province} />
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
-                                            </p>
+                                            </p> */}
                                             <label htmlFor="">CANTON:</label><br />
                                             <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
