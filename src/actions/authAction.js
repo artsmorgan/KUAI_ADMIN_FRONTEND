@@ -10,7 +10,7 @@ const postLoginSuccess = (payload) => ({ type: actionType.LOGIN_POST_SUCCESS, pa
 const postLoginError = () => ({ type: actionType.LOGIN_POST_ERROR })
 const setLoginCred = (payload) => ({ type: actionType.SET_LOGIN_CRED, payload })
 const flushLoginCred = () => ({ type: actionType.FLUSH_LOGIN_CRED })
-const LOGIN_URL = '/api/login'
+const LOGIN_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/login'
 
 export const postLoginForm = (payload) => {
     return (dispatch, getState) => {

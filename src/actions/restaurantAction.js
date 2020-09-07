@@ -12,8 +12,9 @@ const getRestaurantFormError = () => ({ type: actionType.GET_RESTAURANT_FORM_ERR
 const postRestaurantFormRequest = () => ({ type: actionType.POST_RESTAURANT_FORM_REQUEST })
 const postRestaurantFormSuccess = (payload) => ({ type: actionType.POST_RESTAURANT_FORM_SUCCESS, payload })
 const postRestaurantFormError = () => ({ type: actionType.POST_RESTAURANT_FORM_ERROR })
-const GET_RESTAURANT_URL = '/api/restaurant/';
-const UPDATE_RESTAURANT_URL = '/api/restaurant/';
+const GET_RESTAURANT_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/restaurant/';
+const UPDATE_RESTAURANT_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/restaurant/';
+const ADDRESS_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/address/';
 
 export const getRestaurantFormData = (payload) => {
     return (dispatch, getState) => {
@@ -26,7 +27,7 @@ export const getRestaurantFormData = (payload) => {
             let params = {}
             axiosRequest.get(URL, { headers, params })
                 .then(response => {
-                    // console.log(response)
+                    console.log(response)
                     dispatch(getRestaurantFormSuccess(response.data))
                 })
                 .catch(error => {
@@ -89,3 +90,32 @@ export const updateRestaurantFormData = (payload) => {
 
 }
 
+export const getCantonesFromAPI = async (data) => {
+    
+    const cantones  =  await axiosRequest.get(`${ADDRESS_URL}cantones/${data.value}`,{
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+    }).catch((error)=>{
+        toastr.error('Error', 'No se ha podido optener los cantones')
+    })
+
+   
+    return cantones.data
+    
+}
+
+export const getDistritosFromAPI = async (provincia, canton) => {
+    
+    const distritos  =  await axiosRequest.get(`${ADDRESS_URL}distritos/${provincia}/${canton}`,{
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+          },
+    }).catch((error)=>{
+        toastr.error('Error', 'No se ha podido optener los cantones')
+    })
+
+   
+    return distritos.data
+    
+}

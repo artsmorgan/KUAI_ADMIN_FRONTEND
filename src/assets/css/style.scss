@@ -658,6 +658,10 @@ body {
     margin-bottom: 20px;
     width: 47%;
   }
+  .cstm-select-full {
+    margin-bottom: 20px;
+    width: 100%;
+  }
   .uni-input {
     margin-bottom: 20px;
   }
@@ -782,7 +786,9 @@ body {
     padding-bottom: 50px;
   }
 }
-
+.cstm-select-full{
+  width: 100%;
+}
 .cstm-select {
   &.mini {
     .css-yk16xz-control {

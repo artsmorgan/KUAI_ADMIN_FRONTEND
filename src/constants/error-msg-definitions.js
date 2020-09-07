@@ -1,12 +1,12 @@
 const language = {
     en: {
-        invalidCred: 'Invalid credentials',
-        warning: 'Warning',
+        invalidCred: 'Credenciales invalidas',
+        warning: 'Precaución',
         error: 'Error',
-        success: 'Success',
+        success: 'Se ha guardado con éxito',
         registerSuccess: 'Registration success',
-        loginSuccess: 'Login success',
-        postFailed: 'Form post failed',
+        loginSuccess: 'Has  ingresado con exito',
+        postFailed: 'Error',
         validationError: 'Invalid field(s)',
     }
 }
