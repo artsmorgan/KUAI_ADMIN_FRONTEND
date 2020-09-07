@@ -706,7 +706,7 @@ body {
         margin-top: -40px;
         margin-left: 20px;
         background-size: cover !important;
-        
+
         .overlay {
           position: absolute;
           width: 100%;
@@ -973,7 +973,7 @@ body {
         display: inline-block;
         width: 100%;
         padding: 15px 20px 10px 10px;
-    
+
         p {
           font-size: 14px;
           font-weight: 600;
@@ -1535,9 +1535,9 @@ body {
   }
 }
 
-@media only screen 
-  and (min-device-width: 320px) 
-  and (max-device-width: 896px) { 
+@media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 896px) {
 
     .collapse-area .collapse-container .collapse-header span{
       font-size: 12px;
@@ -1745,10 +1745,10 @@ body {
       display: block;
     }
 }
-@media only screen 
-  and (min-device-width: 320px) 
+@media only screen
+  and (min-device-width: 320px)
   and (max-device-width: 896px)
-  and (-webkit-min-device-pixel-ratio: 2) { 
+  and (-webkit-min-device-pixel-ratio: 2) {
 
     .collapse-area .collapse-container .collapse-header span{
       font-size: 12px;
@@ -1837,10 +1837,10 @@ body {
       display: block;
     }
 }
-@media only screen 
-  and (min-device-width: 375px) 
+@media only screen
+  and (min-device-width: 375px)
   and (max-device-width: 896px)
-  and (-webkit-min-device-pixel-ratio: 3) { 
+  and (-webkit-min-device-pixel-ratio: 3) {
 
     .collapse-area .collapse-container .collapse-header span{
       font-size: 12px;
@@ -1930,8 +1930,8 @@ body {
     }
 }
 
-@media only screen 
-  and (min-device-width: 320px) 
+@media only screen
+  and (min-device-width: 320px)
   and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71) {
     .hor-inline .time-block{
@@ -1951,3 +1951,10 @@ body {
       display: block;
     }
   }
+
+
+.collapse-content {
+  textarea{
+    padding: 10px;
+  }
+}
