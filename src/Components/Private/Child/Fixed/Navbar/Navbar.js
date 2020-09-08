@@ -62,6 +62,16 @@ class Navbar extends React.Component {
         $(".sidebar-wrapper").removeClass('collapsed')
     }
 
+    getStyle = () => {
+        let restaurantProfilePicture = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
+        return {
+                    background: 'url('+ restaurantProfilePicture +') no-repeat',
+                    backgroundSize: '100% 100%',
+                    width: "50px", height: "50px", marginTop: "5px",
+                    borderRadius: "50px"
+                }
+    }
+
     render() {
         let restaurantProfilePicture = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
         let restaurantName = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantName;
@@ -84,7 +94,8 @@ class Navbar extends React.Component {
                         </div>
                         <div className="float-right" style={{height: '60px', position: 'relative'}}>
                             <div className="avatar">
-                                <img src={restaurantProfilePicture} alt="User Avatar" style={{width: "50px", height: "50px"}}/>
+                                <div className="headerImage" style={this.getStyle()}></div> 
+                                
                             </div>
                             <Dropdown className="cstm-drop">
                                 <Dropdown.Toggle  id="dropdown-basic">
