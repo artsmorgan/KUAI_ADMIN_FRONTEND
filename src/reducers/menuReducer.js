@@ -1,6 +1,6 @@
 import actionType from '../actions/actionTypes'
 
-const initialState = {categories: {loading: true, categories: []}, dishes: {loading: true, dishes: []}}
+const initialState = {categories: {loading: true, categories: []}, dishes: {loading: false, dishes: []}}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -16,14 +16,15 @@ export default (state = initialState, action) => {
       return {...state, categories: {loading: false, categories: []}}
 
     case actionType.GET_MENU_LIST_REQUEST:
-      return {...state, loading: true}
+      return {...state, dishes: {loading: true, dishes: []}}
 
     case actionType.GET_MENU_LIST_SUCCESS:
       state['MENU_LIST'] = action.payload
-      return {...state, loading: false}
+      const dishes = action.payload.response.productItemList ? JSON.parse(action.payload.response.productItemList) : []
+      return {...state, dishes: {loading: false, dishes}}
 
     case actionType.GET_MENU_LIST_ERROR:
-      return {...state, loading: false}
+      return {...state, dishes: {loading: false, dishes: []}}
 
     case actionType.POST_CATEGORY_FORM_REQUEST:
       return {...state, loading: true}

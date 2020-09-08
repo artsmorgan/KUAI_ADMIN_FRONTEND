@@ -30,31 +30,7 @@ class ModifyMenu extends React.Component {
     super(props);
 
     this.state = {
-      show: false,
-      width: 0,
-      mobile: false,
-      categoryDataToPost: {},
-      formTab: {
-        menuTab: true,
-        categoriesTab: true,
-        newMenuItem: false
-      },
-      categoryList: [],
-      categoryListToUpdate: [],
-
-      categorySelectedOption: null,
-      categoryOptions: [],
-
-      menuDataToPost: {
-        id: '',
-        name: '',
-        description: '',
-        categoryId: '',
-        price: '',
-        isAvailable: "true"
-      },
-      menuList: []
-
+      selectedCategory: ''
     }
 
     this.newMenuItem = this.newMenuItem.bind(this);
@@ -100,14 +76,6 @@ class ModifyMenu extends React.Component {
     }
   };
 
-  addMenuProcessSubmit() {
-    let obj = this.state.menuDataToPost;
-    obj['id'] = uuid();
-    this.setState({menuDataToPost: obj}, () => {
-      // console.log(this.state.menuDataToPost)
-      this.props.postMenuFormData(this.state.menuDataToPost)
-    });
-  }
 
   processSubmit() {
     let {categoryDataToPost} = this.state
@@ -258,6 +226,10 @@ class ModifyMenu extends React.Component {
     })
   }
 
+  loadMenu(id, name) {
+    this.setState({selectedCategory: {id, name}});
+    this.props.getMenuListData(id);
+  }
 
   render() {
     return (
@@ -282,9 +254,9 @@ class ModifyMenu extends React.Component {
                   </div>
 
 
-                  <Categories/>
-                  <Dishes/>
-
+                  <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
+                  <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
+                          selectedCategory={this.state.selectedCategory}/>
                 </div>
               </div>
             </div>

@@ -26,7 +26,7 @@ const restaurantId = localStorage.getItem('restaurantId');
 const GET_CATEGORY_LIST_URL = '/api/menu/categories/' + restaurantId;
 const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId;
 
-const GET_MENU_LIST_URL = 'api/menu/item/' + restaurantId;
+const GET_MENU_LIST_URL = 'api/menu/item/';
 const UPDATE_MENU_URL = '/api/menu/item/';
 
 export const getCategoryListData = () => {
@@ -58,10 +58,10 @@ export const getCategoryListData = () => {
 
 }
 
-export const getMenuListData = () => {
+export const getMenuListData = (id) => {
     return (dispatch, getState) => {
         dispatch(getMenuListRequest())
-        let URL = GET_MENU_LIST_URL
+        let URL = GET_MENU_LIST_URL+id
 
         if (URL) {
             const state = getState()
@@ -129,8 +129,7 @@ export const updateCategoryFormData = (payload, callback) => {
 
 }
 
-export const postMenuFormData = (payload) => {
-    console.log(payload)
+export const postMenuFormData = (payload, callback) => {
     return (dispatch, getState) => {
         dispatch(postMenuFormRequest())
         let URL = UPDATE_MENU_URL + payload.categoryId
@@ -142,7 +141,9 @@ export const postMenuFormData = (payload) => {
             formattedPayload.push(payload)
             formattedPayload = JSON.stringify(formattedPayload)
             // console.log(formattedPayload)
-            axiosRequest.post(URL, {restaurantId: restaurantId,productItemList: formattedPayload}, { headers })
+            const data = {restaurantId: restaurantId, products: formattedPayload}
+            debugger;
+            axiosRequest.post(URL, data, { headers })
                 .then(response => {
                     const data = response.data
                     console.log(response)
@@ -150,6 +151,9 @@ export const postMenuFormData = (payload) => {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postMenuFormSuccess(data))
                         dispatch(push(ROUTES.MODIFY_MENU))
+                        getMenuListData(payload.categoryId);
+                        if(callback)
+                            callback();
                     } else {
                         const response = data.data
                         toastr.error(language[lang].error, response.message)

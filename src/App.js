@@ -52,7 +52,6 @@ class App extends React.Component {
 
                     <Redirect to={ROUTES.LOGIN}/>
                 </Switch>
-                <Loader loading={loading} color={'#B40DFF'}/>
                 <Toaster/>
             </React.Fragment>
         );
