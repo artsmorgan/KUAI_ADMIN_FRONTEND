@@ -1,6 +1,6 @@
 import actionType from '../actions/actionTypes'
 
-const initialState = {loading: false}
+const initialState = {loading: true}
 
 export default (state = initialState, action) => {
     switch (action.type) {

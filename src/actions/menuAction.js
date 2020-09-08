@@ -88,7 +88,7 @@ export const getMenuListData = () => {
 }
 
 
-export const updateCategoryFormData = (payload) => {
+export const updateCategoryFormData = (payload, callback) => {
     return (dispatch, getState) => {
         dispatch(postCategoryFormRequest())
         let URL = UPDATE_CATEGORY_URL
@@ -105,6 +105,8 @@ export const updateCategoryFormData = (payload) => {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postCategoryFormSuccess(data))
                         dispatch(push(ROUTES.MODIFY_MENU))
+                        if (callback)
+                            callback();
                     } else {
                         const response = data.data
                         toastr.error(language[lang].error, response.message)

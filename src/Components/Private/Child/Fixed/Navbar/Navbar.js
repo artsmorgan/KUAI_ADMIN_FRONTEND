@@ -67,14 +67,7 @@ class Navbar extends React.Component {
     }
 
     render() {
-        try {
-            const {defaultConfig} = this.props
-            // console.log(defaultConfig['DEFAULT_CONFIG'])
-          //  this.setState({totalOrders: defaultConfig['DEFAULT_CONFIG'].totalTodayOrders})
-           // this.setState({totalSales: defaultConfig['DEFAULT_CONFIG'].totalTodaySales})
-        } catch (e) {
-
-        }
+        let restaurantName = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantName;
         const {width, totalOrders, totalSales} = this.state
         if (width > 1024) {
             return (
@@ -98,8 +91,7 @@ class Navbar extends React.Component {
                             </div>
                             <Dropdown className="cstm-drop">
                                 <Dropdown.Toggle  id="dropdown-basic">
-                                    Costa Rica
-                                    Beer factory
+                                    {restaurantName}
                                 </Dropdown.Toggle>
 
                                 {/* <Dropdown.Menu>
