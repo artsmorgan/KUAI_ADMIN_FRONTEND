@@ -32,13 +32,6 @@ class ForgotPassword extends React.Component {
         });
     }
 
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
-
     showForgetPasswordSuccessModal = () => {
         this.setState({show: true});
     }
@@ -84,7 +77,7 @@ class ForgotPassword extends React.Component {
                 this.showForgetPasswordSuccessModal()
             }
         }).catch(err => {
-            this.handleError(err)
+            console.log(err)
         })
     }
 
