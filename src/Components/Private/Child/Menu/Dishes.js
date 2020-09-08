@@ -12,9 +12,7 @@ class Dishes extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      formTab: false,
-      menuList: [],
-      selectedDish: null
+      selectedDish: null,
     }
     this.validator = new SimpleReactValidator({
       locale: 'es',
@@ -36,6 +34,29 @@ class Dishes extends Component {
     this.setState({selectedDish: obj})
   }
 
+  newMenuItem() {
+    const newDish = {
+      id: uuid(),
+      isAvailable: true,
+      name: '',
+      description: '',
+      categoryId: this.props.selectedCategory.id,
+      price: 0,
+      upsell: false,
+      recomendacion: false,
+      promo: false,
+      specialPrice: false,
+      specialPriceAmount: 0,
+      discount: false,
+      discountPercentage: 0,
+      llevaXpagaY: false,
+      lleva: 0,
+      paga: 0,
+      envioGratis: false,
+    }
+    this.setState({selectedDish: newDish});
+  }
+
   render() {
     if (this.props.categories.loading || this.props.dishes.loading) {
       return <LoaderInScreen/>
@@ -46,7 +67,7 @@ class Dishes extends Component {
               className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "}>
             <h3 className="mb-hidden">Menú</h3>
             <div className="rotator-container lg">
-              <div className="btn-theme add-menu" onClick={this.newMenuItem}>
+              <div className={`btn-theme add-menu ${this.props.selectedCategory ? '' : 'hidden'}`}>
                 <div className="add-item">
                   <span>+</span>
                 </div>
@@ -55,7 +76,9 @@ class Dishes extends Component {
                   <p className="dummy"></p>
                   <p className="dummy" style={{width: '80px'}}></p>
                   <p className="dummy" style={{width: '80px'}}></p>
-                  <button className="btn-add-menu"><span>+</span>AÑADIR</button>
+                  <button className="btn-add-menu" onClick={()=>{this.newMenuItem()}}>
+                  <span>+</span>AÑADIR</button>
+
                 </div>
               </div>
               <div className="rotator-scroll">
@@ -72,9 +95,7 @@ class Dishes extends Component {
   }
 
   renderNoItems() {
-    if (this.state.selectedDish) {
-      this.setState({selectedDish: null})
-    }
+
     return <>
       <h6 className="lead" style={{color: "grey"}}><b>¡Aún no se agregó ningún menú!</b></h6>
     </>
@@ -141,16 +162,24 @@ class Dishes extends Component {
       obj['id'] = uuid();
     }
     if (!obj.specialPrice) {
-      obj.specialPriceAmount = '';
+      obj.specialPriceAmount = 0;
     }
     if (!obj.discount) {
-      obj.discountPercentage = '';
+      obj.discountPercentage = 0;
     }
     if (!obj.llevaXpagaY) {
-      obj.lleva = '';
-      obj.paga = '';
+      obj.lleva = 0;
+      obj.paga = 0;
     }
-    this.props.postMenuFormData(obj, () => {
+
+    const dishes = [];
+    this.props.dishes.dishes.forEach(dish => {
+      if (dish.id !== obj.id) {
+        dishes.push(dish);
+      }
+    })
+    dishes.push(obj);
+    this.props.postMenuFormData(dishes, this.props.selectedCategory.id, () => {
       this.setState({selectedDish: null})
       this.props.loadMenu(this.props.selectedCategory.id, this.props.selectedCategory.name);
     })

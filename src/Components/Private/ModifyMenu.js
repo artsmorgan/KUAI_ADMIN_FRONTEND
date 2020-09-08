@@ -1,10 +1,9 @@
 import React from 'react';
-import Select from 'react-select';
 import {Button, Nav} from 'react-bootstrap';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
-import Checkbox from '@opuscapita/react-checkbox';
+
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import menuImage from "../../assets/images/food.png";
+
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
@@ -15,10 +14,7 @@ import {
   redirectToUrl,
   updateCategoryFormData
 } from '../../actions'
-import Modal from "react-bootstrap/Modal";
-import SupportModal from "./Child/Fixed/Sidebar/SupportModal";
 import SimpleReactValidator from "simple-react-validator";
-import ROUTES from "../../util/routes";
 import {uuid} from 'uuidv4';
 import $ from 'jquery'
 import Categories from "./Child/Menu/Categories";
@@ -252,8 +248,6 @@ class ModifyMenu extends React.Component {
                       </Nav.Item>
                     </Nav>
                   </div>
-
-
                   <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
                   <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
                           selectedCategory={this.state.selectedCategory}/>

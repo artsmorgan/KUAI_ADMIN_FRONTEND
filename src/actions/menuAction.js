@@ -129,20 +129,15 @@ export const updateCategoryFormData = (payload, callback) => {
 
 }
 
-export const postMenuFormData = (payload, callback) => {
+export const postMenuFormData = (payload, categoryId, callback) => {
     return (dispatch, getState) => {
         dispatch(postMenuFormRequest())
-        let URL = UPDATE_MENU_URL + payload.categoryId
+        let URL = UPDATE_MENU_URL + categoryId
         if (URL) {
             const state = getState()
             const lang = 'en'
             const headers = { Authorization: `bearer ${state.auth.token}` }
-            let formattedPayload = [];
-            formattedPayload.push(payload)
-            formattedPayload = JSON.stringify(formattedPayload)
-            // console.log(formattedPayload)
-            const data = {restaurantId: restaurantId, products: formattedPayload}
-            debugger;
+            const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
             axiosRequest.post(URL, data, { headers })
                 .then(response => {
                     const data = response.data
