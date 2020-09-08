@@ -1,10 +1,9 @@
 import React from 'react';
-import Select from 'react-select';
 import {Button, Nav} from 'react-bootstrap';
 import Navbar from "./Child/Fixed/Navbar/Navbar";
-import Checkbox from '@opuscapita/react-checkbox';
+
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import menuImage from "../../assets/images/food.png";
+
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
@@ -15,10 +14,7 @@ import {
     redirectToUrl,
     updateCategoryFormData
 } from '../../actions'
-import Modal from "react-bootstrap/Modal";
-import SupportModal from "./Child/Fixed/Sidebar/SupportModal";
 import SimpleReactValidator from "simple-react-validator";
-import ROUTES from "../../util/routes";
 import {uuid} from 'uuidv4';
 import $ from 'jquery'
 import Categories from "./Child/Menu/Categories";
@@ -29,33 +25,9 @@ class ModifyMenu extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            show: false,
-            width: 0,
-            mobile: false,
-            categoryDataToPost: {},
-            formTab: {
-                menuTab: true,
-                categoriesTab: true,
-                newMenuItem: false
-            },
-            categoryList: [],
-            categoryListToUpdate: [],
-
-            categorySelectedOption: null,
-            categoryOptions: [],
-
-            menuDataToPost: {
-                id: '',
-                name: '',
-                description: '',
-                categoryId: '',
-                price: '',
-                isAvailable: "true"
-            },
-            menuList: []
-
-        }
+    this.state = {
+      selectedCategory: ''
+    }
 
         this.newMenuItem = this.newMenuItem.bind(this);
 
@@ -100,14 +72,6 @@ class ModifyMenu extends React.Component {
         }
     };
 
-    addMenuProcessSubmit() {
-        let obj = this.state.menuDataToPost;
-        obj['id'] = uuid();
-        this.setState({menuDataToPost: obj}, () => {
-            // console.log(this.state.menuDataToPost)
-            this.props.postMenuFormData(this.state.menuDataToPost)
-        });
-    }
 
     processSubmit() {
         let {categoryDataToPost} = this.state
@@ -258,38 +222,40 @@ class ModifyMenu extends React.Component {
         })
     }
 
+  loadMenu(id, name) {
+    this.setState({selectedCategory: {id, name}});
+    this.props.getMenuListData(id);
+  }
 
-    render() {
-        return (
-            <>
-                <Sidebar/>
-                <div className="wrapper">
-                    <Navbar/>
-                    <div className="flex-area conten container-fluid">
-                        <div className="mod-rest-container">
-                            <div className="row clearfix">
-                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="link-1">
-                                        <Nav.Item>
-                                            <Nav.Link href="#" eventKey="link-1"
-                                                      onClick={(e) => this.activateTab(e, 'menuTab')}>Menú</Nav.Link>
-                                        </Nav.Item>
-                                        <Nav.Item>
-                                            <Nav.Link href="#" eventKey="link-2"
-                                                      onClick={(e) => this.activateTab(e, 'categoriesTab')}>Categorías</Nav.Link>
-                                        </Nav.Item>
-                                    </Nav>
-                                </div>
-
-
-                                <Categories/>
-                                <Dishes/>
-
-                            </div>
-                        </div>
-                    </div>
+  render() {
+    return (
+        <>
+          <Sidebar/>
+          <div className="wrapper">
+            <Navbar/>
+            <div className="flex-area conten container-fluid">
+              <div className="mod-rest-container">
+                <div className="row clearfix">
+                  <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="link-1">
+                      <Nav.Item>
+                        <Nav.Link href="#" eventKey="link-1"
+                                  onClick={(e) => this.activateTab(e, 'menuTab')}>Menú</Nav.Link>
+                      </Nav.Item>
+                      <Nav.Item>
+                        <Nav.Link href="#" eventKey="link-2"
+                                  onClick={(e) => this.activateTab(e, 'categoriesTab')}>Categorías</Nav.Link>
+                      </Nav.Item>
+                    </Nav>
+                  </div>
+                  <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
+                  <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
+                          selectedCategory={this.state.selectedCategory}/>
                 </div>
-            </>
+              </div>
+            </div>
+          </div>
+        </>
 
         );
     }

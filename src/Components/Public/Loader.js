@@ -1,6 +1,6 @@
 import React from 'react'
 import { css } from '@emotion/core';
-import { PulseLoader, DotLoader } from 'react-spinners'
+import { PulseLoader } from 'react-spinners'
 
 
 const Loader = (props) => {
@@ -8,7 +8,7 @@ const Loader = (props) => {
     const override = css`display:block; margin:auto;`;
     const { loading, color } = props
     return (
-        <DotLoader loading={ loading } css={override} sizeUnit={"px"} size={20} color={color}/>
+        <PulseLoader loading={ loading } css={override} sizeUnit={"px"} size={20} color={color}/>
     )
 }
 
