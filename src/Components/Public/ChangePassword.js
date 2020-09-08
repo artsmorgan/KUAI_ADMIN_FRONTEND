@@ -38,13 +38,6 @@ class ChangePassword extends React.Component {
         });
     }
 
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
-
     inputChangeHandler = (e) => {
         let obj = this.state.dataToPost;
         obj[e.target.name] = e.target.value;
@@ -61,29 +54,7 @@ class ChangePassword extends React.Component {
     };
 
     processSubmit() {
-        const url = endpointURL // dummy
-        const headers = {
-            'Content-Type': 'application/json, charset=UTF-8', // dummy
-        };
-        // const data = this.state.dataToPost;
-        // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
-
-        // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                this.props.history.push('/change-password/success')
-            }
-        }).catch(err => {
-            this.handleError(err)
-        })
+        this.props.history.push('/change-password/success')
     }
 
     render() {

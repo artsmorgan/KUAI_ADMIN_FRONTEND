@@ -18,8 +18,7 @@ class Navbar extends React.Component {
             width: 0,
             myOrders: [],
             totalOrders: 0,
-            totalSales: 0,
-            modifyRestaurantChanges: false
+            totalSales: 0
         }
 
         window.addEventListener("resize", this.updateDimension);
@@ -27,11 +26,6 @@ class Navbar extends React.Component {
 
     componentWillMount() {
         this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
-    }
-
-    componentWillReceiveProps(props) {
-        console.log(props.modifyRestaurantChanges)
-        this.setState({modifyRestaurantChanges: props.modifyRestaurantChanges})
     }
 
     updateDimension = () => {
@@ -56,19 +50,9 @@ class Navbar extends React.Component {
         this.setState({totalSales: totalSales})
     }
 
-    getTotalOrders = () => {
-        this.setState({totalOrders: this.state.myOrders.length})
-    }
-
     componentDidMount() {
         this.updateDimension();
     }
-
-/*    componentDidUpdate(prevProps, prevState, snapshot) {
-        if(this.state.modifyRestaurantChanges) {
-            this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
-        }
-    }*/
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimension);

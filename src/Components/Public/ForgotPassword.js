@@ -6,9 +6,6 @@ import Modal from "react-bootstrap/Modal";
 import SimpleReactValidator from 'simple-react-validator';
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
-import * as APITools from '../../util/apiX'
-
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
 class ForgotPassword extends React.Component {
     constructor(props) {
@@ -56,29 +53,7 @@ class ForgotPassword extends React.Component {
     };
 
     processSubmit() {
-        const url = endpointURL // dummy
-        const headers = {
-            'Content-Type': 'application/json, charset=UTF-8', // dummy
-        };
-        // const data = this.state.dataToPost;
-        // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
-
-        // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                this.showForgetPasswordSuccessModal()
-            }
-        }).catch(err => {
-            console.log(err)
-        })
+        this.showForgetPasswordSuccessModal()
     }
 
     render() {
