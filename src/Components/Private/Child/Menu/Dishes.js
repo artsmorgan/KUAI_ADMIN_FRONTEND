@@ -22,6 +22,13 @@ class Dishes extends Component {
     });
   }
 
+  CheckboxChangeHandler = (e, switchName) => {
+    let obj = this.state.selectedDish;
+    let value = !obj[switchName];
+    obj[switchName] = value;
+    this.setState({selectedDish: obj});
+    // console.log(this.state.dataToPost)
+  }
 
   addMenuInputChangeHandler = (e) => {
     let obj = this.state.selectedDish
@@ -131,8 +138,17 @@ class Dishes extends Component {
   addMenuProcessSubmit() {
     let obj = this.state.selectedDish;
     if (!obj.id) {
-
       obj['id'] = uuid();
+    }
+    if (!obj.specialPrice) {
+      obj.specialPriceAmount = '';
+    }
+    if (!obj.discount) {
+      obj.discountPercentage = '';
+    }
+    if (!obj.llevaXpagaY) {
+      obj.lleva = '';
+      obj.paga = '';
     }
     this.props.postMenuFormData(obj, () => {
       this.setState({selectedDish: null})
@@ -148,6 +164,20 @@ class Dishes extends Component {
       this.validator.showMessages();
     }
   };
+
+  calculatePercentage() {
+    let percentage = this.state.selectedDish.discountPercentage;
+    if (!isNaN(percentage)) {
+      percentage = Number(percentage)
+      if (percentage > 0 && percentage < 100) {
+        return this.state.selectedDish.price - Math.round(this.state.selectedDish.price * (percentage / 100))
+      } else {
+        return ''
+      }
+    } else {
+      return ''
+    }
+  }
 
   renderDishEditor() {
     if (this.state.selectedDish === null) {
@@ -222,6 +252,118 @@ class Dishes extends Component {
             <p style={{color: "red"}}>
               {this.validator.message('name', this.state.selectedDish.price, 'required')}
             </p>
+
+
+            <div className="photo-area">
+              <div className="upload">
+                <div className="center">
+                  <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                       xmlns="http://www.w3.org/2000/svg">
+                    <g clipPath="url(#clip0)">
+                      <path
+                          d="M18.8282 14.1716C20.3903 15.7338 20.3903 18.2665 18.8282 19.8287C17.266 21.3908 14.7333 21.3908 13.1711 19.8287C11.609 18.2665 11.609 15.7338 13.1711 14.1716C14.7333 12.6095 17.266 12.6095 18.8282 14.1716Z"
+                          fill="white"/>
+                      <path
+                          d="M27.9999 5.99941H25.2361L23.2351 1.99927H8.76298L6.76386 6.00137L4.004 6.00629C1.80376 6.01022 0.0126439 7.80323 0.0107441 10.0045L0 25.9991C0 28.2052 1.794 30.0002 4.00014 30.0002H27.9999C30.2061 30.0002 32.0001 28.2062 32.0001 26V9.99948C32 7.79341 30.206 5.99941 27.9999 5.99941ZM15.9995 25C11.5882 25 7.99923 21.411 7.99923 16.9997C7.99923 12.5884 11.5882 8.99943 15.9995 8.99943C20.4108 8.99943 23.9998 12.5884 23.9998 16.9997C23.9998 21.411 20.4108 25 15.9995 25Z"
+                          fill="white"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0">
+                        <rect width="32" height="32" fill="white"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </div>
+                <label htmlFor="">Agregar Fotografia</label>
+              </div>
+              <div className="chk-area">
+                <div className='divP'>
+                  <Checkbox id="upsell" name="upsell"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'upsell')}
+                            checked={this.state.selectedDish.upsell}/>
+                  <label htmlFor="" className="chk-label">Upsell</label>
+                </div>
+                <div className='divP'>
+                  <Checkbox id="recomendacion" name="recomendacion"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'recomendacion')}
+                            checked={this.state.selectedDish.recomendacion}/>
+                  <label htmlFor="" className="chk-label">Recomendación</label>
+                </div>
+                <div className='divP'>
+                  <Checkbox id="promo" name="promo"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'promo')}
+                            checked={this.state.selectedDish.promo}/>
+                  <label htmlFor="" className="chk-label">Promoción</label>
+                </div>
+              </div>
+
+              <div className="promo-area">
+                <label htmlFor="">PROMOCIONES</label>
+                <div className='divP'>
+                  <Checkbox id="specialPrice" name="specialPrice"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'specialPrice')}
+                            checked={this.state.selectedDish.specialPrice}/>
+                  <label htmlFor="" className="chk-label">Precio especial</label>
+                </div>
+                <div className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
+                  <label htmlFor="">PRECIO PROMOCIÓN</label>
+                  <input type="text" className="uni-input" name="specialPriceAmount"
+                         onChange={this.addMenuInputChangeHandler}
+                         value={this.state.selectedDish.specialPriceAmount}/>
+                </div>
+              </div>
+              <div className="promo-area">
+                <div className='divP'>
+                  <Checkbox id="discount" name="discount"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'discount')}
+                            checked={this.state.selectedDish.discount}/>
+                  <label htmlFor="" className="chk-label">% de descuento</label>
+                </div>
+                <div className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
+                  <label htmlFor="">PORCENTAJE</label>
+                  <input type="text" className="uni-input" name="discountPercentage"
+                         onChange={this.addMenuInputChangeHandler} style={{width: "100px"}}
+                         value={this.state.selectedDish.discountPercentage}/>
+                  <p className="discounted">
+                    <span
+                        className="cross">₡{this.state.selectedDish.price}</span> | <span>₡{this.calculatePercentage()}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="promo-area">
+                <div className='divP'>
+                  <Checkbox id="llevaXpagaY" name="discount"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'llevaXpagaY')}
+                            checked={this.state.selectedDish.llevaXpagaY}/>
+                  <label htmlFor="" className="chk-label">Llleva “x”, paga
+                    “y”</label>
+                </div>
+                <div className={`promo-code ${this.state.selectedDish.llevaXpagaY ? '' : 'hidden'}`}>
+                  <div className="row">
+                    <div className="col">
+                      <label htmlFor="">LLEVA</label>
+                      <input type="text" className="uni-input" name="lleva"
+                             onChange={this.addMenuInputChangeHandler}
+                             value={this.state.selectedDish.lleva}/>
+                    </div>
+                    <div className="col">
+                      <label htmlFor="">PAGA</label>
+                      <input type="text" className="uni-input" name="paga"
+                             onChange={this.addMenuInputChangeHandler}
+                             value={this.state.selectedDish.paga}/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="promo-area">
+                <div className='divP'>
+                  <Checkbox id="envioGratis" name="discount"
+                            onChange={(e) => this.CheckboxChangeHandler(e, 'envioGratis')}
+                            checked={this.state.selectedDish.envioGratis}/>
+                  <label htmlFor="" className="chk-label">Envío gratis</label>
+                </div>
+              </div>
+            </div>
 
             <div className="row" style={{marginTop: '40px'}}>
               <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
