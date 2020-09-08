@@ -125,6 +125,8 @@ class ModifyRestaurant extends React.Component {
                 sundayClose: null,
                 owner: null,
             },
+
+            modifyRestaurantChanges: false
         };
 
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
@@ -183,6 +185,7 @@ class ModifyRestaurant extends React.Component {
                     .getDownloadURL()
                     .then(url => {
                         this.setState({ profileImageUrl: url });
+                        this.setState({ modifyRestaurantChanges: true });
                         const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
                                 docRef.update({
                                     profilePicture: url
@@ -225,6 +228,7 @@ class ModifyRestaurant extends React.Component {
                     .getDownloadURL()
                     .then(url => {
                         this.setState({ coverImageUrl: url });
+                        this.setState({ modifyRestaurantChanges: true });
                         const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
                                 docRef.update({
                                     coverPicture: url
@@ -365,21 +369,6 @@ class ModifyRestaurant extends React.Component {
 
     };
 
-
-    handleSuccess(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'success',
-            autoHideDuration: 3000,
-        });
-    }
-
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
-
     handleCustomValidation() {
 
         let days = weekDays;
@@ -457,6 +446,7 @@ class ModifyRestaurant extends React.Component {
     processSubmit() {
         if (this.processScheduleValue("post")) {
             this.props.updateRestaurantFormData({ restaurantId: localStorage.getItem('restaurantId'), form: this.state.dataToPost })
+            this.setState({ modifyRestaurantChanges: true });
         }
 
     }
@@ -678,7 +668,7 @@ class ModifyRestaurant extends React.Component {
             <>
                 <Sidebar />
                 <div className="wrapper">
-                    <Navbar />
+                    <Navbar modifyRestaurantChanges={this.state.modifyRestaurantChanges}/>
                     <div className="flex-area conten container-fluid">
                         <div className="mod-rest-container">
                             <form onSubmit={this.formSubmitHandler}>
