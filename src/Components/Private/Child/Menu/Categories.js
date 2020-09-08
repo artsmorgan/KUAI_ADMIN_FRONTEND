@@ -6,7 +6,7 @@ import LoaderInScreen from "../../../Public/LoaderInScreen";
 import {uuid} from "uuidv4";
 import {bindActionCreators} from "redux";
 import {
-  getCategoryListData,
+  getCategoryListData, getMenuListData,
   updateCategoryFormData
 } from "../../../../actions";
 import {connect} from "react-redux";
@@ -174,12 +174,13 @@ class Categories extends Component {
     })
   }
 
+
   renderCategoriesList() {
     let {categories} = this.props;
     return <>
       {
         categories.categories.map(category =>
-            <div className="rotator" key={category.id}>
+            <div className="rotator" key={category.id} onClick={() => this.props.loadMenu(category.id, category.name)}>
               <div className="directional">
                 <svg className="top" width="9" height="7" viewBox="0 0 9 7"
                      fill="none"
@@ -226,6 +227,10 @@ class Categories extends Component {
 }
 
 const mapStateToProps = ({menuReducer}) => ({categories: menuReducer.categories})
-const mapDispatchToProps = dispatch => bindActionCreators({updateCategoryFormData, getCategoryListData}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({
+  updateCategoryFormData,
+  getCategoryListData,
+  getMenuListData
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories)

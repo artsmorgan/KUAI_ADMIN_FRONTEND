@@ -42,6 +42,14 @@ import {
     getDefaultConfigData,
 } from './defaultConfigAction'
 
+import {
+    postForgotPassFormData,
+} from './forgotPasswordAction'
+
+import {
+    postTechSupportFormData,
+} from './techSupportAction'
+
 export {
     redirectToUrl,
     postLoginForm,
@@ -71,5 +79,9 @@ export {
 
     getControlCenterMethodFormData,
 
-    getDefaultConfigData
+    getDefaultConfigData,
+
+    postForgotPassFormData,
+
+    postTechSupportFormData
 }

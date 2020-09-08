@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
+const API_ENDPOINT = 'https://us-central1-kuai-test.cloudfunctions.net';
 const IMAGE_ENDPOINT = process.env.REACT_APP_IMAGE_ENDPOINT;
 
 const axiosRequest = axios.create({
