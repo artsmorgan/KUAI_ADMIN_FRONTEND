@@ -7,6 +7,12 @@ import SimpleReactValidator from 'simple-react-validator';
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
 
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {
+    postForgotPassFormData
+} from '../../actions'
+
 class ForgotPassword extends React.Component {
     constructor(props) {
         super(props);
@@ -15,7 +21,8 @@ class ForgotPassword extends React.Component {
             show: false,
             dataToPost: {
                 email: ''
-            }
+            },
+            forgotPassSuccess: false
         }
 
         SimpleReactValidator.addLocale('es', {
@@ -34,7 +41,9 @@ class ForgotPassword extends React.Component {
     }
 
     hideForgetPasswordSuccessModal = () => {
-        this.setState({show: false});
+        // this.setState({forgotPassSuccess: false});
+        this.state.forgotPassSuccess = false
+        console.log("hideForgetPasswordSuccessModal", this.state.forgotPassSuccess)
     }
 
     inputChangeHandler = (e) => {
@@ -53,7 +62,21 @@ class ForgotPassword extends React.Component {
     };
 
     processSubmit() {
-        this.showForgetPasswordSuccessModal()
+        this.props.postForgotPassFormData(this.state.dataToPost)
+        // this.showForgetPasswordSuccessModal()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        try {
+            const {forgotPassword} = this.props
+            this.setState({forgotPassSuccess: forgotPassword.success})
+            if(this.state.forgotPassSuccess) {
+                let obj = this.state.dataToPost;
+                obj['email'] = '';
+                this.setState({dataToPost: obj});
+            }
+        } catch (e) {
+        }
     }
 
     render() {
@@ -76,10 +99,10 @@ class ForgotPassword extends React.Component {
                     </form>
                 </div>
 
-                <Modal
+                {/*<Modal
                     className="cstm-modal"
                     size="md"
-                    show={this.state.show}
+                    show={this.state.forgotPassSuccess}
                     onHide={this.hideForgetPasswordSuccessModal}
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
@@ -102,10 +125,22 @@ class ForgotPassword extends React.Component {
                             </div>
                         </div>
                     </Modal.Body>
-                </Modal>
+                </Modal>*/}
             </>
         );
     }
 }
 
-export default ForgotPassword;
+const mapStateToProps = ({forgotPassword}) => ({
+    forgotPassword
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            postForgotPassFormData
+        },
+        dispatch
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword)

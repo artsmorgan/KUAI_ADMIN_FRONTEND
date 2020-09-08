@@ -1,4 +1,8 @@
 import React from "react";
+import {bindActionCreators} from "redux";
+import {postTechSupportFormData} from "../../../../../actions";
+import {connect} from "react-redux";
+import SimpleReactValidator from "simple-react-validator";
 
 
 class SupportModal extends React.Component {
@@ -8,13 +12,56 @@ class SupportModal extends React.Component {
         
         this.state = {
             form:true,
+            dataToPost: {
+                restaurantId: localStorage.getItem('restaurantId'),
+                motivo: '',
+                detalles: ''
+            },
         }
 
-       
+        SimpleReactValidator.addLocale('es', {
+            required: 'este campo es requerido'
+        });
+
+        this.validator = new SimpleReactValidator({
+            locale: 'es',
+            autoForceUpdate: this
+        });
     }
 
-    handleSubmit = () => {
-        this.setState({form:false})
+    inputChangeHandler = (e) => {
+        let obj = this.state.dataToPost;
+        obj[e.target.name] = e.target.value;
+        this.setState({dataToPost: obj});
+    };
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        if (this.validator.allValid()) {
+            this.setState({form:false})
+            this.processSubmit();
+        } else {
+            this.validator.showMessages();
+        }
+    }
+
+    processSubmit() {
+        this.props.postTechSupportFormData(this.state.dataToPost)
+        // this.showForgetPasswordSuccessModal()
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        try {
+            const {techSupportReq} = this.props
+            // this.setState({form: !techSupportReq.success})
+            /*if(techSupportReq.success) {
+                let obj = this.state.dataToPost;
+                obj['motivo'] = '';
+                obj['detalles'] = '';
+                this.setState({dataToPost: obj});
+            }*/
+        } catch (e) {
+        }
     }
 
     render() {
@@ -25,9 +72,15 @@ class SupportModal extends React.Component {
                         <div className="col-md-12">
                             <h3>Motivo del contacto</h3>
                             <label htmlFor="">Motivo del contacto</label>
-                            <input type="text" className="uni-input"/>
+                            <input type="text" className="uni-input" onChange={this.inputChangeHandler} value={this.state.dataToPost.email} name="motivo"/>
+                            <p style={{color: "red"}}>
+                                {this.validator.message('motivo', this.state.dataToPost.motivo, 'required')}
+                            </p>
                             <label htmlFor="">Detalles</label>
-                            <textarea name="" className="uni-input tarea" id="" cols="30" rows="10"></textarea>
+                            <textarea name="detalles" className="uni-input tarea" id="" cols="30" rows="10" onChange={this.inputChangeHandler}>{this.state.dataToPost.detalles}</textarea>
+                            <p style={{color: "red"}}>
+                                {this.validator.message('email', this.state.dataToPost.detalles, 'required')}
+                            </p>
                             <br/>
                             <button className="btn-theme" onClick={this.handleSubmit}>Enviar</button>
                         </div>
@@ -43,4 +96,16 @@ class SupportModal extends React.Component {
     }
 }
 
-export default SupportModal;
+const mapStateToProps = ({techSupportReq}) => ({
+    techSupportReq
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            postTechSupportFormData
+        },
+        dispatch
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(SupportModal)
