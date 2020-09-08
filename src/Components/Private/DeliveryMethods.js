@@ -160,17 +160,17 @@ class DeliveryMethods extends React.Component {
       const delivery = this.props.delivery;
       this.setState({
         dataToPost: {
-          comerRestauranteEnabled: this.getBool(delivery.comerRestaurante.enabled),
-          acceptReservations: this.getBool(delivery.comerRestaurante.acceptReservations),
-          paraLlevarEnabled: this.getBool(delivery.paraLlevar.enabled),
-          deliveryOptions: delivery.paraLlevar.deliveryOptions,
-          servicioHabitacionEnabled: this.getBool(delivery.servicioHabitacion),
-          entregaParqueoEnabled: this.getBool(delivery.entregaParqueo.enabled),
-          entregaParqueoOptions: delivery.entregaParqueo.entregaParqueoOptions,
-          expressEnabled: this.getBool(delivery.express.enabled),
-          expressPrecioEnvio: delivery.express.precioEnvio,
-          expressCada: delivery.express.cada,
-          expressEnvioGratisEnabled: this.getBool(delivery.express.envioGratis),
+          comerRestauranteEnabled: (delivery.comerRestaurante) ? this.getBool(delivery.comerRestaurante.enabled) : false,
+          acceptReservations: (delivery.comerRestaurante)  ? this.getBool(delivery.comerRestaurante.acceptReservations) :  false,
+          paraLlevarEnabled: (delivery.paraLlevar) ? this.getBool(delivery.paraLlevar.enabled) : false,
+          deliveryOptions: (delivery.paraLlevar) ?  delivery.paraLlevar.deliveryOptions : '',
+          servicioHabitacionEnabled: (delivery.servicioHabitacion) ? this.getBool(delivery.servicioHabitacion) : false,
+          entregaParqueoEnabled: (delivery.entregaParqueo) ?  this.getBool(delivery.entregaParqueo.enabled) : false,
+          entregaParqueoOptions: (delivery.entregaParqueo) ? delivery.entregaParqueo.entregaParqueoOptions : '',
+          expressEnabled: (delivery.express) ? this.getBool(delivery.express.enabled) : false,
+          expressPrecioEnvio: (delivery.express)  ? delivery.express.precioEnvio : '',
+          expressCada:(delivery.express) ? delivery.express.cada :  '',
+          expressEnvioGratisEnabled: (delivery.express)  ? this.getBool(delivery.express.envioGratis) : false,
           id: delivery.id,
           restaurantId: localStorage.getItem('restaurantId')
         }
