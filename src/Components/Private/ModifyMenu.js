@@ -8,11 +8,11 @@ import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 import {
-  getCategoryListData,
-  getMenuListData,
-  postMenuFormData,
-  redirectToUrl,
-  updateCategoryFormData
+    getCategoryListData,
+    getMenuListData,
+    postMenuFormData,
+    redirectToUrl,
+    updateCategoryFormData
 } from '../../actions'
 import SimpleReactValidator from "simple-react-validator";
 import {uuid} from 'uuidv4';
@@ -22,205 +22,205 @@ import Dishes from "./Child/Menu/Dishes";
 
 class ModifyMenu extends React.Component {
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
     this.state = {
       selectedCategory: ''
     }
 
-    this.newMenuItem = this.newMenuItem.bind(this);
+        this.newMenuItem = this.newMenuItem.bind(this);
 
-    SimpleReactValidator.addLocale('es', {
-      required: 'este campo es requerido'
-    });
+        SimpleReactValidator.addLocale('es', {
+            required: 'este campo es requerido'
+        });
 
-    this.validator = new SimpleReactValidator({
-      locale: 'es',
-      autoForceUpdate: this
-    });
-  }
-
-  inputChangeHandler = (e) => {
-    let obj = this.state.categoryDataToPost
-    obj[e.target.name] = e.target.value
-    this.setState({categoryDataToPost: obj})
-    // console.log(this.state.categoryDataToPost);
-  }
-
-  formSubmitHandler = (e) => {
-    e.preventDefault();
-    if (this.validator.allValid()) {
-      this.processSubmit();
-    } else {
-      this.validator.showMessages();
+        this.validator = new SimpleReactValidator({
+            locale: 'es',
+            autoForceUpdate: this
+        });
     }
-  };
 
-  addMenuInputChangeHandler = (e) => {
-    let obj = this.state.menuDataToPost
-    obj[e.target.name] = e.target.value
-    this.setState({menuDataToPost: obj})
-  }
-
-  addMenuFormSubmitHandler = (e) => {
-    e.preventDefault();
-    if (this.validator.allValid()) {
-      this.addMenuProcessSubmit();
-    } else {
-      this.validator.showMessages();
+    inputChangeHandler = (e) => {
+        let obj = this.state.categoryDataToPost
+        obj[e.target.name] = e.target.value
+        this.setState({categoryDataToPost: obj})
+        // console.log(this.state.categoryDataToPost);
     }
-  };
 
-
-  processSubmit() {
-    let {categoryDataToPost} = this.state
-    // console.log(form)
-    categoryDataToPost['id'] = uuid()
-    this.setState({categoryDataToPost: categoryDataToPost})
-    // console.log(this.state.categoryDataToPost)
-    let categoryListToSend = this.state.categoryList;
-    categoryListToSend.push(categoryDataToPost)
-    // console.log(categoryListToSend)
-    this.props.updateCategoryFormData(categoryListToSend)
-    this.setState({
-      show: false,
-      categoryDataToPost: {}
-    })
-  }
-
-
-  activateTab(e, tabName) {
-    let obj = this.state.formTab;
-    let alltabs = this.state.formTab;
-    if (this.state.mobile) {
-      for (const [key, value] of Object.entries(obj)) {
-        console.log(key)
-        console.log(value)
-        console.log(tabName)
-        if (key == tabName) {
-          alltabs[key] = true
+    formSubmitHandler = (e) => {
+        e.preventDefault();
+        if (this.validator.allValid()) {
+            this.processSubmit();
         } else {
-          alltabs[key] = false
+            this.validator.showMessages();
         }
-      }
+    };
 
-      this.setState({formTab: alltabs})
+    addMenuInputChangeHandler = (e) => {
+        let obj = this.state.menuDataToPost
+        obj[e.target.name] = e.target.value
+        this.setState({menuDataToPost: obj})
     }
-  }
 
-  newMenuItem() {
+    addMenuFormSubmitHandler = (e) => {
+        e.preventDefault();
+        if (this.validator.allValid()) {
+            this.addMenuProcessSubmit();
+        } else {
+            this.validator.showMessages();
+        }
+    };
 
-    let obj = this.state.formTab
-    console.log(obj)
-    obj['newMenuItem'] = true;
-    if (this.state.mobile) {
-      obj['menuTab'] = false
-    }
-    this.setState({formTab: obj});
-  }
 
-  displayCategoryList = () => {
-    let categoryList = []
-    try {
-      const {menuReducer} = this.props
-      // console.log(menuReducer['CATEGORY_LIST'])
-      categoryList = JSON.parse(menuReducer['CATEGORY_LIST'].categories);
-      // console.log(categoryList)
-      if (categoryList) {
-        this.setState({categoryList: categoryList})
-        this.setState({categoryListToUpdate: categoryList})
-        let categoryArrList = []
-        categoryList.map(el => {
-          let catObj = {
-            id: el.id,
-            value: el.name,
-            label: el.name
-          }
-          categoryArrList.push(catObj)
+    processSubmit() {
+        let {categoryDataToPost} = this.state
+        // console.log(form)
+        categoryDataToPost['id'] = uuid()
+        this.setState({categoryDataToPost: categoryDataToPost})
+        // console.log(this.state.categoryDataToPost)
+        let categoryListToSend = this.state.categoryList;
+        categoryListToSend.push(categoryDataToPost)
+        // console.log(categoryListToSend)
+        this.props.updateCategoryFormData(categoryListToSend)
+        this.setState({
+            show: false,
+            categoryDataToPost: {}
         })
-        this.setState({categoryOptions: categoryArrList})
-      }
-    } catch (e) {
-      categoryList = []
     }
-    // console.log(this.state.categoryListToUpdate)
-    // console.log(this.state.categoryOptions)
-  }
 
-  displayMenuList = () => {
-    let menuList = []
-    try {
-      const {menuReducer} = this.props
-      console.log(menuReducer['MENU_LIST'])
-      menuList = JSON.parse(menuReducer['CATEGORY_LIST'].response);
-      // console.log(categoryList)
-      if (Object.keys(menuList).length === 0 && menuList.constructor === Object) {
-        this.setState({menuList: []})
-      } else {
-        this.setState({menuList: menuList})
-      }
-    } catch (e) {
-      menuList = []
+
+    activateTab(e, tabName) {
+        let obj = this.state.formTab;
+        let alltabs = this.state.formTab;
+        if (this.state.mobile) {
+            for (const [key, value] of Object.entries(obj)) {
+                console.log(key)
+                console.log(value)
+                console.log(tabName)
+                if (key == tabName) {
+                    alltabs[key] = true
+                } else {
+                    alltabs[key] = false
+                }
+            }
+
+            this.setState({formTab: alltabs})
+        }
     }
-    // console.log(this.state.menuList)
-  }
 
-  componentWillMount() {
-    //
-    //this.props.getMenuListData()
-  }
+    newMenuItem() {
 
-  componentDidMount() {
-    this.props.getCategoryListData()
-    //window.setTimeout(this.displayCategoryList, 800)
-    // window.setTimeout(this.displayMenuList, 800)
+        let obj = this.state.formTab
+        console.log(obj)
+        obj['newMenuItem'] = true;
+        if (this.state.mobile) {
+            obj['menuTab'] = false
+        }
+        this.setState({formTab: obj});
+    }
 
-  }
+    displayCategoryList = () => {
+        let categoryList = []
+        try {
+            const {menuReducer} = this.props
+            // console.log(menuReducer['CATEGORY_LIST'])
+            categoryList = JSON.parse(menuReducer['CATEGORY_LIST'].categories);
+            // console.log(categoryList)
+            if (categoryList) {
+                this.setState({categoryList: categoryList})
+                this.setState({categoryListToUpdate: categoryList})
+                let categoryArrList = []
+                categoryList.map(el => {
+                    let catObj = {
+                        id: el.id,
+                        value: el.name,
+                        label: el.name
+                    }
+                    categoryArrList.push(catObj)
+                })
+                this.setState({categoryOptions: categoryArrList})
+            }
+        } catch (e) {
+            categoryList = []
+        }
+        // console.log(this.state.categoryListToUpdate)
+        // console.log(this.state.categoryOptions)
+    }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    // console.log("componentDidUpdate")
-    // console.log(this.state.categoryListToUpdate)
-  }
+    displayMenuList = () => {
+        let menuList = []
+        try {
+            const {menuReducer} = this.props
+            console.log(menuReducer['MENU_LIST'])
+            menuList = JSON.parse(menuReducer['CATEGORY_LIST'].response);
+            // console.log(categoryList)
+            if (Object.keys(menuList).length === 0 && menuList.constructor === Object) {
+                this.setState({menuList: []})
+            } else {
+                this.setState({menuList: menuList})
+            }
+        } catch (e) {
+            menuList = []
+        }
+        // console.log(this.state.menuList)
+    }
 
-  showCategoryModal = () => {
-    this.setState({show: true});
-  }
+    componentWillMount() {
+        //
+        //this.props.getMenuListData()
+    }
 
-  hideCategoryModal = () => {
-    this.setState({show: false});
-  }
+    componentDidMount() {
+        this.props.getCategoryListData()
+        //window.setTimeout(this.displayCategoryList, 800)
+        // window.setTimeout(this.displayMenuList, 800)
 
-  categoryInputChangeHandler = (e) => {
-    let categoryId = e.target.id
-    let categoryName = e.target.value
-    let categoryObj = {id: categoryId, name: categoryName}
-    $("svg[id=" + categoryId + "].trash").hide()
-    $("#categories-list svg[id=" + categoryId + "].tik").show()
-    $("input[id=" + categoryId + "]").parent().addClass('active')
+    }
 
-    let categoryListToUpdate = this.state.categoryListToUpdate
-    // console.log(categoryListToUpdate)
-    let foundIndex = categoryListToUpdate.findIndex(x => x.id == categoryId);
-    // console.log(categoryObj)
-    categoryListToUpdate[foundIndex] = categoryObj;
-    this.state.categoryListToUpdate = categoryListToUpdate
-    this.setState({categoryListToUpdate: categoryListToUpdate}, () => {
-      // console.log(this.state.categoryListToUpdate)
-    })
-  }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // console.log("componentDidUpdate")
+        // console.log(this.state.categoryListToUpdate)
+    }
 
-  deleteCategory = (id) => {
-    let categoryListToUpdate = this.state.categoryListToUpdate
-    let result = categoryListToUpdate.filter(function (el) {
-      return el.id != id;
-    })
-    // console.log(result)
-    this.setState({categoryListToUpdate: result}, () => {
-      // console.log(this.state.categoryListToUpdate)
-      this.props.updateCategoryFormData(this.state.categoryListToUpdate)
-    })
-  }
+    showCategoryModal = () => {
+        this.setState({show: true});
+    }
+
+    hideCategoryModal = () => {
+        this.setState({show: false});
+    }
+
+    categoryInputChangeHandler = (e) => {
+        let categoryId = e.target.id
+        let categoryName = e.target.value
+        let categoryObj = {id: categoryId, name: categoryName}
+        $("svg[id=" + categoryId + "].trash").hide()
+        $("#categories-list svg[id=" + categoryId + "].tik").show()
+        $("input[id=" + categoryId + "]").parent().addClass('active')
+
+        let categoryListToUpdate = this.state.categoryListToUpdate
+        // console.log(categoryListToUpdate)
+        let foundIndex = categoryListToUpdate.findIndex(x => x.id == categoryId);
+        // console.log(categoryObj)
+        categoryListToUpdate[foundIndex] = categoryObj;
+        this.state.categoryListToUpdate = categoryListToUpdate
+        this.setState({categoryListToUpdate: categoryListToUpdate}, () => {
+            // console.log(this.state.categoryListToUpdate)
+        })
+    }
+
+    deleteCategory = (id) => {
+        let categoryListToUpdate = this.state.categoryListToUpdate
+        let result = categoryListToUpdate.filter(function (el) {
+            return el.id != id;
+        })
+        // console.log(result)
+        this.setState({categoryListToUpdate: result}, () => {
+            // console.log(this.state.categoryListToUpdate)
+            this.props.updateCategoryFormData(this.state.categoryListToUpdate)
+        })
+    }
 
   loadMenu(id, name) {
     this.setState({selectedCategory: {id, name}});
@@ -257,22 +257,22 @@ class ModifyMenu extends React.Component {
           </div>
         </>
 
-    );
-  }
+        );
+    }
 }
 
 const mapStateToProps = ({menuReducer}) => ({
-  menu: menuReducer
+    menu: menuReducer
 })
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
-          getCategoryListData,
-          updateCategoryFormData,
-          redirectToUrl,
-          getMenuListData,
-          postMenuFormData
+            getCategoryListData,
+            updateCategoryFormData,
+            redirectToUrl,
+            getMenuListData,
+            postMenuFormData
         },
         dispatch
     )

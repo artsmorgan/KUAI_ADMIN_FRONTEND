@@ -6,9 +6,12 @@ import Modal from "react-bootstrap/Modal";
 import SimpleReactValidator from 'simple-react-validator';
 
 import Logo from "../../assets/images/logo-kuai-white.svg";
-import * as APITools from '../../util/apiX'
 
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux'
+import {
+    postForgotPassFormData
+} from '../../actions'
 
 class ForgotPassword extends React.Component {
     constructor(props) {
@@ -18,7 +21,8 @@ class ForgotPassword extends React.Component {
             show: false,
             dataToPost: {
                 email: ''
-            }
+            },
+            forgotPassSuccess: false
         }
 
         SimpleReactValidator.addLocale('es', {
@@ -32,19 +36,14 @@ class ForgotPassword extends React.Component {
         });
     }
 
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
-
     showForgetPasswordSuccessModal = () => {
         this.setState({show: true});
     }
 
     hideForgetPasswordSuccessModal = () => {
-        this.setState({show: false});
+        // this.setState({forgotPassSuccess: false});
+        this.state.forgotPassSuccess = false
+        console.log("hideForgetPasswordSuccessModal", this.state.forgotPassSuccess)
     }
 
     inputChangeHandler = (e) => {
@@ -63,29 +62,21 @@ class ForgotPassword extends React.Component {
     };
 
     processSubmit() {
-        const url = endpointURL // dummy
-        const headers = {
-            'Content-Type': 'application/json, charset=UTF-8', // dummy
-        };
-        // const data = this.state.dataToPost;
-        // dummy
-        const data = JSON.stringify({
-            title: 'foo',
-            body: 'bar',
-            userId: 1
-        })
+        this.props.postForgotPassFormData(this.state.dataToPost)
+        // this.showForgetPasswordSuccessModal()
+    }
 
-        // API calling and handling response
-        const res = APITools.postEndPointsHandler(url, data, headers)
-
-        res.then(result => {
-            console.log(result)
-            if (result.status === 201) {
-                this.showForgetPasswordSuccessModal()
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        try {
+            const {forgotPassword} = this.props
+            this.setState({forgotPassSuccess: forgotPassword.success})
+            if(this.state.forgotPassSuccess) {
+                let obj = this.state.dataToPost;
+                obj['email'] = '';
+                this.setState({dataToPost: obj});
             }
-        }).catch(err => {
-            this.handleError(err)
-        })
+        } catch (e) {
+        }
     }
 
     render() {
@@ -108,10 +99,10 @@ class ForgotPassword extends React.Component {
                     </form>
                 </div>
 
-                <Modal
+                {/*<Modal
                     className="cstm-modal"
                     size="md"
-                    show={this.state.show}
+                    show={this.state.forgotPassSuccess}
                     onHide={this.hideForgetPasswordSuccessModal}
                     aria-labelledby="contained-modal-title-vcenter"
                     centered
@@ -134,10 +125,22 @@ class ForgotPassword extends React.Component {
                             </div>
                         </div>
                     </Modal.Body>
-                </Modal>
+                </Modal>*/}
             </>
         );
     }
 }
 
-export default ForgotPassword;
+const mapStateToProps = ({forgotPassword}) => ({
+    forgotPassword
+})
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            postForgotPassFormData
+        },
+        dispatch
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword)
