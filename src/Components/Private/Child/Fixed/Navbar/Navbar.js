@@ -18,7 +18,8 @@ class Navbar extends React.Component {
             width: 0,
             myOrders: [],
             totalOrders: 0,
-            totalSales: 0
+            totalSales: 0,
+            modifyRestaurantChanges: false
         }
 
         window.addEventListener("resize", this.updateDimension);
@@ -26,6 +27,11 @@ class Navbar extends React.Component {
 
     componentWillMount() {
         this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
+    }
+
+    componentWillReceiveProps(props) {
+        console.log(props.modifyRestaurantChanges)
+        this.setState({modifyRestaurantChanges: props.modifyRestaurantChanges})
     }
 
     updateDimension = () => {
@@ -58,6 +64,12 @@ class Navbar extends React.Component {
         this.updateDimension();
     }
 
+/*    componentDidUpdate(prevProps, prevState, snapshot) {
+        if(this.state.modifyRestaurantChanges) {
+            this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
+        }
+    }*/
+
     componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimension);
     }
@@ -67,14 +79,8 @@ class Navbar extends React.Component {
     }
 
     render() {
-        try {
-            const {defaultConfig} = this.props
-            // console.log(defaultConfig['DEFAULT_CONFIG'])
-          //  this.setState({totalOrders: defaultConfig['DEFAULT_CONFIG'].totalTodayOrders})
-           // this.setState({totalSales: defaultConfig['DEFAULT_CONFIG'].totalTodaySales})
-        } catch (e) {
-
-        }
+        let restaurantProfilePicture = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
+        let restaurantName = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantName;
         const {width, totalOrders, totalSales} = this.state
         if (width > 1024) {
             return (
@@ -94,12 +100,11 @@ class Navbar extends React.Component {
                         </div>
                         <div className="float-right" style={{height: '60px', position: 'relative'}}>
                             <div className="avatar">
-                                <img src={Avatar} alt="User Avatar"/>
+                                <img src={restaurantProfilePicture} alt="User Avatar" style={{width: "50px", height: "50px"}}/>
                             </div>
                             <Dropdown className="cstm-drop">
                                 <Dropdown.Toggle  id="dropdown-basic">
-                                    Costa Rica
-                                    Beer factory
+                                    {restaurantName}
                                 </Dropdown.Toggle>
 
                                 {/* <Dropdown.Menu>

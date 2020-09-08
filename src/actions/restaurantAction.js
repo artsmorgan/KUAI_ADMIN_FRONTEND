@@ -48,6 +48,7 @@ export const getRestaurantFormData = (payload) => {
 
 export const updateRestaurantFormData = (payload) => {
     return (dispatch, getState) => {
+        console.log(payload)
         dispatch(postRestaurantFormRequest())
         let URL = UPDATE_RESTAURANT_URL+payload.restaurantId
         if (URL) {
