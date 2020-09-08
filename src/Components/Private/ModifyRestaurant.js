@@ -1,4 +1,4 @@
-import React from 'react';
+import React,  { useState }  from 'react';
 import Select from 'react-select';
 import { Button, Nav } from 'react-bootstrap';
 import Checkbox from '@opuscapita/react-checkbox';
@@ -11,6 +11,9 @@ import * as APITools from '../../util/apiX';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getRestaurantFormData, updateRestaurantFormData, getCantonesFromAPI, getDistritosFromAPI } from '../../actions';
+import { storage, db } from "../firebase";
+import { toastr } from 'react-redux-toastr'
+
 
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
@@ -20,8 +23,17 @@ class ModifyRestaurant extends React.Component {
 
     constructor(props) {
         super(props);
+
         this.fileUpload = React.createRef();
+
+        this.profilePictRefUpload = React.createRef();
+        this.showProfileUpload = this.showProfileUpload.bind(this);
+
+        this.coverPictRefUpload = React.createRef();
+        // this.showCoverUpload = this.showCoverUpload.bind(this);
+
         this.showFileUpload = this.showFileUpload.bind(this);
+
         this.state = {
             width: 0,
             mobile: false,
@@ -30,6 +42,13 @@ class ModifyRestaurant extends React.Component {
                 informationTab: true,
                 scheduleTab: true,
             },
+
+            profileImage: '',
+            profileImageUrl: '',
+            coverImage: '',
+            coverImageUrl: '',
+            profileImageProgress: '',
+
             form: {},
             checked: false,
             horario0: false,
@@ -126,6 +145,99 @@ class ModifyRestaurant extends React.Component {
         this.setState({ dataToPost: obj });
 
         this.handleCustomValidation()
+    };
+
+    handleProfileImageChange = e => {
+        if (e.target.files[0]) {          
+          this.setState({ profileImage: e.target.files[0] });
+        }
+      };
+
+    
+    getFileExtension = filename =>  filename.split('.').pop();  
+
+    handleProfileImageUpload = (e) => {
+        // console.log('handleProfileImageUpload',e.target.files[0]);
+        if (e && e.target.files[0]) {      
+            const _files = e.target.files[0];
+            // this.setState({ profileImage: e.target.files[0] });
+            const  fileExtension = this.getFileExtension(e.target.files[0].name)
+            const  filename = `${Date.now()}.${fileExtension}`;
+            const uploadTask = storage.ref(`restaurants/${localStorage.getItem('restaurantId')}/images/profile/${filename}`).put(e.target.files[0]);
+            
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    this.setState({ progress: progress });
+                },
+                error => {
+                    console.log(error);
+                },
+                () => {
+                    storage
+                    .ref(`restaurants/${localStorage.getItem('restaurantId')}/images/profile/`)
+                    .child(filename)
+                    .getDownloadURL()
+                    .then(url => {
+                        this.setState({ profileImageUrl: url });
+                        const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                                docRef.update({
+                                    profilePicture: url
+                                }).then(() => {
+                                    toastr.success("Éxito", 'La imágen de perfil fue subida con éxito')
+                                }).catch((error) => {
+                                    console.log('Error updating the document:', error);
+                                })
+                    });
+                }
+            );
+        }
+        
+    };
+
+    handleCoverImageUpload = (e) => {
+        // console.log('handleProfileImageUpload',e.target.files[0]);
+        if (e && e.target.files[0]) {      
+            const _files = e.target.files[0];
+            // this.setState({ profileImage: e.target.files[0] });
+            const  fileExtension = this.getFileExtension(e.target.files[0].name)
+            const  filename = `${Date.now()}.${fileExtension}`;
+            const uploadTask = storage.ref(`restaurants/${localStorage.getItem('restaurantId')}/images/cover/${filename}`).put(e.target.files[0]);
+            
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    this.setState({ progress: progress });
+                },
+                error => {
+                    console.log(error);
+                },
+                () => {
+                    storage
+                    .ref(`restaurants/${localStorage.getItem('restaurantId')}/images/cover/`)
+                    .child(filename)
+                    .getDownloadURL()
+                    .then(url => {
+                        this.setState({ coverImageUrl: url });
+                        const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                                docRef.update({
+                                    coverPicture: url
+                                }).then(() => {
+                                    toastr.success("Éxito", 'La imágen de portada fue subida con éxito')
+                                }).catch((error) => {
+                                    console.log('Error updating the document:', error);
+                                })
+                    });
+                }
+            );
+        }
+        
     };
 
     inputChangeHandler = (e) => {
@@ -331,7 +443,11 @@ class ModifyRestaurant extends React.Component {
     };
 
     showFileUpload() {
-        this.fileUpload.current.click();
+        this.coverPictRefUpload.current.click();
+    }
+
+    showProfileUpload() {
+        this.profilePictRefUpload.current.click();
     }
 
     fileUploadOnchange(e) {
@@ -455,6 +571,8 @@ class ModifyRestaurant extends React.Component {
         if (previousProps.restaurant.loading && !this.props.restaurant.loading) {
             const restaurant = this.props.restaurant;
             this.setState({
+                profileImageUrl: restaurant.profilePicture,
+                coverImageUrl: restaurant.coverPicture,
                 dataToPost: {
                     name: restaurant.name,
                     administrator: restaurant.administrator,
@@ -585,15 +703,19 @@ class ModifyRestaurant extends React.Component {
                                         <h3 className="mb-hidden">
                                             General
                                         </h3>
-                                        <input type="file" id="my_file" style={{ display: "none" }}
-                                            onChange={this.fileUploadOnchange} ref={this.fileUpload} />
+                                       
+                                        <input type="file" id="my_file" style={{ display: "none" }} accept="image/*"
+                                            onChange={this.handleCoverImageUpload} ref={this.coverPictRefUpload} />
+
                                         <div className="cover-pic">
                                             <label htmlFor="">Editar foto de perfil y foto de portada</label>
                                             <div className="cvr">
-                                                <div className="cvr-main" style={{ background: "url(" + bannerImage + ")" }}>
+                                                <div className="cvr-main" style={{ background: "url(" + this.state.coverImageUrl + ")" }}>
                                                     <div className="overlay">
+                                                        
                                                         <button type="button" className="btn-cvr-change"
                                                             onClick={this.showFileUpload}>
+
                                                             <svg width="13" height="13" viewBox="0 0 13 13"
                                                                 fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -614,10 +736,15 @@ class ModifyRestaurant extends React.Component {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="cvr-photo" style={{ background: "url(" + avatarImage + ")" }}>
+                                                <div className="cvr-photo" style={{ background: "url(" + this.state.profileImageUrl + ")" }}>
                                                     <div className="overlay">
+                                                    
+                                                    <input type="file" id="profile-picture" accept="image/*"  style={{ display: "none" }}
+                                                        onChange={this.handleProfileImageUpload} ref={this.profilePictRefUpload} />
+
                                                         <button type="button" className="btn-photo-change"
-                                                            onClick={this.showFileUpload}>
+                                                            onClick={this.showProfileUpload}>
+
                                                             <svg width="13" height="13" viewBox="0 0 13 13"
                                                                 fill="none"
                                                                 xmlns="http://www.w3.org/2000/svg">
@@ -719,20 +846,26 @@ class ModifyRestaurant extends React.Component {
                                             <p className="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p>
-                                            {/*</div>*/}
-                                            {/*</div>*/}
+                                            <br />
+                                            {/* <Select className="cstm-select" options={optionProvince}
+                                                name="province" placeholder="Provincia"
+                                                onChange={this.selectChangeHandler}
+                                                value={this.state.dataToPost.province} />
+                                            <p style={{ color: "red" }}>
+                                                {this.validator.message('province', this.state.dataToPost.province, 'required')}
+                                            </p> */}
                                             <label htmlFor="">CANTON:</label><br />
-                                            <input className="uni-input md" type="text" name="canton"
+                                            {/* {/* <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
-                                                value={this.state.dataToPost.canton} />
-                                            {/*<Select className="cstm-select full-width mini float-left"*/}
-                                            {/*    options={this.state.optionCanton} name="canton"*/}
-                                            {/*    style={{"width": "100"}}*/}
-                                            {/*    placeholder={this.state.dataToPost.canton}*/}
-                                            {/*    onChange={(e) => this.cantonChangeHandler(e, 'canton')}*/}
-                                            {/*    value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled}*/}
-                                            {/*/>*/}
+                                                value={this.state.dataToPost.canton} /> */}
+                                            <Select className="cstm-select f-w"
+                                                options={this.state.optionCanton} name="canton"
+                                                style={{"width": "100"}} 
+                                                placeholder={this.state.dataToPost.canton} 
+                                                onChange={(e) => this.cantonChangeHandler(e, 'canton')} 
+                                                value={this.state.dataToPost.canton} isDisabled={this.state.cantonIsDisabled} 
+                                            />
                                             <p className="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('canton', this.state.dataToPost.canton, 'required')}
                                             </p>
@@ -747,17 +880,17 @@ class ModifyRestaurant extends React.Component {
                                             </p> */}
                                             <label htmlFor="">DISTRITO:</label><br />
 
-                                            <input className="uni-input md" type="text" name="district"
+                                            {/* <input className="uni-input md" type="text" name="district"
                                                 placeholder="district"
                                                 onChange={this.inputChangeHandler}
-                                                value={this.state.dataToPost.district} />
-                                            {/*<Select className="cstm-select full-width mini float-left"*/}
-                                            {/*    options={this.state.optionDistrito} name="district"*/}
-                                            {/*    style={{"width": "100"}}*/}
-                                            {/*    placeholder={this.state.dataToPost.district}*/}
-                                            {/*    onChange={(e) => this.distritoChangeHandler(e, 'district')}*/}
-                                            {/*    value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}*/}
-                                            {/*/>*/}
+                                                value={this.state.dataToPost.district} /> */}
+                                            <Select className="cstm-select f-w"
+                                                options={this.state.optionDistrito} name="district"
+                                                style={{"width": "100"}}
+                                                placeholder={this.state.dataToPost.district}
+                                                onChange={(e) => this.distritoChangeHandler(e, 'district')}
+                                                 value={this.state.dataToPost.district} isDisabled={this.state.distritoIsDisabled}
+                                             />
                                             <p className-="error-txt" style={{ color: "red" }}>
                                                 {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                             </p>

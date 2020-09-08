@@ -111,18 +111,18 @@ class PaymentMethods extends React.Component {
       this.setState({
         dataToPost: {
           restaurantId: payment.restaurantId,
-          transferenceEnabled: this.getBool(payment.transferencia.enabled),
-          transferenceNoCuenta: payment.transferencia.numeroDeCuenta,
-          transferenceTipoCambio: payment.transferencia.tipoCambio,
-          transferenceCuentaBancaria: payment.transferencia.cuentaBancaria,
-          transferenceIban: payment.transferencia.iban,
-          transferenceNombrar: payment.transferencia.nombrar,
-          efectivoEnabled: this.getBool(payment.efectivoContraEntrega.enabled),
-          tarjetaViaAppEnabled: this.getBool(payment.tarjetaViaApp.enabled),
-          tarjetaEnEntregaEnabled: this.getBool(payment.tarjetaEnEntrega.enabled),
-          sinpeMovilEnabled: this.getBool(payment.sinpeMovil.enabled),
-          sinpeMovilNumero: payment.sinpeMovil.numero,
-          sinpeMovilName: payment.sinpeMovil.name,
+          transferenceEnabled: (payment.transferencia) ? this.getBool(payment.transferencia.enabled) : false,
+          transferenceNoCuenta: (payment.transferencia) ? payment.transferencia.numeroDeCuenta : '',
+          transferenceTipoCambio: (payment.transferencia)  ?  payment.transferencia.tipoCambio : '',
+          transferenceCuentaBancaria: (payment.transferencia) ? payment.transferencia.cuentaBancaria : '',
+          transferenceIban: (payment.transferencia) ?  payment.transferencia.iban : '',
+          transferenceNombrar: (payment.transferencia) ? payment.transferencia.nombrar : '',
+          efectivoEnabled: (payment.transferencia) ? this.getBool(payment.efectivoContraEntrega.enabled) : false,
+          tarjetaViaAppEnabled: (payment.transferencia) ? this.getBool(payment.tarjetaViaApp.enabled) : false,
+          tarjetaEnEntregaEnabled: (payment.transferencia) ? this.getBool(payment.tarjetaEnEntrega.enabled) : false,
+          sinpeMovilEnabled: (payment.transferencia) ? this.getBool(payment.sinpeMovil.enabled) :  false,
+          sinpeMovilNumero: (payment.transferencia) ?  payment.sinpeMovil.numero : '',
+          sinpeMovilName: (payment.transferencia)  ? payment.sinpeMovil.name : '',
         }
       });
 
