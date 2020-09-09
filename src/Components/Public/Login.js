@@ -54,6 +54,15 @@ class Login extends React.Component {
     this.props.postLoginForm(form)
   }
 
+  showHidePassword = () => {
+    const x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+
 
   render() {
     return (
@@ -69,7 +78,7 @@ class Login extends React.Component {
                   {this.validator.message('email', this.state.form.email, 'required|email')}
                 </p>
                 <input type="password" className="pass" name="password" placeholder="Contraseña"
-                       onChange={this.inputChangeHandler} value={this.state.form.password}/>
+                       onChange={this.inputChangeHandler} value={this.state.form.password} id="password" onClick={this.showHidePassword}/>
                 <p style={{color: "red"}}>
                   {this.validator.message('password', this.state.form.password, 'required')}
                 </p>

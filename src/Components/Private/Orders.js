@@ -49,7 +49,7 @@ class Orders extends React.Component {
     }
 
     backFromSeeMore = () => {
-        this.setState({ selectedOrderDiv: false })
+        this.setState({ selectedOrderDiv: false, seeMore: false })
     }
 
     getOrdersDispatched = () => {
@@ -66,7 +66,7 @@ class Orders extends React.Component {
                 <div className="wrapper">
                     <Navbar />
                     {/* Mobile backbutton */}
-                    <div className={"mb-navigator "+(this.state.selectedOrderDiv ? '' : 'hidden')} onClick={this.backFromSeeMore}>
+                    <div className={"mb-navigator "+(this.state.selectedOrderDiv ? '' : 'hidden')} onClick={this.backFromSeeMore} style={this.state.seeMore ? {display: "inline"} : {display: "none"}}>
                         <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2.49746 6L6.73149 10.234C7.13548 10.638 7.13548 11.293 6.73149 11.697C6.3275 12.101 5.6725 12.101 5.26851 11.697L0.302993 6.73149C-0.100998 6.3275 -0.100998 5.6725 0.302993 5.26851L5.26851 0.302993C5.6725 -0.100998 6.3275 -0.100998 6.73149 0.302993C7.13548 0.706984 7.13548 1.36198 6.73149 1.76597L2.49746 6Z" fill="#444460" />
                         </svg>
