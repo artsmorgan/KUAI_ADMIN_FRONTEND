@@ -5,12 +5,8 @@ body {
   font-weight: 400;
   padding-top: 60px;
 }
-.avatar{
-  position: absolute;
-  left: -50px;
-}
 
-.headerImage{
+.headerImage {
   background-size: 100% 100% !important;
 }
 
@@ -42,6 +38,29 @@ body {
   -webkit-box-shadow: 2px 8px 20px rgba(0, 0, 0, 0.08);
           box-shadow: 2px 8px 20px rgba(0, 0, 0, 0.08);
   border-radius: 14px;
+}
+
+.container-login .pass-icon {
+  position: relative;
+}
+
+.container-login .pass-icon svg {
+  position: absolute;
+  right: 14px;
+  top: 18px;
+  cursor: pointer;
+}
+
+.container-login .pass-icon svg.color-switch {
+  fill: #d8d8d8;
+}
+
+.container-login .pass-icon svg.color-switch path {
+  fill: #afafaf;
+}
+
+.container-login .pass-icon svg.color-switch.active path {
+  fill: #afafaf;
 }
 
 .container-login img {
@@ -87,15 +106,11 @@ body {
 }
 
 .container-login .ls-panel input.pass {
-  background: #fff url(../images/eye-grey.svg) no-repeat !important;
-  background-position: 95% 17px !important;
   padding-left: 40px !important;
   padding-right: 30px;
 }
 
 .container-login .ls-panel input.pass:focus {
-  background: #fff url(../images/eye-active.svg) no-repeat !important;
-  background-position: 95% 17px !important;
   padding-left: 40px !important;
   padding-right: 30px;
 }
@@ -2150,7 +2165,31 @@ body {
   }
 }
 
+@media only screen and (min-device-width: 320px) and (max-device-width: 568px) {
+  .hor-inline .time-block {
+    width: 100%;
+    margin-top: 13px;
+  }
+  .cstm-select.mini .css-yk16xz-control {
+    width: 130px;
+  }
+  .hor-inline .time-block .dash {
+    left: 145px;
+  }
+  .collapse-area .collapse-container .collapse-content .col {
+    padding: 12px 10px;
+  }
+  .mb-navigator {
+    display: block;
+  }
+}
+
 .collapse-content textarea {
   padding: 10px;
+}
+
+.divP {
+  margin-top: 0;
+  margin-bottom: 1rem;
 }
 /*# sourceMappingURL=style.css.map */
