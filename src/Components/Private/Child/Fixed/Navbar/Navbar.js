@@ -86,7 +86,7 @@ class Navbar extends React.Component {
             return (
                 <>
                     <div className="navbar-cstm clearfix">
-                        <div className="float-left order-short-info">
+                        {/*<div className="float-left order-short-info">
                             <span>Total de hoy</span>
                             <label>
                                 {totalOrders}
@@ -97,7 +97,7 @@ class Navbar extends React.Component {
                                 ₡{totalSales}
                                 <span>Ventas</span>
                             </label>
-                        </div>
+                        </div>*/}
                         <div className="float-right" style={{height: '60px', position: 'relative'}}>
                             <div className="avatar">
                                 <div className="headerImage" style={this.getStyle()}></div> 

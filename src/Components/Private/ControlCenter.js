@@ -5,6 +5,7 @@ import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getControlCenterMethodFormData } from '../../actions';
+import SafePana from "../../assets/images/Safe-pana.svg";
 
 class ControlCenter extends React.Component {
   constructor(props) {
@@ -81,7 +82,7 @@ class ControlCenter extends React.Component {
                     </label>
                   </div>
                 </div>
-                <h3 className="text-center">Total de la semana</h3>
+                {/*<h3 className="text-center">Total de la semana</h3>
                 <div className="desk-total-view white row">
                   <div className="col">
                     <label htmlFor="">
@@ -93,6 +94,10 @@ class ControlCenter extends React.Component {
                       ₡##.### <span>Ventas</span>
                     </label>
                   </div>
+                </div>*/}
+                <div align={"center"}>
+                  <img src={SafePana}/>
+                  <h6>Aca podras ver los totales de vantas diarios, semanales etc y el total de comision mensual</h6>
                 </div>
                 <h3 className="text-center">Total del mes</h3>
                 <div className="desk-total-view white row">

@@ -1,6 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
-import * as APITools from "../../../../util/apiX";
+import SafePana from "../../../../assets/images/Safe-pana.svg";
 
 class OrdersAside extends React.Component {
 
@@ -165,14 +165,20 @@ class OrdersAside extends React.Component {
                 
                 
                 <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
-                    <h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
+                    {/*<h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">
                             Selecciona una
                             orden para ver
                             sus detalles
                         </p>
+                    </div>*/}
+
+                    <div>
+                        <img src={SafePana}/>
+                        <h6>Aca podras seleccionar las ordeaes para versus dettales</h6>
                     </div>
+
                     {/* Order Details start */}
                     <div className="order-detail shadow-1" style={!seeMore ? {display: 'none'} : {}}>
                         <h3 className="order-title">{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.name : "N/A"}</h3>
