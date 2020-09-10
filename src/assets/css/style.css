@@ -1784,6 +1784,12 @@ body {
   font-size: 16px;
 }
 
+.flex-top-name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 896px) {
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;

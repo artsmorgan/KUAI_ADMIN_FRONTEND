@@ -92,7 +92,7 @@ class Navbar extends React.Component {
                                 <span>Ventas</span>
                             </label>
                         </div>
-                        <div className="float-right" style={{height: '60px', position: 'relative'}}>
+                        <div className="float-right flex-top-name" style={{height: '60px', position: 'relative'}}>
                             <div className="avatar">
                                 <div className="headerImage" style={this.getStyle()}></div> 
                                 
