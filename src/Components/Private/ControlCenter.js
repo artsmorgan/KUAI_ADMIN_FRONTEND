@@ -55,8 +55,8 @@ class ControlCenter extends React.Component {
           <Navbar />
           <div className="flex-area content container-fluid">
             <div className="row">
-              <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-              <div >
+              <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+              <div align={"center"}>
                   <img src={SafePana}/>
                   <h6>Acá podrás ver los totales de ventas diarios, semanales, etc. y el total de comisión mensual.</h6>
                 </div>

@@ -164,7 +164,7 @@ class OrdersAside extends React.Component {
             <>
                 
                 
-                <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
+                <div className={"col col-md-12 col-lg-12 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
                     {/*<h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">
@@ -174,9 +174,9 @@ class OrdersAside extends React.Component {
                         </p>
                     </div>*/}
 
-                    <div>
+                    <div align={"center"}>
                         <img src={SafePana}/>
-                        <h6>Acá podrás seleccionar las ordenes para ver sus dettales</h6>
+                        <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6>
                     </div>
 
                     {/* Order Details start */}
