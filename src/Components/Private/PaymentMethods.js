@@ -442,8 +442,8 @@ class PaymentMethods extends React.Component {
                             fill="#3F3356"/>
                     </svg>
                     <Switch
-                        checked={this.state.dataToPost.tarjetaViaAppEnabled}
-                        onChange={(e) => this.handleChange(e, 'tarjetaViaAppEnabled')}
+                        checked={false}
+                        // onChange={(e) => this.handleChange(e, 'tarjetaViaAppEnabled')}
                         handleDiameter={28}
                         offColor="#E0E0E0"
                         onColor="#f5f5f5"
