@@ -28,6 +28,10 @@ class Navbar extends React.Component {
         this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
     }
 
+    gotoStep = (e, step) => {
+        this.props.redirectToUrl(step)
+    }
+
     updateDimension = () => {
         this.setState({
             width: window.innerWidth
@@ -64,6 +68,9 @@ class Navbar extends React.Component {
 
     getStyle = () => {
         let restaurantProfilePicture = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
+        if(!restaurantProfilePicture) {
+            restaurantProfilePicture = "http://www.gravatar.com/avatar/?d=identicon"
+        }
         return {
                     background: 'url('+ restaurantProfilePicture +') no-repeat',
                     backgroundSize: '100% 100%',
@@ -73,14 +80,13 @@ class Navbar extends React.Component {
     }
 
     render() {
-        let restaurantProfilePicture = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
         let restaurantName = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantName;
         const {width, totalOrders, totalSales} = this.state
         if (width > 1024) {
             return (
                 <>
                     <div className="navbar-cstm clearfix">
-                        <div className="float-left order-short-info">
+                        {/*<div className="float-left order-short-info">
                             <span>Total de hoy</span>
                             <label>
                                 {totalOrders}
@@ -91,7 +97,7 @@ class Navbar extends React.Component {
                                 ₡{totalSales}
                                 <span>Ventas</span>
                             </label>
-                        </div>
+                        </div>*/}
                         <div className="float-right flex-top-name" style={{height: '60px', position: 'relative'}}>
                             <div className="avatar">
                                 <div className="headerImage" style={this.getStyle()}></div> 
@@ -102,10 +108,10 @@ class Navbar extends React.Component {
                                     {restaurantName}
                                 </Dropdown.Toggle>
 
-                                {/* <Dropdown.Menu>
+                                 <Dropdown.Menu>
                                     <Dropdown.Item><Link to={'/orders'}>Action</Link></Dropdown.Item>
                                     <Dropdown.Item><Link to={'/orders'}>Another Action</Link></Dropdown.Item>
-                                </Dropdown.Menu> */}
+                                </Dropdown.Menu>
                             </Dropdown>
                         </div>
                     </div>
@@ -141,7 +147,8 @@ const mapStateToProps = ({defaultConfig}) => ({
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
-            getDefaultConfigData
+            getDefaultConfigData,
+            redirectToUrl
         },
         dispatch
     )
