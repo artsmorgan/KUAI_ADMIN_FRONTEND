@@ -56,8 +56,12 @@ class ControlCenter extends React.Component {
           <div className="flex-area content container-fluid">
             <div className="row">
               <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
-                <h3 className="text-center">Total De Hoy</h3>
-                <div className="desk-total-view row">
+              <div >
+                  <img src={SafePana}/>
+                  <h6>Acá podrás ver los totales de ventas diarios, semanales, etc. y el total de comisión mensual.</h6>
+                </div>
+                {/* <h3 className="text-center">Total De Hoy</h3> */}
+                {/* <div className="desk-total-view row">
                   <div className="col">
                     <label htmlFor="">
                     {this.state.totalTodaySales} <span>Ordenes</span>
@@ -82,7 +86,7 @@ class ControlCenter extends React.Component {
                     </label>
                   </div>
                 </div>
-                {/*<h3 className="text-center">Total de la semana</h3>
+                <h3 className="text-center">Total de la semana</h3>
                 <div className="desk-total-view white row">
                   <div className="col">
                     <label htmlFor="">
@@ -94,11 +98,8 @@ class ControlCenter extends React.Component {
                       ₡##.### <span>Ventas</span>
                     </label>
                   </div>
-                </div>*/}
-                <div align={"center"}>
-                  <img src={SafePana}/>
-                  <h6>Aca podras ver los totales de vantas diarios, semanales etc y el total de comision mensual</h6>
                 </div>
+                
                 <h3 className="text-center">Total del mes</h3>
                 <div className="desk-total-view white row">
                   <div className="col">
@@ -126,7 +127,7 @@ class ControlCenter extends React.Component {
                       ₡{this.state.commissionSales} <span>Ventas</span>
                     </label>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

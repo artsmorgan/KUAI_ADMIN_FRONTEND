@@ -433,7 +433,7 @@ class PaymentMethods extends React.Component {
                     </svg>
 
                     <span>
-                                            Tarjeta vía app +16% <small>"Pronto Disponible" can't be enable</small>
+                                            Tarjeta vía app +16% <small>"Pronto Disponible"</small>
                                 </span>
                     <svg className="arrow" width="7" height="10" viewBox="0 0 7 10" fill="none"
                          xmlns="http://www.w3.org/2000/svg">

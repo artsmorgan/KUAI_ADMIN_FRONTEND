@@ -176,7 +176,7 @@ class OrdersAside extends React.Component {
 
                     <div>
                         <img src={SafePana}/>
-                        <h6>Aca podras seleccionar las ordeaes para versus dettales</h6>
+                        <h6>Acá podrás seleccionar las ordenes para ver sus dettales</h6>
                     </div>
 
                     {/* Order Details start */}
