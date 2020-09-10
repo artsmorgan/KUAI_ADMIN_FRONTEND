@@ -11,6 +11,9 @@ import {uuid} from "uuidv4";
 class Dishes extends Component {
   constructor(props) {
     super(props);
+
+    this.productPictRefUpload = React.createRef();
+
     this.state = {
       selectedDish: null,
     }
@@ -208,6 +211,14 @@ class Dishes extends Component {
     }
   }
 
+  uploadPhoto ()  {
+    //selectedDish
+    console.log('uploadPhoto', this.state.selectedDish );
+    this.productPictRefUpload.current.click();
+  }
+
+  
+
   renderDishEditor() {
     if (this.state.selectedDish === null) {
       return <></>
@@ -282,9 +293,11 @@ class Dishes extends Component {
               {this.validator.message('name', this.state.selectedDish.price, 'required')}
             </p>
 
+            <input type="file" id="my_file" style={{display: "none"}} accept="image/*"
+                                               onChange={this.handleProductImageUpload} ref={this.productPictRefUpload}/>
 
-            <div className="photo-area">
-              <div className="upload">
+            <div className="photo-area" >
+              <div className="upload" onClick={this.uploadPhoto.bind(this)}>
                 <div className="center">
                   <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
                        xmlns="http://www.w3.org/2000/svg">

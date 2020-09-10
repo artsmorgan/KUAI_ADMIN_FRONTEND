@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import Logo from "../../assets/images/logo-kuai-white.svg";
+import Logo from "../../assets/images/kuai-logo-new.png";
 import { Button } from 'react-bootstrap';
 import Success from "../../assets/images/check-circle-1.svg";
 

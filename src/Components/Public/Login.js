@@ -2,7 +2,7 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import SimpleReactValidator from 'simple-react-validator';
 
-import Logo from "../../assets/images/logo-kuai-white.svg";
+import Logo from "../../assets/images/kuai-logo-new.png";
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {postLoginForm, isLoggedInAndRedirect, redirectToUrl} from '../../actions'

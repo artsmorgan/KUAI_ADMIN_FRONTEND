@@ -5,7 +5,7 @@ import Modal from "react-bootstrap/Modal";
 
 import SimpleReactValidator from 'simple-react-validator';
 
-import Logo from "../../assets/images/logo-kuai-white.svg";
+import Logo from "../../assets/images/kuai-logo-new.png";
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'

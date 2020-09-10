@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {Button} from 'react-bootstrap';
 import SimpleReactValidator from 'simple-react-validator';
-import Logo from "../../assets/images/logo-kuai-white.svg";
+import Logo from "../../assets/images/kuai-logo-new.png";
 import Modal from "react-bootstrap/Modal";
 import TermsAndCondition from "./TermsAndCondition";
 import {connect} from 'react-redux'

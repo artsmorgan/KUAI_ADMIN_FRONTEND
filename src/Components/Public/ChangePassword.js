@@ -3,7 +3,7 @@ import {Button} from 'react-bootstrap';
 
 import SimpleReactValidator from 'simple-react-validator';
 
-import Logo from "../../assets/images/logo-kuai-white.svg";
+import Logo from "../../assets/images/kuai-logo-new.png";
 import * as APITools from '../../util/apiX'
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT

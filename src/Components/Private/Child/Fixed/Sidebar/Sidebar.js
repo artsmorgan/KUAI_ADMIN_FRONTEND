@@ -4,7 +4,7 @@ import $ from 'jquery';
 import {Dropdown} from 'react-bootstrap';
 import Avatar from "../../../../../assets/images/avatar.svg";
 import Modal from "react-bootstrap/Modal";
-import Logo from "../../../../../assets/images/logo-kuai-white.svg";
+import Logo from "../../../../../assets/images/kuai-logo-new.png";
 import SupportModal from "./SupportModal";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -82,7 +82,7 @@ class Sidebar extends React.Component {
         return (
             <>
                 <div className="sidebar-wrapper">
-                    <img className="logo-sidebar" src={Logo} alt="website logo"/>
+                    <img className="logo-sidebar" src={Logo} style={{width: '75%'}} alt="website logo"/>
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
                             <img src={Avatar} alt="User Avatar"/>
