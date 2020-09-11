@@ -45,7 +45,7 @@ export const getCategoryListData = () => {
                 })
                 .catch(error => {
                     const response = error.response
-                    console.log(error)
+                    // console.log(error)
                     dispatch(getCategoryListError())
                     if (response && response.status === 401) {
                         // logout(dispatch)
@@ -69,12 +69,12 @@ export const getMenuListData = (id) => {
             let params = {}
             axiosRequest.get(URL, { headers, params })
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     dispatch(getMenuListSuccess(response.data))
                 })
                 .catch(error => {
                     const response = error.response
-                    console.log(error)
+                    // console.log(error)
                     dispatch(getMenuListError())
                     if (response && response.status === 401) {
                         // logout(dispatch)
@@ -100,7 +100,7 @@ export const updateCategoryFormData = (payload, callback) => {
             axiosRequest.put(URL, {categories: JSON.stringify(payload)}, { headers })
                 .then(response => {
                     const data = response.data
-                    console.log(response)
+                    // console.log(response)
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postCategoryFormSuccess(data))
@@ -114,7 +114,7 @@ export const updateCategoryFormData = (payload, callback) => {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    // console.log(error)
                     const response = error.response
                     toastr.error(language[lang].error, language[lang].postFailed)
                     dispatch(postCategoryFormError())
@@ -141,7 +141,7 @@ export const postMenuFormData = (payload, categoryId, callback) => {
             axiosRequest.post(URL, data, { headers })
                 .then(response => {
                     const data = response.data
-                    console.log(response)
+                    // console.log(response)
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postMenuFormSuccess(data))
@@ -156,7 +156,7 @@ export const postMenuFormData = (payload, categoryId, callback) => {
                     }
                 })
                 .catch(error => {
-                    console.log(error)
+                    // console.log(error)
                     const response = error.response
                     toastr.error(language[lang].error, language[lang].postFailed)
                     dispatch(postMenuFormError())

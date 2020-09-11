@@ -30,7 +30,7 @@ class Orders extends React.Component {
                 this.setState({ mobile: true, selectedOrderDiv: false });
             }
         });
-        console.log("componentDidMount")
+        // console.log("componentDidMount")
     }
 
     seeMore = (orderId) => {
@@ -41,7 +41,7 @@ class Orders extends React.Component {
         const order = this.state.myOrders.filter(obj => {
             return obj.id === orderId
         })
-        console.log("desktop")
+        // console.log("desktop")
         this.setState({ seeMore: true, seeMoreThisOrder: order[0] });
 
         // console.log(orderId)
@@ -53,7 +53,7 @@ class Orders extends React.Component {
     }
 
     getOrdersDispatched = () => {
-        console.log("ORDENES DESPACHADAS")
+        // console.log("ORDENES DESPACHADAS")
         this.setState({ myOrders: myOrders })
     }
 

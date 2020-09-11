@@ -31,7 +31,7 @@ export const getRestaurantFormData = (payload) => {
             let params = {}
             axiosRequest.get(URL, {headers, params})
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     dispatch(getRestaurantFormSuccess(response.data))
                 })
                 .catch(error => {

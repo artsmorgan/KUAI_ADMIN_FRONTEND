@@ -25,7 +25,7 @@ export const postLoginForm = (payload) => {
         axiosRequest.post(LOGIN_URL, formData)
             .then(response => {
                 const data = response.data
-                console.log(response)
+                // console.log(response)
                 if (data.success) {
                     toastr.success(language[lang].success, language[lang].success)
                     dispatch(postLoginSuccess(data))
@@ -36,7 +36,7 @@ export const postLoginForm = (payload) => {
                 }
             })
             .catch(error => {
-                console.log(error.response)
+                // console.log(error.response)
                 toastr.error(language[lang].error, error.response.data.message)
                 dispatch(postLoginError())
             })
@@ -84,7 +84,7 @@ export const redirectToLogin = () => {
 }
 
 export const logout = () => dispatch => {
-    console.log("logout req")
+    // console.log("logout req")
     localStorage.removeItem('accessToken')
     localStorage.removeItem('tokenExpiredAt')
     localStorage.removeItem('refreshToken')

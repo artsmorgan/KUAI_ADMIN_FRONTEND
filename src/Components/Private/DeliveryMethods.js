@@ -121,9 +121,9 @@ class DeliveryMethods extends React.Component {
     for (const [key, value] of Object.entries(obj)) {
       let field = key;
       if (field in errors && value) {
-        console.log(field)
+        // console.log(field)
         for (const [k, v] of Object.entries(errors[field])) {
-          console.log(obj[k]);
+          // console.log(obj[k]);
           if (!obj[k]) {
             errors[field][k] = this.state.errorMessage
             formIsValid = false

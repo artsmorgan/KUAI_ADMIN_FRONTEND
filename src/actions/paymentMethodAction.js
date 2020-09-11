@@ -63,7 +63,7 @@ export const updatePaymentMethodFormData = (payload) => {
             axiosRequest.put(URL, formData, { headers })
                 .then(response => {
                     const data = response.data
-                    console.log(data)
+                    // console.log(data)
                     if (response.status===200) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postPaymentMethodFormSuccess(data))

@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
             return { ...state, loading: true }
 
         case actionType.GET_CONTROL_CENTER_METHOD_FORM_SUCCESS:
-            console.log(action.payload)
+            // console.log(action.payload)
 
             return {
                 ...state,

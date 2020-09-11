@@ -17,8 +17,8 @@ export const getControlCenterMethodFormData = (payload) => {
     return (dispatch, getState) => {
         dispatch(getControlCenterMethodFormRequest())
         let URL = GET_CONTROL_CENTER_METHOD_URL + payload.restaurantId+'/dashboard';
-        console.log("---------------")
-        console.log(URL)
+        // console.log("---------------")
+        // console.log(URL)
         if (URL) {
             const state = getState()
             const headers = { Authorization: `bearer ${state.auth.token}` }

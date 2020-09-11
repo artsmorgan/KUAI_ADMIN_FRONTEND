@@ -18,20 +18,6 @@ class OrdersAside extends React.Component {
         }
     }
 
-    handleSuccess(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'success',
-            autoHideDuration: 3000,
-        });
-    }
-
-    handleError(msg) {
-        this.key = this.props.enqueueSnackbar(msg, {
-            variant: 'error',
-            autoHideDuration: 3000,
-        });
-    }
-
     componentWillReceiveProps(props) {
         // console.log(props.seeMore)
         this.setState({
@@ -80,51 +66,11 @@ class OrdersAside extends React.Component {
     }
 
     confirmOrder = (orderId) => {
-        if (localStorage.getItem("kuaiUserAuthToken")) {
-            /*const url = endpointURL + APITools.endPoints.MY_ORDERS
-
-            // API calling and handling response
-            const res = APITools.getEndPointsHandler(url)
-
-            res.then(result => {
-                console.log(result)
-                if (result.status === 200) {
-                    this.setState({myOrders: result.data})
-                    this.getTotalSales()
-                }
-            }).catch(err => {
-                console.log(err)
-                this.handleError("Something went wrong! Please try again later.")
-            })*/
-            this.handleSuccess("Successfully confirmed")
-        } else {
-            this.handleError("Unauthorized access")
-            this.props.history.push('/login')
-        }
+        // console.log(orderId)
     }
 
     packOffOrder = (orderId) => {
-        if (localStorage.getItem("kuaiUserAuthToken")) {
-            /*const url = endpointURL + APITools.endPoints.MY_ORDERS
-
-            // API calling and handling response
-            const res = APITools.getEndPointsHandler(url)
-
-            res.then(result => {
-                console.log(result)
-                if (result.status === 200) {
-                    this.setState({myOrders: result.data})
-                    this.getTotalSales()
-                }
-            }).catch(err => {
-                console.log(err)
-                this.handleError("Something went wrong! Please try again later.")
-            })*/
-            this.handleSuccess("Successfully packed off")
-        } else {
-            this.handleError("Unauthorized access")
-            this.props.history.push('/login')
-        }
+        // console.log(orderId)
     }
 
     componentDidMount() {

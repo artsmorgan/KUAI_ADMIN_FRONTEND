@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
             return { ...state, loading: true }
 
         case actionType.GET_RESTAURANT_FORM_SUCCESS:
-            console.log(action.payload)
+            // console.log(action.payload)
 
             return {
                 ...state,
@@ -56,7 +56,7 @@ export default (state = initialState, action) => {
             return { ...state, loading: true }
 
         case actionType.POST_RESTAURANT_FORM_SUCCESS:
-            console.log(action.payload)
+            // console.log(action.payload)
             return {...state,loading: false}
 
         case actionType.POST_RESTAURANT_FORM_ERROR:

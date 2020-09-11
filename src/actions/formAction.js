@@ -20,7 +20,7 @@ const ORDERS_URL = '/api/orders'
 const PAYMENT_METHODS_URL = 'api/paymentMethods/' + restaurantId;
 
 export const getFormData = (payload) => {
-    console.log(payload.step);
+    // console.log(payload.step);
     return (dispatch, getState) => {
         dispatch(getFormRequest())
         let URL = null
@@ -40,7 +40,7 @@ export const getFormData = (payload) => {
             let params = {}
             axiosRequest.get(URL, {headers, params})
                 .then(response => {
-                    console.log(response)
+                    // console.log(response)
                     dispatch(getFormSuccess({
                         data: response.data,
                         step: payload.step
@@ -48,7 +48,7 @@ export const getFormData = (payload) => {
                 })
                 .catch(error => {
                     const response = error.response
-                    console.log(response)
+                    // console.log(response)
                     dispatch(getFormError())
                     if (response && response.status === 401) {
                         logout(dispatch)
