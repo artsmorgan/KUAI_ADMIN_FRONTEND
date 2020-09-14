@@ -132,6 +132,8 @@ class ModifyRestaurant extends React.Component {
             }
         };
 
+        window.addEventListener("resize", this.updateDimension);
+
         this.checkboxChangeHandler = this.checkboxChangeHandler.bind(this);
 
         SimpleReactValidator.addLocale('es', {
@@ -143,6 +145,29 @@ class ModifyRestaurant extends React.Component {
             autoForceUpdate: this
         });
     }
+
+    updateDimension = () => {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                let obj = this.state.formTab
+
+                obj.informationTab = false;
+                obj.scheduleTab = false
+
+                this.setState({formTab: obj, mobile: true});
+            } else {
+                let obj = this.state.formTab
+
+                obj.informationTab = true;
+                obj.scheduleTab = true
+
+                this.setState({formTab: obj, mobile: false});
+            }
+        });
+    };
+
 
     checkboxChangeHandler = (e) => {
         let obj = this.state.dataToPost;
@@ -530,19 +555,11 @@ class ModifyRestaurant extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({
-            width: window.innerWidth
-        }, () => {
-            if (this.state.width < 1024) {
-                let obj = this.state.formTab
+        this.updateDimension();
+    }
 
-                obj.informationTab = false;
-                obj.scheduleTab = false
-
-                this.setState({formTab: obj, mobile: true});
-            }
-        });
-
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimension);
     }
 
     componentWillMount() {
@@ -551,9 +568,9 @@ class ModifyRestaurant extends React.Component {
 
 
     getBool(string) {
-        if(!string)
+        if (!string)
             return false;
-            
+
         switch (string.toLowerCase().trim()) {
             case "true":
             case "yes":

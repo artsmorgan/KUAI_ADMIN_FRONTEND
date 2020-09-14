@@ -20,17 +20,29 @@ class Orders extends React.Component {
             orderDiv: true,
 
         }
+
+        window.addEventListener("resize", this.updateDimension);
     }
 
-    componentDidMount() {
+    updateDimension = () => {
         this.setState({
             width: window.innerWidth
         }, () => {
             if (this.state.width < 1024) {
                 this.setState({ mobile: true, selectedOrderDiv: false });
+            } else {
+                this.setState({ mobile: false, selectedOrderDiv: true });
             }
         });
-        // console.log("componentDidMount")
+    };
+
+
+    componentDidMount() {
+        this.updateDimension();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateDimension);
     }
 
     seeMore = (orderId) => {
@@ -91,44 +103,44 @@ class Orders extends React.Component {
                                 <div className="ord-table shadow-1">
                                     <table>
                                         <tbody>
-                                            {
-                                                myOrders.length === 0 &&
-                                                <>
-                                                    <tr>
-                                                        <td colSpan={3}><h1 className="display-4">No order
+                                        {
+                                            myOrders.length === 0 &&
+                                            <>
+                                                <tr>
+                                                    <td colSpan={3}><h1 className="display-4">No order
                                                         found.</h1></td>
-                                                    </tr>
-                                                </>
-                                            }
+                                                </tr>
+                                            </>
+                                        }
 
-                                            {
-                                                myOrders.length !== 0 &&
-                                                <>
-                                                    {
-                                                        myOrders.map((item, index) => {
-                                                            return (
-                                                                <tr key={index}>
-                                                                    <td className="ord-title">
-                                                                        {item.name}
-                                                                        <span>{item.date} | {item.items.length} items</span>
-                                                                    </td>
-                                                                    <td className="price">
-                                                                        ₡{item.prices.total}
-                                                                    </td>
-                                                                    <td style={{ textAlign: 'right' }}>
-                                                                        <Button className="btn-detail"
+                                        {
+                                            myOrders.length !== 0 &&
+                                            <>
+                                                {
+                                                    myOrders.map((item, index) => {
+                                                        return (
+                                                            <tr key={index}>
+                                                                <td className="ord-title">
+                                                                    {item.name}
+                                                                    <span>{item.date} | {item.items.length} items</span>
+                                                                </td>
+                                                                <td className="price">
+                                                                    ₡{item.prices.total}
+                                                                </td>
+                                                                <td style={{ textAlign: 'right' }}>
+                                                                    <Button className="btn-detail"
                                                                             onClick={() => {
                                                                                 this.seeMore(item.id)
                                                                             }}>
-                                                                            ver más
+                                                                        ver más
                                                                     </Button>
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        })
-                                                    }
-                                                </>
-                                            }
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                }
+                                            </>
+                                        }
                                         </tbody>
                                     </table>
                                 </div>
