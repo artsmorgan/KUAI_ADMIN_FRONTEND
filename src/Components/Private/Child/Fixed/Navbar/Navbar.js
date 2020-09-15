@@ -63,7 +63,9 @@ class Navbar extends React.Component {
     }
 
     removeCollapsed = () => {
-        $(".sidebar-wrapper").removeClass('collapsed')
+        // $(".sidebar-wrapper").removeClass('collapsed')
+        $(".sidebar-wrapper").removeClass('mb-sidepanel')
+        $(".sidebar-wrapper").addClass('trigger')
     }
 
     getStyle = () => {

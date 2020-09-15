@@ -21,10 +21,10 @@ class Sidebar extends React.Component {
             redirectToLogin: false
         }
 
-        window.addEventListener("resize", this.updateDimension);
+        // window.addEventListener("resize", this.updateDimension);
     }
 
-    updateDimension = () => {
+/*    updateDimension = () => {
         this.setState({
             width: window.innerWidth
         }, () => {
@@ -37,18 +37,25 @@ class Sidebar extends React.Component {
                 }
             }
         });
-    };
+    };*/
 
     componentDidMount() {
-        this.updateDimension();
+        // this.updateDimension();
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.updateDimension);
+        // window.removeEventListener('resize', this.updateDimension);
     }
 
     addCollapsed = () => {
-        $(".sidebar-wrapper").addClass('collapsed')
+        // $(".sidebar-wrapper").addClass('collapsed')
+        $(".sidebar-wrapper").removeClass('trigger')
+        $(".sidebar-wrapper").addClass('mb-sidepanel')
+    }
+
+    addCollapsedDesktop = () => {
+        $(".sidebar-wrapper").removeClass('trigger')
+        $(".sidebar-wrapper").addClass('mb-sidepanel')
     }
 
     gotoStep = (e, step) => {
@@ -83,6 +90,17 @@ class Sidebar extends React.Component {
             <>
                 <div className="sidebar-wrapper mb-sidepanel">
                     <img className="logo-sidebar" src={Logo} style={{width: '75%'}} alt="website logo"/>
+                    <button className="menu-close desktop" onClick={this.addCollapsedDesktop}>
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17.4573 14.8367C18.1809 15.5604 18.1809 16.7336 17.4573 17.4573C16.7336 18.1809 15.5604 18.1809 14.8367 17.4573L0.542887 3.16342C-0.180755 2.43978 -0.180755 1.26653 0.542887 0.542886C1.26653 -0.180756 2.43978 -0.180756 3.16342 0.542886L17.4573 14.8367Z"
+                                fill="black"/>
+                            <path
+                                d="M14.8366 0.542731C15.5602 -0.18091 16.7335 -0.18091 17.4571 0.542731C18.1808 1.26637 18.1808 2.43963 17.4571 3.16327L3.16327 17.4571C2.43963 18.1808 1.26637 18.1808 0.542731 17.4571C-0.18091 16.7335 -0.18091 15.5602 0.542731 14.8366L14.8366 0.542731Z"
+                                fill="black"/>
+                        </svg>
+
+                    </button>
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
                             <img src={Avatar} alt="User Avatar"/>
@@ -94,16 +112,16 @@ class Sidebar extends React.Component {
                             </Dropdown.Toggle>
                         </Dropdown>
                         <button className="menu-close" onClick={this.addCollapsed}>
-                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M17.4573 14.8367C18.1809 15.5604 18.1809 16.7336 17.4573 17.4573C16.7336 18.1809 15.5604 18.1809 14.8367 17.4573L0.542887 3.16342C-0.180755 2.43978 -0.180755 1.26653 0.542887 0.542886C1.26653 -0.180756 2.43978 -0.180756 3.16342 0.542886L17.4573 14.8367Z"
-                                fill="black"/>
-                            <path
-                                d="M14.8366 0.542731C15.5602 -0.18091 16.7335 -0.18091 17.4571 0.542731C18.1808 1.26637 18.1808 2.43963 17.4571 3.16327L3.16327 17.4571C2.43963 18.1808 1.26637 18.1808 0.542731 17.4571C-0.18091 16.7335 -0.18091 15.5602 0.542731 14.8366L14.8366 0.542731Z"
-                                fill="black"/>
-                        </svg>
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M17.4573 14.8367C18.1809 15.5604 18.1809 16.7336 17.4573 17.4573C16.7336 18.1809 15.5604 18.1809 14.8367 17.4573L0.542887 3.16342C-0.180755 2.43978 -0.180755 1.26653 0.542887 0.542886C1.26653 -0.180756 2.43978 -0.180756 3.16342 0.542886L17.4573 14.8367Z"
+                                    fill="black"/>
+                                <path
+                                    d="M14.8366 0.542731C15.5602 -0.18091 16.7335 -0.18091 17.4571 0.542731C18.1808 1.26637 18.1808 2.43963 17.4571 3.16327L3.16327 17.4571C2.43963 18.1808 1.26637 18.1808 0.542731 17.4571C-0.18091 16.7335 -0.18091 15.5602 0.542731 14.8366L14.8366 0.542731Z"
+                                    fill="black"/>
+                            </svg>
 
-                    </button>
+                        </button>
                     </div>
                     <ul className="menu-list">
                         <li>
