@@ -2198,4 +2198,14 @@ body {
   margin-top: 0;
   margin-bottom: 1rem;
 }
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 1024px) {
+  .mb-sidepanel {
+    left: auto !important;
+    right: 100% !important;
+  }
+  .wrapper {
+    padding-left: 0px;
+  }
+}
 /*# sourceMappingURL=style.css.map */
