@@ -5,6 +5,8 @@ import SimpleReactValidator from 'simple-react-validator';
 
 import Logo from "../../assets/images/kuai-logo-new.png";
 import * as APITools from '../../util/apiX'
+import { axiosRequest } from '../../util/api'
+import { toastr } from 'react-redux-toastr'
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
@@ -16,12 +18,16 @@ class ChangePassword extends React.Component {
         this.state = {
             dataToPost: {
                 password: '',
-            }
+            },
+            activationCode: this.props.match.params.activationCode,
+            uid: this.props.match.params.uid,
         }
 
         SimpleReactValidator.addLocale('es', {
             required: 'este campo es requerido'
         });
+
+        
 
         this.validator = new SimpleReactValidator({
             locale: 'es',
@@ -44,17 +50,47 @@ class ChangePassword extends React.Component {
         this.setState({dataToPost: obj});
     };
 
+    //{}
+
     formSubmitHandler = (e) => {
         e.preventDefault();
         if (this.validator.allValid()) {
-            this.processSubmit();
+            this.processSubmit(this.state.activationCode);
         } else {
             this.validator.showMessages();
         }
     };
 
     processSubmit() {
-        this.props.history.push('/change-password/success')
+        // let formData = new URLSearchParams()
+        //     formData.set('uid', this.state.uid)
+        //     formData.set('code', this.state.activationCode)
+        //     formData.set('password', this.state.dataToPost.password)
+
+        const  params = {
+            uid: this.state.uid,
+            code: this.state.activationCode,
+            password: this.state.dataToPost.password,
+        }
+        console.log('params',params);
+        // console.log('formData',formData);
+        
+        axiosRequest.post('https://us-central1-kuai-test.cloudfunctions.net/api/forgotpassword/request', params)
+            .then(response => {
+                const data = response.data
+                console.log(response)
+                if (data.success) {
+                    // this.props.history.push('/change-password/success')
+                } else {
+                    // toastr.error("Error", "Su solicitud no pudo ser procesada")                    
+                }
+            })
+            .catch(error => {
+                console.log(error.response)
+                toastr.error("Error", error.response.data.message)
+                
+            })
+        
     }
 
     render() {
@@ -64,7 +100,7 @@ class ChangePassword extends React.Component {
                     <img src={Logo} alt="website logo"/>
                     <form onSubmit={this.formSubmitHandler}>
                         <div className="ls-panel">
-                            <p>Indica tu nuevo password</p>
+                            <p>Indica tu nuevo password </p>
                             <input className="pass" type="password" placeholder="*********" name="password"
                                    onChange={this.inputChangeHandler} value={this.state.dataToPost.password}/>
                             <p style={{color: "red"}}>

@@ -482,27 +482,27 @@ class DeliveryMethods extends React.Component {
                 </p>
               </div>
             </div>
-            <div className="row index-sample">
+            {/* <div className="row index-sample">
               <div className="col">
                 HASTA 3 KM
               </div>
               <div className="col"></div>
               <div className="col">₡ 1.500</div>
-            </div>
-            <div className="row index-sample">
+            </div> */}
+            {/* <div className="row index-sample">
               <div className="col">
                 HASTA 5 KM
               </div>
               <div className="col"></div>
               <div className="col">₡ 3.500</div>
-            </div>
-            <div className="row index-sample">
+            </div> */}
+            {/* <div className="row index-sample">
               <div className="col">
                 HASTA 7 KM
               </div>
               <div className="col"></div>
               <div className="col">₡ 4.500</div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
