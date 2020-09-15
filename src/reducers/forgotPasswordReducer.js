@@ -10,7 +10,7 @@ export default (state = initialState, action) => {
             return {...state, loading: true}
 
         case actionType.POST_FORGOT_PASS_FORM_SUCCESS:
-            console.log(action)
+            // console.log(action)
             return {...state, ...action.payload, loading: false}
 
         case actionType.POST_FORGOT_PASS_FORM_ERROR:

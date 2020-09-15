@@ -9,6 +9,7 @@ import {
 import {
     getFormData,
     postFormData,
+    cleanRegisterData
 } from './formAction'
 
 import {
@@ -60,6 +61,7 @@ export {
 
     getFormData,
     postFormData,
+    cleanRegisterData,
     
     getRestaurantFormData,
     updateRestaurantFormData,

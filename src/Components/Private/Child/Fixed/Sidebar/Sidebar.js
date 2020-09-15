@@ -28,7 +28,7 @@ class Sidebar extends React.Component {
         this.setState({
             width: window.innerWidth
         }, () => {
-            if (this.state.width < 1024) {
+            if (this.state.width < 1170) {
                 // console.log("Width:", this.state.width)
                 $(".sidebar-wrapper").addClass('collapsed')
             } else {
