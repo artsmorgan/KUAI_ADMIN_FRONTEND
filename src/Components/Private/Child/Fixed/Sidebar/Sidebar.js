@@ -81,7 +81,7 @@ class Sidebar extends React.Component {
         }
         return (
             <>
-                <div className="sidebar-wrapper">
+                <div className="sidebar-wrapper mb-sidepanel">
                     <img className="logo-sidebar" src={Logo} style={{width: '75%'}} alt="website logo"/>
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
