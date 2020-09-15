@@ -31,7 +31,7 @@ export const postLoginForm = (payload) => {
                     dispatch(postLoginSuccess(data))
                     dispatch(push(ROUTES.ORDERS))
                 } else {
-                    toastr.error(language[lang].error, data.message)
+                    toastr.error("Error", "Usuario o contraseña inválida.")
                     dispatch(postLoginError())
                 }
             })

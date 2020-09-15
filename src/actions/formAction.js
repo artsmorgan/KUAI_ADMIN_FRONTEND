@@ -13,6 +13,8 @@ const postFormRequest = () => ({type: actionType.POST_FORM_REQUEST})
 const postFormSuccess = (payload) => ({type: actionType.POST_FORM_SUCCESS, payload})
 const postFormError = () => ({type: actionType.POST_FORM_ERROR})
 
+const cleanTheRegisterData = () => ({type: actionType.CLEAN_REGISTER_DATA})
+
 const restaurantId = localStorage.getItem('restaurantId');
 
 const REGISTER_URL = '/api/createUser'
@@ -95,7 +97,7 @@ export const postFormData = (payload) => {
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postFormSuccess(data))
-                        dispatch(push(nextForm))
+                        // dispatch(push(nextForm))
                     } else {
                         const response = data.data
                         toastr.error(language[lang].error, data.error.message)
@@ -113,6 +115,13 @@ export const postFormData = (payload) => {
         } else {
             dispatch(postFormError())
         }
+    }
+
+}
+
+export const cleanRegisterData = () => {
+    return (dispatch) => {
+        dispatch(cleanTheRegisterData())
     }
 
 }

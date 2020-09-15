@@ -465,7 +465,7 @@ class DeliveryMethods extends React.Component {
           <div className="col">
             <div className="row">
               <div className="col">
-                <label htmlFor="">PRECIO DE ENVÍO</label>
+                <label htmlFor="">Precio por kilometro</label>
                 <input type="text" className="uni-input"
                        onChange={(e) => this.inputChangeHandler(e, 'expressPrecioEnvio')}
                        value={this.state.dataToPost.expressPrecioEnvio} name="expressPrecioEnvio"/>
@@ -474,12 +474,12 @@ class DeliveryMethods extends React.Component {
                 </p>
               </div>
               <div className="col">
-                <label htmlFor="">CADA</label>
+                {/*<label htmlFor="">CADA</label>
                 <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'expressCada')}
                        value={this.state.dataToPost.expressCada} name="expressCada"/>
                 <p style={{color: "red"}}>
                   {this.state.errors.expressEnabled.expressCada}
-                </p>
+                </p>*/}
               </div>
             </div>
             {/* <div className="row index-sample">

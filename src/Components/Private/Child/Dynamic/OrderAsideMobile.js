@@ -245,10 +245,10 @@ class OrdersAside extends React.Component {
                                                 <td>Impuestos</td>
                                                 <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.taxes : "N/A"}</td>
                                             </tr>
-                                            <tr>
+                                            {/*<tr>
                                                 <td>Envio express</td>
                                                 <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.express : "N/A"}</td>
-                                            </tr>
+                                            </tr>*/}
                                             <tr className="total">
                                                 <td>Total</td>
                                                 <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.total : "N/A"}</td>

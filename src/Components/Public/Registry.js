@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import TermsAndCondition from "./TermsAndCondition";
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-import {postFormData, isLoggedInAndRedirect, redirectToUrl} from '../../actions'
+import {postFormData, isLoggedInAndRedirect, redirectToUrl, cleanRegisterData} from '../../actions'
 import ROUTES from '../../util/routes'
 
 class Registry extends React.Component {
@@ -59,6 +59,7 @@ class Registry extends React.Component {
   }
 
   hideRegistrySuccessModal = () => {
+    this.props.cleanRegisterData();
     this.setState({registrySuccess: false});
   }
 
@@ -91,6 +92,30 @@ class Registry extends React.Component {
     let data = this.state
     // console.log(data)
     this.props.postFormData(data)
+  }
+
+  doTheTaskAfterRegSuccess = () => {
+    // console.log("doTheTaskAfterRegSuccess")
+    this.setState({registrySuccess: false}, () => {
+      this.props.history.push('/login')
+      this.props.cleanRegisterData()
+    })
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    try {
+      const {form} = this.props
+      // console.log(this.state.registrySuccess, form.REGISTER.success)
+      if(!this.state.registrySuccess && form.REGISTER.success) {
+        // console.log("Hi")
+        this.setState({registrySuccess: form.REGISTER.success}, () => {
+          if(this.state.registrySuccess) {
+            window.setTimeout(this.doTheTaskAfterRegSuccess, 3333)
+          }
+        })
+      }
+    } catch (e) {
+    }
   }
 
   render() {
@@ -191,14 +216,19 @@ class Registry extends React.Component {
   }
 }
 
+const mapStateToProps = ({form}) => ({
+  form
+})
+
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
         {
           postFormData,
           isLoggedInAndRedirect,
-          redirectToUrl
+          redirectToUrl,
+          cleanRegisterData
         },
         dispatch
     )
 
-export default connect(null, mapDispatchToProps)(Registry)
+export default connect(mapStateToProps, mapDispatchToProps)(Registry)

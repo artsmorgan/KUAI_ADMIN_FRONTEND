@@ -13,6 +13,8 @@ export default {
     POST_FORM_SUCCESS: 'POST_FORM_SUCCESS',
     POST_FORM_ERROR: 'POST_FORM_ERROR',
 
+    CLEAN_REGISTER_DATA: 'CLEAN_REGISTER_DATA',
+
     /**
      * Restaurant
      */
