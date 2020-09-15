@@ -286,7 +286,7 @@ body {
 
 .cstm-drop .dropdown-toggle::after {
     border: 0px !important;
-    background: url(../images/down-arrow.svg) no-repeat;
+    /*background: url(../images/down-arrow.svg) no-repeat;*/
     width: 18px;
     height: 10px;
     position: absolute;

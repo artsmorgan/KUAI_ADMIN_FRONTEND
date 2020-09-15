@@ -676,17 +676,17 @@ class ModifyRestaurant extends React.Component {
             {value: "10:00 am", label: "10:00 am", name: 'time'},
             {value: "11:00 am", label: "11:00 am", name: 'time'},
             {value: "12:00 pm", label: "12:00 pm", name: 'time'},
-            // { value: "01:00 pm", label: "01:00 pm", name: 'time' },
-            // { value: "02:00 pm", label: "02:00 pm", name: 'time' },
-            // { value: "03:00 pm", label: "03:00 pm", name: 'time' },
-            // { value: "04:00 pm", label: "04:00 pm", name: 'time' },
-            // { value: "05:00 pm", label: "05:00 pm", name: 'time' },
-            // { value: "06:00 pm", label: "06:00 pm", name: 'time' },
-            // { value: "07:00 pm", label: "07:00 pm", name: 'time' },
-            // { value: "08:00 pm", label: "08:00 pm", name: 'time' },
-            // { value: "09:00 pm", label: "09:00 pm", name: 'time' },
-            // { value: "10:00 pm", label: "10:00 pm", name: 'time' },
-            // { value: "11:00 pm", label: "11:00 pm", name: 'time' }
+            { value: "01:00 pm", label: "01:00 pm", name: 'time' },
+            { value: "02:00 pm", label: "02:00 pm", name: 'time' },
+            { value: "03:00 pm", label: "03:00 pm", name: 'time' },
+            { value: "04:00 pm", label: "04:00 pm", name: 'time' },
+            { value: "05:00 pm", label: "05:00 pm", name: 'time' },
+            { value: "06:00 pm", label: "06:00 pm", name: 'time' },
+            { value: "07:00 pm", label: "07:00 pm", name: 'time' },
+            { value: "08:00 pm", label: "08:00 pm", name: 'time' },
+            { value: "09:00 pm", label: "09:00 pm", name: 'time' },
+            { value: "10:00 pm", label: "10:00 pm", name: 'time' },
+            { value: "11:00 pm", label: "11:00 pm", name: 'time' }
         ];
 
 
