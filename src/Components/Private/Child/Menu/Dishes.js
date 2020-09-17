@@ -7,6 +7,8 @@ import Checkbox from '@opuscapita/react-checkbox';
 import Select from 'react-select';
 import SimpleReactValidator from "simple-react-validator";
 import {uuid} from "uuidv4";
+import {storage, db} from "../../../firebase";
+import {toastr} from 'react-redux-toastr'
 
 class Dishes extends Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class Dishes extends Component {
 
     this.state = {
       selectedDish: null,
+      selectedDishPicture: null
     }
     this.validator = new SimpleReactValidator({
       locale: 'es',
@@ -56,9 +59,60 @@ class Dishes extends Component {
       lleva: 0,
       paga: 0,
       envioGratis: false,
+      picture: ''
     }
     this.setState({selectedDish: newDish});
   }
+
+  getFileExtension = filename => filename.split('.').pop();
+
+  handleProductImageUpload = (e) => {
+    // console.log('handleProfileImageUpload',e.target.files[0]);
+    if (e && e.target.files[0]) {
+        const _files = e.target.files[0];
+        // this.setState({ profileImage: e.target.files[0] });
+        const fileExtension = this.getFileExtension(e.target.files[0].name)
+        const filename = `${Date.now()}.${fileExtension}`;
+        const uploadTask = storage.ref(`restaurants/${localStorage.getItem('restaurantId')}/images/products/${filename}`).put(e.target.files[0]);
+
+        uploadTask.on(
+            "state_changed",
+            snapshot => {
+                const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+                this.setState({progress: progress});
+            },
+            error => {
+                console.log(error);
+            },
+            () => {
+                storage
+                    .ref(`restaurants/${localStorage.getItem('restaurantId')}/images/products/`)
+                    .child(filename)
+                    .getDownloadURL()
+                    .then(url => {
+                      console.log('url', url);
+                        this.setState({selectedDishPicture: url});
+                        let obj = this.state.selectedDish
+                            obj['picture'] = url
+                            console.log('obj',obj);
+                            this.setState({selectedDish: obj})
+                        // const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                        // docRef.update({
+                        //     profilePicture: url
+                        // }).then(() => {
+                        //     toastr.success("Éxito", 'La imágen de perfil fue subida con éxito')
+                        //     // this.props.getDefaultConfigData({restaurantId: localStorage.getItem('restaurantId')})
+                        // }).catch((error) => {
+                        //     console.log('Error updating the document:', error);
+                        // })
+                    });
+            }
+        );
+    }
+
+};
 
   render() {
     if (this.props.categories.loading || this.props.dishes.loading) {
@@ -120,8 +174,10 @@ class Dishes extends Component {
 
   renderDishes() {
     let {dishes} = this.props;
+    console.log(dishes)
     return <>
       {dishes.dishes.map(dish =>
+          
           <div className="rotator" key={dish.id}>
             <div className="directional">
               <svg className="top" width="9" height="7" viewBox="0 0 9 7"
@@ -139,7 +195,7 @@ class Dishes extends Component {
               </svg>
             </div>
             <div className="img"
-                 style={{background: "url(" + null + ")"}}></div>
+                 style={{background: "url(" + dish.picture + ")"}}></div>
             <div className="menu-ind">
               <p>{dish.name}</p>
               <span>₡{dish.price}</span>
@@ -232,13 +288,14 @@ class Dishes extends Component {
           <label htmlFor="">VISTA PREVIA</label>
           <div className="add-menu-new">
             <div className="add-item">
-              <svg width="22" height="20" viewBox="0 0 22 20" fill="none"
+              {/* <svg width="22" height="20" viewBox="0 0 22 20" fill="none"
                    xmlns="http://www.w3.org/2000/svg">
                 <path
                     d="M19.2499 3.12461H17.3498L15.9741 0.374512H6.02455L4.65015 3.12596L2.75275 3.12934C1.24009 3.13204 0.00869271 4.36474 0.00738656 5.87808L0 16.8744C0 18.3911 1.23337 19.6251 2.7501 19.6251H19.2499C20.7667 19.6251 22 18.3918 22 16.875V5.87466C22 4.35798 20.7666 3.12461 19.2499 3.12461ZM10.9997 16.1875C7.9669 16.1875 5.49947 13.7201 5.49947 10.6873C5.49947 7.65455 7.9669 5.18712 10.9997 5.18712C14.0324 5.18712 16.4999 7.65455 16.4999 10.6873C16.4999 13.7201 14.0324 16.1875 10.9997 16.1875Z"
                     fill="#AEA7AF"/>
-              </svg>
-
+              </svg> */}
+              <div className="img"
+                 style={{background: "url(" + this.state.selectedDish.picture + ")"}}></div>
             </div>
             <div className="add-details">
               <p className="title">{this.state.selectedDish.name}</p>
@@ -275,14 +332,14 @@ class Dishes extends Component {
             <p style={{color: "red"}}>
               {this.validator.message('name', this.state.selectedDish.description, 'required')}
             </p>
-            <label htmlFor="">CATEGORIA:</label>
-            <Select className="cstm-select" value={this.state.selectedDish.categoryId}
+            <label htmlFor="">CATEGORIA (Próximamente)</label>
+            {/* <Select className="cstm-select" value={this.state.selectedDish.categoryId}
                     onChange={this.selectHandleChange}
                     placeholder="Categoria"
                     options={this.props.categories.categories.map(category => {
                       return {value: category.id, label: category.name, name: "categoryId"}
                     })}
-            />
+            /> */}
             <p style={{color: "red"}}>
               {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
             </p>

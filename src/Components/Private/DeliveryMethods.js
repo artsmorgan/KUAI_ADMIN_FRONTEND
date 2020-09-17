@@ -259,7 +259,7 @@ class DeliveryMethods extends React.Component {
             <Checkbox id="acceptReservations" name="acceptReservations"
                       onChange={(e) => this.CheckboxChangeHandler(e, 'acceptReservations')}
                       checked={this.state.dataToPost.acceptReservations}/>
-            <label htmlFor="" className="chk-label">Accept reservations</label>
+            <label htmlFor="" className="chk-label">Se aceptan reservaciones</label>
           </div>
         </div>
       </div>
@@ -473,14 +473,14 @@ class DeliveryMethods extends React.Component {
                   {this.state.errors.expressEnabled.expressPrecioEnvio}
                 </p>
               </div>
-              <div className="col">
+              {/* <div className="col"> */}
                 {/*<label htmlFor="">CADA</label>
                 <input type="text" className="uni-input" onChange={(e) => this.inputChangeHandler(e, 'expressCada')}
                        value={this.state.dataToPost.expressCada} name="expressCada"/>
                 <p style={{color: "red"}}>
                   {this.state.errors.expressEnabled.expressCada}
                 </p>*/}
-              </div>
+              {/* </div> */}
             </div>
             {/* <div className="row index-sample">
               <div className="col">

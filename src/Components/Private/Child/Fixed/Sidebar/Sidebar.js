@@ -9,7 +9,7 @@ import SupportModal from "./SupportModal";
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import ROUTES from '../../../../../util/routes'
-import { logout, redirectToUrl, getFormData } from '../../../../../actions'
+import { logout, redirectToUrl, getFormData, getDefaultConfigData } from '../../../../../actions'
 
 class Sidebar extends React.Component {
 
@@ -39,12 +39,17 @@ class Sidebar extends React.Component {
         });
     };*/
 
+    componentWillMount() {
+        this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
+    }
+
     componentDidMount() {
         // this.updateDimension();
     }
 
     componentWillUnmount() {
         // window.removeEventListener('resize', this.updateDimension);
+        
     }
 
     addCollapsed = () => {
@@ -78,7 +83,21 @@ class Sidebar extends React.Component {
         this.setState({show: false});
     }
 
+    getStyle = () => {
+        let restaurantProfilePicture = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
+        if(!restaurantProfilePicture) {
+            restaurantProfilePicture = "http://www.gravatar.com/avatar/?d=identicon"
+        }
+        return {
+                    background: 'url('+ restaurantProfilePicture +') no-repeat',
+                    backgroundSize: '100% 100%',
+                    width: "50px", height: "50px", marginTop: "5px",
+                    borderRadius: "50px"
+                }
+    }
+
     render() {
+        let restaurantName = this.props.defaultConfig.loading ? '' : this.props.defaultConfig.DEFAULT_CONFIG.restaurantName;
         if (this.state.redirectToLogin) {
             return (
                 <>
@@ -103,12 +122,11 @@ class Sidebar extends React.Component {
                     </button>
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
-                            <img src={Avatar} alt="User Avatar"/>
+                            <div className="headerImage" style={this.getStyle()}></div> 
                         </div>
                         <Dropdown className="cstm-drop">
                             <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                Costa Rica
-                                Beer factory
+                            {restaurantName}
                             </Dropdown.Toggle>
                         </Dropdown>
                         <button className="menu-close" onClick={this.addCollapsed}>
@@ -432,8 +450,11 @@ class Sidebar extends React.Component {
     }
 }
 
-const mapStateToProps = ({ form }) => ({
-    form
+
+
+const mapStateToProps = ({ form , defaultConfig}) => ({
+    form,
+    defaultConfig
 })
 
 const mapDispatchToProps = dispatch =>
@@ -441,7 +462,8 @@ const mapDispatchToProps = dispatch =>
         {
             getFormData,
             redirectToUrl,
-            logout
+            logout,
+            getDefaultConfigData,
         },
         dispatch
     )

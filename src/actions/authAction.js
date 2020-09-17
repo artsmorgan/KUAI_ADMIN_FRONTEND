@@ -90,7 +90,7 @@ export const logout = () => dispatch => {
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('token')
     localStorage.removeItem('restaurantId')
-    toastr.warning('Notice', 'Login Session Expired')
+    toastr.warning('', 'Se ha cerrado la sesión')
     dispatch(flushLoginCred())
     dispatch(redirectToLogin())
 }
