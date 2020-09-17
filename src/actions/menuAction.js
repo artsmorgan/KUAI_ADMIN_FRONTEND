@@ -1,44 +1,44 @@
 import actionType from './actionTypes'
-import { axiosRequest } from '../util/api'
+import {axiosRequest} from '../util/api'
 import ROUTES from '../util/routes'
-import { toastr } from 'react-redux-toastr'
-import { push } from 'connected-react-router'
+import {toastr} from 'react-redux-toastr'
+import {push} from 'connected-react-router'
 import language from '../constants/error-msg-definitions'
 
-const getCategoryListRequest = () => ({ type: actionType.GET_CATEGORY_LIST_REQUEST })
-const getCategoryListSuccess = (payload) => ({ type: actionType.GET_CATEGORY_LIST_SUCCESS, payload })
-const getCategoryListError = () => ({ type: actionType.GET_CATEGORY_LIST_ERROR })
+const getCategoryListRequest = () => ({type: actionType.GET_CATEGORY_LIST_REQUEST})
+const getCategoryListSuccess = (payload) => ({type: actionType.GET_CATEGORY_LIST_SUCCESS, payload})
+const getCategoryListError = () => ({type: actionType.GET_CATEGORY_LIST_ERROR})
 
-const postCategoryFormRequest = () => ({ type: actionType.POST_CATEGORY_FORM_REQUEST })
-const postCategoryFormSuccess = (payload) => ({ type: actionType.POST_CATEGORY_FORM_SUCCESS, payload })
-const postCategoryFormError = () => ({ type: actionType.POST_CATEGORY_FORM_ERROR })
+const postCategoryFormRequest = () => ({type: actionType.POST_CATEGORY_FORM_REQUEST})
+const postCategoryFormSuccess = (payload) => ({type: actionType.POST_CATEGORY_FORM_SUCCESS, payload})
+const postCategoryFormError = () => ({type: actionType.POST_CATEGORY_FORM_ERROR})
 
-const getMenuListRequest = () => ({ type: actionType.GET_MENU_LIST_REQUEST })
-const getMenuListSuccess = (payload) => ({ type: actionType.GET_MENU_LIST_SUCCESS, payload })
-const getMenuListError = () => ({ type: actionType.GET_MENU_LIST_ERROR })
+const getMenuListRequest = () => ({type: actionType.GET_MENU_LIST_REQUEST})
+const getMenuListSuccess = (payload) => ({type: actionType.GET_MENU_LIST_SUCCESS, payload})
+const getMenuListError = () => ({type: actionType.GET_MENU_LIST_ERROR})
 
-const postMenuFormRequest = () => ({ type: actionType.POST_MENU_FORM_REQUEST })
-const postMenuFormSuccess = (payload) => ({ type: actionType.POST_MENU_FORM_SUCCESS, payload })
-const postMenuFormError = () => ({ type: actionType.POST_MENU_FORM_ERROR })
+const postMenuFormRequest = () => ({type: actionType.POST_MENU_FORM_REQUEST})
+const postMenuFormSuccess = (payload) => ({type: actionType.POST_MENU_FORM_SUCCESS, payload})
+const postMenuFormError = () => ({type: actionType.POST_MENU_FORM_ERROR})
 
 const restaurantId = localStorage.getItem('restaurantId');
 
-const GET_CATEGORY_LIST_URL = '/api/menu/categories/' + restaurantId;
-const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId;
+const GET_CATEGORY_LIST_URL = '/api/menu/categories/'
+const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId
 
 const GET_MENU_LIST_URL = 'api/menu/item/';
 const UPDATE_MENU_URL = '/api/menu/item/';
 
-export const getCategoryListData = () => {
+export const getCategoryListData = (payload) => {
     return (dispatch, getState) => {
         dispatch(getCategoryListRequest())
-        let URL = GET_CATEGORY_LIST_URL
+        let URL = GET_CATEGORY_LIST_URL + payload.restaurantId;
 
         if (URL) {
             const state = getState()
-            const headers = { Authorization: `bearer ${state.auth.token}` }
+            const headers = {Authorization: `bearer ${state.auth.token}`}
             let params = {}
-            axiosRequest.get(URL, { headers, params })
+            axiosRequest.get(URL, {headers, params})
                 .then(response => {
                     // console.log(response)
                     dispatch(getCategoryListSuccess(response.data))
@@ -61,13 +61,13 @@ export const getCategoryListData = () => {
 export const getMenuListData = (id) => {
     return (dispatch, getState) => {
         dispatch(getMenuListRequest())
-        let URL = GET_MENU_LIST_URL+id
+        let URL = GET_MENU_LIST_URL + id
 
         if (URL) {
             const state = getState()
-            const headers = { Authorization: `bearer ${state.auth.token}` }
+            const headers = {Authorization: `bearer ${state.auth.token}`}
             let params = {}
-            axiosRequest.get(URL, { headers, params })
+            axiosRequest.get(URL, {headers, params})
                 .then(response => {
                     // console.log(response)
                     dispatch(getMenuListSuccess(response.data))
@@ -95,9 +95,9 @@ export const updateCategoryFormData = (payload, callback) => {
         if (URL) {
             const state = getState()
             const lang = 'en'
-            const headers = { Authorization: `bearer ${state.auth.token}` }
+            const headers = {Authorization: `bearer ${state.auth.token}`}
             // console.log(JSON.stringify(payload))
-            axiosRequest.put(URL, {categories: JSON.stringify(payload)}, { headers })
+            axiosRequest.put(URL, {categories: JSON.stringify(payload)}, {headers})
                 .then(response => {
                     const data = response.data
                     // console.log(response)
@@ -136,9 +136,9 @@ export const postMenuFormData = (payload, categoryId, callback) => {
         if (URL) {
             const state = getState()
             const lang = 'en'
-            const headers = { Authorization: `bearer ${state.auth.token}` }
+            const headers = {Authorization: `bearer ${state.auth.token}`}
             const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
-            axiosRequest.post(URL, data, { headers })
+            axiosRequest.post(URL, data, {headers})
                 .then(response => {
                     const data = response.data
                     // console.log(response)
@@ -147,7 +147,7 @@ export const postMenuFormData = (payload, categoryId, callback) => {
                         dispatch(postMenuFormSuccess(data))
                         dispatch(push(ROUTES.MODIFY_MENU))
                         getMenuListData(payload.categoryId);
-                        if(callback)
+                        if (callback)
                             callback();
                     } else {
                         const response = data.data

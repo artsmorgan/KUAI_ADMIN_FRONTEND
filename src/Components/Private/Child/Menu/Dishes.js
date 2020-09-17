@@ -7,6 +7,8 @@ import Checkbox from '@opuscapita/react-checkbox';
 import Select from 'react-select';
 import SimpleReactValidator from "simple-react-validator";
 import {uuid} from "uuidv4";
+import {db, storage} from "../../../firebase";
+import {toastr} from "react-redux-toastr";
 
 class Dishes extends Component {
   constructor(props) {
@@ -15,7 +17,7 @@ class Dishes extends Component {
     this.productPictRefUpload = React.createRef();
 
     this.state = {
-      selectedDish: null,
+      selectedDish: {},
     }
     this.validator = new SimpleReactValidator({
       locale: 'es',
@@ -104,7 +106,7 @@ class Dishes extends Component {
     </>
   }
 
-  selectHandleChange = categorySelectedOption => {
+/*  selectHandleChange = categorySelectedOption => {
     // console.log(categorySelectedOption)
     this.setState(
         this.state,
@@ -116,6 +118,15 @@ class Dishes extends Component {
           this.setState({selectedDish: obj})
         }
     );
+  };*/
+
+  selectHandleChange = categorySelectedOption => {
+    console.log(categorySelectedOption)
+    let obj = this.state.selectedDish
+    obj['categoryId'] = categorySelectedOption.value
+    this.setState({selectedDish: obj}, () => {
+      console.log(this.state)
+    })
   };
 
   renderDishes() {
@@ -182,7 +193,7 @@ class Dishes extends Component {
       }
     })
     dishes.push(obj);
-    this.props.postMenuFormData(dishes, this.props.selectedCategory.id, () => {
+    this.props.postMenuFormData(dishes, this.props.selectedCategory.id ? this.props.selectedCategory.id : this.state.selectedDish.categoryId, () => {
       this.setState({selectedDish: null})
       this.props.loadMenu(this.props.selectedCategory.id, this.props.selectedCategory.name);
     })
@@ -190,6 +201,7 @@ class Dishes extends Component {
 
   addMenuFormSubmitHandler = (e) => {
     e.preventDefault();
+    // console.log(this.validator.allValid())
     if (this.validator.allValid()) {
       this.addMenuProcessSubmit();
     } else {
@@ -216,6 +228,10 @@ class Dishes extends Component {
     console.log('uploadPhoto', this.state.selectedDish );
     this.productPictRefUpload.current.click();
   }
+
+  handleProductImageUpload = (e) => {
+    console.log('handleProductImageUpload',e.target.files[0]);
+  };
 
   
 

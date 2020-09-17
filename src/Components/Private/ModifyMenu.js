@@ -172,7 +172,7 @@ class ModifyMenu extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getCategoryListData()
+        this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
         //window.setTimeout(this.displayCategoryList, 800)
         // window.setTimeout(this.displayMenuList, 800)
 
