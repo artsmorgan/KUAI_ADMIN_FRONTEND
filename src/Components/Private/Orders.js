@@ -4,6 +4,7 @@ import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
 import myOrders from '../../util/data/myOrders.json'
+import SafePana from "../../assets/images/Safe-pana.svg";
 
 class Orders extends React.Component {
 
@@ -91,14 +92,14 @@ class Orders extends React.Component {
 
                             <div className={"col col-md-8 col-lg-8 col-sm-12 col-xs-12 mb-order-table " + (this.state.selectedOrderDiv ? 'hidden' : '')}>
                                 <div>
-                                    <Nav className="tab-cstm" variant="pills" defaultActiveKey="/ORDENES">
+                                    {/* <Nav className="tab-cstm" variant="pills" defaultActiveKey="/ORDENES">
                                         <Nav.Item>
                                             <Nav.Link href="/ORDENES">ORDENES</Nav.Link>
                                         </Nav.Item>
                                         <Nav.Item>
                                             <Nav.Link eventKey="link-1" onClick={this.getOrdersDispatched}>ORDENES DESPACHADAS</Nav.Link>
                                         </Nav.Item>
-                                    </Nav>
+                                    </Nav> */}
                                 </div>
                                 <div className="ord-table shadow-1">
                                     <table>
@@ -107,7 +108,16 @@ class Orders extends React.Component {
                                             myOrders.length === 0 &&
                                             <>
                                                 <tr>
+<<<<<<< HEAD
                                                     <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td>
+=======
+                                                    <td colSpan={3}>
+                                                    <div align={"center"}>
+                                                            <img src={SafePana}/>
+                                                            <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6>
+                                                        </div>
+                                                    </td>
+>>>>>>> 4afa7073c8064a0e29853fbbbe0f7dda48e2ef3f
                                                 </tr>
                                             </>
                                         }

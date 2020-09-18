@@ -31,7 +31,7 @@ export const postLoginForm = (payload) => {
                     dispatch(postLoginSuccess(data))
                     dispatch(push(ROUTES.ORDERS))
                 } else {
-                    toastr.error(language[lang].error, data.message)
+                    toastr.error("Error", "Usuario o contraseña inválida.")
                     dispatch(postLoginError())
                 }
             })
@@ -90,7 +90,7 @@ export const logout = () => dispatch => {
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('token')
     localStorage.removeItem('restaurantId')
-    toastr.warning('Notice', 'Login Session Expired')
+    toastr.warning('', 'Se ha cerrado la sesión')
     dispatch(flushLoginCred())
     dispatch(redirectToLogin())
 }

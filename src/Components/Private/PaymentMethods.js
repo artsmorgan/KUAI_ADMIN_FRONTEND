@@ -441,7 +441,7 @@ class PaymentMethods extends React.Component {
                             d="M-9.50382e-08 8.82578C-5.76932e-08 9.68013 1.00212 10.141 1.65079 9.58504L6.1142 5.75926C6.57981 5.36016 6.57981 4.63984 6.1142 4.24074L1.65079 0.414964C1.00212 -0.141042 -4.66843e-07 0.319867 -4.29498e-07 1.17422L-9.50382e-08 8.82578Z"
                             fill="#3F3356"/>
                     </svg>
-                    <Switch
+                    {/* <Switch
                         checked={false}
                         // onChange={(e) => this.handleChange(e, 'tarjetaViaAppEnabled')}
                         handleDiameter={28}
@@ -453,7 +453,7 @@ class PaymentMethods extends React.Component {
                         width={60}
                         className="react-switch"
                         id="small-radius-switch"
-                    />
+                    /> */}
                 </div>
 
             </div>

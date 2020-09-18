@@ -133,10 +133,11 @@ body {
 }
 
 .container-login .ls-panel .link-holder a {
-    color: #262628;
-    font-size: 12px;
-    opacity: 0.4;
-    font-weight: 500;
+  color: #262628;
+  font-size: 12px;
+  opacity: 0.4;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .container-login .ls-panel .link-holder a.default {
