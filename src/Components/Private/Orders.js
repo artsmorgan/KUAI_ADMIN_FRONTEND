@@ -114,6 +114,7 @@ class Orders extends React.Component {
                                                             <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6>
                                                         </div>
                                                     </td>
+
                                                 </tr>
                                             </>
                                         }

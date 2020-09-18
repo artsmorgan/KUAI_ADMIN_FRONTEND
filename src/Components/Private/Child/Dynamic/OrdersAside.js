@@ -122,7 +122,8 @@ class OrdersAside extends React.Component {
 
                     <div align={"center"}>
                         <img src={SafePana}/>
-                        <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6>
+                        {/* <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6> */}
+                        <h6>Actualmente no cuentas con ordenes despachadas</h6>
                     </div>
 
                     {/* Order Details start */}
@@ -173,7 +174,7 @@ class OrdersAside extends React.Component {
                                     </svg>
 
                                 </button>
-                                <span>Express</span>
+                                <span>Rápido</span>
                             </div>
                         </div>
                         <div className="order-ptable">
@@ -268,7 +269,7 @@ class OrdersAside extends React.Component {
                                         fill="white"/>
                                 </svg>
                             </div>
-                            <p>Express</p>
+                            <p>Rápido</p>
                             <a onClick={this.hideExpress} style={xStyle}>
                                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">

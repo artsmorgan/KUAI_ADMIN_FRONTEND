@@ -122,7 +122,11 @@ class Sidebar extends React.Component {
                     </button>
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
+
+                            {/* <img src={Logo} alt="User Avatar" style={{width:'100%'}}/> */}
+
                             <div className="headerImage" style={this.getStyle()}></div> 
+
                         </div>
                         <Dropdown className="cstm-drop">
                             <Dropdown.Toggle variant="success" id="dropdown-basic">
