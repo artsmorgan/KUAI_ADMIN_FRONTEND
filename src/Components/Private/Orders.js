@@ -107,8 +107,7 @@ class Orders extends React.Component {
                                             myOrders.length === 0 &&
                                             <>
                                                 <tr>
-                                                    <td colSpan={3}><h1 className="display-4">No order
-                                                        found.</h1></td>
+                                                    <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td>
                                                 </tr>
                                             </>
                                         }

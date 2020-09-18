@@ -259,7 +259,7 @@ class DeliveryMethods extends React.Component {
             <Checkbox id="acceptReservations" name="acceptReservations"
                       onChange={(e) => this.CheckboxChangeHandler(e, 'acceptReservations')}
                       checked={this.state.dataToPost.acceptReservations}/>
-            <label htmlFor="" className="chk-label">Accept reservations</label>
+            <label htmlFor="" className="chk-label">Se aceptan reservaciones</label>
           </div>
         </div>
       </div>
