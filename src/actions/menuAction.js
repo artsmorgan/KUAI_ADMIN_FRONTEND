@@ -21,6 +21,10 @@ const postMenuFormRequest = () => ({ type: actionType.POST_MENU_FORM_REQUEST })
 const postMenuFormSuccess = (payload) => ({ type: actionType.POST_MENU_FORM_SUCCESS, payload })
 const postMenuFormError = () => ({ type: actionType.POST_MENU_FORM_ERROR })
 
+const getMenuListFullRequest = () => ({ type: actionType.GET_MENU_LIST_FULL_REQUEST })
+const getMenuListFullSuccess = (payload) => ({ type: actionType.GET_MENU_LIST_FULL_SUCCESS, payload })
+const getMenuListFullError = () => ({ type: actionType.GET_MENU_LIST_FULL_ERROR })
+
 const restaurantId = localStorage.getItem('restaurantId');
 
 const GET_CATEGORY_LIST_URL = '/api/menu/categories/' + restaurantId;
@@ -28,6 +32,8 @@ const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId;
 
 const GET_MENU_LIST_URL = 'api/menu/item/';
 const UPDATE_MENU_URL = '/api/menu/item/';
+
+const GET_MENU_LIST_BY_CATEGORY_URL = 'api/menu/categoriesandproducts/'+ restaurantId;
 
 export const getCategoryListData = () => {
     return (dispatch, getState) => {
@@ -58,6 +64,8 @@ export const getCategoryListData = () => {
 
 }
 
+
+
 export const getMenuListData = (id) => {
     return (dispatch, getState) => {
         dispatch(getMenuListRequest())
@@ -82,6 +90,35 @@ export const getMenuListData = (id) => {
                 })
         } else {
             dispatch(getMenuListError())
+        }
+    }
+
+}
+
+export const getMenuListByCategoryData = () => {
+    return (dispatch, getState) => {
+        dispatch(getMenuListFullRequest())
+        let URL = GET_MENU_LIST_BY_CATEGORY_URL
+        console.log('url',URL)
+        if (URL) {
+            const state = getState()
+            const headers = { Authorization: `bearer ${state.auth.token}` }
+            let params = {}
+            axiosRequest.get(URL, { headers, params })
+                .then(response => {
+                    console.log(response)
+                    dispatch(getMenuListFullSuccess(response.data))
+                })
+                .catch(error => {
+                    const response = error.response
+                    // console.log(error)
+                    dispatch(getMenuListFullError())
+                    if (response && response.status === 401) {
+                        // logout(dispatch)
+                    }
+                })
+        } else {
+            dispatch(getMenuListFullError())
         }
     }
 

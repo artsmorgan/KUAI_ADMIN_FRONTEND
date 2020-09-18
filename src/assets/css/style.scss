@@ -1589,6 +1589,14 @@ body {
   and (min-device-width: 320px)
   and (max-device-width: 896px) {
 
+    .dishEditorMobile{
+      position: absolute;
+      z-index: 9;
+      top: 0;
+      left: 0;
+      background: whitesmoke;
+    }
+
     .collapse-area .collapse-container .collapse-header span{
       font-size: 12px;
     }

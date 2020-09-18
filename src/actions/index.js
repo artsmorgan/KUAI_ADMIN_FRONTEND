@@ -33,7 +33,8 @@ import {
     getCategoryListData,
     updateCategoryFormData,
     getMenuListData,
-    postMenuFormData
+    postMenuFormData,
+    getMenuListByCategoryData
 } from './menuAction'
 import {
     getControlCenterMethodFormData,
@@ -85,5 +86,7 @@ export {
 
     postForgotPassFormData,
 
-    postTechSupportFormData
+    postTechSupportFormData,
+
+    getMenuListByCategoryData
 }

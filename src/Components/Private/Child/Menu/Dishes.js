@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from "redux";
-import {getCategoryListData, updateCategoryFormData, postMenuFormData} from "../../../../actions";
+import {getCategoryListData, updateCategoryFormData, postMenuFormData, getMenuListByCategoryData} from "../../../../actions";
 import {connect} from "react-redux";
 import LoaderInScreen from "../../../Public/LoaderInScreen";
 import Checkbox from '@opuscapita/react-checkbox';
@@ -18,12 +18,18 @@ class Dishes extends Component {
 
     this.state = {
       selectedDish: null,
-      selectedDishPicture: null
+      selectedDishPicture: null,
+      allDishes: null
     }
     this.validator = new SimpleReactValidator({
       locale: 'es',
       autoForceUpdate: this
     });
+  }
+
+  componentWillMount(){
+     this.setState({allDishes: this.props.getMenuListByCategoryData() })
+     
   }
 
   CheckboxChangeHandler = (e, switchName) => {
@@ -114,7 +120,9 @@ class Dishes extends Component {
 
 };
 
+
   render() {
+    // console.log('allDishes', this.state.allDishes)
     if (this.props.categories.loading || this.props.dishes.loading) {
       return <LoaderInScreen/>
     }
@@ -124,7 +132,7 @@ class Dishes extends Component {
               className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "}>
             <h3 className="mb-hidden">Menú</h3>
             <div className="rotator-container lg">
-              <div className={`btn-theme add-menu ${this.props.selectedCategory ? '' : 'hidden'}`}>
+              <div className={`btn-theme add-menu `}>
                 <div className="add-item">
                   <span>+</span>
                 </div>
@@ -173,8 +181,8 @@ class Dishes extends Component {
   };
 
   renderDishes() {
-    let {dishes} = this.props;
-    console.log(dishes)
+    let {dishes} = this.props.getMenuListByCategoryData();
+    console.log('dishes',dishes)
     return <>
       {dishes.dishes.map(dish =>
           
@@ -281,8 +289,7 @@ class Dishes extends Component {
     }
     return <>
 
-      <div
-          className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 "}>
+      <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 dishEditorMobile "}>
         <h3 style={{marginBottom: '21px'}}>Nuevo item de Menú</h3>
         <div className="menu-details">
           <label htmlFor="">VISTA PREVIA</label>
@@ -478,12 +485,14 @@ class Dishes extends Component {
 
 const mapStateToProps = ({menuReducer}) => ({
   dishes: menuReducer.dishes,
-  categories: menuReducer.categories
+  categories: menuReducer.categories,
+  fullDishes: menuReducer.fullDishes
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
   updateCategoryFormData,
   getCategoryListData,
-  postMenuFormData
+  postMenuFormData,
+  getMenuListByCategoryData
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dishes)

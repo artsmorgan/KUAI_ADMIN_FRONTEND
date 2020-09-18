@@ -12,7 +12,8 @@ import {
     getMenuListData,
     postMenuFormData,
     redirectToUrl,
-    updateCategoryFormData
+    updateCategoryFormData,
+    getMenuListByCategoryData
 } from '../../actions'
 import SimpleReactValidator from "simple-react-validator";
 import {uuid} from 'uuidv4';
@@ -25,9 +26,14 @@ class ModifyMenu extends React.Component {
     constructor(props) {
         super(props);
 
-    this.state = {
-      selectedCategory: ''
-    }
+        this.state = {
+        selectedCategory: '',
+        mobile: false,
+        formTab: {
+                menuTab: true,
+                categoriesTab: false
+        },
+        }
 
         this.newMenuItem = this.newMenuItem.bind(this);
 
@@ -39,7 +45,31 @@ class ModifyMenu extends React.Component {
             locale: 'es',
             autoForceUpdate: this
         });
+
+        
     }
+
+    updateDimension = () => {
+        this.setState({
+            width: window.innerWidth
+        }, () => {
+            if (this.state.width < 1024) {
+                let obj = this.state.formTab
+
+                obj.informationTab = false;
+                obj.scheduleTab = false
+
+                this.setState({formTab: obj, mobile: true});
+            } else {
+                let obj = this.state.formTab
+
+                obj.informationTab = true;
+                obj.scheduleTab = true
+
+                this.setState({formTab: obj, mobile: false});
+            }
+        });
+    };
 
     inputChangeHandler = (e) => {
         let obj = this.state.categoryDataToPost
@@ -90,21 +120,41 @@ class ModifyMenu extends React.Component {
     }
 
 
+    // activateTab(e, tabName) {
+    //     let obj = this.state.formTab;
+    //     let alltabs = this.state.formTab;
+    //     if (this.state.mobile) {
+    //         for (const [key, value] of Object.entries(obj)) {
+    //             console.log(key)
+    //             console.log(value)
+    //             console.log(tabName)
+    //             if (key == tabName) {
+    //                 alltabs[key] = true
+    //             } else {
+    //                 alltabs[key] = false
+    //             }
+    //         }
+
+    //         this.setState({formTab: alltabs})
+    //     }
+    // }
+
     activateTab(e, tabName) {
+        console.log('here')
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
         if (this.state.mobile) {
             for (const [key, value] of Object.entries(obj)) {
-                console.log(key)
-                console.log(value)
-                console.log(tabName)
+                // console.log(key)
+                // console.log(value)
+                // console.log(tabName)
                 if (key == tabName) {
                     alltabs[key] = true
                 } else {
                     alltabs[key] = false
                 }
             }
-
+            console.log('alltabs',alltabs)
             this.setState({formTab: alltabs})
         }
     }
@@ -166,13 +216,14 @@ class ModifyMenu extends React.Component {
         // console.log(this.state.menuList)
     }
 
-    componentWillMount() {
-        //
+    componentWillMount() {        
         //this.props.getMenuListData()
+        window.removeEventListener('resize', this.updateDimension);
     }
 
     componentDidMount() {
         this.props.getCategoryListData()
+        this.updateDimension();
         //window.setTimeout(this.displayCategoryList, 800)
         // window.setTimeout(this.displayMenuList, 800)
 
@@ -224,10 +275,41 @@ class ModifyMenu extends React.Component {
 
   loadMenu(id, name) {
     this.setState({selectedCategory: {id, name}});
-    this.props.getMenuListData(id);
+    this.props.getMenuListByCategoryData();
+  }
+
+  renderMobile(){
+    return (
+        <>
+            <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.formTab.menuTab ? '' : 'hidden')}>
+                <Dishes loadMenu={(id, name) => this.loadMenu(id, name)} selectedCategory={this.state.selectedCategory}/>
+            </div>
+            <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.formTab.categoriesTab ? '' : 'hidden')}>
+                <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
+            </div>
+        </>
+    )
+  }
+
+  renderDesktop(){
+    return(
+        <>
+            <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
+            <Dishes loadMenu={(id, name) => this.loadMenu(id, name)} selectedCategory={this.state.selectedCategory}/>
+        </>
+    )
   }
 
   render() {
+
+    let render;
+
+    if(this.state.mobile){
+        render = this.renderMobile()
+    }else{
+        render = this.renderDesktop()
+    }
+
     return (
         <>
           <Sidebar/>
@@ -248,9 +330,9 @@ class ModifyMenu extends React.Component {
                       </Nav.Item>
                     </Nav>
                   </div>
-                  <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
-                  <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
-                          selectedCategory={this.state.selectedCategory}/>
+                  
+                  {render}
+                  
                 </div>
               </div>
             </div>
@@ -272,7 +354,8 @@ const mapDispatchToProps = dispatch =>
             updateCategoryFormData,
             redirectToUrl,
             getMenuListData,
-            postMenuFormData
+            postMenuFormData,
+            getMenuListByCategoryData
         },
         dispatch
     )
