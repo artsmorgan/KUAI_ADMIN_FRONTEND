@@ -108,16 +108,13 @@ class Orders extends React.Component {
                                             myOrders.length === 0 &&
                                             <>
                                                 <tr>
-<<<<<<< HEAD
                                                     <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td>
-=======
                                                     <td colSpan={3}>
                                                     <div align={"center"}>
                                                             <img src={SafePana}/>
                                                             <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6>
                                                         </div>
                                                     </td>
->>>>>>> 4afa7073c8064a0e29853fbbbe0f7dda48e2ef3f
                                                 </tr>
                                             </>
                                         }
