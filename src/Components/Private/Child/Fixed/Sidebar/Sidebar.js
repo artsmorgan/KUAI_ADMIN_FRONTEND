@@ -123,7 +123,7 @@ class Sidebar extends React.Component {
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
 
-                            <img src={Logo} alt="User Avatar" style={{width:'100%'}}/>
+                            {/* <img src={Logo} alt="User Avatar" style={{width:'100%'}}/> */}
 
                             <div className="headerImage" style={this.getStyle()}></div> 
 
