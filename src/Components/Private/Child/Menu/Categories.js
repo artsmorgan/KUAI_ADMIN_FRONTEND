@@ -144,7 +144,7 @@ class Categories extends Component {
 
       <div className="rotator-scroll" style={{paddingTop: '25px'}}
            id="categories-list">
-        {categories.categories.length === 0 ? this.renderNoCategories() : this.renderCategoriesList()}
+            {categories.categories.length === 0 ? this.renderNoCategories() : this.renderCategoriesList()}
       </div>
     </div>
   }
@@ -177,6 +177,7 @@ class Categories extends Component {
 
   renderCategoriesList() {
     let {categories} = this.props;
+    // console.log('categories',categories)
     //onClick={() => this.props.loadMenu(category.id, category.name)}
     return <>
       {

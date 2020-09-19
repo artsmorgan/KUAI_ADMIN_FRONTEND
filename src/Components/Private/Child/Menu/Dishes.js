@@ -9,8 +9,15 @@ import SimpleReactValidator from "simple-react-validator";
 import {uuid} from "uuidv4";
 import {storage, db} from "../../../firebase";
 import {toastr} from 'react-redux-toastr'
+import axios from 'axios'
+
+
+const restaurantId = localStorage.getItem('restaurantId');
+
+const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/categoriesandproducts/'+ restaurantId;
 
 class Dishes extends Component {
+  _isMounted = false;
   constructor(props) {
     super(props);
 
@@ -19,7 +26,9 @@ class Dishes extends Component {
     this.state = {
       selectedDish: null,
       selectedDishPicture: null,
-      allDishes: null
+      allDishes: {
+        productList: []
+      }
     }
     this.validator = new SimpleReactValidator({
       locale: 'es',
@@ -27,9 +36,37 @@ class Dishes extends Component {
     });
   }
 
-  componentWillMount(){
-     this.setState({allDishes: this.props.getMenuListByCategoryData() })
+  componentDidMount(){
+
+    this._isMounted = true;
+
+    // console.log('this.props.getMenuListByCategoryData()',this.props.getMenuListByCategoryData())
+    
+    // console.log('getMenuListByCategoryData',this.getMenuListByCategoryData())
+
+    //  this.setState({allDishes: this.props.getMenuListByCategoryData() })
+
+
+     axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
+        .then(response => {
+            console.log(response)
+            this.setState({allDishes: response.data});
+            // dispatch(getMenuListFullSuccess(response.data))
+        })
+        .catch(error => {
+            const response = error.response
+            console.log(error)
+            // dispatch(getMenuListFullError())
+            if (response && response.status === 401) {
+                // logout(dispatch)
+            }
+        })
      
+  }
+
+  componentWillUnmount(){
+    this._isMounted = false;
+    // this.setState({allDishes: null});
   }
 
   CheckboxChangeHandler = (e, switchName) => {
@@ -122,7 +159,7 @@ class Dishes extends Component {
 
 
   render() {
-    // console.log('allDishes', this.state.allDishes)
+    console.log('allDishes', this.state.allDishes)
     if (this.props.categories.loading || this.props.dishes.loading) {
       return <LoaderInScreen/>
     }
@@ -147,9 +184,8 @@ class Dishes extends Component {
                 </div>
               </div>
               <div className="rotator-scroll">
-                <div className="rotator-stripe">
-                  <p className="rotator-title">{this.props.selectedCategory.name}</p>
-                  {this.props.dishes.dishes.length === 0 ? this.renderNoItems() : this.renderDishes()}
+                <div className="rotator-stripe">                  
+                  {this.state.allDishes.productList.length === 0 ? this.renderNoItems() : this.renderDishes()}
                 </div>
               </div>
             </div>
@@ -180,47 +216,98 @@ class Dishes extends Component {
     );
   };
 
+  renderDish(){
+    return <i>test</i>
+  }
+
+  renderCategoryTitle(){}
+
   renderDishes() {
-    let {dishes} = this.props.getMenuListByCategoryData();
-    console.log('dishes',dishes)
-    return <>
-      {dishes.dishes.map(dish =>
+    let dishes = this.state.allDishes;
+    console.log('dishes---->',dishes)
+
+    let categoriesArr = []
+
+    let categories = dishes.productList.map(category => {
+      var categoryObj = {};
+
+      categoryObj['name'] = category.name;
+      categoryObj['id'] = category.id;
+      // categoryObj['products'] = (category.products.menuItems && category.products.menuItems.products.length > 0) ? JSON.parse(category.products.menuItems.productItemList)  : [];
+
+      // console.log('category',category)
+
+      if(category.products.menuItems && category.products.menuItems.productItemList){
+        categoryObj['items'] = JSON.parse(category.products.menuItems.productItemList);
+      }else{
+        categoryObj['items'] = [];
+      }
+
+      
+      // console.log('category.products.menuItems',category.products.menuItems)      
+      // console.log('categoryObj',categoryObj)
+      categoriesArr.push(categoryObj);
+
+    } )
+
+    console.log('categoriesArr',categoriesArr)
+
+    //parse product list
+    return (
+      <>
+          {categoriesArr.map(category => 
+              <>
+              <strong>{category.name}</strong>
+              <div>
+                {                  
+                  category.items.map(dish => 
+                  <div className="rotator" key={dish.id}>
+                    <div className="directional">
+                      <svg className="top" width="9" height="7" viewBox="0 0 9 7"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7.68156 7C8.50732 7 8.97723 6.05578 8.47932 5.39702L5.19777 1.05545C4.79765 0.526091 4.00237 0.52609 3.60225 1.05545L0.320704 5.39702C-0.177216 6.05578 0.292695 7 1.11846 7L7.68156 7Z"
+                            fill="#41404D"/>
+                      </svg>
+                      <svg className="bottom" width="9" height="7" viewBox="0 0 9 7"
+                          fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7.68156 7C8.50732 7 8.97723 6.05578 8.47932 5.39702L5.19777 1.05545C4.79765 0.526091 4.00237 0.52609 3.60225 1.05545L0.320704 5.39702C-0.177216 6.05578 0.292695 7 1.11846 7L7.68156 7Z"
+                            fill="#41404D"/>
+                      </svg>
+                    </div>
+                    <div className="img"
+                        style={{background: "url(" + dish.picture + ")"}}></div>
+                    <div className="menu-ind">
+                      <p>{dish.name}</p>
+                      <span>₡{dish.price}</span>
+                      <button onClick={() => {
+                        this.setState({selectedDish: {...dish}})
+                      }}>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" clipRule="evenodd"
+                                d="M8.89 0.21L10.99 2.31C11.27 2.59 11.27 3.01 10.99 3.29L9.73 4.55L6.65 1.47L7.91 0.21C8.19 -0.07 8.61 -0.07 8.89 0.21ZM0.21 7.91L5.67 2.45L8.75 5.53L3.29 10.99C3.15 11.13 3.01 11.2 2.8 11.2H0.7C0.28 11.2 0 10.92 0 10.5V8.4C0 8.19 0.07 8.05 0.21 7.91Z"
+                                fill="white"/>
+                        </svg>
+                        Editor
+                      </button>
+                    </div>
+                </div>
+                )}
+              </div>
+              </>
+          )
+        }
+      </>
+    )
+      
           
-          <div className="rotator" key={dish.id}>
-            <div className="directional">
-              <svg className="top" width="9" height="7" viewBox="0 0 9 7"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M7.68156 7C8.50732 7 8.97723 6.05578 8.47932 5.39702L5.19777 1.05545C4.79765 0.526091 4.00237 0.52609 3.60225 1.05545L0.320704 5.39702C-0.177216 6.05578 0.292695 7 1.11846 7L7.68156 7Z"
-                    fill="#41404D"/>
-              </svg>
-              <svg className="bottom" width="9" height="7" viewBox="0 0 9 7"
-                   fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M7.68156 7C8.50732 7 8.97723 6.05578 8.47932 5.39702L5.19777 1.05545C4.79765 0.526091 4.00237 0.52609 3.60225 1.05545L0.320704 5.39702C-0.177216 6.05578 0.292695 7 1.11846 7L7.68156 7Z"
-                    fill="#41404D"/>
-              </svg>
-            </div>
-            <div className="img"
-                 style={{background: "url(" + dish.picture + ")"}}></div>
-            <div className="menu-ind">
-              <p>{dish.name}</p>
-              <span>₡{dish.price}</span>
-              <button onClick={() => {
-                this.setState({selectedDish: {...dish}})
-              }}>
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                     xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd" clipRule="evenodd"
-                        d="M8.89 0.21L10.99 2.31C11.27 2.59 11.27 3.01 10.99 3.29L9.73 4.55L6.65 1.47L7.91 0.21C8.19 -0.07 8.61 -0.07 8.89 0.21ZM0.21 7.91L5.67 2.45L8.75 5.53L3.29 10.99C3.15 11.13 3.01 11.2 2.8 11.2H0.7C0.28 11.2 0 10.92 0 10.5V8.4C0 8.19 0.07 8.05 0.21 7.91Z"
-                        fill="white"/>
-                </svg>
-                Editor
-              </button>
-            </div>
-          </div>
-      )}</>
+          
+          
+      
+      
   }
 
   addMenuProcessSubmit() {
@@ -340,13 +427,13 @@ class Dishes extends Component {
               {this.validator.message('name', this.state.selectedDish.description, 'required')}
             </p>
             <label htmlFor="">CATEGORIA (Próximamente)</label>
-            {/* <Select className="cstm-select" value={this.state.selectedDish.categoryId}
+            <Select className="cstm-select" value={this.state.selectedDish.categoryId}
                     onChange={this.selectHandleChange}
                     placeholder="Categoria"
                     options={this.props.categories.categories.map(category => {
                       return {value: category.id, label: category.name, name: "categoryId"}
                     })}
-            /> */}
+            />
             <p style={{color: "red"}}>
               {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
             </p>
@@ -486,13 +573,13 @@ class Dishes extends Component {
 const mapStateToProps = ({menuReducer}) => ({
   dishes: menuReducer.dishes,
   categories: menuReducer.categories,
-  fullDishes: menuReducer.fullDishes
+  // fullDishes: menuReducer.fullDishes
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
   updateCategoryFormData,
   getCategoryListData,
   postMenuFormData,
-  getMenuListByCategoryData
+  // getMenuListByCategoryData
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dishes)
