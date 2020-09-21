@@ -50,7 +50,8 @@ class Categories extends Component {
     // console.log(result)
     this.setState({categoryListToUpdate: result}, () => {
       // console.log(this.state.categoryListToUpdate)
-      this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData)
+      this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+      this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
     })
   }
 
@@ -59,7 +60,10 @@ class Categories extends Component {
     $("svg[id=" + categoryId + "].trash").show()
     $("#categories-list svg[id=" + categoryId + "].tik").hide()
     $("input[id=" + categoryId + "]").parent().removeClass('active')
-    this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData)
+    this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+    window.setTimeout(() => {
+      this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
+    }, 500)
   }
 
   selectHandleChange = categorySelectedOption => {
@@ -84,7 +88,7 @@ class Categories extends Component {
     let categoryListToSend = this.props.categories.categories;
     categoryListToSend.push(categoryDataToPost)
     // console.log(categoryListToSend)
-    this.props.updateCategoryFormData(categoryListToSend, this.props.getCategoryListData)
+    this.props.updateCategoryFormData(categoryListToSend, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
     this.setState({
       show: false,
       categoryDataToPost: {name: ''}

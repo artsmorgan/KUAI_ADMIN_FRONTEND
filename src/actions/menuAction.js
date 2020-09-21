@@ -35,6 +35,7 @@ const UPDATE_MENU_URL = '/api/menu/item/';
 const GET_MENU_LIST_BY_CATEGORY_URL = '/api/menu/categoriesandproducts/'+ restaurantId;
 
 export const getCategoryListData = (payload) => {
+    // console.log("I see", payload)
     return (dispatch, getState) => {
         dispatch(getCategoryListRequest())
         let URL = GET_CATEGORY_LIST_URL + payload.restaurantId;
@@ -60,7 +61,6 @@ export const getCategoryListData = (payload) => {
             dispatch(getCategoryListError())
         }
     }
-
 }
 
 
@@ -136,7 +136,7 @@ export const updateCategoryFormData = (payload, callback) => {
             axiosRequest.put(URL, {categories: JSON.stringify(payload)}, {headers})
                 .then(response => {
                     const data = response.data
-                    // console.log(response)
+                    console.log(response)
                     if (data.success) {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postCategoryFormSuccess(data))
@@ -150,7 +150,7 @@ export const updateCategoryFormData = (payload, callback) => {
                     }
                 })
                 .catch(error => {
-                    // console.log(error)
+                    console.log(error)
                     const response = error.response
                     toastr.error(language[lang].error, language[lang].postFailed)
                     dispatch(postCategoryFormError())
