@@ -1634,7 +1634,7 @@ body {
     .sidebar-wrapper{
       z-index: 999;
       background: #f5f5f5;
-      box-shadow: 0px 0px 10px #bdbdbd;
+      border-right: 1px solid #dddddd;
       .menu-list{
         margin-top: 20px;
         a{
@@ -1739,7 +1739,7 @@ body {
     .sidebar-wrapper{
       z-index: 999;
       background: #f5f5f5;
-      box-shadow: 0px 0px 10px #bdbdbd;
+      border-right: 1px solid #dddddd;
       .menu-list{
         margin-top: 20px;
         a{
@@ -1847,7 +1847,7 @@ body {
     .sidebar-wrapper{
       z-index: 999;
       background: #f5f5f5;
-      box-shadow: 0px 0px 10px #bdbdbd;
+      border-right: 1px solid #dddddd;
       .menu-list{
         margin-top: 20px;
         a{
@@ -1939,7 +1939,7 @@ body {
     .sidebar-wrapper{
       z-index: 999;
       background: #f5f5f5;
-      box-shadow: 0px 0px 10px #bdbdbd;
+      border-right: 1px solid #dddddd;
       .menu-list{
         margin-top: 20px;
         a{
@@ -2048,15 +2048,54 @@ body {
   margin-bottom: 1rem;
 }
 
+.trigger{
+  left: 0px !important;
+  right: auto !important;
+}
 
-@media only screen
-  and (min-device-width: 320px)
-  and (max-device-width: 1024px) {
-    .mb-sidepanel{
+.menu-close.desktop{
+  top: 64px;
+  right: 10px;
+  display: none;
+}
+
+@media (min-width: 320px) and (max-width: 1024px) {
+  .mb-sidepanel {
       left: auto !important;
       right: 100% !important;
-    }
-    .wrapper{
+  }
+
+  .wrapper {
       padding-left: 0px;
-    }
+  }
+  .navbar-cstm{
+      padding-left: 0px;
+  }
+  .menu-close.desktop {
+      display: block;
+  }
+  .container-login img {
+    margin-top: -140px;
+    width: 170px;
+  }
+  // .avatar{
+  //   img{
+  //     width: 100px;
+  //   }
+  // }
+  .headerImage{
+    display: none;
+  }
 }
+
+// @media only screen
+//   and (min-device-width: 320px)
+//   and (max-device-width: 1024px) {
+//     .mb-sidepanel{
+//       left: auto !important;
+//       right: 100% !important;
+//     }
+//     .wrapper{
+//       padding-left: 0px;
+//     }
+// }
