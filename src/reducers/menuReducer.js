@@ -1,6 +1,6 @@
 import actionType from '../actions/actionTypes'
 
-const initialState = {categories: {loading: true, categories: []}, dishes: {loading: false, dishes: []}}
+const initialState = {categories: {loading: true, categories: []}, dishes: {loading: false, dishes: []}, eventTriggered: false}
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -30,7 +30,7 @@ export default (state = initialState, action) => {
       return {...state, loading: true}
 
     case actionType.POST_CATEGORY_FORM_SUCCESS:
-      return {...state, loading: false}
+      return {...state, loading: false, eventTriggered: true}
 
     case actionType.POST_CATEGORY_FORM_ERROR:
       return {...state, loading: false}
