@@ -32,6 +32,7 @@ const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId
 
 const GET_MENU_LIST_URL = 'api/menu/item/';
 const UPDATE_MENU_URL = '/api/menu/item/';
+const GET_MENU_LIST_BY_CATEGORY_URL = '/api/menu/categoriesandproducts/'+ restaurantId;
 
 export const getCategoryListData = (payload) => {
     return (dispatch, getState) => {

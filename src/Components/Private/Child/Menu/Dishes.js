@@ -9,6 +9,10 @@ import SimpleReactValidator from "simple-react-validator";
 import {uuid} from "uuidv4";
 import {db, storage} from "../../../firebase";
 import {toastr} from "react-redux-toastr";
+import axios from 'axios'
+
+const restaurantId = localStorage.getItem('restaurantId');
+const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/categoriesandproducts/'+ restaurantId;
 
 class Dishes extends Component {
   _isMounted = false;
