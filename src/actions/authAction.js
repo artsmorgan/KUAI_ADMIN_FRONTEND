@@ -37,7 +37,7 @@ export const postLoginForm = (payload) => {
             })
             .catch(error => {
                 // console.log(error.response)
-                toastr.error(language[lang].error, error.response.data.message)
+                toastr.error(language[lang].error, error.response !== undefined ? error.response.data.message : "Something went wrong")
                 dispatch(postLoginError())
             })
     }
