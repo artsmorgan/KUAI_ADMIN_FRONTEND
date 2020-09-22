@@ -42,10 +42,11 @@ class ModifyRestaurant extends React.Component {
         this.state = {
             width: 0,
             mobile: false,
+            selectedTab:'',
             formTab: {
                 generalTab: true,
-                informationTab: true,
-                scheduleTab: true,
+                informationTab: false,
+                scheduleTab: false,
             },
 
             profileImage: '',
@@ -146,23 +147,29 @@ class ModifyRestaurant extends React.Component {
         });
     }
 
-    updateDimension = () => {
+    updateDimension = (e) => {
         this.setState({
             width: window.innerWidth
         }, () => {
             if (this.state.width < 1024) {
-                let obj = this.state.formTab
+                this.setState({mobile: true});
+                let obj = this.state.selectedTab;
+            
+                if(obj===''){
+                    this.setState({selectedTab:'generalTab'});
+                    this.activateTab(e,'generalTab')
+                }else{
+                    this.activateTab(e,obj)
+                }
+                
 
-                obj.informationTab = true;
-                obj.scheduleTab = true
-
-                this.setState({formTab: obj, mobile: true});
+                
             } else {
                 let obj = this.state.formTab
 
                 obj.informationTab = true;
-                obj.scheduleTab = true
-
+                obj.scheduleTab = true;
+                obj.generalTab =true;
                 this.setState({formTab: obj, mobile: false});
             }
         });
@@ -536,13 +543,15 @@ class ModifyRestaurant extends React.Component {
     }
 
     activateTab(e, tabName) {
+        console.log("---aaa----");
+        console.log(tabName);
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
-        if (this.state.mobile) {
+        console.log(this.state.mobile);  
+        if (this.state.mobile) {  
+            console.log(alltabs);          
             for (const [key, value] of Object.entries(obj)) {
-                // console.log(key)
-                // console.log(value)
-                // console.log(tabName)
+                console.log(key);
                 if (key == tabName) {
                     alltabs[key] = true
                 } else {
@@ -550,7 +559,7 @@ class ModifyRestaurant extends React.Component {
                 }
             }
 
-            this.setState({formTab: alltabs})
+            this.setState({formTab: alltabs,selectedTab:tabName})
         }
     }
 
