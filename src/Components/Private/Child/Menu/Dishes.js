@@ -30,12 +30,38 @@ class Dishes extends Component {
         this.state = {
             allDishes: {productList: []},
             selectedDish: {},
+            categoryOptions: [],
+            selectedOption: null,
+            eventTriggered: null,
+            ignoreValidation: false
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
             autoForceUpdate: this
         });
     }
+
+    getMenuListByCat = () => {
+        axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
+            .then(response => {
+                // console.log(response)
+                this.setState({allDishes: response.data});
+                this.setState({eventTriggered: null});
+                // dispatch(getMenuListFullSuccess(response.data))
+            })
+            .catch(error => {
+                const response = error.response
+                console.log(error)
+                // dispatch(getMenuListFullError())
+                if (response && response.status === 401) {
+                    // logout(dispatch)
+                }
+            })
+    }
+
+    /*    componentWillMount() {
+            this.getMenuListByCat()
+        }*/
 
     componentDidMount() {
 
@@ -47,22 +73,24 @@ class Dishes extends Component {
 
         //  this.setState({allDishes: this.props.getMenuListByCategoryData() })
 
+        this.getMenuListByCat()
 
-        axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
-            .then(response => {
-                console.log(response)
-                this.setState({allDishes: response.data});
-                // dispatch(getMenuListFullSuccess(response.data))
-            })
-            .catch(error => {
-                const response = error.response
-                console.log(error)
-                // dispatch(getMenuListFullError())
-                if (response && response.status === 401) {
-                    // logout(dispatch)
-                }
-            })
+    }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        // console.log(prevState.eventTriggered)
+        // console.log(this.state.eventTriggered)
+        if (prevState.eventTriggered !== this.state.eventTriggered) {
+            // console.log("eventTriggered")
+            this.getMenuListByCat()
+        }
+    }
+
+    componentWillReceiveProps(props) {
+        console.log(props.eventTriggered)
+        this.setState({
+            eventTriggered: props.eventTriggered,
+        });
     }
 
     componentWillUnmount() {
@@ -136,11 +164,11 @@ class Dishes extends Component {
                         .child(filename)
                         .getDownloadURL()
                         .then(url => {
-                            console.log('url', url);
+                            // console.log('url', url);
                             this.setState({selectedDishPicture: url});
                             let obj = this.state.selectedDish
                             obj['picture'] = url
-                            console.log('obj', obj);
+                            // console.log('obj', obj);
                             this.setState({selectedDish: obj})
                             // const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
                             // docRef.update({
@@ -160,10 +188,11 @@ class Dishes extends Component {
 
 
     render() {
-        console.log('allDishes', this.state.allDishes)
+        // console.log('allDishes', this.state.allDishes)
         if (this.props.categories.loading || this.props.dishes.loading) {
             return <LoaderInScreen/>
         }
+
         return (
             <>
                 <div
@@ -220,13 +249,18 @@ class Dishes extends Component {
         );
       };*/
 
-    selectHandleChange = categorySelectedOption => {
-        console.log(categorySelectedOption)
-        let obj = this.state.selectedDish
-        obj['categoryId'] = categorySelectedOption.value
-        this.setState({selectedDish: obj}, () => {
-            console.log(this.state)
-        })
+    selectHandleChange = selectedOption => {
+        this.setState(
+            {selectedOption},
+            () => {
+                // console.log(`Option selected:`, this.state.selectedOption)
+                let obj = this.state.selectedDish
+                obj['categoryId'] = selectedOption.id
+                this.setState({selectedDish: obj}, () => {
+                    // console.log(this.state)
+                })
+            }
+        );
     };
 
     renderDish() {
@@ -238,7 +272,7 @@ class Dishes extends Component {
 
     renderDishes() {
         let dishes = this.state.allDishes;
-        console.log('dishes---->', dishes)
+        // console.log('dishes---->', dishes)
 
         let categoriesArr = []
 
@@ -264,7 +298,7 @@ class Dishes extends Component {
 
         })
 
-        console.log('categoriesArr', categoriesArr)
+        // console.log('categoriesArr', categoriesArr)
 
         //parse product list
         return (
@@ -274,7 +308,7 @@ class Dishes extends Component {
                         <strong>{category.name}</strong>
                         <div>
                             {
-                                category.items.map(dish =>
+                                category.items.length > 0 && category.items.map(dish =>
                                     <div className="rotator" key={dish.id}>
                                         <div className="directional">
                                             <svg className="top" width="9" height="7" viewBox="0 0 9 7"
@@ -297,6 +331,13 @@ class Dishes extends Component {
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>
                                             <button onClick={() => {
+                                                this.setState({
+                                                    selectedOption: {
+                                                        value: category.name,
+                                                        label: category.name,
+                                                        id: category.id
+                                                    }
+                                                })
                                                 this.setState({selectedDish: {...dish}})
                                             }}>
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
@@ -310,6 +351,12 @@ class Dishes extends Component {
                                         </div>
                                     </div>
                                 )}
+                            {
+                                category.items.length === 0 &&
+                                <small className="text-muted">
+                                    <em>No dish under this category.</em>
+                                </small>
+                            }
                         </div>
                     </>
                 )
@@ -344,15 +391,19 @@ class Dishes extends Component {
         })
         dishes.push(obj);
         this.props.postMenuFormData(dishes, this.props.selectedCategory.id ? this.props.selectedCategory.id : this.state.selectedDish.categoryId, () => {
-            this.setState({selectedDish: null})
+            this.setState({selectedDish: null, ignoreValidation: true, selectedOption: null}, () => {
+                console.log(this.state.selectedDish)
+            })
             this.props.loadMenu(this.props.selectedCategory.id, this.props.selectedCategory.name);
+            this.getMenuListByCat()
+            console.log(this.state.selectedDish)
         })
     }
 
     addMenuFormSubmitHandler = (e) => {
         e.preventDefault();
-        // console.log(this.validator.allValid())
-        if (this.validator.allValid()) {
+        console.log(this.validator.allValid(), this.state.selectedDish)
+        if (this.validator.allValid() && this.state.selectedDish) {
             this.addMenuProcessSubmit();
         } else {
             this.validator.showMessages();
@@ -431,7 +482,16 @@ class Dishes extends Component {
                         <input type="text" className="uni-input" name="name" onChange={this.addMenuInputChangeHandler}
                                value={this.state.selectedDish.name}/>
                         <p style={{color: "red"}}>
-                            {this.validator.message('name', this.state.selectedDish.name, 'required')}
+{/*                            { !this.state.ignoreValidation
+                                ? this.validator.message('name', this.state.selectedDish.name, 'required')
+                                : [
+                                    (!this.state.selectedDish
+                                            ? this.validator.message('name', this.state.selectedDish.name, 'required')
+                                            : ''
+                                    )
+                                ]
+                            }*/}
+                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.name, 'required') : ''}
                         </p>
                         <label htmlFor="">DescripciÓn:</label>
                         <textarea name="description" className="uni-input" id="" cols="30"
@@ -439,24 +499,24 @@ class Dishes extends Component {
                                   onChange={this.addMenuInputChangeHandler}
                                   value={this.state.selectedDish.description}/>
                         <p style={{color: "red"}}>
-                            {this.validator.message('name', this.state.selectedDish.description, 'required')}
+                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}
                         </p>
                         <label htmlFor="">CATEGORIA (Próximamente)</label>
-                        <Select className="cstm-select" value={this.state.selectedDish.categoryId}
+                        <Select className="cstm-select" value={this.state.selectedOption}
                                 onChange={this.selectHandleChange}
                                 placeholder="Categoria"
                                 options={this.props.categories.categories.map(category => {
-                                    return {value: category.id, label: category.name, name: "categoryId"}
+                                    return {value: category.name, label: category.name, id: category.id}
                                 })}
                         />
                         <p style={{color: "red"}}>
-                            {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
+                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.categoryId, 'required') : ''}
                         </p>
                         <label htmlFor="">PRECIO:</label>
                         <input type="text" className="uni-input" name="price" onChange={this.addMenuInputChangeHandler}
                                value={this.state.selectedDish.price}/>
                         <p style={{color: "red"}}>
-                            {this.validator.message('name', this.state.selectedDish.price, 'required')}
+                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required') : ''}
                         </p>
 
                         <input type="file" id="my_file" style={{display: "none"}} accept="image/*"
