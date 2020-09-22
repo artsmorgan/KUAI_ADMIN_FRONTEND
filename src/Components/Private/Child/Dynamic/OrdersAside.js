@@ -107,23 +107,16 @@ class OrdersAside extends React.Component {
         const xStyle = {cursor: "pointer"}
 
         return (
-            <>
-                
-                
-                <div className={"col col-md-12 col-lg-12 col-sm-12 col-xs-12 " + (this.state.mobile ? 'order-aside-mb' : '')+' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
-                    {/*<h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
+            <> 
+                <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " +' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
+                {/* (this.state.mobile ? 'order-aside-mb' : '')+ */}
+                    <h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">
                             Selecciona una
                             orden para ver
                             sus detalles
                         </p>
-                    </div>*/}
-
-                    <div align={"center"}>
-                        <img src={SafePana}/>
-                        {/* <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6> */}
-                        <h6>Actualmente no cuentas con ordenes despachadas</h6>
                     </div>
 
                     {/* Order Details start */}
