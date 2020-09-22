@@ -216,7 +216,7 @@ class Dishes extends Component {
 
                             </div>
                         </div>
-                        <div className="rotator-scroll">
+                        <div className="rotator-scroll" style={{height: 'calc(100% - 100px)'}}>
                             <div className="rotator-stripe">
                                 {this.state.allDishes.productList.length === 0 ? this.renderNoItems() : this.renderDishes()}
                             </div>
