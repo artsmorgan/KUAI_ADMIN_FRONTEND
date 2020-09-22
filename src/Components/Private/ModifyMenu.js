@@ -146,9 +146,12 @@ class ModifyMenu extends React.Component {
         let alltabs = this.state.formTab;
         if (this.state.mobile) {
             for (const [key, value] of Object.entries(obj)) {
-                // console.log(key)
-                // console.log(value)
-                // console.log(tabName)
+                console.log(key)
+                console.log(value)
+                console.log(tabName)
+                if (tabName === 'menuTab') {
+                    $('div.dishEditorMobile').addClass('hidden')
+                }
                 if (key == tabName) {
                     alltabs[key] = true
                 } else {

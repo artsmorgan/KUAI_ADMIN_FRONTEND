@@ -333,6 +333,7 @@ class Dishes extends Component {
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>
                                             <button onClick={() => {
+                                                $('div.dishEditorMobile').removeClass('hidden')
                                                 this.setState({
                                                     selectedOption: {
                                                         value: category.name,
@@ -473,10 +474,10 @@ class Dishes extends Component {
                     <div className="menu-elements">
                         <ul className="menu-tabs">
                             <li className="active">
-                                <a href="">Disponible</a>
+                                <a href="#">Disponible</a>
                             </li>
                             <li>
-                                <a href="">Agotado</a>
+                                <a href="#">Agotado</a>
                             </li>
                         </ul>
 
