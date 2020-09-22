@@ -153,8 +153,8 @@ class ModifyRestaurant extends React.Component {
             if (this.state.width < 1024) {
                 let obj = this.state.formTab
 
-                obj.informationTab = false;
-                obj.scheduleTab = false
+                obj.informationTab = true;
+                obj.scheduleTab = true
 
                 this.setState({formTab: obj, mobile: true});
             } else {
@@ -703,15 +703,15 @@ class ModifyRestaurant extends React.Component {
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="link-1">
                                             <Nav.Item>
-                                                <Nav.Link href="#" eventKey="link-1"
+                                                <Nav.Link href="javascript:void(0)" eventKey="link-1"
                                                           onClick={(e) => this.activateTab(e, 'generalTab')}>General</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href="#" eventKey="link-2"
+                                                <Nav.Link href="javascript:void(0)" eventKey="link-2"
                                                           onClick={(e) => this.activateTab(e, 'informationTab')}>Información</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href="#" eventKey="link-3"
+                                                <Nav.Link href="javascript:void(0)" eventKey="link-3"
                                                           onClick={(e) => this.activateTab(e, 'scheduleTab')}>Horario</Nav.Link>
                                             </Nav.Item>
                                         </Nav>
