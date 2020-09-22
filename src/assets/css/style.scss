@@ -926,9 +926,10 @@ body {
   .rotator-container {
     height: 80vh;
     position: relative;
+    margin-bottom: 20px;
     .rotator-scroll{
       position: absolute;
-      height: 100%;
+      height: calc(100% - 55px);
       width: 100%;
       overflow: auto;
       padding: 5px;
