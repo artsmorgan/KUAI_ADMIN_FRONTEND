@@ -418,9 +418,9 @@ class ModifyRestaurant extends React.Component {
                 let closeValue = value + "Close";
 
                 if (obj[field]) {
-                    // console.log(obj[openValue])
-                    // console.log(obj[closeValue])
-                    if (obj[openValue] === "-" || obj[openValue]['value'] === "-") {
+                    console.log(obj[openValue])
+                    console.log(obj[closeValue])
+                    if (obj[openValue] === "-" || obj[openValue]['value'] === "-"||obj[openValue] === "" || obj[openValue]['value'] === "") {
                         // console.log(obj[openValue]);
                         errors[openValue] = this.state.customErrorMessageOpen;
                         formIsValid = false;
@@ -428,7 +428,7 @@ class ModifyRestaurant extends React.Component {
                         errors[openValue] = '';
                     }
 
-                    if (obj[closeValue] === "-" || obj[closeValue]['value'] === "-") {
+                    if (obj[closeValue] === "-" || obj[closeValue]['value'] === "-"||obj[closeValue] === "" || obj[closeValue]['value'] === "") {
                         // console.log(obj[closeValue]);
                         errors[closeValue] = this.state.customErrorMessageClose;
                         formIsValid = false;
@@ -512,19 +512,19 @@ class ModifyRestaurant extends React.Component {
             let closeValue = element + "Close";
 
             if (type == "post") {
-                if (obj[openValue] != '-') {
+                if (obj[openValue] != '-' && obj[openValue]!='') {
                     obj[openValue] = obj[openValue]['value']
                 }
 
-                if (obj[closeValue] != '-') {
+                if (obj[closeValue] != '-' && obj[closeValue]!='') {
                     obj[closeValue] = obj[closeValue]['value']
                 }
             } else {
-                if (obj[openValue] != '-') {
+                if (obj[openValue] != '-' && obj[openValue]!='') {
                     obj[openValue] = {value: obj[openValue], label: obj[openValue], name: 'time'}
                 }
 
-                if (obj[closeValue] != '-') {
+                if (obj[closeValue] != '-' && obj[closeValue]!='') {
                     obj[closeValue] = {value: obj[closeValue], label: obj[closeValue], name: 'time'}
                 }
             }
@@ -543,15 +543,11 @@ class ModifyRestaurant extends React.Component {
     }
 
     activateTab(e, tabName) {
-        console.log("---aaa----");
-        console.log(tabName);
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
-        console.log(this.state.mobile);  
         if (this.state.mobile) {  
             console.log(alltabs);          
             for (const [key, value] of Object.entries(obj)) {
-                console.log(key);
                 if (key == tabName) {
                     alltabs[key] = true
                 } else {
