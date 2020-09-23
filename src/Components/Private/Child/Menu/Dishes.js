@@ -15,6 +15,7 @@ import {uuid} from "uuidv4";
 import {db, storage} from "../../../firebase";
 import {toastr} from "react-redux-toastr";
 import axios from 'axios'
+import $ from 'jquery'
 
 const restaurantId = localStorage.getItem('restaurantId');
 const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/categoriesandproducts/' + restaurantId;
@@ -113,6 +114,7 @@ class Dishes extends Component {
     }
 
     newMenuItem() {
+        $('div.dishEditorMobile').removeClass('hidden')
         const newDish = {
             id: uuid(),
             isAvailable: true,
@@ -331,6 +333,7 @@ class Dishes extends Component {
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>
                                             <button onClick={() => {
+                                                $('div.dishEditorMobile').removeClass('hidden')
                                                 this.setState({
                                                     selectedOption: {
                                                         value: category.name,
@@ -441,7 +444,7 @@ class Dishes extends Component {
         }
         return <>
 
-            <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 dishEditorMobile "}>
+            <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 dishEditorMobile hidden"}>
                 <h3 style={{marginBottom: '21px'}}>Nuevo item de Menú</h3>
                 <div className="menu-details">
                     <label htmlFor="">VISTA PREVIA</label>
@@ -471,10 +474,10 @@ class Dishes extends Component {
                     <div className="menu-elements">
                         <ul className="menu-tabs">
                             <li className="active">
-                                <a href="">Disponible</a>
+                                <a href="#">Disponible</a>
                             </li>
                             <li>
-                                <a href="">Agotado</a>
+                                <a href="#">Agotado</a>
                             </li>
                         </ul>
 

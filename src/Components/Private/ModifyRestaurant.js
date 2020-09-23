@@ -42,10 +42,11 @@ class ModifyRestaurant extends React.Component {
         this.state = {
             width: 0,
             mobile: false,
+            selectedTab:'',
             formTab: {
                 generalTab: true,
-                informationTab: true,
-                scheduleTab: true,
+                informationTab: false,
+                scheduleTab: false,
             },
 
             profileImage: '',
@@ -146,23 +147,29 @@ class ModifyRestaurant extends React.Component {
         });
     }
 
-    updateDimension = () => {
+    updateDimension = (e) => {
         this.setState({
             width: window.innerWidth
         }, () => {
             if (this.state.width < 1024) {
-                let obj = this.state.formTab
+                this.setState({mobile: true});
+                let obj = this.state.selectedTab;
+            
+                if(obj===''){
+                    this.setState({selectedTab:'generalTab'});
+                    this.activateTab(e,'generalTab')
+                }else{
+                    this.activateTab(e,obj)
+                }
+                
 
-                obj.informationTab = false;
-                obj.scheduleTab = false
-
-                this.setState({formTab: obj, mobile: true});
+                
             } else {
                 let obj = this.state.formTab
 
                 obj.informationTab = true;
-                obj.scheduleTab = true
-
+                obj.scheduleTab = true;
+                obj.generalTab =true;
                 this.setState({formTab: obj, mobile: false});
             }
         });
@@ -536,13 +543,15 @@ class ModifyRestaurant extends React.Component {
     }
 
     activateTab(e, tabName) {
+        console.log("---aaa----");
+        console.log(tabName);
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
-        if (this.state.mobile) {
+        console.log(this.state.mobile);  
+        if (this.state.mobile) {  
+            console.log(alltabs);          
             for (const [key, value] of Object.entries(obj)) {
-                // console.log(key)
-                // console.log(value)
-                // console.log(tabName)
+                console.log(key);
                 if (key == tabName) {
                     alltabs[key] = true
                 } else {
@@ -550,7 +559,7 @@ class ModifyRestaurant extends React.Component {
                 }
             }
 
-            this.setState({formTab: alltabs})
+            this.setState({formTab: alltabs,selectedTab:tabName})
         }
     }
 
@@ -703,15 +712,15 @@ class ModifyRestaurant extends React.Component {
                                     <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <Nav className="tab-cstm mb-visible" variant="pills" defaultActiveKey="link-1">
                                             <Nav.Item>
-                                                <Nav.Link href="#" eventKey="link-1"
+                                                <Nav.Link href="javascript:void(0)" eventKey="link-1"
                                                           onClick={(e) => this.activateTab(e, 'generalTab')}>General</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href="#" eventKey="link-2"
+                                                <Nav.Link href="javascript:void(0)" eventKey="link-2"
                                                           onClick={(e) => this.activateTab(e, 'informationTab')}>Información</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link href="#" eventKey="link-3"
+                                                <Nav.Link href="javascript:void(0)" eventKey="link-3"
                                                           onClick={(e) => this.activateTab(e, 'scheduleTab')}>Horario</Nav.Link>
                                             </Nav.Item>
                                         </Nav>

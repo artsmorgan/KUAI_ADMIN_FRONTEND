@@ -47,7 +47,7 @@ class ModifyMenu extends React.Component {
             autoForceUpdate: this
         });
 
-
+        window.addEventListener("resize", this.updateDimension);
     }
 
     updateDimension = () => {
@@ -141,14 +141,17 @@ class ModifyMenu extends React.Component {
     // }
 
     activateTab(e, tabName) {
-        console.log('here')
+        // console.log('here')
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
         if (this.state.mobile) {
             for (const [key, value] of Object.entries(obj)) {
-                // console.log(key)
-                // console.log(value)
-                // console.log(tabName)
+                console.log(key)
+                console.log(value)
+                console.log(tabName)
+                if (tabName === 'menuTab') {
+                    $('div.dishEditorMobile').addClass('hidden')
+                }
                 if (key == tabName) {
                     alltabs[key] = true
                 } else {
@@ -217,12 +220,17 @@ class ModifyMenu extends React.Component {
         // console.log(this.state.menuList)
     }
 
-    componentWillMount() {
-        //this.props.getMenuListData()
+    componentWillUnmount() {
         window.removeEventListener('resize', this.updateDimension);
     }
 
+    componentWillMount() {
+        //this.props.getMenuListData()
+        // window.removeEventListener('resize', this.updateDimension);
+    }
+
     componentDidMount() {
+        this.updateDimension();
         this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
         //window.setTimeout(this.displayCategoryList, 800)
         // window.setTimeout(this.displayMenuList, 800)
