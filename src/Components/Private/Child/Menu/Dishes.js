@@ -20,6 +20,8 @@ import $ from 'jquery'
 const restaurantId = localStorage.getItem('restaurantId');
 const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/categoriesandproducts/' + restaurantId;
 
+const pageTabs = ['disponible', 'agotado']
+
 class Dishes extends Component {
     _isMounted = false;
 
@@ -35,7 +37,9 @@ class Dishes extends Component {
             categoryOptions: [],
             selectedOption: null,
             eventTriggered: null,
-            ignoreValidation: false
+            ignoreValidation: false,
+            showDisponible: true,
+            showagotado: null,
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
@@ -138,7 +142,7 @@ class Dishes extends Component {
             envioGratis: false,
             picture: ''
         }
-        this.setState({selectedDish: newDish});
+        this.setState({selectedDish: newDish, showDisponible: true, showagotado: false});
     }
 
     getFileExtension = filename => filename.split('.').pop();
@@ -277,6 +281,21 @@ class Dishes extends Component {
         );
     };
 
+    selectTab = (e, tabArrayPosition) => {
+        this.setState({ selectedTab: pageTabs[tabArrayPosition] })
+        switch(tabArrayPosition){
+            case 0:
+                this.setState({ showDisponible: true, showagotado: false })
+                break;
+            case 1:
+                this.setState({ showDisponible: false, showagotado: true })
+                break;
+            default:
+                this.setState({ showDisponible: true, showagotado: false })
+        }
+
+    }
+
     renderDish() {
         return <i>test</i>
     }
@@ -351,7 +370,9 @@ class Dishes extends Component {
                                                         value: category.name,
                                                         label: category.name,
                                                         id: category.id
-                                                    }
+                                                    },
+                                                    showDisponible: true,
+                                                    showagotado: false
                                                 })
                                                 this.setState({selectedDish: {...dish}})
                                             }}>
@@ -486,166 +507,171 @@ class Dishes extends Component {
                     </div>
                     <div className="menu-elements">
                         <ul className="menu-tabs">
-                            <li className="active">
-                                <a href="#">Disponible</a>
+                            <li className={this.state.showagotado && !this.state.showDisponible ? '' : 'active'}>
+                                <a href="#" onClick={(e) => this.selectTab(e, 0)}>Disponible</a>
                             </li>
-                            <li>
-                                <a href="#">Agotado</a>
+                            <li className={!this.state.showagotado && this.state.showDisponible ? '' : 'active'}>
+                                <a href="#" onClick={(e) => this.selectTab(e, 1)}>Agotado</a>
                             </li>
                         </ul>
 
-                        <label htmlFor="">NOMBRE DEL item:</label>
-                        <input type="text" className="uni-input" name="name" onChange={this.addMenuInputChangeHandler}
-                               value={this.state.selectedDish.name}/>
-                        <p style={{color: "red"}}>
-                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.name, 'required') : ''}*/}
-                            {this.validator.message('name', this.state.selectedDish.name, 'required')}
-                        </p>
-                        <label htmlFor="">DescripciÓn:</label>
-                        <textarea name="description" className="uni-input" id="" cols="30"
-                                  rows="10"
-                                  onChange={this.addMenuInputChangeHandler}
-                                  value={this.state.selectedDish.description}/>
-                        <p style={{color: "red"}}>
-                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}*/}
-                            {this.validator.message('name', this.state.selectedDish.description, 'required')}
-                        </p>
-                        <label htmlFor="">CATEGORIA (Próximamente)</label>
-                        <Select className="cstm-select" value={this.state.selectedOption}
-                                onChange={this.selectHandleChange}
-                                placeholder="Categoria"
-                                options={this.props.categories.categories.map(category => {
-                                    return {value: category.name, label: category.name, id: category.id}
-                                })}
-                        />
-                        <p style={{color: "red"}}>
-                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.categoryId, 'required') : ''}*/}
-                            {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
-                        </p>
-                        <label htmlFor="">PRECIO:</label>
-                        <input type="text" className="uni-input" name="price" onChange={this.addMenuInputChangeHandler}
-                               value={this.state.selectedDish.price}/>
-                        <p style={{color: "red"}}>
-                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num') : ''}*/}
-                            {this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num')}
-                        </p>
+                        <div className={this.state.showagotado && !this.state.showDisponible ? 'd-none' : 'd-block'}>
+                            <label htmlFor="">NOMBRE DEL item:</label>
+                            <input type="text" className="uni-input" name="name" onChange={this.addMenuInputChangeHandler}
+                                   value={this.state.selectedDish.name}/>
+                            <p style={{color: "red"}}>
+                                {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.name, 'required') : ''}*/}
+                                {this.validator.message('name', this.state.selectedDish.name, 'required')}
+                            </p>
+                            <label htmlFor="">DescripciÓn:</label>
+                            <textarea name="description" className="uni-input" id="" cols="30"
+                                      rows="10"
+                                      onChange={this.addMenuInputChangeHandler}
+                                      value={this.state.selectedDish.description}/>
+                            <p style={{color: "red"}}>
+                                {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}*/}
+                                {this.validator.message('name', this.state.selectedDish.description, 'required')}
+                            </p>
+                            <label htmlFor="">CATEGORIA (Próximamente)</label>
+                            <Select className="cstm-select" value={this.state.selectedOption}
+                                    onChange={this.selectHandleChange}
+                                    placeholder="Categoria"
+                                    options={this.props.categories.categories.map(category => {
+                                        return {value: category.name, label: category.name, id: category.id}
+                                    })}
+                            />
+                            <p style={{color: "red"}}>
+                                {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.categoryId, 'required') : ''}*/}
+                                {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
+                            </p>
+                            <label htmlFor="">PRECIO:</label>
+                            <input type="text" className="uni-input" name="price" onChange={this.addMenuInputChangeHandler}
+                                   value={this.state.selectedDish.price}/>
+                            <p style={{color: "red"}}>
+                                {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num') : ''}*/}
+                                {this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num')}
+                            </p>
 
-                        <input type="file" id="my_file" style={{display: "none"}} accept="image/*"
-                               onChange={this.handleProductImageUpload} ref={this.productPictRefUpload}/>
+                            <input type="file" id="my_file" style={{display: "none"}} accept="image/*"
+                                   onChange={this.handleProductImageUpload} ref={this.productPictRefUpload}/>
 
-                        <div className="photo-area">
-                            <div className="upload" onClick={this.uploadPhoto.bind(this)}>
-                                <div className="center">
-                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <g clipPath="url(#clip0)">
-                                            <path
-                                                d="M18.8282 14.1716C20.3903 15.7338 20.3903 18.2665 18.8282 19.8287C17.266 21.3908 14.7333 21.3908 13.1711 19.8287C11.609 18.2665 11.609 15.7338 13.1711 14.1716C14.7333 12.6095 17.266 12.6095 18.8282 14.1716Z"
-                                                fill="white"/>
-                                            <path
-                                                d="M27.9999 5.99941H25.2361L23.2351 1.99927H8.76298L6.76386 6.00137L4.004 6.00629C1.80376 6.01022 0.0126439 7.80323 0.0107441 10.0045L0 25.9991C0 28.2052 1.794 30.0002 4.00014 30.0002H27.9999C30.2061 30.0002 32.0001 28.2062 32.0001 26V9.99948C32 7.79341 30.206 5.99941 27.9999 5.99941ZM15.9995 25C11.5882 25 7.99923 21.411 7.99923 16.9997C7.99923 12.5884 11.5882 8.99943 15.9995 8.99943C20.4108 8.99943 23.9998 12.5884 23.9998 16.9997C23.9998 21.411 20.4108 25 15.9995 25Z"
-                                                fill="white"/>
-                                        </g>
-                                        <defs>
-                                            <clipPath id="clip0">
-                                                <rect width="32" height="32" fill="white"/>
-                                            </clipPath>
-                                        </defs>
-                                    </svg>
+                            <div className="photo-area">
+                                <div className="upload" onClick={this.uploadPhoto.bind(this)}>
+                                    <div className="center">
+                                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <g clipPath="url(#clip0)">
+                                                <path
+                                                    d="M18.8282 14.1716C20.3903 15.7338 20.3903 18.2665 18.8282 19.8287C17.266 21.3908 14.7333 21.3908 13.1711 19.8287C11.609 18.2665 11.609 15.7338 13.1711 14.1716C14.7333 12.6095 17.266 12.6095 18.8282 14.1716Z"
+                                                    fill="white"/>
+                                                <path
+                                                    d="M27.9999 5.99941H25.2361L23.2351 1.99927H8.76298L6.76386 6.00137L4.004 6.00629C1.80376 6.01022 0.0126439 7.80323 0.0107441 10.0045L0 25.9991C0 28.2052 1.794 30.0002 4.00014 30.0002H27.9999C30.2061 30.0002 32.0001 28.2062 32.0001 26V9.99948C32 7.79341 30.206 5.99941 27.9999 5.99941ZM15.9995 25C11.5882 25 7.99923 21.411 7.99923 16.9997C7.99923 12.5884 11.5882 8.99943 15.9995 8.99943C20.4108 8.99943 23.9998 12.5884 23.9998 16.9997C23.9998 21.411 20.4108 25 15.9995 25Z"
+                                                    fill="white"/>
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0">
+                                                    <rect width="32" height="32" fill="white"/>
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                    </div>
+                                    <label htmlFor="">Agregar Fotografia</label>
                                 </div>
-                                <label htmlFor="">Agregar Fotografia</label>
-                            </div>
-                            <div className="chk-area">
-                                <div className='divP'>
-                                    <Checkbox id="upsell" name="upsell"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'upsell')}
-                                              checked={this.state.selectedDish.upsell}/>
-                                    <label htmlFor="" className="chk-label">Upsell</label>
+                                <div className="chk-area">
+                                    <div className='divP'>
+                                        <Checkbox id="upsell" name="upsell"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'upsell')}
+                                                  checked={this.state.selectedDish.upsell}/>
+                                        <label htmlFor="" className="chk-label">Upsell</label>
+                                    </div>
+                                    <div className='divP'>
+                                        <Checkbox id="recomendacion" name="recomendacion"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'recomendacion')}
+                                                  checked={this.state.selectedDish.recomendacion}/>
+                                        <label htmlFor="" className="chk-label">Recomendación</label>
+                                    </div>
+                                    <div className='divP'>
+                                        <Checkbox id="promo" name="promo"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'promo')}
+                                                  checked={this.state.selectedDish.promo}/>
+                                        <label htmlFor="" className="chk-label">Promoción</label>
+                                    </div>
                                 </div>
-                                <div className='divP'>
-                                    <Checkbox id="recomendacion" name="recomendacion"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'recomendacion')}
-                                              checked={this.state.selectedDish.recomendacion}/>
-                                    <label htmlFor="" className="chk-label">Recomendación</label>
-                                </div>
-                                <div className='divP'>
-                                    <Checkbox id="promo" name="promo"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'promo')}
-                                              checked={this.state.selectedDish.promo}/>
-                                    <label htmlFor="" className="chk-label">Promoción</label>
-                                </div>
-                            </div>
 
-                            <div className="promo-area">
-                                <label htmlFor="">PROMOCIONES</label>
-                                <div className='divP'>
-                                    <Checkbox id="specialPrice" name="specialPrice"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'specialPrice')}
-                                              checked={this.state.selectedDish.specialPrice}/>
-                                    <label htmlFor="" className="chk-label">Precio especial</label>
+                                <div className="promo-area">
+                                    <label htmlFor="">PROMOCIONES</label>
+                                    <div className='divP'>
+                                        <Checkbox id="specialPrice" name="specialPrice"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'specialPrice')}
+                                                  checked={this.state.selectedDish.specialPrice}/>
+                                        <label htmlFor="" className="chk-label">Precio especial</label>
+                                    </div>
+                                    <div className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
+                                        <label htmlFor="">PRECIO PROMOCIÓN</label>
+                                        <input type="text" className="uni-input" name="specialPriceAmount"
+                                               onChange={this.addMenuInputChangeHandler}
+                                               value={this.state.selectedDish.specialPriceAmount}/>
+                                    </div>
                                 </div>
-                                <div className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
-                                    <label htmlFor="">PRECIO PROMOCIÓN</label>
-                                    <input type="text" className="uni-input" name="specialPriceAmount"
-                                           onChange={this.addMenuInputChangeHandler}
-                                           value={this.state.selectedDish.specialPriceAmount}/>
-                                </div>
-                            </div>
-                            <div className="promo-area">
-                                <div className='divP'>
-                                    <Checkbox id="discount" name="discount"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'discount')}
-                                              checked={this.state.selectedDish.discount}/>
-                                    <label htmlFor="" className="chk-label">% de descuento</label>
-                                </div>
-                                <div className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
-                                    <label htmlFor="">PORCENTAJE</label>
-                                    <input type="text" className="uni-input" name="discountPercentage"
-                                           onChange={this.addMenuInputChangeHandler} style={{width: "100px"}}
-                                           value={this.state.selectedDish.discountPercentage}/>
-                                    <p className="discounted">
+                                <div className="promo-area">
+                                    <div className='divP'>
+                                        <Checkbox id="discount" name="discount"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'discount')}
+                                                  checked={this.state.selectedDish.discount}/>
+                                        <label htmlFor="" className="chk-label">% de descuento</label>
+                                    </div>
+                                    <div className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
+                                        <label htmlFor="">PORCENTAJE</label>
+                                        <input type="text" className="uni-input" name="discountPercentage"
+                                               onChange={this.addMenuInputChangeHandler} style={{width: "100px"}}
+                                               value={this.state.selectedDish.discountPercentage}/>
+                                        <p className="discounted">
                     <span
                         className="cross">₡{this.state.selectedDish.price}</span> | <span>₡{this.calculatePercentage()}</span>
-                                    </p>
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="promo-area">
-                                <div className='divP'>
-                                    <Checkbox id="llevaXpagaY" name="discount"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'llevaXpagaY')}
-                                              checked={this.state.selectedDish.llevaXpagaY}/>
-                                    <label htmlFor="" className="chk-label">Llleva “x”, paga
-                                        “y”</label>
-                                </div>
-                                <div className={`promo-code ${this.state.selectedDish.llevaXpagaY ? '' : 'hidden'}`}>
-                                    <div className="row">
-                                        <div className="col">
-                                            <label htmlFor="">LLEVA</label>
-                                            <input type="text" className="uni-input" name="lleva"
-                                                   onChange={this.addMenuInputChangeHandler}
-                                                   value={this.state.selectedDish.lleva}/>
-                                        </div>
-                                        <div className="col">
-                                            <label htmlFor="">PAGA</label>
-                                            <input type="text" className="uni-input" name="paga"
-                                                   onChange={this.addMenuInputChangeHandler}
-                                                   value={this.state.selectedDish.paga}/>
+                                <div className="promo-area">
+                                    <div className='divP'>
+                                        <Checkbox id="llevaXpagaY" name="discount"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'llevaXpagaY')}
+                                                  checked={this.state.selectedDish.llevaXpagaY}/>
+                                        <label htmlFor="" className="chk-label">Llleva “x”, paga
+                                            “y”</label>
+                                    </div>
+                                    <div className={`promo-code ${this.state.selectedDish.llevaXpagaY ? '' : 'hidden'}`}>
+                                        <div className="row">
+                                            <div className="col">
+                                                <label htmlFor="">LLEVA</label>
+                                                <input type="text" className="uni-input" name="lleva"
+                                                       onChange={this.addMenuInputChangeHandler}
+                                                       value={this.state.selectedDish.lleva}/>
+                                            </div>
+                                            <div className="col">
+                                                <label htmlFor="">PAGA</label>
+                                                <input type="text" className="uni-input" name="paga"
+                                                       onChange={this.addMenuInputChangeHandler}
+                                                       value={this.state.selectedDish.paga}/>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="promo-area">
-                                <div className='divP'>
-                                    <Checkbox id="envioGratis" name="discount"
-                                              onChange={(e) => this.CheckboxChangeHandler(e, 'envioGratis')}
-                                              checked={this.state.selectedDish.envioGratis}/>
-                                    <label htmlFor="" className="chk-label">Envío gratis</label>
+                                <div className="promo-area">
+                                    <div className='divP'>
+                                        <Checkbox id="envioGratis" name="discount"
+                                                  onChange={(e) => this.CheckboxChangeHandler(e, 'envioGratis')}
+                                                  checked={this.state.selectedDish.envioGratis}/>
+                                        <label htmlFor="" className="chk-label">Envío gratis</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="row" style={{marginTop: '40px'}}>
-                            <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
+                            <div className="row" style={{marginTop: '40px'}}>
+                                <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
+                            </div>
+                        </div>
+                        <div className={!this.state.showagotado && this.state.showDisponible ? 'd-none' : 'd-block'}>
+                            <small className="text-muted">Comming soon</small>
                         </div>
                     </div>
                 </div>
