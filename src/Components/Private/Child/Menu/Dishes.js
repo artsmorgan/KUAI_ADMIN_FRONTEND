@@ -30,6 +30,7 @@ class Dishes extends Component {
 
         this.state = {
             allDishes: {productList: []},
+            isFetched: true,
             selectedDish: {},
             categoryOptions: [],
             selectedOption: null,
@@ -45,8 +46,8 @@ class Dishes extends Component {
     getMenuListByCat = () => {
         axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
             .then(response => {
-                // console.log(response)
-                this.setState({allDishes: response.data});
+                console.log(response.data)
+                this.setState({allDishes: response.data, isFetched: false});
                 this.setState({eventTriggered: null});
                 // dispatch(getMenuListFullSuccess(response.data))
             })
@@ -88,7 +89,7 @@ class Dishes extends Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log(props.eventTriggered)
+        // console.log(props.eventTriggered)
         this.setState({
             eventTriggered: props.eventTriggered,
         });
@@ -110,7 +111,9 @@ class Dishes extends Component {
     addMenuInputChangeHandler = (e) => {
         let obj = this.state.selectedDish
         obj[e.target.name] = e.target.value
-        this.setState({selectedDish: obj})
+        this.setState({selectedDish: obj}, () => {
+            console.log(this.state.selectedDish)
+        })
     }
 
     newMenuItem() {
@@ -118,10 +121,10 @@ class Dishes extends Component {
         const newDish = {
             id: uuid(),
             isAvailable: true,
-            name: '',
-            description: '',
+            name: null,
+            description: null,
             categoryId: this.props.selectedCategory.id,
-            price: 0,
+            price: null,
             upsell: false,
             recomendacion: false,
             promo: false,
@@ -220,7 +223,17 @@ class Dishes extends Component {
                         </div>
                         <div className="rotator-scroll" style={{height: 'calc(100% - 100px)'}}>
                             <div className="rotator-stripe">
-                                {this.state.allDishes.productList.length === 0 ? this.renderNoItems() : this.renderDishes()}
+                                {this.state.isFetched
+                                    ? <div className="d-flex justify-content-center">
+                                        <div className="spinner-border" role="status">
+                                            <span className="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                    : [
+                                        this.state.allDishes.productList.length === 0 ? this.renderNoItems() : this.renderDishes()
+                                    ]
+                                }
+                                {/*{this.state.allDishes.productList.length === 0 ? this.renderNoItems() : this.renderDishes()}*/}
                             </div>
                         </div>
                     </div>
@@ -231,7 +244,6 @@ class Dishes extends Component {
     }
 
     renderNoItems() {
-
         return <>
             <h6 className="lead" style={{color: "grey"}}><b>¡Aún no se agregó ningún menú!</b></h6>
         </>
@@ -405,8 +417,9 @@ class Dishes extends Component {
 
     addMenuFormSubmitHandler = (e) => {
         e.preventDefault();
-        console.log(this.validator.allValid(), this.state.selectedDish)
-        if (this.validator.allValid() && this.state.selectedDish) {
+        console.log(this.state.selectedDish)
+        console.log(this.validator.allValid())
+        if (this.validator.allValid()) {
             this.addMenuProcessSubmit();
         } else {
             this.validator.showMessages();
@@ -420,10 +433,10 @@ class Dishes extends Component {
             if (percentage > 0 && percentage < 100) {
                 return this.state.selectedDish.price - Math.round(this.state.selectedDish.price * (percentage / 100))
             } else {
-                return ''
+                return ' _ '
             }
         } else {
-            return ''
+            return ' _ '
         }
     }
 
@@ -485,16 +498,8 @@ class Dishes extends Component {
                         <input type="text" className="uni-input" name="name" onChange={this.addMenuInputChangeHandler}
                                value={this.state.selectedDish.name}/>
                         <p style={{color: "red"}}>
-{/*                            { !this.state.ignoreValidation
-                                ? this.validator.message('name', this.state.selectedDish.name, 'required')
-                                : [
-                                    (!this.state.selectedDish
-                                            ? this.validator.message('name', this.state.selectedDish.name, 'required')
-                                            : ''
-                                    )
-                                ]
-                            }*/}
-                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.name, 'required') : ''}
+                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.name, 'required') : ''}*/}
+                            {this.validator.message('name', this.state.selectedDish.name, 'required')}
                         </p>
                         <label htmlFor="">DescripciÓn:</label>
                         <textarea name="description" className="uni-input" id="" cols="30"
@@ -502,7 +507,8 @@ class Dishes extends Component {
                                   onChange={this.addMenuInputChangeHandler}
                                   value={this.state.selectedDish.description}/>
                         <p style={{color: "red"}}>
-                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}
+                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}*/}
+                            {this.validator.message('name', this.state.selectedDish.description, 'required')}
                         </p>
                         <label htmlFor="">CATEGORIA (Próximamente)</label>
                         <Select className="cstm-select" value={this.state.selectedOption}
@@ -513,13 +519,15 @@ class Dishes extends Component {
                                 })}
                         />
                         <p style={{color: "red"}}>
-                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.categoryId, 'required') : ''}
+                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.categoryId, 'required') : ''}*/}
+                            {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
                         </p>
                         <label htmlFor="">PRECIO:</label>
                         <input type="text" className="uni-input" name="price" onChange={this.addMenuInputChangeHandler}
                                value={this.state.selectedDish.price}/>
                         <p style={{color: "red"}}>
-                            {!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required') : ''}
+                            {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num') : ''}*/}
+                            {this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num')}
                         </p>
 
                         <input type="file" id="my_file" style={{display: "none"}} accept="image/*"

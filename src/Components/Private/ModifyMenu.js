@@ -120,26 +120,6 @@ class ModifyMenu extends React.Component {
         })
     }
 
-
-    // activateTab(e, tabName) {
-    //     let obj = this.state.formTab;
-    //     let alltabs = this.state.formTab;
-    //     if (this.state.mobile) {
-    //         for (const [key, value] of Object.entries(obj)) {
-    //             console.log(key)
-    //             console.log(value)
-    //             console.log(tabName)
-    //             if (key == tabName) {
-    //                 alltabs[key] = true
-    //             } else {
-    //                 alltabs[key] = false
-    //             }
-    //         }
-
-    //         this.setState({formTab: alltabs})
-    //     }
-    // }
-
     activateTab(e, tabName) {
         // console.log('here')
         let obj = this.state.formTab;
@@ -224,11 +204,6 @@ class ModifyMenu extends React.Component {
         window.removeEventListener('resize', this.updateDimension);
     }
 
-    componentWillMount() {
-        //this.props.getMenuListData()
-        // window.removeEventListener('resize', this.updateDimension);
-    }
-
     componentDidMount() {
         this.updateDimension();
         this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
@@ -285,7 +260,7 @@ class ModifyMenu extends React.Component {
 
     loadMenu(id, name) {
         this.setState({selectedCategory: {id, name}});
-        this.props.getMenuListByCategoryData();
+        this.props.getMenuListByCategoryData({restaurantId: localStorage.getItem('restaurantId')});
     }
 
     renderMobile() {
