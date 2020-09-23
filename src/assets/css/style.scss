@@ -1012,7 +1012,7 @@ body {
         border-radius: 5px;
         display: inline-block;
         margin: 15px 15px 8px 30px;
-        background-color: #d8d8d8;
+        // background-color: #d8d8d8 !important;
         background-size: cover !important;
       }
       .menu-ind {
@@ -1183,6 +1183,9 @@ body {
           path{
             fill: #fff;
           }
+        }
+        .arrow{
+          transform: rotate(90deg);
         }
       }
     }

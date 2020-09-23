@@ -11,6 +11,7 @@ import LoaderInScreen from "../../../Public/LoaderInScreen";
 import Checkbox from '@opuscapita/react-checkbox';
 import Select from 'react-select';
 import SimpleReactValidator from "simple-react-validator";
+import defaultImage from "../../../../assets/images/food.png";
 import {uuid} from "uuidv4";
 import {db, storage} from "../../../firebase";
 import {toastr} from "react-redux-toastr";
@@ -358,8 +359,9 @@ class Dishes extends Component {
                                                     fill="#41404D"/>
                                             </svg>
                                         </div>
+
                                         <div className="img"
-                                             style={{background: "url(" + dish.picture + ")"}}></div>
+                                             style={{background: "url(" + dish.picture ? dish.picture : defaultImage + ")"}}></div>
                                         <div className="menu-ind">
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>

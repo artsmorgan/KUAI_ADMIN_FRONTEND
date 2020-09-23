@@ -960,9 +960,6 @@ class ModifyRestaurant extends React.Component {
                                                 {this.validator.message('otherSigns', this.state.dataToPost.otherSigns, 'required')}
                                             </p>
                                         </div>
-                                        <div className="text-center">
-                                            <button className="btn-theme" type="submit">GUARDAR</button>
-                                        </div>
                                     </div>
                                     {/* This section will be go inside tab end */}
 
@@ -1203,6 +1200,10 @@ class ModifyRestaurant extends React.Component {
                                             </div>
                                         </div>
 
+                                    </div>
+
+                                    <div className="text-center" style={{width: '100%'}}>
+                                            <button className="btn-theme" type="submit">GUARDAR</button>
                                     </div>
 
                                     {/* This section will be go inside tab end */}

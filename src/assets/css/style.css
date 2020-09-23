@@ -1150,7 +1150,6 @@ body {
   border-radius: 5px;
   display: inline-block;
   margin: 15px 15px 8px 30px;
-  background-color: #d8d8d8;
   background-size: cover !important;
 }
 
@@ -1349,6 +1348,11 @@ body {
 
 .collapse-area .collapse-container .collapse-header.active svg path {
   fill: #fff;
+}
+
+.collapse-area .collapse-container .collapse-header.active .arrow {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 
 .collapse-area .collapse-container .collapse-content .col {
