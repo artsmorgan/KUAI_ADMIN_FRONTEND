@@ -11,7 +11,7 @@ import LoaderInScreen from "../../../Public/LoaderInScreen";
 import Checkbox from '@opuscapita/react-checkbox';
 import Select from 'react-select';
 import SimpleReactValidator from "simple-react-validator";
-import defaultImage from "../../../../assets/images/food.png";
+import DefaultImage from "../../../../assets/images/food.png";
 import {uuid} from "uuidv4";
 import {db, storage} from "../../../firebase";
 import {toastr} from "react-redux-toastr";
@@ -283,16 +283,16 @@ class Dishes extends Component {
     };
 
     selectTab = (e, tabArrayPosition) => {
-        this.setState({ selectedTab: pageTabs[tabArrayPosition] })
-        switch(tabArrayPosition){
+        this.setState({selectedTab: pageTabs[tabArrayPosition]})
+        switch (tabArrayPosition) {
             case 0:
-                this.setState({ showDisponible: true, showagotado: false })
+                this.setState({showDisponible: true, showagotado: false})
                 break;
             case 1:
-                this.setState({ showDisponible: false, showagotado: true })
+                this.setState({showDisponible: false, showagotado: true})
                 break;
             default:
-                this.setState({ showDisponible: true, showagotado: false })
+                this.setState({showDisponible: true, showagotado: false})
         }
 
     }
@@ -361,7 +361,7 @@ class Dishes extends Component {
                                         </div>
 
                                         <div className="img"
-                                             style={{background: "url(" + dish.picture ? dish.picture : defaultImage + ")"}}></div>
+                                             style={{backgroundImage: `url(${dish.picture ? dish.picture : DefaultImage})`}}></div>
                                         <div className="menu-ind">
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>
@@ -519,7 +519,8 @@ class Dishes extends Component {
 
                         <div className={this.state.showagotado && !this.state.showDisponible ? 'd-none' : 'd-block'}>
                             <label htmlFor="">NOMBRE DEL item:</label>
-                            <input type="text" className="uni-input" name="name" onChange={this.addMenuInputChangeHandler}
+                            <input type="text" className="uni-input" name="name"
+                                   onChange={this.addMenuInputChangeHandler}
                                    value={this.state.selectedDish.name}/>
                             <p style={{color: "red"}}>
                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.name, 'required') : ''}*/}
@@ -547,7 +548,8 @@ class Dishes extends Component {
                                 {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
                             </p>
                             <label htmlFor="">PRECIO:</label>
-                            <input type="text" className="uni-input" name="price" onChange={this.addMenuInputChangeHandler}
+                            <input type="text" className="uni-input" name="price"
+                                   onChange={this.addMenuInputChangeHandler}
                                    value={this.state.selectedDish.price}/>
                             <p style={{color: "red"}}>
                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num') : ''}*/}
@@ -608,7 +610,8 @@ class Dishes extends Component {
                                                   checked={this.state.selectedDish.specialPrice}/>
                                         <label htmlFor="" className="chk-label">Precio especial</label>
                                     </div>
-                                    <div className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
+                                    <div
+                                        className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
                                         <label htmlFor="">PRECIO PROMOCIÓN</label>
                                         <input type="text" className="uni-input" name="specialPriceAmount"
                                                onChange={this.addMenuInputChangeHandler}
@@ -641,7 +644,8 @@ class Dishes extends Component {
                                         <label htmlFor="" className="chk-label">Llleva “x”, paga
                                             “y”</label>
                                     </div>
-                                    <div className={`promo-code ${this.state.selectedDish.llevaXpagaY ? '' : 'hidden'}`}>
+                                    <div
+                                        className={`promo-code ${this.state.selectedDish.llevaXpagaY ? '' : 'hidden'}`}>
                                         <div className="row">
                                             <div className="col">
                                                 <label htmlFor="">LLEVA</label>
