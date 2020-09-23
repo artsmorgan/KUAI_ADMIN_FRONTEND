@@ -313,7 +313,7 @@ class PaymentMethods extends React.Component {
                     <div className="col">
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">Numero De Cuenta:</label>
-                        <input type="text" className="uni-input" name="transferenceNoCuenta"
+                        <input type="number" min="0" className="uni-input" name="transferenceNoCuenta"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNoCuenta')}
                                value={this.state.dataToPost.transferenceNoCuenta}/>
                         <p style={{color: "red"}}>
@@ -598,7 +598,7 @@ class PaymentMethods extends React.Component {
                     <div className="col">
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">NUMERO DE TELEFONO:</label>
-                        <input type="text" className="uni-input" name="sinpeMovilNumero"
+                        <input type="number" min="0" className="uni-input" name="sinpeMovilNumero"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilNumero')}
                                value={this.state.dataToPost.sinpeMovilNumero}/>
                         <p style={{color: "red"}}>

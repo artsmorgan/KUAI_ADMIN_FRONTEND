@@ -183,6 +183,22 @@ class DeliveryMethods extends React.Component {
     }
   }
 
+  handleKeypress (e) {
+    const characterCode = e.key
+    if (characterCode === 'Backspace') return
+
+    const characterNumber = Number(characterCode)
+    if (characterNumber >= 0 && characterNumber <= 9) {
+      if (e.currentTarget.value && e.currentTarget.value.length) {
+        return
+      } else if (characterNumber === 0) {
+        e.preventDefault()
+      }
+    } else {
+      e.preventDefault()
+    }
+  }
+
   render() {
     return (
         <>
@@ -467,7 +483,7 @@ class DeliveryMethods extends React.Component {
             <div className="row">
               <div className="col">
                 <label htmlFor="">Precio por kilometro</label>
-                <input type="text" className="uni-input"
+                <input type="number" min="0" className="uni-input"
                        onChange={(e) => this.inputChangeHandler(e, 'expressPrecioEnvio')}
                        value={this.state.dataToPost.expressPrecioEnvio} name="expressPrecioEnvio"/>
                 <p style={{color: "red"}}>
@@ -517,7 +533,7 @@ class DeliveryMethods extends React.Component {
           <div className="row">
             <div className="col" style={{marginLeft: '45px', marginTop: '15px'}}>
               <label htmlFor="" style={{fontSize: '14px', fontWeight: '500'}}>COMPRA MIÍNIMA</label>
-              <input type="number" className="uni-input" style={{width: '50%', display: 'block'}}
+              <input type="number" min="0" className="uni-input" style={{width: '50%', display: 'block'}}
                      onChange={(e) => this.inputChangeHandler(e, 'expressompraMiinima')}
                      value={this.state.dataToPost.expressompraMiinima} name="expressompraMiinima"
                      disabled={!this.state.dataToPost.expressEnvioGratisEnabled}/>
