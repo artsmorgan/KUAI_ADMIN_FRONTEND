@@ -47,15 +47,16 @@ export const postLoginForm = (payload) => {
 export const isLoggedInAndRedirect = () => {
     return (dispatch, getState) => {
         const { auth } = getState()
-        // console.log(auth)
+        console.log("order redirect")
         if (auth.accessToken && auth.tokenExpiredAt && auth.tokenExpiredAt > new Date()) {
+            console.log("order redirect")
             dispatch(push(ROUTES.ORDERS))
         }
     }
 }
 
 export const checkStorageLoginCred = () => {
-    // console.log("i see checkStorageLoginCred req")
+    console.log("i see checkStorageLoginCred req")
     return (dispatch, getState) => {
         const state = getState()
         const accessToken = localStorage.getItem('accessToken')
@@ -71,7 +72,9 @@ export const checkStorageLoginCred = () => {
                 dispatch(push(state.router.location.pathname))
             }, 100)
         } else {
-            logout()
+            console.log("logout")
+            // logout()
+            dispatch(push(ROUTES.LOGIN))
         }
     }
 }

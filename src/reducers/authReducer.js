@@ -1,10 +1,10 @@
 import actionType from '../actions/actionTypes'
 
 const initialState = {
-    accessToken: null,
-    refreshToken: null,
-    token: null,
-    tokenExpiredAt: null,
+    accessToken: localStorage.getItem('accessToken') ? localStorage.getItem('accessToken') : null,
+    refreshToken: localStorage.getItem('refreshToken') ? localStorage.getItem('refreshToken') : null,
+    token: localStorage.getItem('token') ? localStorage.getItem('token') : null,
+    tokenExpiredAt: localStorage.getItem('tokenExpiredAt') ? localStorage.getItem('tokenExpiredAt') : null,
     loading: false
 }
 
