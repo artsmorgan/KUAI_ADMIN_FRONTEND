@@ -28,7 +28,7 @@ const getMenuListFullError = () => ({ type: actionType.GET_MENU_LIST_FULL_ERROR 
 const restaurantId = localStorage.getItem('restaurantId');
 
 const GET_CATEGORY_LIST_URL = '/api/menu/categories/'
-const UPDATE_CATEGORY_URL = '/api/menu/categories/' + restaurantId
+const UPDATE_CATEGORY_URL = '/api/menu/categories/'
 
 const GET_MENU_LIST_URL = 'api/menu/item/';
 const UPDATE_MENU_URL = '/api/menu/item/';
@@ -127,7 +127,8 @@ export const getMenuListByCategoryData = (payload) => {
 export const updateCategoryFormData = (payload, callback) => {
     return (dispatch, getState) => {
         dispatch(postCategoryFormRequest())
-        let URL = UPDATE_CATEGORY_URL
+        // console.log(payload)
+        let URL = UPDATE_CATEGORY_URL + restaurantId
         if (URL) {
             const state = getState()
             const lang = 'en'

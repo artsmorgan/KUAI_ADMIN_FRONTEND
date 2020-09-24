@@ -88,6 +88,10 @@ class Categories extends Component {
     let categoryListToSend = this.props.categories.categories;
     categoryListToSend.push(categoryDataToPost)
     // console.log(categoryListToSend)
+/*    const dataPack = {
+      catList: categoryListToSend,
+      restaurantId: localStorage.getItem('restaurantId')
+    }*/
     this.props.updateCategoryFormData(categoryListToSend, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
     this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
     this.setState({
