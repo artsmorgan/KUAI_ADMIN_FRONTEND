@@ -250,20 +250,6 @@ class Dishes extends Component {
         </>
     }
 
-    /*  selectHandleChange = categorySelectedOption => {
-        // console.log(categorySelectedOption)
-        this.setState(
-            this.state,
-            () => {
-
-              // console.log(`Option selected:`, this.state.categorySelectedOption)
-              let obj = this.state.selectedDish
-              obj['categoryId'] = categorySelectedOption.id
-              this.setState({selectedDish: obj})
-            }
-        );
-      };*/
-
     selectHandleChange = selectedOption => {
         this.setState(
             {selectedOption},
@@ -302,7 +288,6 @@ class Dishes extends Component {
 
     renderDishes() {
         let dishes = this.state.allDishes;
-        // console.log('dishes---->', dishes)
 
         let categoriesArr = []
 
@@ -311,24 +296,15 @@ class Dishes extends Component {
 
             categoryObj['name'] = category.name;
             categoryObj['id'] = category.id;
-            // categoryObj['products'] = (category.products.menuItems && category.products.menuItems.products.length > 0) ? JSON.parse(category.products.menuItems.productItemList)  : [];
-
-            // console.log('category',category)
 
             if (category.products.menuItems && category.products.menuItems.productItemList) {
                 categoryObj['items'] = JSON.parse(category.products.menuItems.productItemList);
             } else {
                 categoryObj['items'] = [];
             }
-
-
-            // console.log('category.products.menuItems',category.products.menuItems)
-            // console.log('categoryObj',categoryObj)
             categoriesArr.push(categoryObj);
 
         })
-
-        // console.log('categoriesArr', categoriesArr)
 
         //parse product list
         return (
@@ -483,12 +459,6 @@ class Dishes extends Component {
                     <label htmlFor="">VISTA PREVIA</label>
                     <div className="add-menu-new">
                         <div className="add-item">
-                            {/* <svg width="22" height="20" viewBox="0 0 22 20" fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M19.2499 3.12461H17.3498L15.9741 0.374512H6.02455L4.65015 3.12596L2.75275 3.12934C1.24009 3.13204 0.00869271 4.36474 0.00738656 5.87808L0 16.8744C0 18.3911 1.23337 19.6251 2.7501 19.6251H19.2499C20.7667 19.6251 22 18.3918 22 16.875V5.87466C22 4.35798 20.7666 3.12461 19.2499 3.12461ZM10.9997 16.1875C7.9669 16.1875 5.49947 13.7201 5.49947 10.6873C5.49947 7.65455 7.9669 5.18712 10.9997 5.18712C14.0324 5.18712 16.4999 7.65455 16.4999 10.6873C16.4999 13.7201 14.0324 16.1875 10.9997 16.1875Z"
-                    fill="#AEA7AF"/>
-              </svg> */}
                             <div className="img"
                                  style={{backgroundImage: `url(${this.state.selectedDish.picture ? this.state.selectedDish.picture : [this.state.editReq ? DefaultImage : '']})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%'}}></div>
                         </div>
