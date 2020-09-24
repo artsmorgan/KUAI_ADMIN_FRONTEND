@@ -7,7 +7,6 @@ import {
     getMenuListByCategoryData
 } from "../../../../actions";
 import {connect} from "react-redux";
-import LoaderInScreen from "../../../Public/LoaderInScreen";
 import Checkbox from '@opuscapita/react-checkbox';
 import Select from 'react-select';
 import SimpleReactValidator from "simple-react-validator";
@@ -17,9 +16,7 @@ import {db, storage} from "../../../firebase";
 import {toastr} from "react-redux-toastr";
 import axios from 'axios'
 import $ from 'jquery'
-
-const restaurantId = localStorage.getItem('restaurantId');
-const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/categoriesandproducts/' + restaurantId;
+import LoaderInScreen from "../../../Public/LoaderInScreen";
 
 const pageTabs = ['disponible', 'agotado']
 
@@ -50,6 +47,8 @@ class Dishes extends Component {
     }
 
     getMenuListByCat = () => {
+        const restaurantId = localStorage.getItem('restaurantId');
+        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/categoriesandproducts/' + restaurantId;
         axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
             .then(response => {
                 console.log(response.data)
@@ -230,11 +229,7 @@ class Dishes extends Component {
                         <div className="rotator-scroll" style={{height: 'calc(100% - 100px)'}}>
                             <div className="rotator-stripe">
                                 {this.state.isFetched
-                                    ? <div className="d-flex justify-content-center">
-                                        <div className="spinner-border" role="status">
-                                            <span className="sr-only">Loading...</span>
-                                        </div>
-                                    </div>
+                                    ? <LoaderInScreen/>
                                     : [
                                         this.state.allDishes.productList.length === 0 ? this.renderNoItems() : this.renderDishes()
                                     ]
@@ -394,7 +389,7 @@ class Dishes extends Component {
                             {
                                 category.items.length === 0 &&
                                 <small className="text-muted">
-                                    <em>No dish under this category.</em>
+                                    <em>No hay ningún plato en esta categoría</em>
                                 </small>
                             }
                         </div>
@@ -519,7 +514,7 @@ class Dishes extends Component {
                             </li>
                         </ul>
 
-                        <div className={this.state.showagotado && !this.state.showDisponible ? 'd-none' : 'd-block'}>
+                        <div>
                             <label htmlFor="">NOMBRE DEL item:</label>
                             <input type="text" className="uni-input" name="name"
                                    onChange={this.addMenuInputChangeHandler}
@@ -678,19 +673,17 @@ class Dishes extends Component {
                                 <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
                             </div>
                         </div>
-                        <div className={!this.state.showagotado && this.state.showDisponible ? 'd-none' : 'd-block'}>
-                            <small className="text-muted">Comming soon</small>
-                        </div>
                     </div>
                 </div>
             </div>
+
 
 
         </>
     }
 }
 
-const mapStateToProps = ({menuReducer}) => ({
+const mapStateToProps = ({auth, menuReducer}) => ({
     dishes: menuReducer.dishes,
     categories: menuReducer.categories,
     // fullDishes: menuReducer.fullDishes

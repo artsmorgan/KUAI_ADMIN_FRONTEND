@@ -5,12 +5,12 @@ import ROUTES from '../../util/routes';
 
 const PrivateRoutes = ({component: Component, auth, path}) => {
     let isAuthenticated = false;
-    console.log(auth)
+    // console.log(auth)
     if (auth.accessToken && auth.tokenExpiredAt && auth.tokenExpiredAt > new Date()) {
-        console.log("if condition")
+        // console.log("if condition")
         isAuthenticated = true;
     }
-    console.log(isAuthenticated)
+    // console.log(isAuthenticated)
     return (
         <Route exact path={path}
                render={props => (isAuthenticated ? <Component {...props} /> : <Redirect to={ROUTES.LOGIN}/>)}/>
