@@ -41,6 +41,7 @@ class Dishes extends Component {
             ignoreValidation: false,
             showDisponible: true,
             showagotado: null,
+            editReq: false
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
@@ -361,7 +362,7 @@ class Dishes extends Component {
                                         </div>
 
                                         <div className="img"
-                                             style={{backgroundImage: `url(${dish.picture ? dish.picture : DefaultImage})`}}></div>
+                                             style={{backgroundImage: `url(${dish.picture ? dish.picture : DefaultImage})`, backgroundPosition: 'center'}}></div>
                                         <div className="menu-ind">
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>
@@ -374,7 +375,8 @@ class Dishes extends Component {
                                                         id: category.id
                                                     },
                                                     showDisponible: true,
-                                                    showagotado: false
+                                                    showagotado: false,
+                                                    editReq: true
                                                 })
                                                 this.setState({selectedDish: {...dish}})
                                             }}>
@@ -493,7 +495,7 @@ class Dishes extends Component {
                     fill="#AEA7AF"/>
               </svg> */}
                             <div className="img"
-                                 style={{background: "url(" + this.state.selectedDish.picture + ")"}}></div>
+                                 style={{backgroundImage: `url(${this.state.selectedDish.picture ? this.state.selectedDish.picture : [this.state.editReq ? DefaultImage : '']})`, backgroundSize: 'cover', backgroundPosition: 'center', width: '100%', height: '100%'}}></div>
                         </div>
                         <div className="add-details">
                             <p className="title">{this.state.selectedDish.name}</p>
