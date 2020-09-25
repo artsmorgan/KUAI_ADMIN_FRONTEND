@@ -351,7 +351,7 @@ class Dishes extends Component {
                                             </svg>
                                         </div>
 
-                                        <div className="img"
+                                        <div className={ !dish.isAvailable ? "img out_stock" : "img"}
                                              style={{
                                                  backgroundImage: `url(${dish.picture ? dish.picture : DefaultImage})`,
                                                  backgroundPosition: 'center'

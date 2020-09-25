@@ -1153,6 +1153,48 @@ body {
   background-size: cover !important;
 }
 
+.mod-rest-container .rotator-container.lg  .img {
+  width: 100px;
+  height: 68px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 15px 15px 8px 30px;
+  background-size: cover !important;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.mod-rest-container .rotator-container.lg  .img.out_stock::before {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  content: " ";
+  z-index: 1;
+  left: 0px;
+  top: 0px;
+  background: rgba(255, 255, 225, 0.3);
+}
+.mod-rest-container .rotator-container.lg  .img.out_stock::after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: " Agotado ";
+  z-index: 2;
+  left: 4px;
+  top: -3px;
+  text-transform: uppercase;
+  color: red;
+  font-size: 12px;
+  font-weight: 600;
+  transform: rotate(-45deg);
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+
 .mod-rest-container .rotator-container.lg .menu-ind {
   display: inline-block;
   width: 100%;
