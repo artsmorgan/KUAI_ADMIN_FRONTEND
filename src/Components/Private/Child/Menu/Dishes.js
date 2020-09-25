@@ -28,6 +28,7 @@ class Dishes extends Component {
         super(props);
 
         this.productPictRefUpload = React.createRef();
+        this.handleProductImageUpload = this.handleProductImageUpload.bind(this)
 
         this.state = {
             allDishes: {productList: []},
@@ -39,7 +40,8 @@ class Dishes extends Component {
             ignoreValidation: false,
             showDisponible: true,
             showagotado: null,
-            editReq: false
+            editReq: false,
+            uploadedFile: null
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
@@ -153,9 +155,10 @@ class Dishes extends Component {
     getFileExtension = filename => filename.split('.').pop();
 
     handleProductImageUpload = (e) => {
-        // console.log('handleProfileImageUpload',e.target.files[0]);
+        console.log('handleProfileImageUpload::::::',e.target.files[0]);
         if (e && e.target.files[0]) {
             const _files = e.target.files[0];
+            this.setState({ uploadedFile: URL.createObjectURL(_files)})
             // this.setState({ profileImage: e.target.files[0] });
             const fileExtension = this.getFileExtension(e.target.files[0].name)
             const filename = `${Date.now()}.${fileExtension}`;
@@ -178,21 +181,21 @@ class Dishes extends Component {
                         .child(filename)
                         .getDownloadURL()
                         .then(url => {
-                            // console.log('url', url);
+                            console.log('url', url);
                             this.setState({selectedDishPicture: url});
                             let obj = this.state.selectedDish
                             obj['picture'] = url
                             // console.log('obj', obj);
                             this.setState({selectedDish: obj})
-                            // const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
-                            // docRef.update({
-                            //     profilePicture: url
-                            // }).then(() => {
-                            //     toastr.success("Éxito", 'La imágen de perfil fue subida con éxito')
-                            //     // this.props.getDefaultConfigData({restaurantId: localStorage.getItem('restaurantId')})
-                            // }).catch((error) => {
-                            //     console.log('Error updating the document:', error);
-                            // })
+                            const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                            docRef.update({
+                                profilePicture: url
+                            }).then(() => {
+                                toastr.success("Éxito", 'La imágen de perfil fue subida con éxito')
+                                // this.props.getDefaultConfigData({restaurantId: localStorage.getItem('restaurantId')})
+                            }).catch((error) => {
+                                console.log('Error updating the document:', error);
+                            })
                         });
                 }
             );
@@ -406,14 +409,6 @@ class Dishes extends Component {
 
     addMenuProcessSubmit() {
         let obj = this.state.selectedDish;
-        /*        console.log(obj);
-                if (this.state.showDisponible) {
-                    obj.isAvailable = this.state.showDisponible
-                    console.log(obj);
-                } else {
-                    obj.isAvailable = this.state.showagotado
-                    console.log(obj);
-                }*/
         if (!obj.id) {
             obj['id'] = uuid();
         }
@@ -476,10 +471,6 @@ class Dishes extends Component {
         console.log('uploadPhoto', this.state.selectedDish);
         this.productPictRefUpload.current.click();
     }
-
-    handleProductImageUpload = (e) => {
-        console.log('handleProductImageUpload', e.target.files[0]);
-    };
 
 
     renderDishEditor() {
