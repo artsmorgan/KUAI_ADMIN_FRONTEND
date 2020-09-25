@@ -45,7 +45,7 @@ class DeliveryMethods extends React.Component {
         expressPrecioEnvio: "",
         expressCada: "",
         expressEnvioGratisEnabled: false,
-        expressCompraMiinima:"",
+        expressCompraMinima:"",
         id: null
       }
     };
@@ -175,6 +175,7 @@ class DeliveryMethods extends React.Component {
           expressPrecioEnvio: (delivery.express)  ? delivery.express.precioEnvio : '',
           expressCada:(delivery.express) ? delivery.express.cada :  '',
           expressEnvioGratisEnabled: (delivery.express)  ? this.getBool(delivery.express.envioGratis) : false,
+          expressCompraMinima:(delivery.expressCompraMinima) ? delivery.expressCompraMinima : '',
           id: delivery.id,
           restaurantId: localStorage.getItem('restaurantId')
         }
@@ -534,8 +535,8 @@ class DeliveryMethods extends React.Component {
             <div className="col" style={{marginLeft: '45px', marginTop: '15px'}}>
               <label htmlFor="" style={{fontSize: '14px', fontWeight: '500'}}>COMPRA MIÍNIMA</label>
               <input type="number" min="0" className="uni-input" style={{width: '50%', display: 'block'}}
-                     onChange={(e) => this.inputChangeHandler(e, 'expressCompraMiinima')}
-                     value={this.state.dataToPost.expressCompraMiinima} name="expressCompraMiinima"
+                     onChange={(e) => this.inputChangeHandler(e, 'expressCompraMinima')}
+                     value={this.state.dataToPost.expressCompraMinima} name="expressCompraMinima"
                      disabled={!this.state.dataToPost.expressEnvioGratisEnabled}/>
               {/* <p style={{ color: "red" }}>
                                                     {this.state.errors.tarjetaEnEntrega.compraMiinima}
