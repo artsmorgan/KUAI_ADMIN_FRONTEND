@@ -827,7 +827,7 @@ class ModifyRestaurant extends React.Component {
                                                 &nbsp;&nbsp;
                                                 FACEBOOK:
                                             </label>
-                                                <input className="uni-input " type="text" name="fb"
+                                                <input className="uni-input " type="url" name="fb"
                                                     placeholder="facebook"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.fb} />
@@ -844,7 +844,7 @@ class ModifyRestaurant extends React.Component {
                                                 &nbsp;&nbsp;
                                                 INSTAGRAM:
                                             </label>
-                                                <input className="uni-input " type="text" name="ig"
+                                                <input className="uni-input " type="url" name="ig"
                                                     placeholder="instagram"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.ig} />
