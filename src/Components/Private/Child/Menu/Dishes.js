@@ -44,7 +44,8 @@ class Dishes extends Component {
             editReq: false,
             uploadedFile: null,
             previousCategory: null,
-            dishHasCategoryChange: false
+            dishHasCategoryChange: false,
+            isCreationMode : false
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
@@ -150,7 +151,7 @@ class Dishes extends Component {
 
     newMenuItem() {
         //reset previous states
-        this.setState({dishHasCategoryChange: false, previousCategory: null})
+        this.setState({dishHasCategoryChange: false, previousCategory: '', isCreationMode: true})
         
         this.setState({selectedDish: {}}, () => {
             let newDish = {
@@ -176,6 +177,7 @@ class Dishes extends Component {
             this.setState({selectedDish: newDish, showDisponible: true, showagotado: false}, () => {
                 $('div.dishEditorMobile').removeClass('hidden');
                 console.log('selectedDish', this.state.selectedDish)
+                console.log('dishHasCategoryChange', this.state.dishHasCategoryChange)
             });
         })
     }
@@ -287,13 +289,19 @@ class Dishes extends Component {
 
     selectHandleChange = selectedOption => {
         //previousCategory
+        console.log('isCreationMode',this.state.isCreationMode)
         console.log('previousCategory',this.state.selectedDish.categoryId)
         console.log('new Category', selectedOption)
         //dishHasCategoryChange
-        if(this.state.selectedDish.categoryId !== selectedOption.id){
-            this.setState({dishHasCategoryChange: true, previousCategory: this.state.selectedDish.categoryId})
-            
+        if(!this.state.isCreationMode){
+            if(this.state.selectedDish.categoryId !== selectedOption.id){
+                this.setState({dishHasCategoryChange: true, previousCategory: this.state.selectedDish.categoryId})
+                
+            }
         }
+        
+
+        
 
         this.setState(
             {selectedOption},
@@ -410,7 +418,7 @@ class Dishes extends Component {
                                                     // showagotado: false,
                                                     editReq: true
                                                 })
-                                                this.setState({dishHasCategoryChange: false, previousCategory: null})
+                                                this.setState({dishHasCategoryChange: false, previousCategory: null, isCreationMode: false})
                                                 this.setState({selectedDish: {...dish}}, () => {
                                                     let obj = this.state.selectedDish
                                                     console.log(obj)
