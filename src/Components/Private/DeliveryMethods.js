@@ -537,7 +537,7 @@ class DeliveryMethods extends React.Component {
               <input type="number" min="0" className="uni-input" style={{width: '50%', display: 'block'}}
                      onChange={(e) => this.inputChangeHandler(e, 'expressCompraMinima')}
                      value={this.state.dataToPost.expressCompraMinima} name="expressCompraMinima"
-                     disabled={!this.state.dataToPost.expressEnvioGratisEnabled}/>
+                     />
               {/* <p style={{ color: "red" }}>
                                                     {this.state.errors.tarjetaEnEntrega.compraMiinima}
                                                 </p> */}

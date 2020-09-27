@@ -18,6 +18,7 @@ import axios from 'axios'
 import $ from 'jquery'
 import LoaderInScreen from "../../../Public/LoaderInScreen";
 import {Nav} from "react-bootstrap";
+import _ from "lodash";
 
 const pageTabs = ['disponible', 'agotado']
 
@@ -41,11 +42,32 @@ class Dishes extends Component {
             showDisponible: true,
             showagotado: null,
             editReq: false,
-            uploadedFile: null
+            uploadedFile: null,
+            previousCategory: null,
+            dishHasCategoryChange: false
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
             autoForceUpdate: this
+        });
+
+        SimpleReactValidator.addLocale('es', {
+            required: 'este campo es requerido',
+            email: 'Introduzca un correo electrónico válido'
+        });
+
+        this.validator = new SimpleReactValidator({
+            locale: 'es',
+            autoForceUpdate: this,
+            validators: {
+                mixPass: {
+                    message: 'Esta no es una contraseña válida',
+                    rule: (val, params, validator) => {
+                        // console.log(val, params, validator);
+                        return validator.helpers.testRegex(val, /^(?=.*\d)(?=.*[ A-Za-z]).{8,}$/)
+                    },
+                }
+            }
         });
     }
 
@@ -94,6 +116,7 @@ class Dishes extends Component {
             // console.log("eventTriggered")
             this.getMenuListByCat()
         }
+        
     }
 
     componentWillReceiveProps(props) {
@@ -105,6 +128,7 @@ class Dishes extends Component {
 
     componentWillUnmount() {
         this._isMounted = false;
+        this.setState({dishHasCategoryChange: false, previousCategory: null})
         // this.setState({allDishes: null});
     }
 
@@ -125,14 +149,17 @@ class Dishes extends Component {
     }
 
     newMenuItem() {
+        //reset previous states
+        this.setState({dishHasCategoryChange: false, previousCategory: null})
+        
         this.setState({selectedDish: {}}, () => {
             let newDish = {
                 id: uuid(),
                 isAvailable: true,
-                name: null,
-                description: null,
-                categoryId: this.props.selectedCategory.id,
-                price: null,
+                name: '',
+                description: '',
+                categoryId: null,
+                price: 0,
                 upsell: false,
                 recomendacion: false,
                 promo: false,
@@ -147,7 +174,8 @@ class Dishes extends Component {
                 picture: ''
             }
             this.setState({selectedDish: newDish, showDisponible: true, showagotado: false}, () => {
-                $('div.dishEditorMobile').removeClass('hidden')
+                $('div.dishEditorMobile').removeClass('hidden');
+                console.log('selectedDish', this.state.selectedDish)
             });
         })
     }
@@ -187,15 +215,15 @@ class Dishes extends Component {
                             obj['picture'] = url
                             // console.log('obj', obj);
                             this.setState({selectedDish: obj})
-                            const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
-                            docRef.update({
-                                profilePicture: url
-                            }).then(() => {
-                                toastr.success("Éxito", 'La imágen de perfil fue subida con éxito')
-                                // this.props.getDefaultConfigData({restaurantId: localStorage.getItem('restaurantId')})
-                            }).catch((error) => {
-                                console.log('Error updating the document:', error);
-                            })
+                            // const docRef = db.collection('restaurants').doc(localStorage.getItem('restaurantId'));
+                            // docRef.update({
+                            //     profilePicture: url
+                            // }).then(() => {
+                            //     toastr.success("Éxito", 'La imágen del producto fue subida con éxito')
+                            //     // this.props.getDefaultConfigData({restaurantId: localStorage.getItem('restaurantId')})
+                            // }).catch((error) => {
+                            //     console.log('Error updating the document:', error);
+                            // })
                         });
                 }
             );
@@ -258,14 +286,24 @@ class Dishes extends Component {
     }
 
     selectHandleChange = selectedOption => {
+        //previousCategory
+        console.log('previousCategory',this.state.selectedDish.categoryId)
+        console.log('new Category', selectedOption)
+        //dishHasCategoryChange
+        if(this.state.selectedDish.categoryId !== selectedOption.id){
+            this.setState({dishHasCategoryChange: true, previousCategory: this.state.selectedDish.categoryId})
+            
+        }
+
         this.setState(
             {selectedOption},
             () => {
                 // console.log(`Option selected:`, this.state.selectedOption)
                 let obj = this.state.selectedDish
                 obj['categoryId'] = selectedOption.id
+                
                 this.setState({selectedDish: obj}, () => {
-                    // console.log(this.state)
+                    console.log(this.state.selectedDish)
                 })
             }
         );
@@ -334,7 +372,8 @@ class Dishes extends Component {
                         <div>
                             {
                                 category.items.length > 0 && category.items.map(dish =>
-                                    <div className="rotator" key={dish.id}>
+                                    
+                                    <div className="rotator" key={dish.id}>                                        
                                         <div className="directional">
                                             <svg className="top" width="9" height="7" viewBox="0 0 9 7"
                                                  fill="none"
@@ -371,6 +410,7 @@ class Dishes extends Component {
                                                     // showagotado: false,
                                                     editReq: true
                                                 })
+                                                this.setState({dishHasCategoryChange: false, previousCategory: null})
                                                 this.setState({selectedDish: {...dish}}, () => {
                                                     let obj = this.state.selectedDish
                                                     console.log(obj)
@@ -408,6 +448,9 @@ class Dishes extends Component {
     }
 
     addMenuProcessSubmit() {
+
+        console.log('here')
+
         let obj = this.state.selectedDish;
         if (!obj.id) {
             obj['id'] = uuid();
@@ -424,21 +467,126 @@ class Dishes extends Component {
         }
 
         const dishes = [];
+        // console.log('his.props.dishes.dishes',this.props.dishes.dishes)
         this.props.dishes.dishes.forEach(dish => {
             if (dish.id !== obj.id) {
                 dishes.push(dish);
             }
         })
-        dishes.push(obj);
-        console.log(dishes);
-        this.props.postMenuFormData(dishes, this.props.selectedCategory.id ? this.props.selectedCategory.id : this.state.selectedDish.categoryId, () => {
-            this.setState({selectedDish: null, ignoreValidation: true, selectedOption: null}, () => {
-                console.log(this.state.selectedDish)
+        
+        const restaurantId = localStorage.getItem('restaurantId');
+
+        console.log('this.state.dishHasCategoryChange',this.state.dishHasCategoryChange)
+        const expectedCategoryId = (this.state.dishHasCategoryChange) ? this.state.previousCategory : obj.categoryId;
+        
+
+        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/' + expectedCategoryId ;
+        axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
+            .then(response => {
+                
+                let dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
+                console.log('dishes', dishes)
+                //check if the object Id exists in the list, if so update'
+                const IsEdit = _.findIndex(dishes, function(item) {
+                    return item.id === obj.id; 
+                })
+
+                
+                let cateId = this.props.selectedCategory.id ? this.props.selectedCategory.id : this.state.selectedDish.categoryId;
+
+                if(IsEdit >= 0){
+                    
+                    // console.log('dishes[IsEdit]',dishes[IsEdit])
+
+                    //this.setState({dishHasCategoryChange: true, previousCategory: this.state.selectedDish.categoryId})
+                    if(this.state.dishHasCategoryChange){
+                        //Remove product from current dish list
+                        let result = dishes.filter(function (dish) {
+                            return dish.id != obj.id;
+                        })
+
+                        console.log('current dish list', dishes);
+                        console.log('new dish list', result);
+
+                        
+                        
+                        //get new dish list
+                        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/' + obj.categoryId ;
+                        axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
+                            .then(response => {
+                                    let new_dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
+                                    new_dishes.push(obj);
+                                    this.props.postMenuFormData(new_dishes, obj.categoryId, () => { })
+                            })
+                            .catch(error => {
+                                    const response = error.response
+                                    console.log(error)
+                                    // dispatch(getMenuListFullError())
+                                    if (response && response.status === 401) {
+                                        // logout(dispatch)
+                                    }
+                            })
+
+                        //add the dish to the new dish list
+                        dishes = result;
+                    }else{
+                        const defaultCategory = this.props.categories.categories[0].id;
+                    
+
+                        if (cateId == null){
+                            cateId = defaultCategory;
+                            obj.categoryId = defaultCategory;
+                        }
+                        dishes[IsEdit]  = obj
+                    }
+
+                    
+
+                }else{
+                    dishes.push(obj);
+
+                }
+
+                this.props.postMenuFormData(dishes, expectedCategoryId, () => {
+                    this.setState({selectedDish: null, ignoreValidation: true, selectedOption: null}, () => {
+                        console.log(this.state.selectedDish)
+                    })
+                    this.props.loadMenu(this.props.selectedCategory.id, this.props.selectedCategory.name);
+                    // this.getMenuListByCat()
+                    console.log(this.state.selectedDish)
+                })
+
+                
+                // console.log('IsEdit', IsEdit);
+                // console.log('obj', obj);
+                // console.log('dishes', dishes);
+
+                // // const IsEdit = _.findIndex(dishes, function(item) {
+
+                
+                // console.log('this.props.selectedCategory.id',this.props.selectedCategory.id)
+                // console.log('this.state.selectedDish.categoryId',this.state.selectedDish.categoryId)
+                // console.log('cateId',cateId)
+                // console.log('this.props.categories.categories',)
+
+
+                
+                
+                
+                // dispatch(getMenuListFullSuccess(response.data))
             })
-            this.props.loadMenu(this.props.selectedCategory.id, this.props.selectedCategory.name);
-            this.getMenuListByCat()
-            console.log(this.state.selectedDish)
-        })
+            .catch(error => {
+                const response = error.response
+                console.log(error)
+                // dispatch(getMenuListFullError())
+                if (response && response.status === 401) {
+                    // logout(dispatch)
+                }
+            })
+
+        // console.log('currentProductListArr',currentProductListArr)
+
+        
     }
 
     addMenuFormSubmitHandler = (e) => {
@@ -472,6 +620,9 @@ class Dishes extends Component {
         this.productPictRefUpload.current.click();
     }
 
+    hideEditorMobile(){
+        $('div.dishEditorMobile').addClass('hidden')
+    }
 
     renderDishEditor() {
         if (this.state.selectedDish === null) {
@@ -692,6 +843,8 @@ class Dishes extends Component {
 
                             <div className="row" style={{marginTop: '40px'}}>
                                 <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
+                                <br />
+                                <button className="btn hideMobile" onClick={this.hideEditorMobile}>Cerrar</button>
                             </div>
                         </div>
                     </div>

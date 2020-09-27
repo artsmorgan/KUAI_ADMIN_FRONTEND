@@ -7,10 +7,12 @@ import {uuid} from "uuidv4";
 import {bindActionCreators} from "redux";
 import {
   getCategoryListData, getMenuListData,
-  updateCategoryFormData
+  updateCategoryFormData,
+  postMenuFormData
 } from "../../../../actions";
 import {connect} from "react-redux";
 import $ from "jquery";
+import axios from "axios";
 
 class Categories extends Component {
   constructor(props) {
@@ -47,12 +49,72 @@ class Categories extends Component {
     let result = categoryListToUpdate.filter(function (el) {
       return el.id != id;
     })
+
+    //check  if the category  has products
+    const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/';
+    axios.get(GET_MENU_LIST_BY_CATEGORY_URL+ id, {})
+        .then(response => {
+          console.log('response', response)
+            let dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : false;
+            console.log('dishes', dishes)
+            //check if the object Id exists in the list, if so update'
+            
+
+            //If category has dishes assign to next top category
+            if(dishes != false){
+              const defaultCategory = result[0].id;
+              console.log('currentCategory',id)
+              console.log('defaultCategory',defaultCategory)
+              
+              dishes.map(dish=>{
+                dish.categoryId = defaultCategory;
+              })
+
+              //Get Defaul categories array list
+              axios.get(GET_MENU_LIST_BY_CATEGORY_URL+ defaultCategory, {})
+                    .then(response => {
+                      let catDishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
+                      const mergeDishes = [...catDishes,...dishes];
+                      this.props.postMenuFormData(mergeDishes, defaultCategory, () => { })
+                    })
+                    .catch(error => {
+                        const response = error.response
+                        console.log(error)
+                        // dispatch(getMenuListFullError())
+                        if (response && response.status === 401) {
+                            // logout(dispatch)
+                        }
+                    })
+
+              
+
+            }
+            
+           
+
+            
+
+            this.setState({categoryListToUpdate: result}, () => {
+              // console.log(this.state.categoryListToUpdate)
+              this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+              this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
+            })
+            
+            
+            
+            // dispatch(getMenuListFullSuccess(response.data))
+        })
+        .catch(error => {
+            const response = error.response
+            console.log(error)
+            // dispatch(getMenuListFullError())
+            if (response && response.status === 401) {
+                // logout(dispatch)
+            }
+        })
+
     // console.log(result)
-    this.setState({categoryListToUpdate: result}, () => {
-      // console.log(this.state.categoryListToUpdate)
-      this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
-      this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
-    })
+    
   }
 
   categoryUpdateHandler = (id) => {
@@ -136,7 +198,7 @@ class Categories extends Component {
           <form onSubmit={this.formSubmitHandler}>
             <div className="ls-panel">
               <input type="text" className={"uni-input"} name="name"
-                     placeholder="Category name"
+                     placeholder=""
                      onChange={this.inputChangeHandler}
                      value={this.state.categoryDataToPost.name}
                      autoComplete={"off"}/>
@@ -241,7 +303,8 @@ const mapStateToProps = ({menuReducer}) => ({categories: menuReducer.categories}
 const mapDispatchToProps = dispatch => bindActionCreators({
   updateCategoryFormData,
   getCategoryListData,
-  getMenuListData
+  getMenuListData,
+  postMenuFormData
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories)

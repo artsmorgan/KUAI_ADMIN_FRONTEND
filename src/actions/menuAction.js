@@ -76,7 +76,7 @@ export const getMenuListData = (id) => {
             let params = {}
             axiosRequest.get(URL, {headers, params})
                 .then(response => {
-                    // console.log(response)
+                    console.log('GET_MENU_LIST_URL',response)
                     dispatch(getMenuListSuccess(response.data))
                 })
                 .catch(error => {
@@ -167,6 +167,7 @@ export const updateCategoryFormData = (payload, callback) => {
 }
 
 export const postMenuFormData = (payload, categoryId, callback) => {
+    console.log('payload', payload)
     return (dispatch, getState) => {
         dispatch(postMenuFormRequest())
         let URL = UPDATE_MENU_URL + categoryId
