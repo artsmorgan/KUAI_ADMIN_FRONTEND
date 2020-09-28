@@ -655,6 +655,9 @@ class Dishes extends Component {
         if (this.state.selectedDish === null) {
             return <></>
         }
+
+        let {categories} = this.props;
+        categories = !categories ? categories = {categories: []} : categories
         return <>
 
             <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 dishEditorMobile hidden"}>

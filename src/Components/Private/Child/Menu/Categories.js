@@ -247,18 +247,11 @@ class Categories extends Component {
 
 
   renderCategoriesList() {
-    let categories = null;
-    try{
-      categories = this.props.categories;
-    } catch (e) {
-      categories = {}
-    }
-    // let {categories} = this.props;
     // console.log('categories',categories)
     //onClick={() => this.props.loadMenu(category.id, category.name)}
     return <>
       {
-        categories.categories.map(category =>
+        this.props.categories.categories.map(category =>
             <div className="rotator" key={category.id} > 
               <div className="directional">
                 <svg className="top" width="9" height="7" viewBox="0 0 9 7"
