@@ -247,7 +247,13 @@ class Categories extends Component {
 
 
   renderCategoriesList() {
-    let {categories} = this.props;
+    let categories = null;
+    try{
+      categories = this.props.categories;
+    } catch (e) {
+      categories = {}
+    }
+    // let {categories} = this.props;
     // console.log('categories',categories)
     //onClick={() => this.props.loadMenu(category.id, category.name)}
     return <>
