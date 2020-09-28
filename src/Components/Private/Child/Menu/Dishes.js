@@ -45,7 +45,7 @@ class Dishes extends Component {
             uploadedFile: null,
             previousCategory: null,
             dishHasCategoryChange: false,
-            isCreationMode : false
+            isCreationMode: false
         }
         this.validator = new SimpleReactValidator({
             locale: 'es',
@@ -117,7 +117,7 @@ class Dishes extends Component {
             // console.log("eventTriggered")
             this.getMenuListByCat()
         }
-        
+
     }
 
     componentWillReceiveProps(props) {
@@ -152,7 +152,7 @@ class Dishes extends Component {
     newMenuItem() {
         //reset previous states
         this.setState({dishHasCategoryChange: false, previousCategory: '', isCreationMode: true})
-        
+
         this.setState({selectedDish: {}}, () => {
             let newDish = {
                 id: uuid(),
@@ -185,10 +185,10 @@ class Dishes extends Component {
     getFileExtension = filename => filename.split('.').pop();
 
     handleProductImageUpload = (e) => {
-        console.log('handleProfileImageUpload::::::',e.target.files[0]);
+        console.log('handleProfileImageUpload::::::', e.target.files[0]);
         if (e && e.target.files[0]) {
             const _files = e.target.files[0];
-            this.setState({ uploadedFile: URL.createObjectURL(_files)})
+            this.setState({uploadedFile: URL.createObjectURL(_files)})
             // this.setState({ profileImage: e.target.files[0] });
             const fileExtension = this.getFileExtension(e.target.files[0].name)
             const filename = `${Date.now()}.${fileExtension}`;
@@ -289,19 +289,17 @@ class Dishes extends Component {
 
     selectHandleChange = selectedOption => {
         //previousCategory
-        console.log('isCreationMode',this.state.isCreationMode)
-        console.log('previousCategory',this.state.selectedDish.categoryId)
+        console.log('isCreationMode', this.state.isCreationMode)
+        console.log('previousCategory', this.state.selectedDish.categoryId)
         console.log('new Category', selectedOption)
         //dishHasCategoryChange
-        if(!this.state.isCreationMode){
-            if(this.state.selectedDish.categoryId !== selectedOption.id){
+        if (!this.state.isCreationMode) {
+            if (this.state.selectedDish.categoryId !== selectedOption.id) {
                 this.setState({dishHasCategoryChange: true, previousCategory: this.state.selectedDish.categoryId})
-                
+
             }
         }
-        
 
-        
 
         this.setState(
             {selectedOption},
@@ -309,7 +307,7 @@ class Dishes extends Component {
                 // console.log(`Option selected:`, this.state.selectedOption)
                 let obj = this.state.selectedDish
                 obj['categoryId'] = selectedOption.id
-                
+
                 this.setState({selectedDish: obj}, () => {
                     console.log(this.state.selectedDish)
                 })
@@ -380,8 +378,8 @@ class Dishes extends Component {
                         <div>
                             {
                                 category.items.length > 0 && category.items.map(dish =>
-                                    
-                                    <div className="rotator" key={dish.id}>                                        
+
+                                    <div className="rotator" key={dish.id}>
                                         <div className="directional">
                                             <svg className="top" width="9" height="7" viewBox="0 0 9 7"
                                                  fill="none"
@@ -398,7 +396,7 @@ class Dishes extends Component {
                                             </svg>
                                         </div>
 
-                                        <div className={ !dish.isAvailable ? "img out_stock" : "img"}
+                                        <div className={!dish.isAvailable ? "img out_stock" : "img"}
                                              style={{
                                                  backgroundImage: `url(${dish.picture ? dish.picture : DefaultImage})`,
                                                  backgroundPosition: 'center'
@@ -407,7 +405,7 @@ class Dishes extends Component {
                                             <p>{dish.name}</p>
                                             <span>₡{dish.price}</span>
                                             <button onClick={() => {
-                                                $('div.dishEditorMobile').removeClass('hidden')
+                                                // $('div.dishEditorMobile').removeClass('hidden')
                                                 this.setState({
                                                     selectedOption: {
                                                         value: category.name,
@@ -421,12 +419,32 @@ class Dishes extends Component {
                                                 this.setState({dishHasCategoryChange: false, previousCategory: null, isCreationMode: false})
                                                 this.setState({selectedDish: {...dish}}, () => {
                                                     let obj = this.state.selectedDish
-                                                    console.log(obj)
+                                                    console.log("editor")
                                                     this.setState({
                                                         showDisponible: obj.isAvailable ? true : false,
                                                         showagotado: obj.isAvailable ? false : true,
+                                                    }, () => {
+                                                        console.log("editor..inside")
                                                     })
+                                                    console.log("editor..ouside")
+                                                    $('div.dishEditorMobile').removeClass('hidden')
                                                 })
+/*                                                this.setState({
+                                                        selectedOption: {
+                                                            value: category.name,
+                                                            label: category.name,
+                                                            id: category.id
+                                                        },
+                                                        dishHasCategoryChange: false,
+                                                        previousCategory: null,
+                                                        isCreationMode: false,
+                                                        selectedDish: {...dish},
+                                                        editReq: true,
+                                                        showDisponible: dish.isAvailable ? true : false,
+                                                        showagotado: dish.isAvailable ? false : true,
+
+                                                    }
+                                                )*/
                                             }}>
                                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                                                      xmlns="http://www.w3.org/2000/svg">
@@ -457,7 +475,7 @@ class Dishes extends Component {
 
     addMenuProcessSubmit() {
 
-        console.log('here')
+        // console.log('here')
 
         let obj = this.state.selectedDish;
         if (!obj.id) {
@@ -475,39 +493,44 @@ class Dishes extends Component {
         }
 
         const dishes = [];
-        // console.log('his.props.dishes.dishes',this.props.dishes.dishes)
+        /*        console.log("+++++++++++")
+                console.log(obj)
+                console.log("+++++++++++")
+                console.log('this.props.dishes.dishes', this.props.dishes.dishes)
+                console.log('menu dishes', this.state.allDishes)
+                console.log("+++++++++++")*/
         this.props.dishes.dishes.forEach(dish => {
             if (dish.id !== obj.id) {
                 dishes.push(dish);
             }
         })
-        
+
         const restaurantId = localStorage.getItem('restaurantId');
 
-        console.log('this.state.dishHasCategoryChange',this.state.dishHasCategoryChange)
+        console.log('this.state.dishHasCategoryChange', this.state.dishHasCategoryChange)
         const expectedCategoryId = (this.state.dishHasCategoryChange) ? this.state.previousCategory : obj.categoryId;
-        
 
-        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/' + expectedCategoryId ;
+
+        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/' + expectedCategoryId;
         axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
             .then(response => {
-                
+
                 let dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
                 console.log('dishes', dishes)
                 //check if the object Id exists in the list, if so update'
-                const IsEdit = _.findIndex(dishes, function(item) {
-                    return item.id === obj.id; 
+                const IsEdit = _.findIndex(dishes, function (item) {
+                    return item.id === obj.id;
                 })
 
-                
+
                 let cateId = this.props.selectedCategory.id ? this.props.selectedCategory.id : this.state.selectedDish.categoryId;
 
-                if(IsEdit >= 0){
-                    
+                if (IsEdit >= 0) {
+
                     // console.log('dishes[IsEdit]',dishes[IsEdit])
 
                     //this.setState({dishHasCategoryChange: true, previousCategory: this.state.selectedDish.categoryId})
-                    if(this.state.dishHasCategoryChange){
+                    if (this.state.dishHasCategoryChange) {
                         //Remove product from current dish list
                         let result = dishes.filter(function (dish) {
                             return dish.id != obj.id;
@@ -516,41 +539,40 @@ class Dishes extends Component {
                         console.log('current dish list', dishes);
                         console.log('new dish list', result);
 
-                        
-                        
+
                         //get new dish list
-                        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/' + obj.categoryId ;
+                        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/' + obj.categoryId;
                         axios.get(GET_MENU_LIST_BY_CATEGORY_URL, {})
                             .then(response => {
-                                    let new_dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
-                                    new_dishes.push(obj);
-                                    this.props.postMenuFormData(new_dishes, obj.categoryId, () => { })
+                                let new_dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
+                                new_dishes.push(obj);
+                                this.props.postMenuFormData(new_dishes, obj.categoryId, () => {
+                                })
                             })
                             .catch(error => {
-                                    const response = error.response
-                                    console.log(error)
-                                    // dispatch(getMenuListFullError())
-                                    if (response && response.status === 401) {
-                                        // logout(dispatch)
-                                    }
+                                const response = error.response
+                                console.log(error)
+                                // dispatch(getMenuListFullError())
+                                if (response && response.status === 401) {
+                                    // logout(dispatch)
+                                }
                             })
 
                         //add the dish to the new dish list
                         dishes = result;
-                    }else{
+                    } else {
                         const defaultCategory = this.props.categories.categories[0].id;
-                    
 
-                        if (cateId == null){
+
+                        if (cateId == null) {
                             cateId = defaultCategory;
                             obj.categoryId = defaultCategory;
                         }
-                        dishes[IsEdit]  = obj
+                        dishes[IsEdit] = obj
                     }
 
-                    
 
-                }else{
+                } else {
                     dishes.push(obj);
 
                 }
@@ -564,23 +586,20 @@ class Dishes extends Component {
                     console.log(this.state.selectedDish)
                 })
 
-                
+
                 // console.log('IsEdit', IsEdit);
                 // console.log('obj', obj);
                 // console.log('dishes', dishes);
 
                 // // const IsEdit = _.findIndex(dishes, function(item) {
 
-                
+
                 // console.log('this.props.selectedCategory.id',this.props.selectedCategory.id)
                 // console.log('this.state.selectedDish.categoryId',this.state.selectedDish.categoryId)
                 // console.log('cateId',cateId)
                 // console.log('this.props.categories.categories',)
 
 
-                
-                
-                
                 // dispatch(getMenuListFullSuccess(response.data))
             })
             .catch(error => {
@@ -594,7 +613,7 @@ class Dishes extends Component {
 
         // console.log('currentProductListArr',currentProductListArr)
 
-        
+
     }
 
     addMenuFormSubmitHandler = (e) => {
@@ -628,7 +647,7 @@ class Dishes extends Component {
         this.productPictRefUpload.current.click();
     }
 
-    hideEditorMobile(){
+    hideEditorMobile() {
         $('div.dishEditorMobile').addClass('hidden')
     }
 
@@ -691,10 +710,10 @@ class Dishes extends Component {
                                       value={this.state.selectedDish.description}/>
                             <p style={{color: "red"}}>
                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}*/}
-                                {this.validator.message('name', this.state.selectedDish.description, 'required')}
+                                {this.validator.message('description', this.state.selectedDish.description, 'required')}
                             </p>
                             <label htmlFor="">CATEGORIA (Próximamente)</label>
-                            <Select className="cstm-select" value={this.state.selectedOption}
+                            <Select className="cstm-select" value={this.state.selectedOption} name="categoryId"
                                     onChange={this.selectHandleChange}
                                     placeholder="Categoria"
                                     options={this.props.categories.categories.map(category => {
@@ -703,7 +722,7 @@ class Dishes extends Component {
                             />
                             <p style={{color: "red"}}>
                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.categoryId, 'required') : ''}*/}
-                                {this.validator.message('name', this.state.selectedDish.categoryId, 'required')}
+                                {this.validator.message('categoryId', this.state.selectedDish.categoryId, 'required')}
                             </p>
                             <label htmlFor="">PRECIO:</label>
                             <input type="text" className="uni-input" name="price"
@@ -711,7 +730,7 @@ class Dishes extends Component {
                                    value={this.state.selectedDish.price}/>
                             <p style={{color: "red"}}>
                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num') : ''}*/}
-                                {this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num')}
+                                {this.validator.message('price', this.state.selectedDish.price, 'required|numeric|min:0,num')}
                             </p>
 
                             <input type="file" id="my_file" style={{display: "none"}} accept="image/*"
@@ -788,7 +807,8 @@ class Dishes extends Component {
                                                       checked={this.state.selectedDish.discount}/>
                                             <label htmlFor="" className="chk-label">% de descuento</label>
                                         </div>
-                                        <div className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
+                                        <div
+                                            className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
                                             <label htmlFor="">PORCENTAJE</label>
                                             <input type="text" className="uni-input" name="discountPercentage"
                                                    onChange={this.addMenuInputChangeHandler} style={{width: "100px"}}
@@ -851,7 +871,7 @@ class Dishes extends Component {
 
                             <div className="row" style={{marginTop: '40px'}}>
                                 <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
-                                <br />
+                                <br/>
                                 <button className="btn hideMobile" onClick={this.hideEditorMobile}>Cerrar</button>
                             </div>
                         </div>
