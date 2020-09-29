@@ -92,6 +92,36 @@ class Dishes extends Component {
             })
     }
 
+    deleteMenu = (id) => {
+        let dataToPost = [];
+        let categoryId='';
+        let arrayKey = '';
+        let menuListToUpdate = this.state.allDishes.productList;
+
+        for (const [key, value] of Object.entries(menuListToUpdate)) {
+            if(value.products.menuItems){
+                let itemList = JSON.parse(value.products.menuItems.productItemList);
+                itemList.forEach(item => {
+                    if(item.id==id){
+                        arrayKey=key;
+                    }
+                });
+            }
+        }
+
+        let data = JSON.parse(menuListToUpdate[arrayKey].products.menuItems.productItemList);
+        data.forEach(element => {
+            categoryId = element.categoryId;
+            if(element.id!=id){
+                dataToPost.push(element)
+            }
+        });
+      
+        this.props.postMenuFormData(dataToPost, categoryId)
+        
+    }
+
+
     /*    componentWillMount() {
             this.getMenuListByCat()
         }*/
@@ -402,6 +432,18 @@ class Dishes extends Component {
                                                 backgroundPosition: 'center'
                                             }}></div>
                                         <div className="menu-ind">
+                                            <div className="action">
+                                                <svg className="trash" width="15" height="16"
+                                                    viewBox="0 0 15 16"
+                                                    fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                    id={category.id}
+                                                    onClick={() => this.deleteMenu(dish.id)}>
+                                                    <path fillRule="evenodd" clipRule="evenodd"
+                                                        d="M13.5393 2.66665H10.0121V0.666661C10.0121 0.298474 9.74885 0 9.42418 0H4.72118C4.39651 0 4.13331 0.298474 4.13331 0.666661V2.66665H0.606063C0.281389 2.66665 0.0181885 2.96512 0.0181885 3.33331C0.0181885 3.70149 0.281389 3.99997 0.606063 3.99997H13.5393C13.864 3.99997 14.1272 3.70149 14.1272 3.33331C14.1272 2.96512 13.864 2.66665 13.5393 2.66665ZM5.30905 1.33332H8.8363V2.66665H5.30905V1.33332ZM1.78181 5.33329V13.9999C1.78181 15.1045 2.57141 15.9999 3.54543 15.9999H10.5999C11.5739 15.9999 12.3635 15.1045 12.3635 13.9999V5.33329H1.78181ZM5.30904 12.6664H4.13329V7.99973H5.30904V12.6664ZM6.48479 12.6664H7.66054V7.99973H6.48479V12.6664ZM10.012 12.6664H8.83629V7.99973H10.012V12.6664Z"
+                                                        fill="#41404D" />
+                                                </svg>
+                                            </div>
+
                                             <p>{dish.name}</p>
                                             <span className={` ${(!dish.promo || !dish.specialPrice) ? '' : 'hidden'}`}>₡{dish.price}</span>
                                             <span className={` ${(dish.promo && dish.specialPrice) ? '' : 'hidden'}`}><span style={{ textDecoration: 'line-through' }}>₡{dish.price}</span> | <span>₡{dish.specialPriceAmount}</span></span>
