@@ -725,7 +725,7 @@ class Dishes extends Component {
                                 {this.validator.message('categoryId', this.state.selectedDish.categoryId, 'required')}
                             </p>
                             <label htmlFor="">PRECIO:</label>
-                            <input type="text" className="uni-input" name="price"
+                            <input type="number" className="uni-input" name="price"
                                    onChange={this.addMenuInputChangeHandler}
                                    value={this.state.selectedDish.price}/>
                             <p style={{color: "red"}}>
@@ -791,7 +791,7 @@ class Dishes extends Component {
                                         <div
                                             className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
                                             <label htmlFor="">PRECIO PROMOCIÓN</label>
-                                            <input type="text" className="uni-input" name="specialPriceAmount"
+                                            <input type="number" className="uni-input" name="specialPriceAmount"
                                                    onChange={this.addMenuInputChangeHandler}
                                                    value={this.state.selectedDish.specialPriceAmount}/>
                                             <p style={{color: "red"}}>
@@ -810,7 +810,7 @@ class Dishes extends Component {
                                         <div
                                             className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
                                             <label htmlFor="">PORCENTAJE</label>
-                                            <input type="text" className="uni-input" name="discountPercentage"
+                                            <input type="number" className="uni-input" name="discountPercentage"
                                                    onChange={this.addMenuInputChangeHandler} style={{width: "100px"}}
                                                    value={this.state.selectedDish.discountPercentage}/>
                                             <p style={{color: "red"}}>
@@ -836,7 +836,7 @@ class Dishes extends Component {
                                             <div className="row">
                                                 <div className="col">
                                                     <label htmlFor="">LLEVA</label>
-                                                    <input type="text" className="uni-input" name="lleva"
+                                                    <input type="number" className="uni-input" name="lleva"
                                                            onChange={this.addMenuInputChangeHandler}
                                                            value={this.state.selectedDish.lleva}/>
                                                     <p style={{color: "red"}}>
@@ -846,7 +846,7 @@ class Dishes extends Component {
                                                 </div>
                                                 <div className="col">
                                                     <label htmlFor="">PAGA</label>
-                                                    <input type="text" className="uni-input" name="paga"
+                                                    <input type="number" className="uni-input" name="paga"
                                                            onChange={this.addMenuInputChangeHandler}
                                                            value={this.state.selectedDish.paga}/>
                                                     <p style={{color: "red"}}>

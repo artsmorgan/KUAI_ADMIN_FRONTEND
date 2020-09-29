@@ -281,6 +281,10 @@ class ModifyRestaurant extends React.Component {
 
     };
 
+    // checkInvalid = (e) => {
+    //     e.target.setCustomValidity("Please select a date in the past.");
+    // };
+
     inputChangeHandler = (e) => {
         let obj = this.state.dataToPost;
         obj[e.target.name] = e.target.value;
@@ -830,10 +834,7 @@ class ModifyRestaurant extends React.Component {
                                                 <input className="uni-input " type="url" name="fb"
                                                     placeholder="facebook"
                                                     onChange={this.inputChangeHandler}
-                                                    value={this.state.dataToPost.fb} />
-                                                <p className-="error-txt" style={{ color: "red" }}>
-                                                    {this.validator.message('fb', this.state.dataToPost.fb, 'required')}
-                                                </p>
+                                                    value={this.state.dataToPost.fb} /> 
                                                 <label htmlFor="">
                                                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -848,9 +849,6 @@ class ModifyRestaurant extends React.Component {
                                                     placeholder="instagram"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.ig} />
-                                                <p className-="error-txt" style={{ color: "red" }}>
-                                                    {this.validator.message('ig', this.state.dataToPost.ig, 'required')}
-                                                </p>
                                             </div>
                                         </div>
 
