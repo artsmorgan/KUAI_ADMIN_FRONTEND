@@ -277,7 +277,9 @@ class Dishes extends Component {
                     <h3 className="mb-hidden">Menú</h3>
                     <div className="rotator-container lg">
                         <div className={`btn-theme add-menu `}>
-                            <div className="add-item">
+                            <div className="add-item" onClick={() => {
+                                this.newMenuItem()
+                            }}>
                                 <span>+</span>
                             </div>
                             <div className="add-details">
@@ -285,9 +287,7 @@ class Dishes extends Component {
                                 <p className="dummy"></p>
                                 <p className="dummy" style={{ width: '80px' }}></p>
                                 <p className="dummy" style={{ width: '80px' }}></p>
-                                <button className="btn-add-menu" onClick={() => {
-                                    this.newMenuItem()
-                                }}>
+                                <button className="btn-add-menu">
                                     <span>+</span>AÑADIR
                                 </button>
 

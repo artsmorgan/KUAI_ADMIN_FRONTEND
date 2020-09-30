@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 import {getPaymentMethodFormData, updatePaymentMethodFormData,} from '../../actions';
 import LoaderInScreen from "../Public/LoaderInScreen";
+import $ from 'jquery'
 
 class PaymentMethods extends React.Component {
 
@@ -59,6 +60,28 @@ class PaymentMethods extends React.Component {
             locale: 'es',
             autoForceUpdate: this
         });
+
+        this.validator = new SimpleReactValidator({
+            locale: 'es',
+            autoForceUpdate: this,
+            validators: {
+                phoneNumber: {
+                    message: 'Esto no es un número de teléfono válido',
+                    rule: (val, params, validator) => {
+                        // console.log(val, params, validator);
+                        return validator.helpers.testRegex(val, /\d{4}-\d{4}$/)
+                    },
+                },
+                accNumber: {
+                    message: 'Este no es un número de cuenta válido',
+                    rule: (val, params, validator) => {
+                        // console.log(val, params, validator);
+                        // return validator.helpers.testRegex(val, /[d{4} \d{4} d{4} \d{4} \d{4}]{24}/)
+                        return validator.helpers.testRegex(val, /\d{4} \d{4} \d{4} \d{4} \d{4}$/)
+                    },
+                }
+            }
+        });
     }
 
     handleChange(e, switchName) {
@@ -70,11 +93,28 @@ class PaymentMethods extends React.Component {
     }
 
     paymentInputChangeHandler(e, switchName) {
+        console.log(e.target.value)
         let obj = this.state.dataToPost;
-        obj[e.target.name] = e.target.value;
+        obj[e.target.name] = e.target.value === "C" ? e.target.value.replace("C", "") : e.target.value.replace("CR", "");
 
         this.setState({dataToPost: obj});
         //this.handleCustomValidation()
+    }
+
+    phoneNumberInputChangeHandler(e) {
+        let obj = this.state.dataToPost;
+        // console.log(obj)
+        obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
+
+        this.setState({dataToPost: obj});
+    }
+
+    accNumberInputChangeHandler(e) {
+        let obj = this.state.dataToPost;
+        // console.log(obj)
+        obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{4})(\d{4})(\d{4})(\d{3})/, "$1 $2 $3 $4 $5");
+
+        this.setState({dataToPost: obj});
     }
 
     updateDimension = () => {
@@ -85,7 +125,6 @@ class PaymentMethods extends React.Component {
 
     componentDidMount() {
         this.updateDimension();
-
     }
 
     componentWillUnmount() {
@@ -204,11 +243,13 @@ class PaymentMethods extends React.Component {
 
 
     processSubmit() {
-        if (this.handleCustomValidation()) {
+        if (this.validator.allValid() && this.handleCustomValidation()) {
             this.props.updatePaymentMethodFormData({
                 restaurantId: localStorage.getItem('restaurantId'),
                 form: this.state.dataToPost
             })
+        } else {
+            this.validator.showMessages();
         }
 
     }
@@ -313,11 +354,12 @@ class PaymentMethods extends React.Component {
                     <div className="col">
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">Numero De Cuenta:</label>
-                        <input type="number" min="0" className="uni-input" name="transferenceNoCuenta"
-                               onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNoCuenta')}
+                        <input type="text" className="uni-input" name="transferenceNoCuenta"
+                               onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNoCuenta')} onKeyPress={(e) => this.accNumberInputChangeHandler(e)}
                                value={this.state.dataToPost.transferenceNoCuenta}/>
                         <p style={{color: "red"}}>
                             {this.state.errors.transferenceEnabled.transferenceNoCuenta}
+                            {this.state.dataToPost.transferenceNoCuenta ? this.validator.message('transferenceNoCuenta', this.state.dataToPost.transferenceNoCuenta, 'accNumber') : ''}
                         </p>
                         <label htmlFor="">Moneda:</label>
                         <input type="text" className="uni-input" name="transferenceTipoCambio"
@@ -334,11 +376,12 @@ class PaymentMethods extends React.Component {
                             {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
                         </p>
                         <label htmlFor="">Número De Cuenta IBAN:</label>
-                        <input type="text" className="uni-input" name="transferenceIban"
+                        <input type="text" className="uni-input" name="transferenceIban" id="transferenceIban"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceIban')}
-                               value={this.state.dataToPost.transferenceIban}/>
+                               value={"CR" + this.state.dataToPost.transferenceIban}/>
                         <p style={{color: "red"}}>
                             {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
+                            {this.state.dataToPost.transferenceIban ? this.validator.message('transferenceIban', this.state.dataToPost.transferenceIban, 'alpha_num|min:20|max:20') : ''}
                         </p>
                         <label htmlFor="">A nombre de:</label>
                         <input type="text" className="uni-input" name="transferenceNombrar"
@@ -598,11 +641,12 @@ class PaymentMethods extends React.Component {
                     <div className="col">
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">NUMERO DE TELEFONO:</label>
-                        <input type="number" min="0" className="uni-input" name="sinpeMovilNumero"
+                        <input type="text" className="uni-input" name="sinpeMovilNumero"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilNumero')}
-                               value={this.state.dataToPost.sinpeMovilNumero}/>
+                               value={this.state.dataToPost.sinpeMovilNumero} onKeyPress={(e) => this.phoneNumberInputChangeHandler(e)}/>
                         <p style={{color: "red"}}>
                             {this.state.errors.sinpeMovilEnabled.sinpeMovilNumero}
+                            {this.state.dataToPost.sinpeMovilNumero ? this.validator.message('sinpeMovilNumero', this.state.dataToPost.sinpeMovilNumero, 'phoneNumber') : ''}
                         </p>
                         <label htmlFor="">A NOMBRE DE:</label>
                         <input type="text" className="uni-input" name="sinpeMovilName"
