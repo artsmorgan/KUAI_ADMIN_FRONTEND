@@ -127,14 +127,14 @@ export const getMenuListByCategoryData = (payload) => {
 export const updateCategoryFormData = (payload, callback) => {
     return (dispatch, getState) => {
         dispatch(postCategoryFormRequest())
-        // console.log(payload)
-        let URL = UPDATE_CATEGORY_URL + restaurantId
+        console.log("payload", payload)
+        let URL = UPDATE_CATEGORY_URL + payload.restaurantId
         if (URL) {
             const state = getState()
             const lang = 'en'
             const headers = {Authorization: `bearer ${state.auth.token}`}
             // console.log(JSON.stringify(payload))
-            axiosRequest.put(URL, {categories: JSON.stringify(payload)}, {headers})
+            axiosRequest.put(URL, {categories: JSON.stringify(payload.catList)}, {headers})
                 .then(response => {
                     const data = response.data
                     console.log(response)
