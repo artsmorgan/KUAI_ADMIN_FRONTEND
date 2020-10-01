@@ -94,16 +94,16 @@ class Dishes extends Component {
 
     deleteMenu = (id) => {
         let dataToPost = [];
-        let categoryId='';
+        let categoryId = '';
         let arrayKey = '';
         let menuListToUpdate = this.state.allDishes.productList;
 
         for (const [key, value] of Object.entries(menuListToUpdate)) {
-            if(value.products.menuItems){
+            if (value.products.menuItems) {
                 let itemList = JSON.parse(value.products.menuItems.productItemList);
                 itemList.forEach(item => {
-                    if(item.id==id){
-                        arrayKey=key;
+                    if (item.id == id) {
+                        arrayKey = key;
                     }
                 });
             }
@@ -112,13 +112,13 @@ class Dishes extends Component {
         let data = JSON.parse(menuListToUpdate[arrayKey].products.menuItems.productItemList);
         data.forEach(element => {
             categoryId = element.categoryId;
-            if(element.id!=id){
+            if (element.id != id) {
                 dataToPost.push(element)
             }
         });
-      
+
         this.props.postMenuFormData(dataToPost, categoryId)
-        
+
     }
 
 
@@ -447,8 +447,14 @@ class Dishes extends Component {
                                             </div>
 
                                             <p>{dish.name}</p>
-                                            <span className={` ${(!dish.promo || !dish.specialPrice) ? '' : 'hidden'}`}>₡{dish.price}</span>
-                                            <span className={` ${(dish.promo && dish.specialPrice) ? '' : 'hidden'}`}><span style={{ textDecoration: 'line-through' }}>₡{dish.price}</span> | <span>₡{dish.specialPriceAmount}</span></span>
+                                            <span className={`price ${(!dish.promo) ? '' : 'hidden'}`}>₡{dish.price}</span>
+                                            <span className={`price ${(dish.promo) ? '' : 'hidden'}`}>
+                                                <span style={{ textDecoration: 'line-through' }}>₡{dish.price}</span>
+                                                <span className={`${(dish.specialPrice) ? '' : 'hidden'}`}> | ₡{dish.specialPriceAmount}</span>
+                                                <span className={`${(dish.discount) ? '' : 'hidden'}`}> | ₡{dish.price-Math.round((dish.discountPercentage*dish.price)/100)}</span>
+                                                <span className={`${(dish.llevaXpagaY) ? '' : 'hidden'}`}> | {dish.lleva} X {dish.paga}</span>
+                                                <span className={`${(dish.envioGratis) ? '' : 'hidden'}`}> | ENVÍO GRATIS</span>
+                                            </span>
 
 
                                             {/* <span>₡{dish.price}</span> */}
@@ -704,8 +710,8 @@ class Dishes extends Component {
             return <></>
         }
 
-        let {categories} = this.props;
-        categories = !categories ? categories = {categories: []} : categories
+        let { categories } = this.props;
+        categories = !categories ? categories = { categories: [] } : categories
         return <>
 
             <div className={"col-md-4 col-lg-4 col-sm-12 col-xs-12 dishEditorMobile hidden"}>
@@ -729,8 +735,14 @@ class Dishes extends Component {
                                 {this.state.selectedDish.description}
                             </p>
 
-                            <p className={`price ${(!this.state.selectedDish.promo || !this.state.selectedDish.specialPrice) ? '' : 'hidden'}`}>₡{this.state.selectedDish.price}</p>
-                            <p className={`price ${(this.state.selectedDish.promo && this.state.selectedDish.specialPrice) ? '' : 'hidden'}`}><span style={{ textDecoration: 'line-through' }}>₡{this.state.selectedDish.price}</span> | <span>₡{this.state.selectedDish.specialPriceAmount}</span></p>
+                            <p className={`price ${(!this.state.selectedDish.promo) ? '' : 'hidden'}`}>₡{this.state.selectedDish.price}</p>
+                            <p className={`price ${(this.state.selectedDish.promo) ? '' : 'hidden'}`}>
+                                <span style={{ textDecoration: 'line-through' }}>₡{this.state.selectedDish.price}</span>
+                                <span className={`${(this.state.selectedDish.specialPrice) ? '' : 'hidden'}`}> | ₡{this.state.selectedDish.specialPriceAmount}</span>
+                                <span className={`${(this.state.selectedDish.discount) ? '' : 'hidden'}`}> | ₡{this.calculatePercentage()}</span>
+                                <span className={`${(this.state.selectedDish.llevaXpagaY) ? '' : 'hidden'}`}> | {this.state.selectedDish.lleva} X {this.state.selectedDish.paga}</span>
+                                <span className={`${(this.state.selectedDish.envioGratis) ? '' : 'hidden'}`}> | ENVÍO GRATIS</span>
+                            </p>
                         </div>
                         <button className="btn-add-menu" onClick={e => {
                             e.preventDefault()
