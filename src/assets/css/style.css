@@ -1151,22 +1151,20 @@ body {
   display: inline-block;
   margin: 15px 15px 8px 30px;
   background-size: cover !important;
-}
-
-.mod-rest-container .rotator-container.lg  .img {
-  width: 100px;
-  height: 68px;
-  border-radius: 5px;
-  display: inline-block;
-  margin: 15px 15px 8px 30px;
-  background-size: cover !important;
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   overflow: hidden;
 }
-.mod-rest-container .rotator-container.lg  .img.out_stock::before {
+
+.mod-rest-container .rotator-container.lg .img.out_stock::before {
   position: absolute;
   width: 200px;
   height: 200px;
@@ -1176,7 +1174,8 @@ body {
   top: 0px;
   background: rgba(255, 255, 225, 0.3);
 }
-.mod-rest-container .rotator-container.lg  .img.out_stock::after {
+
+.mod-rest-container .rotator-container.lg .img.out_stock::after {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -1188,12 +1187,16 @@ body {
   color: red;
   font-size: 12px;
   font-weight: 600;
-  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
   text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
-
 
 .mod-rest-container .rotator-container.lg .menu-ind {
   display: inline-block;
@@ -1836,6 +1839,26 @@ body {
   display: flex;
 }
 
+.url_input {
+  position: relative;
+  background: #fff;
+  width: 100%;
+  height: 45px;
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
+          box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
+  border-radius: 30px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+}
+
+.url_input .btn-copy {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  border: 0px;
+  background: #fff;
+}
+
 @media only screen and (min-device-width: 320px) and (max-device-width: 896px) {
   .dishEditorMobile {
     position: absolute;
@@ -1942,16 +1965,10 @@ body {
   }
 }
 
-.hideMobile{
-  display: none;
-}
-
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;
   }
-
-  
   .wrapper {
     padding-left: 0px;
   }
@@ -2048,10 +2065,6 @@ body {
 }
 
 @media only screen and (min-device-width: 320px) and (max-device-width: 896px) and (-webkit-min-device-pixel-ratio: 2) {
-  .hideMobile{
-    display: inline-block;
-    width: 100%;
-  }
   .collapse-area .collapse-container .collapse-header span {
     font-size: 12px;
   }
