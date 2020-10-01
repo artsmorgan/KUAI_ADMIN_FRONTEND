@@ -11,6 +11,7 @@ import * as APITools from '../../util/apiX';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import LoaderInScreen from "../Public/LoaderInScreen";
+import * as TinyURL from 'tinyurl';
 
 import {
     getRestaurantFormData,
@@ -104,7 +105,7 @@ class ModifyRestaurant extends React.Component {
                 name: null,
                 description: null,
                 menuLink: null,
-                tinyUrl: 'http://75.101.253.80:3000/restaurant/menu/' + localStorage.getItem('restaurantId'),
+                tinyUrl: null,
                 administrator: null,
                 fb: null,
                 ig: null,
@@ -586,9 +587,33 @@ class ModifyRestaurant extends React.Component {
         }
     }
 
+    shortendURL = () => {
+        let THIS = this
+        console.log("calling")
+        let shortURL = 'http://75.101.253.80:3000/restaurant/menu/' + localStorage.getItem('restaurantId');
+        let shortURLres = ''
+        TinyURL.shorten(shortURL, function(res, err) {
+            if (err)
+                console.log(err)
+            console.log(res);
+            shortURLres = res;
+            // return res;
+            let obj = THIS.state.dataToPost;
+            obj['tinyURL'] = shortURLres;
+            console.log("objjjjjjjjj")
+            console.log(obj)
+            console.log("objjjjjjjjj")
+            THIS.setState({dataToPost: obj}, () => {
+                console.log("ending")
+                console.log(THIS.state.dataToPost)
+            });
+        });
+    }
+
     componentDidMount() {
         this.updateDimension();
         // this.checkUrlValidation();
+        // this.shortendURL()
     }
 
     componentWillUnmount() {
@@ -679,10 +704,12 @@ class ModifyRestaurant extends React.Component {
                     owner: restaurant.owner,
                     id: restaurant.id,
                     phone: restaurant.phone,
-                    description: restaurant.description
+                    description: restaurant.description,
+                    tinyURL: !restaurant.tinyUrl ? this.shortendURL() : restaurant.tinyUrl
                 }
             }, () => {
                 this.processScheduleValue("get");
+                this.shortendURL()
             });
 
         }
@@ -702,6 +729,7 @@ class ModifyRestaurant extends React.Component {
 
 
     render() {
+        console.log(this.state.dataToPost)
         const {width} = this.state
         const optionProvince = [
             {value: 1, label: "San Jose", name: "province"},
@@ -882,13 +910,19 @@ class ModifyRestaurant extends React.Component {
                                                 </p> */}
 
                                                 <label htmlFor="">LINK AL MENU:</label>
-                                                <div style={{position:"absolute", top:"0", left:"-500px"}}>
-                                                    <textarea id="menuLink" type="text" rows="1" cols="2">{this.state.dataToPost.tinyUrl}</textarea>
-                                                </div>
+                                                {/*<div style={{position: "absolute", top: "0", left: "-500px"}}>
+                                                    <textarea id="menuLink" type="text" rows="1"
+                                                              cols="2">{this.state.dataToPost.tinyURL}</textarea>
+                                                </div>*/}
                                                 <div className="url_input">
-                                                    <p>Short-end URL</p>
-                                                    <span title="Copy to clipboard"><svg className="svg-icon btn-copy" viewBox="0 0 20 20" style={{width: "30px", cursor: "pointer"}} onClick={this.copyFunction}
-                                                               >
+                                                    <input className="uni-input" type="text" name="tinyURL" value={this.state.dataToPost.tinyURL}
+                                                           readOnly id="menuLink"/>
+                                                    <span title="Copy to clipboard"><svg className="svg-icon btn-copy"
+                                                                                         viewBox="0 0 20 20" style={{
+                                                        width: "30px",
+                                                        cursor: "pointer"
+                                                    }} onClick={this.copyFunction}
+                                                    >
                                                     <path
                                                         d="M17.391,2.406H7.266c-0.232,0-0.422,0.19-0.422,0.422v3.797H3.047c-0.232,0-0.422,0.19-0.422,0.422v10.125c0,0.232,0.19,0.422,0.422,0.422h10.125c0.231,0,0.422-0.189,0.422-0.422v-3.797h3.797c0.232,0,0.422-0.19,0.422-0.422V2.828C17.812,2.596,17.623,2.406,17.391,2.406 M12.749,16.75h-9.28V7.469h3.375v5.484c0,0.231,0.19,0.422,0.422,0.422h5.483V16.75zM16.969,12.531H7.688V3.25h9.281V12.531z"></path>
                                                     </svg></span>
@@ -919,7 +953,7 @@ class ModifyRestaurant extends React.Component {
                                                 <p style={{color: "red"}}>
                                                     {this.state.dataToPost.fb ? this.validator.message('fb', this.state.dataToPost.fb, 'url') : ''}
                                                 </p>
-                                            <label htmlFor="">
+                                                <label htmlFor="">
                                                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none"
                                                          xmlns="http://www.w3.org/2000/svg">
                                                         <path fillRule="evenodd" clipRule="evenodd"
@@ -939,19 +973,19 @@ class ModifyRestaurant extends React.Component {
                                                 </p>
                                                 <label htmlFor="">
                                                     <svg width="19" height="18" viewBox="0 0 19 18" fill="none"
-                                                        xmlns="http://www.w3.org/2000/svg">
+                                                         xmlns="http://www.w3.org/2000/svg">
                                                         <path fillRule="evenodd" clipRule="evenodd"
-                                                            d="M5.40619 0.054C6.36619 0.0105 6.67294 0 9.11719 0C11.5614 0 11.8682 0.0105 12.8282 0.054C14.2907 0.12075 15.5754 0.47925 16.6067 1.5105C17.6379 2.54175 17.9964 3.8265 18.0632 5.289C18.1067 6.249 18.1172 6.55575 18.1172 9C18.1172 11.4443 18.1067 11.751 18.0632 12.711C17.9964 14.1735 17.6379 15.4583 16.6067 16.4895C15.5754 17.5208 14.2907 17.8792 12.8282 17.946C11.8682 17.9895 11.5614 18 9.11719 18C6.67294 18 6.36619 17.9895 5.40619 17.946C3.94369 17.8792 2.65894 17.5208 1.62769 16.4895C0.596437 15.4583 0.237937 14.1735 0.171187 12.711C0.127688 11.751 0.117188 11.4443 0.117188 9C0.117188 6.55575 0.127688 6.249 0.171187 5.289C0.237937 3.8265 0.596437 2.54175 1.62769 1.5105C2.65894 0.47925 3.94369 0.12075 5.40619 0.054ZM12.7539 1.674C11.8052 1.6305 11.5202 1.6215 9.11719 1.6215C6.71419 1.6215 6.42919 1.6305 5.48044 1.674C4.45594 1.7205 3.50569 1.926 2.77444 2.65725C2.04319 3.3885 1.83769 4.33875 1.79119 5.36325C1.74769 6.312 1.73869 6.597 1.73869 9C1.73869 11.403 1.74769 11.688 1.79119 12.6368C1.83769 13.6613 2.04319 14.6115 2.77444 15.3427C3.50569 16.074 4.45594 16.2795 5.48044 16.326C6.42919 16.3695 6.71419 16.3785 9.11719 16.3785C11.5202 16.3785 11.8052 16.3695 12.7539 16.326C13.7784 16.2795 14.7287 16.074 15.4599 15.3427C16.1912 14.6115 16.3967 13.6613 16.4432 12.6368C16.4867 11.688 16.4957 11.403 16.4957 9C16.4957 6.597 16.4867 6.312 16.4432 5.36325C16.3967 4.33875 16.1912 3.3885 15.4599 2.65725C14.7287 1.926 13.7784 1.7205 12.7539 1.674ZM4.49566 9C4.49566 6.44775 6.56491 4.3785 9.11716 4.3785C11.6694 4.3785 13.7387 6.44775 13.7387 9C13.7387 11.5522 11.6694 13.6215 9.11716 13.6215C6.56491 13.6215 4.49566 11.5522 4.49566 9ZM6.11717 9C6.11717 10.6567 7.46042 12 9.11717 12C10.7739 12 12.1172 10.6567 12.1172 9C12.1172 7.34325 10.7739 6 9.11717 6C7.46042 6 6.11717 7.34325 6.11717 9ZM15.0017 4.1955C15.0017 4.79197 14.5182 5.2755 13.9217 5.2755C13.3252 5.2755 12.8417 4.79197 12.8417 4.1955C12.8417 3.59903 13.3252 3.1155 13.9217 3.1155C14.5182 3.1155 15.0017 3.59903 15.0017 4.1955Z"
-                                                            fill="#444460" />
+                                                              d="M5.40619 0.054C6.36619 0.0105 6.67294 0 9.11719 0C11.5614 0 11.8682 0.0105 12.8282 0.054C14.2907 0.12075 15.5754 0.47925 16.6067 1.5105C17.6379 2.54175 17.9964 3.8265 18.0632 5.289C18.1067 6.249 18.1172 6.55575 18.1172 9C18.1172 11.4443 18.1067 11.751 18.0632 12.711C17.9964 14.1735 17.6379 15.4583 16.6067 16.4895C15.5754 17.5208 14.2907 17.8792 12.8282 17.946C11.8682 17.9895 11.5614 18 9.11719 18C6.67294 18 6.36619 17.9895 5.40619 17.946C3.94369 17.8792 2.65894 17.5208 1.62769 16.4895C0.596437 15.4583 0.237937 14.1735 0.171187 12.711C0.127688 11.751 0.117188 11.4443 0.117188 9C0.117188 6.55575 0.127688 6.249 0.171187 5.289C0.237937 3.8265 0.596437 2.54175 1.62769 1.5105C2.65894 0.47925 3.94369 0.12075 5.40619 0.054ZM12.7539 1.674C11.8052 1.6305 11.5202 1.6215 9.11719 1.6215C6.71419 1.6215 6.42919 1.6305 5.48044 1.674C4.45594 1.7205 3.50569 1.926 2.77444 2.65725C2.04319 3.3885 1.83769 4.33875 1.79119 5.36325C1.74769 6.312 1.73869 6.597 1.73869 9C1.73869 11.403 1.74769 11.688 1.79119 12.6368C1.83769 13.6613 2.04319 14.6115 2.77444 15.3427C3.50569 16.074 4.45594 16.2795 5.48044 16.326C6.42919 16.3695 6.71419 16.3785 9.11719 16.3785C11.5202 16.3785 11.8052 16.3695 12.7539 16.326C13.7784 16.2795 14.7287 16.074 15.4599 15.3427C16.1912 14.6115 16.3967 13.6613 16.4432 12.6368C16.4867 11.688 16.4957 11.403 16.4957 9C16.4957 6.597 16.4867 6.312 16.4432 5.36325C16.3967 4.33875 16.1912 3.3885 15.4599 2.65725C14.7287 1.926 13.7784 1.7205 12.7539 1.674ZM4.49566 9C4.49566 6.44775 6.56491 4.3785 9.11716 4.3785C11.6694 4.3785 13.7387 6.44775 13.7387 9C13.7387 11.5522 11.6694 13.6215 9.11716 13.6215C6.56491 13.6215 4.49566 11.5522 4.49566 9ZM6.11717 9C6.11717 10.6567 7.46042 12 9.11717 12C10.7739 12 12.1172 10.6567 12.1172 9C12.1172 7.34325 10.7739 6 9.11717 6C7.46042 6 6.11717 7.34325 6.11717 9ZM15.0017 4.1955C15.0017 4.79197 14.5182 5.2755 13.9217 5.2755C13.3252 5.2755 12.8417 4.79197 12.8417 4.1955C12.8417 3.59903 13.3252 3.1155 13.9217 3.1155C14.5182 3.1155 15.0017 3.59903 15.0017 4.1955Z"
+                                                              fill="#444460"/>
                                                     </svg>
-                                                &nbsp;&nbsp;
-                                                Teléfono:
-                                            </label>
-                                            <input className="uni-input " type="text" name="phone"
-                                                    placeholder="Teléfono"
-                                                    onChange={this.inputChangeHandler}
-                                                    value={this.state.dataToPost.phone} />
-                                                <p className-="error-txt" style={{ color: "red" }}>
+                                                    &nbsp;&nbsp;
+                                                    Teléfono:
+                                                </label>
+                                                <input className="uni-input " type="text" name="phone"
+                                                       placeholder="Teléfono"
+                                                       onChange={this.inputChangeHandler}
+                                                       value={this.state.dataToPost.phone}/>
+                                                <p className-="error-txt" style={{color: "red"}}>
                                                     {this.validator.message('phone', this.state.dataToPost.phone, 'required')}
                                                 </p>
                                             </div>
