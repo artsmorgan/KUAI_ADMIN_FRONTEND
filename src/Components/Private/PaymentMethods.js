@@ -81,8 +81,11 @@ class PaymentMethods extends React.Component {
                     },
                 },
                 transferenceIban: {
-                    message: 'Número IBAN incorrecto',
-                    required: true
+                    message: 'El número de cuenta IBAN no puede contener mas de 20 digitos',
+                    rule: (val, params, validator) => {
+                        // console.log(val, params, validator);
+                        return validator.helpers.testRegex(val, /^[\p{Z}\s]*(?:[^\p{Z}\s][\p{Z}\s]*){20,20}$/)
+                    },
                 }
             }
         });
@@ -102,7 +105,7 @@ class PaymentMethods extends React.Component {
         obj[e.target.name] = e.target.value === "C" ? e.target.value.replace("C", "") : e.target.value.replace("CR", "");
 
         this.setState({dataToPost: obj});
-        //this.handleCustomValidation()
+        this.handleCustomValidation()
     }
 
     phoneNumberInputChangeHandler(e) {
@@ -385,7 +388,7 @@ class PaymentMethods extends React.Component {
                                value={"CR" + this.state.dataToPost.transferenceIban}/>
                         <p style={{color: "red"}}>
                             {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
-                            {this.state.dataToPost.transferenceIban ? this.validator.message('transferenceIban', this.state.dataToPost.transferenceIban, 'alpha_num|min:20|max:20') : ''}
+                            {this.state.dataToPost.transferenceIban ? this.validator.message('transferenceIban', this.state.dataToPost.transferenceIban, 'transferenceIban') : ''}
                         </p>
                         <label htmlFor="">A nombre de:</label>
                         <input type="text" className="uni-input" name="transferenceNombrar"
