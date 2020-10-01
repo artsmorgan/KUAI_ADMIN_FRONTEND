@@ -104,7 +104,7 @@ class ModifyRestaurant extends React.Component {
                 name: null,
                 description: null,
                 menuLink: null,
-                tinyUrl: 'http://75.101.253.80:3000/restaurant/' + localStorage.getItem('restaurantId') + '/menu',
+                tinyUrl: 'http://75.101.253.80:3000/restaurant/menu/' + localStorage.getItem('restaurantId'),
                 administrator: null,
                 fb: null,
                 ig: null,
@@ -690,9 +690,13 @@ class ModifyRestaurant extends React.Component {
     }
 
     copyFunction = () => {
+        console.log("copy")
         var copyText = document.getElementById("menuLink");
+        console.log(copyText)
         copyText.select();
+        console.log(copyText.select())
         copyText.setSelectionRange(0, 99999);
+        console.log(copyText.setSelectionRange(0, 99999))
         document.execCommand("copy");
     }
 
@@ -866,6 +870,7 @@ class ModifyRestaurant extends React.Component {
                                                 <p className-="error-txt" style={{color: "red"}}>
                                                     {this.validator.message('name', this.state.dataToPost.name, 'required')}
                                                 </p>
+
                                                 <label htmlFor="">Descripción:</label>
                                                 <textarea className="uni-input tarea" name="description"
                                                           placeholder="Descripción"
@@ -875,29 +880,19 @@ class ModifyRestaurant extends React.Component {
                                                 {/* <p className-="error-txt" style={{color: "red"}}>
                                                     {this.validator.message('description', this.state.dataToPost.description, 'required')}
                                                 </p> */}
-                                                <label htmlFor="">LINK AL MENU: <svg className="svg-icon" viewBox="0 0 20 20" style={{width: "30px", cursor: "pointer"}} onClick={this.copyFunction}
-                                                                                     title={"Copy to clipboard"}>
-                                                    <path
-                                                        d="M17.391,2.406H7.266c-0.232,0-0.422,0.19-0.422,0.422v3.797H3.047c-0.232,0-0.422,0.19-0.422,0.422v10.125c0,0.232,0.19,0.422,0.422,0.422h10.125c0.231,0,0.422-0.189,0.422-0.422v-3.797h3.797c0.232,0,0.422-0.19,0.422-0.422V2.828C17.812,2.596,17.623,2.406,17.391,2.406 M12.749,16.75h-9.28V7.469h3.375v5.484c0,0.231,0.19,0.422,0.422,0.422h5.483V16.75zM16.969,12.531H7.688V3.25h9.281V12.531z"></path>
-                                                </svg></label>
-                                                <input className="uni-input" type="text" name="menuLink"
-                                                       placeholder="LINK AL MENU"
-                                                       onChange={this.inputChangeHandler}
-                                                       value={this.state.dataToPost.tinyUrl} readOnly id="menuLink"/>
 
+                                                <label htmlFor="">LINK AL MENU:</label>
+                                                <div style={{position:"absolute", top:"0", left:"-500px"}}>
+                                                    <textarea id="menuLink" type="text" rows="1" cols="2">{this.state.dataToPost.tinyUrl}</textarea>
+                                                </div>
                                                 <div className="url_input">
-                                                    <p>Awesome URL</p>
-                                                    <button className="btn-copy">
-                                                    <svg className="svg-icon" viewBox="0 0 20 20" style={{width: "30px", cursor: "pointer"}} onClick={this.copyFunction}
-                                                                                     title={"Copy to clipboard"}>
+                                                    <p>Short-end URL</p>
+                                                    <span title="Copy to clipboard"><svg className="svg-icon btn-copy" viewBox="0 0 20 20" style={{width: "30px", cursor: "pointer"}} onClick={this.copyFunction}
+                                                               >
                                                     <path
                                                         d="M17.391,2.406H7.266c-0.232,0-0.422,0.19-0.422,0.422v3.797H3.047c-0.232,0-0.422,0.19-0.422,0.422v10.125c0,0.232,0.19,0.422,0.422,0.422h10.125c0.231,0,0.422-0.189,0.422-0.422v-3.797h3.797c0.232,0,0.422-0.19,0.422-0.422V2.828C17.812,2.596,17.623,2.406,17.391,2.406 M12.749,16.75h-9.28V7.469h3.375v5.484c0,0.231,0.19,0.422,0.422,0.422h5.483V16.75zM16.969,12.531H7.688V3.25h9.281V12.531z"></path>
-                                                    </svg>
-                                                    </button>
+                                                    </svg></span>
                                                 </div>
-                                                {/*<p className-="error-txt" style={{color: "red"}}>
-                                                    {this.validator.message('menuLink', this.state.dataToPost.menuLink, 'required')}
-                                                </p>*/}
                                                 <label htmlFor="">ADMINISTRADOR:</label>
                                                 <input className="uni-input" type="text" name="administrator"
                                                        placeholder="administrador"

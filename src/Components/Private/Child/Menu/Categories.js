@@ -45,6 +45,7 @@ class Categories extends Component {
   }
 
   deleteCategory = (id) => {
+    console.log("deleteCategory", id)
     let categoryListToUpdate = this.props.categories.categories
     let result = categoryListToUpdate.filter(function (el) {
       return el.id != id;
@@ -96,8 +97,14 @@ class Categories extends Component {
 
             this.setState({categoryListToUpdate: result}, () => {
               // console.log(this.state.categoryListToUpdate)
-              this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
-              this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
+              const dataPack = {
+                catList: this.state.categoryListToUpdate,
+                restaurantId: localStorage.getItem('restaurantId')
+              }
+              this.props.updateCategoryFormData(dataPack, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+              window.setTimeout(() => {
+                this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
+              }, 500)
             })
             
             
@@ -122,7 +129,12 @@ class Categories extends Component {
     $("svg[id=" + categoryId + "].trash").show()
     $("#categories-list svg[id=" + categoryId + "].tik").hide()
     $("input[id=" + categoryId + "]").parent().removeClass('active')
-    this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+    const dataPack = {
+      catList: this.state.categoryListToUpdate,
+      restaurantId: localStorage.getItem('restaurantId')
+    }
+    this.props.updateCategoryFormData(dataPack, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+    // this.props.updateCategoryFormData(this.state.categoryListToUpdate, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
     window.setTimeout(() => {
       this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
     }, 500)
@@ -150,16 +162,15 @@ class Categories extends Component {
     let categoryListToSend = this.props.categories.categories;
     categoryListToSend.push(categoryDataToPost)
     // console.log(categoryListToSend)
-/*    const dataPack = {
+    const dataPack = {
       catList: categoryListToSend,
       restaurantId: localStorage.getItem('restaurantId')
-    }*/
-    this.props.updateCategoryFormData(categoryListToSend, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
-    this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
+    }
+    this.props.updateCategoryFormData(dataPack, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
     this.setState({
       show: false,
       categoryDataToPost: {name: ''}
-    })
+    }, () => this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
   }
 
   render() {
