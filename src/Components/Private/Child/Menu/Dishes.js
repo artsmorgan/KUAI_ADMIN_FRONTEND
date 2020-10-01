@@ -450,10 +450,10 @@ class Dishes extends Component {
                                             <span className={`price ${(!dish.promo) ? '' : 'hidden'}`}>₡{dish.price}</span>
                                             <span className={`price ${(dish.promo) ? '' : 'hidden'}`}>
                                                 <span style={{ textDecoration: 'line-through' }}>₡{dish.price}</span>
-                                                <span className={`${(dish.specialPrice) ? '' : 'hidden'}`}>| ₡{dish.specialPriceAmount}</span>
-                                                <span className={`${(dish.discount) ? '' : 'hidden'}`}>| ₡{dish.price-Math.round((dish.discountPercentage*dish.price)/100)}</span>
-                                                <span className={`${(dish.llevaXpagaY) ? '' : 'hidden'}`}>| {dish.lleva} X {dish.paga}</span>
-                                                <span className={`${(dish.envioGratis) ? '' : 'hidden'}`}>| ENVÍO GRATIS</span>
+                                                <span className={`${(dish.specialPrice) ? '' : 'hidden'}`}> | ₡{dish.specialPriceAmount}</span>
+                                                <span className={`${(dish.discount) ? '' : 'hidden'}`}> | ₡{dish.price-Math.round((dish.discountPercentage*dish.price)/100)}</span>
+                                                <span className={`${(dish.llevaXpagaY) ? '' : 'hidden'}`}> | {dish.lleva} X {dish.paga}</span>
+                                                <span className={`${(dish.envioGratis) ? '' : 'hidden'}`}> | ENVÍO GRATIS</span>
                                             </span>
 
 
@@ -738,10 +738,10 @@ class Dishes extends Component {
                             <p className={`price ${(!this.state.selectedDish.promo) ? '' : 'hidden'}`}>₡{this.state.selectedDish.price}</p>
                             <p className={`price ${(this.state.selectedDish.promo) ? '' : 'hidden'}`}>
                                 <span style={{ textDecoration: 'line-through' }}>₡{this.state.selectedDish.price}</span>
-                                <span className={`${(this.state.selectedDish.specialPrice) ? '' : 'hidden'}`}>| ₡{this.state.selectedDish.specialPriceAmount}</span>
-                                <span className={`${(this.state.selectedDish.discount) ? '' : 'hidden'}`}>| ₡{this.calculatePercentage()}</span>
-                                <span className={`${(this.state.selectedDish.llevaXpagaY) ? '' : 'hidden'}`}>| {this.state.selectedDish.lleva} X {this.state.selectedDish.paga}</span>
-                                <span className={`${(this.state.selectedDish.envioGratis) ? '' : 'hidden'}`}>| ENVÍO GRATIS</span>
+                                <span className={`${(this.state.selectedDish.specialPrice) ? '' : 'hidden'}`}> | ₡{this.state.selectedDish.specialPriceAmount}</span>
+                                <span className={`${(this.state.selectedDish.discount) ? '' : 'hidden'}`}> | ₡{this.calculatePercentage()}</span>
+                                <span className={`${(this.state.selectedDish.llevaXpagaY) ? '' : 'hidden'}`}> | {this.state.selectedDish.lleva} X {this.state.selectedDish.paga}</span>
+                                <span className={`${(this.state.selectedDish.envioGratis) ? '' : 'hidden'}`}> | ENVÍO GRATIS</span>
                             </p>
                         </div>
                         <button className="btn-add-menu" onClick={e => {
