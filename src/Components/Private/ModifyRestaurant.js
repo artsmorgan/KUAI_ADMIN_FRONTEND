@@ -514,7 +514,7 @@ class ModifyRestaurant extends React.Component {
     processSubmit() {
         if (this.processScheduleValue("post")) {
             let formData = this.state.dataToPost
-            formData['menuLink'] = 'http://75.101.253.80:3000/menu/' + localStorage.getItem('restaurantId')
+            formData['menuLink'] = process.env.REACT_APP_MENU_PANEL_ENDPOINT + localStorage.getItem('restaurantId')
             this.props.updateRestaurantFormData({
                 restaurantId: localStorage.getItem('restaurantId'),
                 form: formData

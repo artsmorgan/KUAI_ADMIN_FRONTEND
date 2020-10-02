@@ -35,7 +35,7 @@ const UPDATE_MENU_URL = '/api/menu/item/';
 const GET_MENU_LIST_BY_CATEGORY_URL = '/api/menu/categoriesandproducts/';
 
 export const getCategoryListData = (payload) => {
-    // console.log("I see", payload)
+    console.log("I see", payload)
     return (dispatch, getState) => {
         dispatch(getCategoryListRequest())
         let URL = GET_CATEGORY_LIST_URL + payload.restaurantId;
@@ -142,8 +142,10 @@ export const updateCategoryFormData = (payload, callback) => {
                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
                         dispatch(postCategoryFormSuccess(data))
                         dispatch(push(ROUTES.MODIFY_MENU))
-                        if (callback)
+                        if (callback) {
+                            console.log("callback req to get menu list")
                             callback();
+                        }
                     } else {
                         const response = data.data
                         toastr.error(language[lang].error, response.message)
