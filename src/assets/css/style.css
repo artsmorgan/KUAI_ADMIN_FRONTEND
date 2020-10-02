@@ -1633,7 +1633,9 @@ body {
 .add-menu-new .add-details .price {
   font-size: 18px;
   color: #000;
-  margin-top: 28px;
+  margin-top: 25px;
+  white-space: nowrap;
+  overflow: auto;
 }
 
 .add-menu-new .btn-add-menu {

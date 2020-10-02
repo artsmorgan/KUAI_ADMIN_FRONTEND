@@ -1638,7 +1638,9 @@ body {
     .price {
       font-size: 18px;
       color: #000;
-      margin-top: 28px;
+      margin-top: 25px;
+      white-space: nowrap;
+      overflow: auto;
     }
   }
 
