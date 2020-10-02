@@ -712,7 +712,7 @@ class ModifyRestaurant extends React.Component {
                     owner: restaurant.owner,
                     id: restaurant.id,
                     phone: restaurant.phone,
-                    description: restaurant.description,
+                    description: restaurant.description ? restaurant.description:'',
                     tinyUrl: !restaurant.tinyUrl ? this.shortendURL() : restaurant.tinyUrl
                 }
             }, () => {
@@ -1271,14 +1271,14 @@ class ModifyRestaurant extends React.Component {
                                                         value={this.state.dataToPost.fridayClose}
                                                         isDisabled={!this.state.dataToPost.fridayEnable}
                                                     />
-                                                    {/* <div className="error-show">
+                                                    <div className="error-show">
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.fridayOpen}
                                                     </p>
                                                     <p style={{ color: "red" }}>
                                                         {this.state.customErrors.fridayClose}
                                                     </p>
-                                                </div> */}
+                                                </div>
                                                 </div>
                                             </div>
                                             <div className="hor-inline">
