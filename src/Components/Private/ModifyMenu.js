@@ -79,14 +79,14 @@ class ModifyMenu extends React.Component {
         // console.log(this.state.categoryDataToPost);
     }
 
-    formSubmitHandler = (e) => {
+/*    formSubmitHandler = (e) => {
         e.preventDefault();
         if (this.validator.allValid()) {
             this.processSubmit();
         } else {
             this.validator.showMessages();
         }
-    };
+    };*/
 
     addMenuInputChangeHandler = (e) => {
         let obj = this.state.menuDataToPost
@@ -94,17 +94,17 @@ class ModifyMenu extends React.Component {
         this.setState({menuDataToPost: obj})
     }
 
-    addMenuFormSubmitHandler = (e) => {
+/*    addMenuFormSubmitHandler = (e) => {
         e.preventDefault();
         if (this.validator.allValid()) {
             this.addMenuProcessSubmit();
         } else {
             this.validator.showMessages();
         }
-    };
+    };*/
 
 
-    processSubmit() {
+/*    processSubmit() {
         let {categoryDataToPost} = this.state
         // console.log(form)
         categoryDataToPost['id'] = uuid()
@@ -118,7 +118,7 @@ class ModifyMenu extends React.Component {
             show: false,
             categoryDataToPost: {}
         })
-    }
+    }*/
 
     activateTab(e, tabName) {
         // console.log('here')
@@ -282,7 +282,7 @@ class ModifyMenu extends React.Component {
     renderDesktop() {
         return (
             <>
-                <Categories loadMenu={(id, name) => this.loadMenu(id, name)}/>
+                <Categories loadMenu={(id, name) => this.loadMenu(id, name)} eventTriggered={this.state.eventTriggered}/>
                 <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
                         selectedCategory={this.state.selectedCategory} eventTriggered={this.state.eventTriggered}/>
             </>
