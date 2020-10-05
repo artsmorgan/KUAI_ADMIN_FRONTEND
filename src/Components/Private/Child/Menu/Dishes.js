@@ -850,7 +850,7 @@ class Dishes extends Component {
                                         <div className='divP'>
                                             <Checkbox id="specialPrice" name="specialPrice"
                                                 onChange={(e) => this.CheckboxChangeHandler(e, 'specialPrice')}
-                                                checked={this.state.selectedDish.specialPrice} />
+                                                checked={this.state.selectedDish.specialPrice} disabled={this.state.selectedDish.discount ? true : false}/>
                                             <label htmlFor="" className="chk-label">Precio especial</label>
                                         </div>
                                         <div
@@ -858,7 +858,7 @@ class Dishes extends Component {
                                             <label htmlFor="">PRECIO PROMOCIÓN</label>
                                             <input type="number" className="uni-input" name="specialPriceAmount"
                                                 onChange={this.addMenuInputChangeHandler}
-                                                value={this.state.selectedDish.specialPriceAmount} />
+                                                value={this.state.selectedDish.specialPriceAmount}/>
                                             <p style={{ color: "red" }}>
                                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.price, 'required|numeric|min:0,num') : ''}*/}
                                                 {this.state.selectedDish.specialPrice ? this.validator.message('name', this.state.selectedDish.specialPriceAmount, 'required|numeric|min:0,num') : null}
@@ -869,7 +869,7 @@ class Dishes extends Component {
                                         <div className='divP'>
                                             <Checkbox id="discount" name="discount"
                                                 onChange={(e) => this.CheckboxChangeHandler(e, 'discount')}
-                                                checked={this.state.selectedDish.discount} />
+                                                checked={this.state.selectedDish.discount} disabled={this.state.selectedDish.specialPrice ? true : false}/>
                                             <label htmlFor="" className="chk-label">% de descuento</label>
                                         </div>
                                         <div
