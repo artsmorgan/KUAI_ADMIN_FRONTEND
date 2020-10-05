@@ -896,7 +896,7 @@ class ModifyRestaurant extends React.Component {
                                             <div>
                                                 <label htmlFor="">NOMBRE:</label>
                                                 <input className="uni-input" type="text" name="name"
-                                                    placeholder="nombre"
+                                                    placeholder="Ex: Los Amigos Restaurante"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.name} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
@@ -905,7 +905,7 @@ class ModifyRestaurant extends React.Component {
 
                                                 <label htmlFor="">Descripción:</label>
                                                 <textarea className="uni-input tarea" name="description"
-                                                    placeholder="Descripción"
+                                                    placeholder="Ex: Burger King es una cadena multinacional estadounidense de restaurantes de comida ..."
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.description} cols="30"
                                                     rows="10"></textarea>
@@ -916,7 +916,7 @@ class ModifyRestaurant extends React.Component {
                                                 
                                                 <label htmlFor="">ADMINISTRADOR:</label>
                                                 <input className="uni-input" type="text" name="administrator"
-                                                    placeholder="administrador"
+                                                    placeholder="Ex: John Doe"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.administrator} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
@@ -933,7 +933,7 @@ class ModifyRestaurant extends React.Component {
                                                 Teléfono:
                                                 </label>
                                                 <input className="uni-input " type="text" name="phone"
-                                                    placeholder="Teléfono"
+                                                    placeholder="Ex: 0124-4556"
                                                     onChange={this.inputChangeHandler} onKeyPress={(e) => this.phoneNumberInputChangeHandler(e)}
                                                     value={this.state.dataToPost.phone} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
@@ -950,7 +950,7 @@ class ModifyRestaurant extends React.Component {
                                                     FACEBOOK:
                                                 </label>
                                                 <input className="uni-input " type="text" name="fb"
-                                                    placeholder="facebook"
+                                                    placeholder="https://www.facebook.com/yammy_food"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.fb}
                                                 />
@@ -968,7 +968,7 @@ class ModifyRestaurant extends React.Component {
                                                     INSTAGRAM:
                                                 </label>
                                                 <input className="uni-input " name="ig"
-                                                    placeholder="instagram"
+                                                    placeholder="https://www.instagram.com/yammy_food"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.ig}
                                                 />

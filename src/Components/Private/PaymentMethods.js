@@ -361,7 +361,7 @@ class PaymentMethods extends React.Component {
                     <div className="col">
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">Numero De Cuenta:</label>
-                        <input type="text" className="uni-input" name="transferenceNoCuenta"
+                        <input type="text" className="uni-input" name="transferenceNoCuenta" placeholder="1234 5678 9632 6587"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNoCuenta')} onKeyPress={(e) => this.accNumberInputChangeHandler(e)}
                                value={this.state.dataToPost.transferenceNoCuenta}/>
                         <p style={{color: "red"}}>
@@ -376,14 +376,14 @@ class PaymentMethods extends React.Component {
                             {this.state.errors.transferenceEnabled.transferenceTipoCambio}
                         </p>
                         <label htmlFor="">Banco Emisor:</label>
-                        <input type="text" className="uni-input" name="transferenceCuentaBancaria"
+                        <input type="text" className="uni-input" name="transferenceCuentaBancaria" placeholder="Ex: Banco Santander"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceCuentaBancaria')}
                                value={this.state.dataToPost.transferenceCuentaBancaria}/>
                         <p style={{color: "red"}}>
                             {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
                         </p>
                         <label htmlFor="">Número De Cuenta IBAN:</label>
-                        <input type="text" className="uni-input" name="transferenceIban" id="transferenceIban"
+                        <input type="text" className="uni-input" name="transferenceIban" id="transferenceIban" placeholder="Ex: CR02001026284066"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceIban')}
                                value={"CR" + this.state.dataToPost.transferenceIban}/>
                         <p style={{color: "red"}}>
@@ -391,7 +391,7 @@ class PaymentMethods extends React.Component {
                             {this.state.dataToPost.transferenceIban ? this.validator.message('transferenceIban', this.state.dataToPost.transferenceIban, 'transferenceIban') : ''}
                         </p>
                         <label htmlFor="">A nombre de:</label>
-                        <input type="text" className="uni-input" name="transferenceNombrar"
+                        <input type="text" className="uni-input" name="transferenceNombrar" placeholder="Ex:John Doe"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNombrar')}
                                value={this.state.dataToPost.transferenceNombrar}/>
                         <p style={{color: "red"}}>
@@ -648,7 +648,7 @@ class PaymentMethods extends React.Component {
                     <div className="col">
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">NUMERO DE TELEFONO:</label>
-                        <input type="text" className="uni-input" name="sinpeMovilNumero"
+                        <input type="text" className="uni-input" name="sinpeMovilNumero" placeholder="Ex: 1234-5689"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilNumero')}
                                value={this.state.dataToPost.sinpeMovilNumero} onKeyPress={(e) => this.phoneNumberInputChangeHandler(e)}/>
                         <p style={{color: "red"}}>
@@ -656,7 +656,7 @@ class PaymentMethods extends React.Component {
                             {this.state.dataToPost.sinpeMovilNumero ? this.validator.message('sinpeMovilNumero', this.state.dataToPost.sinpeMovilNumero, 'phoneNumber') : ''}
                         </p>
                         <label htmlFor="">A NOMBRE DE:</label>
-                        <input type="text" className="uni-input" name="sinpeMovilName"
+                        <input type="text" className="uni-input" name="sinpeMovilName" placeholder="Ex: John Doe"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilName')}
                                value={this.state.dataToPost.sinpeMovilName}/>
                         <p style={{color: "red"}}>
