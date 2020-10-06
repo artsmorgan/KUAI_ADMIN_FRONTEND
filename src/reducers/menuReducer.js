@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
     case actionType.GET_MENU_LIST_REQUEST:
       return {...state, dishes: {loading: true, dishes: []}}
 
-    case actionType.GET_MENU_LIST_SUCCESS:
+    case actionType.GET_MENU_LIST_FULL_SUCCESS:
       state['MENU_LIST'] = action.payload
       const dishes = action.payload.response.productItemList ? JSON.parse(action.payload.response.productItemList) : []
       return {...state, dishes: {loading: false, dishes}}
