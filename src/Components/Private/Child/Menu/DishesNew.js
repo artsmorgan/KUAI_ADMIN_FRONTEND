@@ -3,7 +3,8 @@ import { bindActionCreators } from "redux";
 import {
     postMenuFormData,
     getMenuListByCategoryData,
-    getMenuListData
+    getMenuListData,
+    postRemovalMenuFormData
 } from "../../../../actions";
 import { connect } from "react-redux";
 import Checkbox from '@opuscapita/react-checkbox';
@@ -29,20 +30,12 @@ class Dishes extends Component {
         this.handleProductImageUpload = this.handleProductImageUpload.bind(this)
 
         this.state = {
-            allDishes: { productList: [] },
-            isFetched: true,
             selectedDish: {},
-            categoryOptions: [],
-            selectedOption: null,
-            eventTriggered: null,
             ignoreValidation: false,
             showDisponible: true,
             showagotado: null,
             editReq: false,
             uploadedFile: null,
-            previousCategory: null,
-            dishHasCategoryChange: false,
-            isCreationMode: false,
             itemList: [],
             categoryList:[],
             showItemManage:false,
@@ -78,9 +71,7 @@ class Dishes extends Component {
     }
 
     componentDidMount() {
-
         this._isMounted = true;
-
     }
 
     componentDidUpdate(previousProps) {
@@ -88,7 +79,7 @@ class Dishes extends Component {
             const items = this.props.items
             const categoryList = this.props.categories.data;
             console.log(items)
-            this.setState({ itemList: items.data,categoryList:categoryList});
+            this.setState({ itemList: items.data,categoryList:categoryList,showItemManage:false});
 
         }
     }
@@ -295,11 +286,6 @@ class Dishes extends Component {
         // console.log(this.state)
     }
 
-   
-
-    renderCategoryTitle() {
-    }
-
     addMenuProcessSubmit() {
         let obj = this.state.selectedDish;
         if (!obj.id) {
@@ -323,39 +309,47 @@ class Dishes extends Component {
         let newItem = this.state.newItem;
         // console.log(menuListToUpdate)
         // console.log(obj)
-        dataToPost.push(obj)
-        categoryId = obj.categoryId;
+        
         let updateArrayKey = '';
-        if(!newItem){
-            for (const [key, value] of Object.entries(menuListToUpdate)) {
-                if (value.products.menuItems) {
-                    let itemList = JSON.parse(value.products.menuItems.productItemList);
+
+        for (const [key, value] of Object.entries(menuListToUpdate)) {
+            if (value.products.menuItems) {
+                let itemList = JSON.parse(value.products.menuItems.productItemList);                    
+                itemList.forEach(item => {
+                    if(item.categoryId===obj.categoryId && item.id!==obj.id){
+                        dataToPost.push(item)
+                    }
                     
-                    itemList.forEach(item => {
-                        console.log(item)
-                        if (item.id === obj.id) {
-                            updateArrayKey = key;
-                        }
-                    });
-                }
+                    if (item.id === obj.id && item.categoryId!==obj.categoryId) {
+                        updateArrayKey = key;                    
+                    }
+                });
             }
         }
 
-        console.log(updateArrayKey)
+        dataToPost.push(obj)
+        categoryId = obj.categoryId;
+
+        if(!newItem && updateArrayKey){
+                let updateDataToPost=[];
+                let updateCategoryId='';
+                // console.log(arrayKey)
+                let data = JSON.parse(menuListToUpdate[updateArrayKey].products.menuItems.productItemList);
+                console.log(data)
+                data.forEach(element => {
+                    updateCategoryId = element.categoryId;
+                    if (element.id !== obj.id) {
+                        updateDataToPost.push(element)
+                    }
+                });
+                this.props.postRemovalMenuFormData(updateDataToPost,updateCategoryId);        
+        }
+
+        // console.log(updateArrayKey)
         
-        // let updateDataToPost=[];
-        // let updateCategoryId=[];
-        // // console.log(arrayKey)
-        // let data = JSON.parse(menuListToUpdate[updateArrayKey].products.menuItems.productItemList);
-        // console.log(data)
-        // data.forEach(element => {
-        //     updateCategoryId = element.categoryId;
-        //     if (element.categoryId != obj.categoryId) {
-        //         updateDataToPost.push(element)
-        //     }
-        // });
+        
         // console.log(updateDataToPost)
-        // this.props.postMenuFormData(dataToPost,categoryId)
+        this.props.postMenuFormData(dataToPost,categoryId)
 
     }
 
@@ -367,6 +361,12 @@ class Dishes extends Component {
             this.validator.showMessages();
         }
     };
+
+    hideEditorMobile() {
+        console.log(this.state.showItemManage)
+        this.setState({showItemManage:false})
+        // $('div.dishEditorMobile').addClass('hidden')
+    }
 
     calculatePercentage() {
         let percentage = this.state.selectedDish.discountPercentage;
@@ -389,9 +389,7 @@ class Dishes extends Component {
     }
 
 
-    hideEditorMobile() {
-        $('div.dishEditorMobile').addClass('hidden')
-    }
+    
 
     render() {
         if (this.props.items.loading) {
@@ -806,7 +804,8 @@ const mapStateToProps = store =>
 const mapDispatchToProps = dispatch => bindActionCreators({
     getMenuListByCategoryData,
     postMenuFormData,
-    getMenuListData
+    getMenuListData,
+    postRemovalMenuFormData
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dishes)

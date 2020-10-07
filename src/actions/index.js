@@ -34,7 +34,8 @@ import {
     updateCategoryFormData,
     getMenuListData,
     postMenuFormData,
-    getMenuListByCategoryData
+    getMenuListByCategoryData,
+    postRemovalMenuFormData
 } from './menuAction'
 import {
     getControlCenterMethodFormData,
@@ -88,5 +89,6 @@ export {
 
     postTechSupportFormData,
 
-    getMenuListByCategoryData
+    getMenuListByCategoryData,
+    postRemovalMenuFormData
 }

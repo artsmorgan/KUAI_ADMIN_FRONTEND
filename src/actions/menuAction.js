@@ -191,48 +191,48 @@ export const postMenuFormData = (payload, categoryId, callback) => {
     }
 }
 
-// export const postMenuFormData = (payload, categoryId, callback) => {
-//     console.log('payload', payload)
-//     return (dispatch, getState) => {
-//         dispatch(postMenuFormRequest())
-//         let URL = UPDATE_MENU_URL + payload.categoryId
-//         if (URL) {
-//             const state = getState()
-//             const lang = 'en'
-//             const headers = {Authorization: `bearer ${state.auth.token}`}
-//             const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
-//             axiosRequest.post(URL, data, {headers})
-//                 .then(response => {
-//                     const data = response.data
-//                     // console.log(response)
-//                     if (data.success) {
-//                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
-//                         dispatch(postMenuFormSuccess(data))
-//                         // dispatch(push(ROUTES.MODIFY_MENU))
-//                         // getMenuListData(payload.categoryId);
-//                         dispatch(getMenuListByCategoryData({ restaurantId: localStorage.getItem('restaurantId') }))
-//                         if (callback)
-//                             callback();
-//                     } else {
-//                         const response = data.data
-//                         toastr.error(language[lang].error, response.message)
-//                         dispatch(postMenuFormError())
-//                     }
-//                 })
-//                 .catch(error => {
-//                     // console.log(error)
-//                     const response = error.response
-//                     toastr.error(language[lang].error, language[lang].postFailed)
-//                     dispatch(postMenuFormError())
-//                     if (response && response.status === 401) {
-//                         // logout(dispatch)
-//                     }
-//                 })
-//         } else {
-//             dispatch(postMenuFormError())
-//         }
-//     }
-// }
+export const postRemovalMenuFormData = (payload, categoryId, callback) => {
+    console.log('payload', payload)
+    return (dispatch, getState) => {
+        dispatch(postMenuFormRequest())
+        let URL = UPDATE_MENU_URL + categoryId
+        if (URL) {
+            const state = getState()
+            const lang = 'en'
+            const headers = {Authorization: `bearer ${state.auth.token}`}
+            const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
+            axiosRequest.post(URL, data, {headers})
+                .then(response => {
+                    const data = response.data
+                    // console.log(response)
+                    if (data.success) {
+                        toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
+                        // dispatch(postMenuFormSuccess(data))
+                        // dispatch(push(ROUTES.MODIFY_MENU))
+                        // getMenuListData(payload.categoryId);
+                        // dispatch(getMenuListByCategoryData({ restaurantId: localStorage.getItem('restaurantId') }))
+                        if (callback)
+                            callback();
+                    } else {
+                        const response = data.data
+                        toastr.error(language[lang].error, response.message)
+                        dispatch(postMenuFormError())
+                    }
+                })
+                .catch(error => {
+                    // console.log(error)
+                    const response = error.response
+                    toastr.error(language[lang].error, language[lang].postFailed)
+                    dispatch(postMenuFormError())
+                    if (response && response.status === 401) {
+                        // logout(dispatch)
+                    }
+                })
+        } else {
+            dispatch(postMenuFormError())
+        }
+    }
+}
 
 
 export const getMenuListByCategoryData = (payload) => {
