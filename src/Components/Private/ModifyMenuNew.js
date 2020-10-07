@@ -81,22 +81,21 @@ class ModifyMenuNew extends React.Component {
         this.updateDimension();
     }
 
-    loadMenu(id, name) {
-        this.setState({selectedCategory: {id, name}});
-        this.props.getMenuListByCategoryData({restaurantId: localStorage.getItem('restaurantId')});
-    }
+    // loadMenu(id, name) {
+    //     this.setState({selectedCategory: {id, name}});
+    //     this.props.getMenuListByCategoryData({restaurantId: localStorage.getItem('restaurantId')});
+    // }
 
     renderMobile() {
         return (
             <>
                 <div
                     className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.formTab.menuTab ? '' : 'hidden')}>
-                    <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
-                            selectedCategory={this.state.selectedCategory}/>
+                    {/* <Dishes/> */}
                 </div>
                 <div
                     className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.formTab.categoriesTab ? '' : 'hidden')}>
-                    <Categories/>
+                    {/* <Categories/> */}
                 </div>
             </>
         )
@@ -106,8 +105,7 @@ class ModifyMenuNew extends React.Component {
         return (
             <>
                 <Categories/>
-                <Dishes loadMenu={(id, name) => this.loadMenu(id, name)}
-                        selectedCategory={this.state.selectedCategory}/>
+                <Dishes />
             </>
         )
     }
@@ -163,4 +161,12 @@ const mapDispatchToProps = dispatch =>
         dispatch
     )
 
-export default connect(null, mapDispatchToProps)(ModifyMenuNew)
+    const mapStateToProps = store =>
+    (
+        {
+            restaurant: store.menu
+        }
+    )
+
+    export default connect(mapStateToProps, mapDispatchToProps)(ModifyMenuNew)
+// export default connect(null, mapDispatchToProps)(ModifyMenuNew)

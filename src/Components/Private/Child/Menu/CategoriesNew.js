@@ -8,7 +8,7 @@ import {bindActionCreators} from "redux";
 import {
     getCategoryListData,
     updateCategoryFormData,
-    postMenuFormData
+    postMenuFormData,
 } from "../../../../actions";
 import {connect} from "react-redux";
 import $ from "jquery";
@@ -20,8 +20,10 @@ class Categories extends Component {
         super(props);
         this.state = {
             show: false,
-            menuList: [],
-            categoryDataToPost: {name: ''}
+            itemList: [],
+            categoryList: [],
+            categoryListToUpdate:[],
+            categoryDataToPost: {name: '',id:''}
         }
 
         SimpleReactValidator.addLocale('es', {
@@ -33,6 +35,20 @@ class Categories extends Component {
             autoForceUpdate: this
         });
     }
+
+    componentWillMount() {
+        this.props.getCategoryListData({ restaurantId: localStorage.getItem('restaurantId') })
+    }
+
+    componentDidUpdate(previousProps) {
+        if ((previousProps.categories.loading && !this.props.categories.loading) || (previousProps.items.loading && !this.props.items.loading)) {
+            const categories = this.props.categories
+            const items = this.props.items
+            this.setState({categoryList:categories.data,categoryListToUpdate:categories.data,itemList:items});
+        }
+    }
+
+
 
     toggleCategoryModal = () => {
         this.setState({show: !this.state.show});
@@ -47,75 +63,21 @@ class Categories extends Component {
         }
     };
 
-    inputChangeHandler = (e) => {
-        let obj = this.state.categoryDataToPost
-        obj[e.target.name] = e.target.value
-        this.setState({categoryDataToPost: obj})
-    }
+    categoryInputChangeHandler = (e) => {
+        let categoryId = e.target.id
+        let categoryName = e.target.value
+        let categoryObj = {id: categoryId, name: categoryName}
+        $("svg[id=" + categoryId + "].trash").hide()
+        $("#categories-list svg[id=" + categoryId + "].tik").show()
+        $("input[id=" + categoryId + "]").parent().addClass('active')
 
-    deleteCategory = (id) => {
-        console.log("deleteCategory", id)
-        let categoryListToUpdate = this.state.menuList
-        let result = categoryListToUpdate.filter(function (el) {
-            return el.id != id;
-        })
+        let categoryListToUpdate = this.state.categoryList
+        console.log(categoryListToUpdate)
+        let foundIndex = categoryListToUpdate.findIndex(x => x.id == categoryId);
+        console.log(categoryObj)
 
-        //check  if the category  has products
-        const GET_MENU_LIST_BY_CATEGORY_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/menu/item/';
-        axios.get(GET_MENU_LIST_BY_CATEGORY_URL + id, {})
-            .then(response => {
-                console.log('response', response)
-                let dishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : false;
-                console.log('dishes', dishes)
-                //check if the object Id exists in the list, if so update'
-
-
-                //If category has dishes assign to next top category
-                if (dishes != false) {
-                    const defaultCategory = result[0].id;
-                    console.log('currentCategory', id)
-                    console.log('defaultCategory', defaultCategory)
-
-                    dishes.map(dish => {
-                        dish.categoryId = defaultCategory;
-                    })
-
-                    //Get Defaul categories array list
-                    axios.get(GET_MENU_LIST_BY_CATEGORY_URL + defaultCategory, {})
-                        .then(response => {
-                            let catDishes = (response.data.response.productItemList) ? JSON.parse(response.data.response.productItemList) : [];
-                            const mergeDishes = [...catDishes, ...dishes];
-                            this.props.postMenuFormData(mergeDishes, defaultCategory, () => {
-                            })
-                        })
-                        .catch(error => {
-                            const response = error.response
-                            console.log(response)
-                            // dispatch(getMenuListFullError())
-                            if (response && response.status === 401) {
-                                // logout(dispatch)
-                            }
-                        })
-
-
-                }
-
-
-                this.setState({categoryListToUpdate: result}, () => {
-                    // console.log(this.state.categoryListToUpdate)
-                    const dataPack = {
-                        catList: this.state.categoryListToUpdate,
-                        restaurantId: localStorage.getItem('restaurantId')
-                    }
-                    this.props.updateCategoryFormData(dataPack, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
-                })
-            })
-            .catch(error => {
-                const response = error.response
-                console.log(response)
-                if (response && response.status === 401) {
-                }
-            })
+        categoryListToUpdate[foundIndex] = categoryObj;
+        this.setState({categoryList: categoryListToUpdate})
     }
 
     categoryUpdateHandler = (id) => {
@@ -127,61 +89,74 @@ class Categories extends Component {
             catList: this.state.categoryListToUpdate,
             restaurantId: localStorage.getItem('restaurantId')
         }
-        this.props.updateCategoryFormData(dataPack, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+        this.props.updateCategoryFormData(dataPack)
+        
+
     }
 
+    inputChangeHandler = (e) => {
+        let obj = this.state.categoryDataToPost
+        obj[e.target.name] = e.target.value
+        this.setState({categoryDataToPost: obj})
+    }
+
+    deleteCategory = (id) => {
+        console.log("deleteCategory", id)
+        let categoryListToUpdate = this.state.categoryList
+        let categoryResult = categoryListToUpdate.filter(function (el) {
+            return el.id != id;
+        })
+
+        let itemListToUpdate = this.state.itemList.data;
+        let itemResult = itemListToUpdate.filter(function (el) {
+            return el.id != id;
+        })
+
+        const categoryDataPack = {
+            catList: categoryResult,
+            restaurantId: localStorage.getItem('restaurantId')
+        }
+
+        const itemDataPack = {
+            catList: categoryResult,
+            restaurantId: localStorage.getItem('restaurantId')
+        }
+        this.props.updateCategoryFormData(categoryDataPack);
+        // this.props.postMenuFormData(itemDataPack);
+       
+    }
+
+
+    
+
     selectHandleChange = categorySelectedOption => {
-        // console.log(categorySelectedOption)
-        this.setState(
-            {categorySelectedOption},
-            () => {
-                // console.log(`Option selected:`, this.state.categorySelectedOption)
-                let obj = this.state.menuDataToPost
-                obj['categoryId'] = categorySelectedOption.id
-                this.setState({menuDataToPost: obj})
-            }
-        );
+        
     };
 
     processSubmit() {
-        let {categoryDataToPost} = this.state
+        let categoryDataToPost = this.state.categoryDataToPost;
         categoryDataToPost['id'] = uuid()
         this.setState({categoryDataToPost: categoryDataToPost})
-        console.log("categoryDataToPost", this.state.categoryDataToPost)
-        let categoryListToSend = this.state.menuList;
+        console.log(this.state.categoryDataToPost)
+        let categoryListToSend = this.state.categoryList;
         categoryListToSend.push(categoryDataToPost)
-        console.log("categoryListToSend", categoryListToSend)
+        // console.log(categoryListToSend)
         const dataPack = {
             catList: categoryListToSend,
             restaurantId: localStorage.getItem('restaurantId')
         }
-        this.props.updateCategoryFormData(dataPack, this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')}))
+        this.props.updateCategoryFormData(dataPack)
         this.setState({
             show: false,
-            categoryDataToPost: {name: ''}
+            categoryDataToPost: {name: '',id:''}
         }, () => {
             console.log("calling after adding a menu")
-            this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
         })
     }
 
-    componentWillMount() {
-        this.props.getCategoryListData({restaurantId: localStorage.getItem('restaurantId')})
-    }
+    
 
-    componentDidUpdate(previousProps) {
-        console.log("componentDidUpdate")
-        console.log(previousProps.categories.loading)
-        console.log(this.props.categories.loading)
-        console.log("************end")
-        if (previousProps.categories.loading && !this.props.categories.loading) {
-            console.log("going to update cat list")
-            const categories = this.props.categories.categories;
-            this.setState({menuList: categories}, () => {
-                // console.log(this.state)
-            });
-        }
-    }
+    
 
     render() {
         return (
@@ -197,7 +172,7 @@ class Categories extends Component {
 
 
     renderCategories() {
-        let categories = this.state.menuList;
+        let categories = this.state.categoryList;
         return <div className="rotator-container">
             <button className="btn-theme btn-cat" onClick={this.toggleCategoryModal}>
                 <span>+</span>NUEVA CATEGORÍA
@@ -247,31 +222,10 @@ class Categories extends Component {
         </>
     }
 
-    categoryInputChangeHandler = (e) => {
-        let categoryId = e.target.id
-        let categoryName = e.target.value
-        let categoryObj = {id: categoryId, name: categoryName}
-        $("svg[id=" + categoryId + "].trash").hide()
-        $("#categories-list svg[id=" + categoryId + "].tik").show()
-        $("input[id=" + categoryId + "]").parent().addClass('active')
-
-        // let categoryListToUpdate = this.props.categories.categories
-        let categoryListToUpdate = this.state.menuList
-        // console.log(categoryListToUpdate)
-        let foundIndex = categoryListToUpdate.findIndex(x => x.id == categoryId);
-        // console.log(categoryObj)
-        categoryListToUpdate[foundIndex] = categoryObj;
-        this.state.categoryListToUpdate = categoryListToUpdate
-        this.setState({categoryListToUpdate: categoryListToUpdate}, () => {
-            // console.log(this.state.categoryListToUpdate)
-        })
-    }
-
-
     renderCategoriesList() {
         return <>
             {
-                this.state.menuList.map(category =>
+                this.state.categoryList.map(category =>
                     <div className="rotator" key={category.id}>
                         <div className="directional">
                             <svg className="top" width="9" height="7" viewBox="0 0 9 7"
@@ -321,13 +275,14 @@ class Categories extends Component {
 const mapStateToProps = store =>
     (
         {
-            categories: store.menuReducer.categories
+            categories: store.menu.categories,
+            items:store.menu.items
         }
     )
 const mapDispatchToProps = dispatch => bindActionCreators({
     updateCategoryFormData,
     getCategoryListData,
-    postMenuFormData
+    postMenuFormData,
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Categories)

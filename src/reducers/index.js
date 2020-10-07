@@ -6,12 +6,12 @@ import form from './formReducer';
 import deliveryMethod from './deliveryMethodReducer';
 import paymentMethod from './paymentMethodReducer';
 import restaurant from './restaurantReducer';
-import menuReducer from "./menuReducer";
+import menuMethod from "./menuReducer";
 import controlCenter from './controlCenterMethodReducer';
 import defaultConfigReducer from "./defaultConfigReducer";
 import forgotPasswordReducer from "./forgotPasswordReducer";
 import techSupportReducer from "./techSupportReducer";
 
 export default combineReducers({
-    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menuReducer, controlCenter, payment:paymentMethod, defaultConfig: defaultConfigReducer, forgotPassword: forgotPasswordReducer, techSupportReq: techSupportReducer
+    auth, toastr: toastrReducer, form, delivery: deliveryMethod, restaurant, menu:menuMethod, controlCenter, payment:paymentMethod, defaultConfig: defaultConfigReducer, forgotPassword: forgotPasswordReducer, techSupportReq: techSupportReducer
 })

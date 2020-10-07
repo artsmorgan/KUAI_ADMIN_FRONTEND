@@ -51,7 +51,7 @@ export const getCategoryListData = (payload) => {
                 })
                 .catch(error => {
                     const response = error.response
-                    // console.log(error)
+                    console.log(error)
                     dispatch(getCategoryListError())
                     if (response && response.status === 401) {
                         // logout(dispatch)
@@ -62,6 +62,58 @@ export const getCategoryListData = (payload) => {
         }
     }
 }
+
+
+export const updateCategoryFormData = (payload, callback) => {
+    return (dispatch, getState) => {
+        dispatch(postCategoryFormRequest())
+        console.log("payload", payload)
+        let URL = UPDATE_CATEGORY_URL + payload.restaurantId
+        if (URL) {
+            const state = getState()
+            const lang = 'en'
+            const headers = {Authorization: `bearer ${state.auth.token}`}
+            // console.log(JSON.stringify(payload))
+            axiosRequest.put(URL, {categories: JSON.stringify(payload.catList)}, {headers})
+                .then(response => {
+                    const data = response.data
+                    console.log(response)
+                    if (data.success) {
+                        toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
+                        dispatch(postCategoryFormSuccess(data))
+                        dispatch(getCategoryListData({ restaurantId: localStorage.getItem('restaurantId') }))
+                        dispatch(getMenuListByCategoryData({ restaurantId: localStorage.getItem('restaurantId') }))
+                        dispatch(push(ROUTES.MODIFY_MENU))
+                        if (callback) {
+                            console.log("callback req to get menu list")
+                            callback();
+                        }
+                    } else {
+                        const response = data.data
+                        toastr.error(language[lang].error, response.message)
+                        dispatch(postCategoryFormError())
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                    const response = error.response
+                    toastr.error(language[lang].error, language[lang].postFailed)
+                    dispatch(postCategoryFormError())
+                    if (response && response.status === 401) {
+                        // logout(dispatch)
+                    }
+                })
+        } else {
+            dispatch(postCategoryFormError())
+        }
+    }
+
+}
+
+
+
+
+
 
 
 
@@ -81,18 +133,107 @@ export const getMenuListData = (id) => {
                 })
                 .catch(error => {
                     const response = error.response
-                    // console.log(error)
+                    console.log('EEEEEEEEEEEEEEEEEEEEEEEEEEEe')
+                    console.log(error)
                     dispatch(getMenuListError())
                     if (response && response.status === 401) {
                         // logout(dispatch)
                     }
                 })
         } else {
+            console.log('-----------------------------***************')
             dispatch(getMenuListError())
         }
     }
 
 }
+
+export const postMenuFormData = (payload, categoryId, callback) => {
+    console.log('payload', payload)
+    return (dispatch, getState) => {
+        dispatch(postMenuFormRequest())
+        let URL = UPDATE_MENU_URL + categoryId
+        if (URL) {
+            const state = getState()
+            const lang = 'en'
+            const headers = {Authorization: `bearer ${state.auth.token}`}
+            const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
+            axiosRequest.post(URL, data, {headers})
+                .then(response => {
+                    const data = response.data
+                    // console.log(response)
+                    if (data.success) {
+                        toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
+                        dispatch(postMenuFormSuccess(data))
+                        // dispatch(push(ROUTES.MODIFY_MENU))
+                        // getMenuListData(payload.categoryId);
+                        dispatch(getMenuListByCategoryData({ restaurantId: localStorage.getItem('restaurantId') }))
+                        if (callback)
+                            callback();
+                    } else {
+                        const response = data.data
+                        toastr.error(language[lang].error, response.message)
+                        dispatch(postMenuFormError())
+                    }
+                })
+                .catch(error => {
+                    // console.log(error)
+                    const response = error.response
+                    toastr.error(language[lang].error, language[lang].postFailed)
+                    dispatch(postMenuFormError())
+                    if (response && response.status === 401) {
+                        // logout(dispatch)
+                    }
+                })
+        } else {
+            dispatch(postMenuFormError())
+        }
+    }
+}
+
+// export const postMenuFormData = (payload, categoryId, callback) => {
+//     console.log('payload', payload)
+//     return (dispatch, getState) => {
+//         dispatch(postMenuFormRequest())
+//         let URL = UPDATE_MENU_URL + payload.categoryId
+//         if (URL) {
+//             const state = getState()
+//             const lang = 'en'
+//             const headers = {Authorization: `bearer ${state.auth.token}`}
+//             const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
+//             axiosRequest.post(URL, data, {headers})
+//                 .then(response => {
+//                     const data = response.data
+//                     // console.log(response)
+//                     if (data.success) {
+//                         toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
+//                         dispatch(postMenuFormSuccess(data))
+//                         // dispatch(push(ROUTES.MODIFY_MENU))
+//                         // getMenuListData(payload.categoryId);
+//                         dispatch(getMenuListByCategoryData({ restaurantId: localStorage.getItem('restaurantId') }))
+//                         if (callback)
+//                             callback();
+//                     } else {
+//                         const response = data.data
+//                         toastr.error(language[lang].error, response.message)
+//                         dispatch(postMenuFormError())
+//                     }
+//                 })
+//                 .catch(error => {
+//                     // console.log(error)
+//                     const response = error.response
+//                     toastr.error(language[lang].error, language[lang].postFailed)
+//                     dispatch(postMenuFormError())
+//                     if (response && response.status === 401) {
+//                         // logout(dispatch)
+//                     }
+//                 })
+//         } else {
+//             dispatch(postMenuFormError())
+//         }
+//     }
+// }
+
 
 export const getMenuListByCategoryData = (payload) => {
     return (dispatch, getState) => {
@@ -122,92 +263,3 @@ export const getMenuListByCategoryData = (payload) => {
     }
 
 }
-
-
-export const updateCategoryFormData = (payload, callback) => {
-    return (dispatch, getState) => {
-        dispatch(postCategoryFormRequest())
-        console.log("payload", payload)
-        let URL = UPDATE_CATEGORY_URL + payload.restaurantId
-        if (URL) {
-            const state = getState()
-            const lang = 'en'
-            const headers = {Authorization: `bearer ${state.auth.token}`}
-            // console.log(JSON.stringify(payload))
-            axiosRequest.put(URL, {categories: JSON.stringify(payload.catList)}, {headers})
-                .then(response => {
-                    const data = response.data
-                    console.log(response)
-                    if (data.success) {
-                        toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
-                        dispatch(postCategoryFormSuccess(data))
-                        dispatch(push(ROUTES.MODIFY_MENU))
-                        if (callback) {
-                            console.log("callback req to get menu list")
-                            callback();
-                        }
-                    } else {
-                        const response = data.data
-                        toastr.error(language[lang].error, response.message)
-                        dispatch(postCategoryFormError())
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                    const response = error.response
-                    toastr.error(language[lang].error, language[lang].postFailed)
-                    dispatch(postCategoryFormError())
-                    if (response && response.status === 401) {
-                        // logout(dispatch)
-                    }
-                })
-        } else {
-            dispatch(postCategoryFormError())
-        }
-    }
-
-}
-
-export const postMenuFormData = (payload, categoryId, callback) => {
-    console.log('payload', payload)
-    return (dispatch, getState) => {
-        dispatch(postMenuFormRequest())
-        let URL = UPDATE_MENU_URL + categoryId
-        if (URL) {
-            const state = getState()
-            const lang = 'en'
-            const headers = {Authorization: `bearer ${state.auth.token}`}
-            const data = {restaurantId: restaurantId, products: JSON.stringify(payload)}
-            axiosRequest.post(URL, data, {headers})
-                .then(response => {
-                    const data = response.data
-                    // console.log(response)
-                    if (data.success) {
-                        toastr.success(language[lang].success, data.message ? data.message : language[lang].success)
-                        dispatch(postMenuFormSuccess(data))
-                        dispatch(push(ROUTES.MODIFY_MENU))
-                        getMenuListData(payload.categoryId);
-                        if (callback)
-                            callback();
-                    } else {
-                        const response = data.data
-                        toastr.error(language[lang].error, response.message)
-                        dispatch(postMenuFormError())
-                    }
-                })
-                .catch(error => {
-                    // console.log(error)
-                    const response = error.response
-                    toastr.error(language[lang].error, language[lang].postFailed)
-                    dispatch(postMenuFormError())
-                    if (response && response.status === 401) {
-                        // logout(dispatch)
-                    }
-                })
-        } else {
-            dispatch(postMenuFormError())
-        }
-    }
-
-}
-
