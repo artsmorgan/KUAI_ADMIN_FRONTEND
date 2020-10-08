@@ -362,10 +362,10 @@ class Dishes extends Component {
         }
     };
 
-    hideEditorMobile() {
-        console.log(this.state.showItemManage)
-        this.setState({showItemManage:false})
-        // $('div.dishEditorMobile').addClass('hidden')
+    hideEditorMobile = () => {
+        this.setState({showItemManage:false}, () => {
+            console.log(this.state)
+        })
     }
 
     calculatePercentage() {
@@ -779,7 +779,7 @@ class Dishes extends Component {
                             <div className="row" style={{ marginTop: '40px' }}>
                                 <button className="btn-theme" onClick={this.addMenuFormSubmitHandler}>GUARDAR</button>
                                 <br />
-                                <button className="btn hideMobile" onClick={this.hideEditorMobile}>Cerrar</button>
+                                <button className="btn hidden-lg hidden-md btn-theme" onClick={this.hideEditorMobile} style={{marginTop: "5px"}}>Cerrar</button>
                             </div>
                         </div>
                     </div>

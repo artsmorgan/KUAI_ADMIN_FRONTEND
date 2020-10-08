@@ -702,7 +702,7 @@ class Dishes extends Component {
     }
 
     hideEditorMobile() {
-        $('div.dishEditorMobile').addClass('hidden')
+        $('dishEditorMobile').addClass('hidden')
     }
 
     renderDishEditor() {
