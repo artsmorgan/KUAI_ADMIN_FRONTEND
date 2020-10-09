@@ -23,8 +23,8 @@ class App extends React.Component {
     }
 
     render() {
-        const {auth, form, menuReducer} = this.props
-        const loading = auth.loading || form.loading 
+        // const {auth, form} = this.props
+        // const loading = auth.loading || form.loading
         return (
             <React.Fragment>
                 <Switch>
