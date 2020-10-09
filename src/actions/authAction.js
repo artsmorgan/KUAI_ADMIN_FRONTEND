@@ -49,7 +49,7 @@ export const isLoggedInAndRedirect = () => {
         const { auth } = getState()
         console.log("order redirect")
         if (auth.accessToken && auth.tokenExpiredAt && auth.tokenExpiredAt > new Date()) {
-            console.log("order redirect")
+            console.log("order redirect!!!")
             dispatch(push(ROUTES.ORDERS))
         }
     }
@@ -72,9 +72,16 @@ export const checkStorageLoginCred = () => {
                 dispatch(push(state.router.location.pathname))
             }, 100)
         } else {
-            console.log("logout")
-            // logout()
-            dispatch(push(ROUTES.LOGIN))
+            switch(state.router.location.pathname) {
+                case "/registry":
+                    dispatch(push(state.router.location.pathname))
+                    break;
+                case "/forgot-password":
+                    dispatch(push(state.router.location.pathname))
+                    break;
+                default:
+                    /^\/change-password/.test(state.router.location.pathname) ? dispatch(push(state.router.location.pathname)) : dispatch(push(ROUTES.LOGIN))
+            }
         }
     }
 }

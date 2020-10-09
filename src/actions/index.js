@@ -50,6 +50,10 @@ import {
 } from './forgotPasswordAction'
 
 import {
+    postCHANGEPassFormData,
+} from './changePasswordAction'
+
+import {
     postTechSupportFormData,
 } from './techSupportAction'
 
@@ -90,5 +94,7 @@ export {
     postTechSupportFormData,
 
     getMenuListByCategoryData,
-    postRemovalMenuFormData
+    postRemovalMenuFormData,
+
+    postCHANGEPassFormData
 }
