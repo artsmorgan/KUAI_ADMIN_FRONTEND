@@ -1,13 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Select from 'react-select';
-import { Button, Nav } from 'react-bootstrap';
+import { Nav } from 'react-bootstrap';
 import Checkbox from '@opuscapita/react-checkbox';
 import SimpleReactValidator from 'simple-react-validator';
-import bannerImage from "../../assets/images/banner-bg.png";
-import avatarImage from "../../assets/images/oval-avatar.png";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
-import * as APITools from '../../util/apiX';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import LoaderInScreen from "../Public/LoaderInScreen";
@@ -23,8 +20,6 @@ import {
 import { storage, db } from "../firebase";
 import { toastr } from 'react-redux-toastr'
 
-
-const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
 class ModifyRestaurant extends React.Component {
