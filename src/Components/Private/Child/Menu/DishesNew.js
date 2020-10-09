@@ -565,7 +565,7 @@ class Dishes extends Component {
                         <div className="add-item">
                             <div className="img"
                                 style={{
-                                    backgroundImage: `url(${this.state.selectedDish.picture ? this.state.selectedDish.picture : [this.state.editReq ? DefaultImage : '']})`,
+                                    backgroundImage: `url(${this.state.selectedDish.picture ? this.state.selectedDish.picture : [this.state.editReq ? DefaultImage : DefaultImage]})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     width: '100%',
