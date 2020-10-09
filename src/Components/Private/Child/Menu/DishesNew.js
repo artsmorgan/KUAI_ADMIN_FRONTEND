@@ -565,7 +565,7 @@ class Dishes extends Component {
                         <div className="add-item">
                             <div className="img"
                                 style={{
-                                    backgroundImage: `url(${this.state.selectedDish.picture ? this.state.selectedDish.picture : [this.state.editReq ? DefaultImage : '']})`,
+                                    backgroundImage: `url(${this.state.selectedDish.picture ? this.state.selectedDish.picture : [this.state.editReq ? DefaultImage : DefaultImage]})`,
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     width: '100%',
@@ -633,7 +633,7 @@ class Dishes extends Component {
                                 {this.validator.message('categoryId', this.state.selectedDish.categoryId, 'required')}
                             </p>
                             <label htmlFor="">PRECIO:</label>
-                            <input type="number" className="uni-input" name="price"
+                            <input type="number" className="uni-input" name="price" min={0}
                                 onChange={this.addMenuInputChangeHandler}
                                 value={this.state.selectedDish.price} />
                             <p style={{ color: "red" }}>
@@ -699,7 +699,7 @@ class Dishes extends Component {
                                         <div
                                             className={`promo-code ${this.state.selectedDish.specialPrice ? '' : 'hidden'}`}>
                                             <label htmlFor="">PRECIO PROMOCIÓN</label>
-                                            <input type="number" className="uni-input" name="specialPriceAmount"
+                                            <input type="number" className="uni-input" name="specialPriceAmount" min={0}
                                                 onChange={this.addMenuInputChangeHandler}
                                                 value={this.state.selectedDish.specialPriceAmount} />
                                             <p style={{ color: "red" }}>
@@ -718,7 +718,7 @@ class Dishes extends Component {
                                         <div
                                             className={`promo-code ${this.state.selectedDish.discount ? '' : 'hidden'}`}>
                                             <label htmlFor="">PORCENTAJE</label>
-                                            <input type="number" className="uni-input" name="discountPercentage"
+                                            <input type="number" className="uni-input" name="discountPercentage" min={0}
                                                 onChange={this.addMenuInputChangeHandler} style={{ width: "100px" }}
                                                 value={this.state.selectedDish.discountPercentage} />
                                             <p style={{ color: "red" }}>
@@ -743,7 +743,7 @@ class Dishes extends Component {
                                             <div className="row">
                                                 <div className="col">
                                                     <label htmlFor="">LLEVA</label>
-                                                    <input type="number" className="uni-input" name="lleva"
+                                                    <input type="number" className="uni-input" name="lleva" min={0}
                                                         onChange={this.addMenuInputChangeHandler}
                                                         value={this.state.selectedDish.lleva} />
                                                     <p style={{ color: "red" }}>
@@ -753,7 +753,7 @@ class Dishes extends Component {
                                                 </div>
                                                 <div className="col">
                                                     <label htmlFor="">PAGA</label>
-                                                    <input type="number" className="uni-input" name="paga"
+                                                    <input type="number" className="uni-input" name="paga" min={0}
                                                         onChange={this.addMenuInputChangeHandler}
                                                         value={this.state.selectedDish.paga} />
                                                     <p style={{ color: "red" }}>

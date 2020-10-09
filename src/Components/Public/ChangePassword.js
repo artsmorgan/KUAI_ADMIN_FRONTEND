@@ -7,6 +7,9 @@ import Logo from "../../assets/images/kuai-logo-new.png";
 import * as APITools from '../../util/apiX'
 import { axiosRequest } from '../../util/api'
 import { toastr } from 'react-redux-toastr'
+import {bindActionCreators} from "redux";
+import {postCHANGEPassFormData} from "../../actions";
+import {connect} from "react-redux";
 
 const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
 
@@ -62,20 +65,16 @@ class ChangePassword extends React.Component {
     };
 
     processSubmit() {
-        // let formData = new URLSearchParams()
-        //     formData.set('uid', this.state.uid)
-        //     formData.set('code', this.state.activationCode)
-        //     formData.set('password', this.state.dataToPost.password)
-
         const  params = {
             uid: this.state.uid,
             code: this.state.activationCode,
             password: this.state.dataToPost.password,
         }
         console.log('params',params);
-        // console.log('formData',formData);
+
+        this.props.postCHANGEPassFormData(params)
         
-        axiosRequest.post('https://us-central1-kuai-test.cloudfunctions.net/api/forgotpassword/request', params)
+/*        axiosRequest.post('https://us-central1-kuai-test.cloudfunctions.net/api/forgotpassword/update', params)
             .then(response => {
                 const data = response.data
                 console.log(response)
@@ -89,7 +88,7 @@ class ChangePassword extends React.Component {
                 console.log(error.response)
                 toastr.error("Error", error.response.data.message)
                 
-            })
+            })*/
         
     }
 
@@ -117,4 +116,12 @@ class ChangePassword extends React.Component {
     }
 }
 
-export default ChangePassword;
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            postCHANGEPassFormData
+        },
+        dispatch
+    )
+
+export default connect(null, mapDispatchToProps)(ChangePassword)
