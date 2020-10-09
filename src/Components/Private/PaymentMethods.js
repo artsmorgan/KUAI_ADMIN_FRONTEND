@@ -110,19 +110,32 @@ class PaymentMethods extends React.Component {
 
     phoneNumberInputChangeHandler(e) {
         let obj = this.state.dataToPost;
-        // console.log(obj)
-        obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
-
-        this.setState({dataToPost: obj});
+        
+        if(e.target.value==='' || e.target.value.replace("-","").match(/^[0-9]+$/) != null){
+            if(e.target.value===''){
+                obj[e.target.name] = e.target.value;
+            }else{
+                obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
+            }   
+            this.setState({dataToPost: obj});
+        }
+    
+        this.handleCustomValidation()
     }
 
     accNumberInputChangeHandler(e) {
         let obj = this.state.dataToPost;
-        // console.log(obj)
-        obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{4})(\d{4})(\d{4})(\d{3})/, "$1 $2 $3 $4 $5");
-
-        this.setState({dataToPost: obj});
+        if(e.target.value==='' || e.target.value.replace(/ /g,'').match(/^[0-9]+$/) != null){
+            if(e.target.value===''){
+                obj[e.target.name] = e.target.value;
+            }else{
+                obj[e.target.name] = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
+            }   
+            this.setState({dataToPost: obj});
+        }
+        this.handleCustomValidation()
     }
+
 
     updateDimension = () => {
         this.setState({
@@ -362,7 +375,7 @@ class PaymentMethods extends React.Component {
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">Numero De Cuenta:</label>
                         <input type="text" className="uni-input" name="transferenceNoCuenta" placeholder="1234 5678 9632 6587"
-                               onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceNoCuenta')} onKeyPress={(e) => this.accNumberInputChangeHandler(e)}
+                               onChange={(e) => this.accNumberInputChangeHandler(e)}
                                value={this.state.dataToPost.transferenceNoCuenta}/>
                         <p style={{color: "red"}}>
                             {this.state.errors.transferenceEnabled.transferenceNoCuenta}
@@ -649,8 +662,8 @@ class PaymentMethods extends React.Component {
                         <label htmlFor="">DEPOSITAR A:</label><br/>
                         <label htmlFor="">NUMERO DE TELEFONO:</label>
                         <input type="text" className="uni-input" name="sinpeMovilNumero" placeholder="Ex: 1234-5689"
-                               onChange={(e) => this.paymentInputChangeHandler(e, 'sinpeMovilNumero')}
-                               value={this.state.dataToPost.sinpeMovilNumero} onKeyPress={(e) => this.phoneNumberInputChangeHandler(e)}/>
+                               onChange={(e) => this.phoneNumberInputChangeHandler(e)}
+                               value={this.state.dataToPost.sinpeMovilNumero} />
                         <p style={{color: "red"}}>
                             {this.state.errors.sinpeMovilEnabled.sinpeMovilNumero}
                             {this.state.dataToPost.sinpeMovilNumero ? this.validator.message('sinpeMovilNumero', this.state.dataToPost.sinpeMovilNumero, 'phoneNumber') : ''}

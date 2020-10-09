@@ -398,13 +398,30 @@ class ModifyRestaurant extends React.Component {
 
     };
 
+
     phoneNumberInputChangeHandler(e) {
         let obj = this.state.dataToPost;
-        // console.log(obj)
-        obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
-
-        this.setState({dataToPost: obj});
+        
+        if(e.target.value==='' || e.target.value.replace("-","").match(/^[0-9]+$/) != null){
+            if(e.target.value===''){
+                obj[e.target.name] = e.target.value;
+            }else{
+                obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
+            }   
+            this.setState({dataToPost: obj});
+        }
+    
+        this.handleCustomValidation()
     }
+
+
+    // phoneNumberInputChangeHandler(e) {
+    //     let obj = this.state.dataToPost;
+    //     // console.log(obj)
+    //     obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
+
+    //     this.setState({dataToPost: obj});
+    // }
 
 
     distritoChangeHandler = async (e, fieldName) => {
@@ -934,7 +951,7 @@ class ModifyRestaurant extends React.Component {
                                                 </label>
                                                 <input className="uni-input " type="text" name="phone"
                                                     placeholder="Ex: 0124-4556"
-                                                    onChange={this.inputChangeHandler} onKeyPress={(e) => this.phoneNumberInputChangeHandler(e)}
+                                                    onChange={(e) => this.phoneNumberInputChangeHandler(e)}
                                                     value={this.state.dataToPost.phone} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
                                                     {this.validator.message('phone', this.state.dataToPost.phone, 'required')}
