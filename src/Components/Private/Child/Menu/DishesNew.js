@@ -612,7 +612,7 @@ class Dishes extends Component {
                                 {this.validator.message('name', this.state.selectedDish.name, 'required')}
                             </p>
                             <label htmlFor="">DescripciÓn:</label>
-                            <textarea name="description" className="uni-input" id="" cols="30"
+                            <textarea name="description" className="uni-input" style={{padding: '8px 12px'}} id="" cols="30"
                                 rows="10"
                                 onChange={this.addMenuInputChangeHandler}
                                 value={this.state.selectedDish.description} />
