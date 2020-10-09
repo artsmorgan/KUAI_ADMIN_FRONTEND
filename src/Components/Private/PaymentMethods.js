@@ -396,9 +396,11 @@ class PaymentMethods extends React.Component {
                             {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
                         </p>
                         <label htmlFor="">Número De Cuenta IBAN:</label>
-                        <input type="text" className="uni-input" name="transferenceIban" id="transferenceIban" placeholder="Ex: CR02001026284066"
+                        <div className="fake-cr">
+                        <input type="text" className="uni-input" name="transferenceIban" id="transferenceIban" placeholder="Ex:02001026284066"
                                onChange={(e) => this.paymentInputChangeHandler(e, 'transferenceIban')}
-                               value={"CR" + this.state.dataToPost.transferenceIban}/>
+                               value={this.state.dataToPost.transferenceIban}/>
+                        </div>
                         <p style={{color: "red"}}>
                             {this.state.errors.transferenceEnabled.transferenceCuentaBancaria}
                             {this.state.dataToPost.transferenceIban ? this.validator.message('transferenceIban', this.state.dataToPost.transferenceIban, 'transferenceIban') : ''}

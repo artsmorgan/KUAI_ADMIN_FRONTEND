@@ -865,6 +865,30 @@ body {
   margin-top: -5px;
 }
 
+.modal-dialog .uni-input {
+  border: 1px solid #cecece !important;
+}
+
+.fake-cr {
+  position: relative;
+}
+
+.fake-cr input {
+  padding-left: 40px !important;
+}
+
+.fake-cr::after {
+  content: "CR";
+  position: absolute;
+  z-index: 9;
+  top: 12px;
+  font-weight: 600;
+  left: 14px;
+  width: 50px;
+  height: 50px;
+  background: transparent;
+}
+
 .uni-input {
   background: #ffffff;
   -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.07);
@@ -893,7 +917,7 @@ body {
   border-radius: 50px;
   overflow: auto;
   resize: none;
-  padding-left: 16px;
+  padding-left: 26px;
   padding-top: 15px;
 }
 

@@ -876,6 +876,27 @@ body {
   }
 }
 
+.modal-dialog .uni-input{
+  border: 1px solid #cecece !important;
+}
+
+.fake-cr{
+  position: relative;
+  input{
+    padding-left: 40px !important;
+  }
+  &::after{
+    content: "CR";
+    position: absolute;
+    z-index: 9;
+    top: 12px;
+    font-weight: 600;
+    left: 14px;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+  }
+}
 // Universal Inputs
 .uni-input {
   background: #ffffff;
@@ -902,7 +923,7 @@ body {
     border-radius: 50px;
     overflow: auto;
     resize: none;
-    padding-left: 16px;
+    padding-left: 26px;
     padding-top: 15px;
   }
 }
