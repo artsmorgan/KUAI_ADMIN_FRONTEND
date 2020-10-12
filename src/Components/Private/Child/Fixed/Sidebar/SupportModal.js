@@ -72,12 +72,12 @@ class SupportModal extends React.Component {
                         <div className="col-md-12">
                             <h3>Motivo del contacto</h3>
                             <label htmlFor="">Motivo del contacto</label>
-                            <input type="text" placeholder="Ex: mi menú no se actualiza" className="uni-input" onChange={this.inputChangeHandler} value={this.state.dataToPost.email} name="motivo"/>
+                            <input type="text" placeholder=" mi menú no se actualiza" className="uni-input" onChange={this.inputChangeHandler} value={this.state.dataToPost.email} name="motivo"/>
                             <p style={{color: "red"}}>
                                 {this.validator.message('motivo', this.state.dataToPost.motivo, 'required')}
                             </p>
                             <label htmlFor="">Detalles</label>
-                            <textarea name="detalles" className="uni-input tarea" id="" placeholder="Ex:I am trying to update my restaurant menu from modify-restaurant but it's..." cols="30" rows="10" onChange={this.inputChangeHandler}>{this.state.dataToPost.detalles}</textarea>
+                            <textarea name="detalles" className="uni-input tarea" id="" placeholder="I am trying to update my restaurant menu from modify-restaurant but it's..." cols="30" rows="10" onChange={this.inputChangeHandler}>{this.state.dataToPost.detalles}</textarea>
                             <p style={{color: "red"}}>
                                 {this.validator.message('email', this.state.dataToPost.detalles, 'required')}
                             </p>

@@ -96,9 +96,9 @@ export const updateRestaurantFormData = (payload) => {
 
 }
 
-export const getCantonesFromAPI = async (data) => {
+export const getCantonesFromAPI = async (provincia) => {
 
-    const cantones = await axiosRequest.get(`${ADDRESS_URL}cantones/${data.value}`, {
+    const cantones = await axiosRequest.get(`${ADDRESS_URL}cantones/${provincia}`, {
         headers: {
             'Access-Control-Allow-Origin': '*',
         },

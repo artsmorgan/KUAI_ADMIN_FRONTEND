@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
-import { Nav } from 'react-bootstrap';
+import { Button, Nav } from 'react-bootstrap';
 import Checkbox from '@opuscapita/react-checkbox';
 import SimpleReactValidator from 'simple-react-validator';
+import bannerImage from "../../assets/images/banner-bg.png";
+import avatarImage from "../../assets/images/oval-avatar.png";
 import Navbar from "./Child/Fixed/Navbar/Navbar";
 import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
+import * as APITools from '../../util/apiX';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import LoaderInScreen from "../Public/LoaderInScreen";
@@ -20,8 +23,20 @@ import {
 import { storage, db } from "../firebase";
 import { toastr } from 'react-redux-toastr'
 
-const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
+const endpointURL = process.env.REACT_APP_API_ENDPOINT + ":" + process.env.REACT_APP_API_PORT
+const weekDays = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+const optionprovince = [
+    { value: "1", label: "San Jose", name: "province" },
+    { value: "2", label: "Alajuela", name: "province" },
+    { value: "3", label: "Cartago", name: "province" },
+    { value: "4", label: "Heredia", name: "province" },
+    { value: "5", label: "Guanacaste", name: "province" },
+    { value: "6", label: "Puntarenas", name: "province" },
+    { value: "7", label: "Limon", name: "province" }
+];
+let optioncanton = [];
+let optiondistrict = [];
 class ModifyRestaurant extends React.Component {
 
     constructor(props) {
@@ -62,11 +77,11 @@ class ModifyRestaurant extends React.Component {
             cantonIsDisabled: true,
             distritoIsDisabled: true,
 
-            optionCanton: [],
+            optioncanton: [],
             cantonSelected: 1,
             provinciaSelected: 0,
 
-            optionDistrito: [],
+            optiondistrict: [],
             distritoSelected: 0,
 
             customErrorMessage: "este campo es requerido",
@@ -324,74 +339,64 @@ class ModifyRestaurant extends React.Component {
 
 
     provinceChangeHandler = async (e, fieldName) => {
-        // console.log('e', e)
         let obj = this.state.dataToPost;
-        obj[fieldName] = e.label;
-        this.setState({ dataToPost: obj });
+        obj[fieldName] = e;
+        optioncanton = [];
+        optiondistrict=[];
+        obj['canton'] ='';
+        obj['district'] ='';
+        this.setState({ dataToPost: obj,cantonIsDisabled: true,distritoIsDisabled: true });
+       
+        await this.setCantonOptionData(this.state.dataToPost.province.value);
+        
         this.handleCustomValidation()
-        //this.state.dataToPost.canton
-        //Get Canton List
-        const cantonesData = await getCantonesFromAPI(e);
-
-
-        //parse to the correct  format
-        // const cantones = this.formatSelectData(cantonesData);
-        // console.log(cantonesData)
-        const cantonesObj = [];
-        for (const canton in cantonesData.cantones) {
-            // console.log('canton', canton)
-            // console.log('canton', cantonesData.cantones[canton])
-            cantonesObj.push({ value: canton, label: cantonesData.cantones[canton], name: "canton" })
-        }
-
-        this.setState({ optionCanton: cantonesObj })
-        this.setState({ provinciaSelected: e.value })
-        // this.setState({ provinciaSelected: e.value })
-
-        if (cantonesData.success) {
-            let obj = this.state.dataToPost;
-            obj['canton'] = cantonesData.cantones[1]; //Every time that "Provincia change" set canton to the first in the list
-            this.setState({ dataToPost: obj });
-            this.setState({ cantonIsDisabled: false })
-        }
 
     };
 
     cantonChangeHandler = async (e, fieldName) => {
         let obj = this.state.dataToPost;
-        obj[fieldName] = e.label;
-        this.setState({ dataToPost: obj });
+        obj[fieldName] = e;
+        optiondistrict=[];
+        obj['district'] ='';
+        this.setState({ dataToPost: obj,distritoIsDisabled: true });
+
+        await this.setDistrictOptionData(this.state.dataToPost.province.value, this.state.dataToPost.canton.value)
+
         this.handleCustomValidation()
-        // console.log(this.state.provinciaSelected)
-        // console.log('cantonChangeHandler e', e)
+    };
 
-        this.setState({ cantonSelected: e.value })
+    async setCantonOptionData(provinceValue){
+        const cantonesData = await getCantonesFromAPI(provinceValue);
+        
+        const cantonesObj = [];
+        for (const canton in cantonesData.cantones) {
+    
+            cantonesObj.push({ value: canton, label: cantonesData.cantones[canton], name: "canton" })
+
+        }
+
+        optioncanton = cantonesObj;
+        
+        this.setState({ cantonIsDisabled: false})
+        
+        
+    }
 
 
-        //Get Canton List
-        const distritosData = await getDistritosFromAPI(this.state.provinciaSelected, e.value);
+    async setDistrictOptionData(provinceValue,cantonValue){
+        const distritosData = await getDistritosFromAPI(provinceValue,cantonValue);
 
-        // console.log('distritosData', distritosData)
-
-
-        // //parse to the correct  format
-        // // const cantones = this.formatSelectData(cantonesData);
-        // console.log(cantonesData)
         const distritosObj = [];
         for (const distrito in distritosData.distritos) {
-            // console.log('canton', distrito)
-            // console.log('canton', distritosData.distritos[distrito])
+
             distritosObj.push({ value: distrito, label: distritosData.distritos[distrito], name: "district" })
         }
 
-        this.setState({ optionDistrito: distritosObj })
+        optiondistrict = distritosObj;
+        this.setState({ distritoIsDisabled: false})
 
-        if (distritosData.success) {
-
-            this.setState({ distritoIsDisabled: false })
-        }
-
-    };
+      
+    }
 
 
     phoneNumberInputChangeHandler(e) {
@@ -410,44 +415,10 @@ class ModifyRestaurant extends React.Component {
     }
 
 
-    // phoneNumberInputChangeHandler(e) {
-    //     let obj = this.state.dataToPost;
-    //     // console.log(obj)
-    //     obj[e.target.name] = e.target.value.replace(/(\d{4})(\d{3})/, "$1-$2");
-
-    //     this.setState({dataToPost: obj});
-    // }
-
-
     distritoChangeHandler = async (e, fieldName) => {
         let obj = this.state.dataToPost;
-        obj[fieldName] = e.label;
+        obj[fieldName] = e;
         this.setState({ dataToPost: obj });
-        // this.handleCustomValidation()
-        // console.log(this.state.provinciaSelected)
-        // //Get Canton List
-        // const distritosData = await getDistritosFromAPI(this.state.provinciaSelected, this.state.cantonSelected);
-
-        // console.log('distritosData',distritosData)
-
-
-        // // //parse to the correct  format
-        // // // const cantones = this.formatSelectData(cantonesData);
-        // // console.log(cantonesData)
-        // const distritosObj = [];
-        // for( const distrito  in distritosData.distritos ){
-        //     console.log('canton',distrito)
-        //     console.log('canton',distritosData.distritos[distrito])
-        //     distritosObj.push({ value: distrito, label: distritosData.distritos[distrito], name: "district" },)
-        // }
-
-        // this.setState({ optionDistrito: distritosObj })
-
-        // if(distritosData.success){
-
-        //     this.setState({ distritoIsDisabled: false })
-        // }
-
     };
 
     handleCustomValidation() {
@@ -460,14 +431,14 @@ class ModifyRestaurant extends React.Component {
         for (const [key, value] of Object.entries(days)) {
 
             let field = value + "Enable";
-            console.log(value)
+            // console.log(value)
             if (field in errors) {
                 let openValue = value + "Open";
                 let closeValue = value + "Close";
 
                 if (obj[field]) {
-                    console.log(obj[openValue])
-                    console.log(obj[closeValue])
+                    // console.log(obj[openValue])
+                    // console.log(obj[closeValue])
                     if (obj[openValue] === "-" || obj[openValue]['value'] === "-" || obj[openValue] === "" || obj[openValue]['value'] === "") {
                         // console.log(obj[openValue]);
                         errors[openValue] = this.state.customErrorMessageOpen;
@@ -524,7 +495,7 @@ class ModifyRestaurant extends React.Component {
     }
 
     processSubmit() {
-        if (this.processScheduleValue("post")) {
+        if (this.processScheduleValue("post") && this.processAddressValue('post')) {
             let formData = this.state.dataToPost
             formData['menuLink'] = process.env.REACT_APP_MENU_PANEL_ENDPOINT + localStorage.getItem('restaurantId')
             this.props.updateRestaurantFormData({
@@ -535,19 +506,79 @@ class ModifyRestaurant extends React.Component {
         this.props.getDefaultConfigData({ restaurantId: localStorage.getItem('restaurantId') })
     }
 
-    // processCustomError() {
+    async processAddressValue(type){        
+        if(type=='get'){
+          try {
+            await this.setDistrictOptionData(this.state.dataToPost.province,this.state.dataToPost.canton);
+            await this.setCantonOptionData(this.state.dataToPost.province);            
+          } catch (error) {
+              
+          }
+            
+        }
+        let returnType = false;
+        let addressValue = ['province','canton','district'];
+        let i = 0;
+
+        addressValue.forEach(element => {  
+            let obj = this.state.dataToPost;
+            let option= [];
+            switch(element) {
+                case 'province':
+                  option= optionprovince;
+                  break;
+                case 'canton':
+                  option = optioncanton;
+                  break;
+                case 'district':
+                  option = optiondistrict;
+                  break;
+                default:
+                    option=[];
+              }
+            
+            if(type=='post'){
+                obj[element] = obj[element]['value'];
+            }else{
+                option.forEach(pv => {
+                    if(pv.value === obj[element]){
+                        obj[element] = pv
+                    }
+                });
+            }
+
+            i++
+            if (i === addressValue.length) {
+                this.setState({
+                    dataToPost: obj
+                })
+                returnType = true;
+            }
+        });
+
+        return returnType;
+    }
+
+    // async setCantonValue(){
     //     let obj = this.state.dataToPost;
-    //     let errors = this.state.customErrors;
-    //     let i=0;
-    //     for (const [key, value] of Object.entries(obj)) {
-    //         if (key in errors) {
-    //             errors[key] = value;
-    //         }
-    //         i++;
-    //         if(i==obj.length){
-    //             this.setState({customErrorMessage:errors})
-    //         }
+    //     obj[fieldName] = e;
+    //     optiondistrict=[];
+    //     this.setState({ dataToPost: obj,distritoIsDisabled: true });
+
+    //     const distritosData = await getDistritosFromAPI(this.state.dataToPost.province, this.state.dataToPost.canton);
+
+    //     const distritosObj = [];
+    //     for (const distrito in distritosData.distritos) {
+
+    //         distritosObj.push({ value: distrito, label: distritosData.distritos[distrito], name: "district" })
     //     }
+
+    //     optiondistrict = distritosObj;
+    //     this.setState({ distritoIsDisabled: false })
+    // }
+
+    // setDistrictValue(){
+
     // }
 
     processScheduleValue(type) {
@@ -584,7 +615,6 @@ class ModifyRestaurant extends React.Component {
                 this.setState({
                     dataToPost: obj
                 })
-
                 returnType = true;
             }
         });
@@ -596,7 +626,7 @@ class ModifyRestaurant extends React.Component {
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
         if (this.state.mobile) {
-            console.log(alltabs);
+            // console.log(alltabs);
             for (const [key, value] of Object.entries(obj)) {
                 if (key == tabName) {
                     alltabs[key] = true
@@ -611,21 +641,21 @@ class ModifyRestaurant extends React.Component {
 
     shortendURL = () => {
         let THIS = this
-        console.log("calling")
+        // console.log("calling")
         let shortURL = 'http://75.101.253.80:3000/restaurant/menu/' + localStorage.getItem('restaurantId');
         let shortURLres = ''
         TinyURL.shorten(shortURL, function(res, err) {
             if (err)
                 console.log(err)
-            console.log(res);
+            // console.log(res);
             shortURLres = res;
             // return res;
             let obj = THIS.state.dataToPost;
             obj['tinyUrl'] = shortURLres;
             
             THIS.setState({dataToPost: obj}, () => {
-                console.log("ending")
-                console.log(THIS.state.dataToPost)
+                // console.log("ending")
+                // console.log(THIS.state.dataToPost)
             });
         });
     }
@@ -730,6 +760,7 @@ class ModifyRestaurant extends React.Component {
             }, () => {
                 this.processScheduleValue("get");
                 this.shortendURL()
+                this.processAddressValue("get");
             });
 
         }
@@ -737,34 +768,26 @@ class ModifyRestaurant extends React.Component {
     }
 
     copyFunction = () => {
-        console.log("copy")
+        // console.log("copy")
         var copyText = document.getElementById("menuLink");
-        console.log(copyText)
+        // console.log(copyText)
         copyText.select();
-        console.log(copyText.select())
+        // console.log(copyText.select())
         copyText.setSelectionRange(0, 99999);
-        console.log(copyText.setSelectionRange(0, 99999))
+        // console.log(copyText.setSelectionRange(0, 99999))
         document.execCommand("copy");
     }
 
 
     render() {
         const { width } = this.state
-        const optionProvince = [
-            { value: 1, label: "San Jose", name: "province" },
-            { value: 2, label: "Alajuela", name: "province" },
-            { value: 3, label: "Cartago", name: "province" },
-            { value: 4, label: "Heredia", name: "province" },
-            { value: 5, label: "Guanacaste", name: "province" },
-            { value: 6, label: "Puntarenas", name: "province" },
-            { value: 7, label: "Limon", name: "province" }
-        ]
-        // const optionCanton = [
+        
+        // const optioncanton = [
         //     { value: "chocolate", label: "Chocolate", name: "canton" },
         //     { value: "strawberry", label: "Strawberry", name: "canton" },
         //     { value: "vanilla", label: "Vanilla", name: "canton" },
         // ];
-        // const optionDistrito = [
+        // const optiondistrict = [
         //     { value: "chocolate", label: "Chocolate", name: "distrito" },
         //     { value: "strawberry", label: "Strawberry", name: "distrito" },
         //     { value: "vanilla", label: "Vanilla", name: "distrito" },
@@ -908,7 +931,7 @@ class ModifyRestaurant extends React.Component {
                                             <div>
                                                 <label htmlFor="">NOMBRE:</label>
                                                 <input className="uni-input" type="text" name="name"
-                                                    placeholder="Ex: Los Amigos Restaurante"
+                                                    placeholder=" Los Amigos Restaurante"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.name} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
@@ -917,7 +940,7 @@ class ModifyRestaurant extends React.Component {
 
                                                 <label htmlFor="">Descripción:</label>
                                                 <textarea className="uni-input tarea" name="description"
-                                                    placeholder="Ex: Burger King es una cadena multinacional estadounidense de restaurantes de comida ..."
+                                                    placeholder=" Burger King es una cadena multinacional estadounidense de restaurantes de comida ..."
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.description} cols="30"
                                                     rows="10"></textarea>
@@ -928,7 +951,7 @@ class ModifyRestaurant extends React.Component {
                                                 
                                                 <label htmlFor="">ADMINISTRADOR:</label>
                                                 <input className="uni-input" type="text" name="administrator"
-                                                    placeholder="Ex: John Doe"
+                                                    placeholder=" John Doe"
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.administrator} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
@@ -945,7 +968,7 @@ class ModifyRestaurant extends React.Component {
                                                 Teléfono:
                                                 </label>
                                                 <input className="uni-input " type="text" name="phone"
-                                                    placeholder="Ex: 0124-4556"
+                                                    placeholder=" 0124-4556"
                                                     onChange={(e) => this.phoneNumberInputChangeHandler(e)}
                                                     value={this.state.dataToPost.phone} />
                                                 <p className-="error-txt" style={{ color: "red" }}>
@@ -1026,17 +1049,17 @@ class ModifyRestaurant extends React.Component {
                                                 {/*<div className="row" >*/}
                                                 {/*<div className="col-md-6 col-sm-6 col-lg-6 col-xs-6">*/}
                                                 <Select className="cstm-select f-w"
-                                                    options={optionProvince} name="province"
+                                                    options={optionprovince} name="province"
                                                     style={{ "width": "100" }}
-                                                    placeholder={this.state.dataToPost.province}
+                                                    placeholder="Select Province"
                                                     onChange={(e) => this.provinceChangeHandler(e, 'province')}
-                                                    value={this.state.dataToPost.province} isDisabled={false}
+                                                    value={this.state.dataToPost.province}
                                                 />
                                                 <p className="error-txt" style={{ color: "red" }}>
                                                     {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                                 </p>
                                                 <br />
-                                                {/* <Select className="cstm-select" options={optionProvince}
+                                                {/* <Select className="cstm-select" options={optionprovince}
                                                 name="province" placeholder="Provincia"
                                                 onChange={this.selectChangeHandler}
                                                 value={this.state.dataToPost.province} />
@@ -1049,9 +1072,9 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.canton} /> */}
                                                 <Select className="cstm-select f-w"
-                                                    options={this.state.optionCanton} name="canton"
+                                                    options={optioncanton} name="canton"
                                                     style={{ "width": "100" }}
-                                                    placeholder={this.state.dataToPost.canton}
+                                                    placeholder="Select Canton"
                                                     onChange={(e) => this.cantonChangeHandler(e, 'canton')}
                                                     value={this.state.dataToPost.canton}
                                                     isDisabled={this.state.cantonIsDisabled}
@@ -1061,7 +1084,7 @@ class ModifyRestaurant extends React.Component {
                                                 </p>
                                                 <br />
 
-                                                {/* <Select className="cstm-select" options={optionCanton} name="canton"
+                                                {/* <Select className="cstm-select" options={optioncanton} name="canton"
                                                 placeholder="Canton"
                                                 onChange={this.selectChangeHandler}
                                                 value={this.state.dataToPost.canton} />
@@ -1075,9 +1098,9 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.district} /> */}
                                                 <Select className="cstm-select f-w"
-                                                    options={this.state.optionDistrito} name="district"
+                                                    options={optiondistrict} name="district"
                                                     style={{ "width": "100" }}
-                                                    placeholder={this.state.dataToPost.district}
+                                                    placeholder="Select District"
                                                     onChange={(e) => this.distritoChangeHandler(e, 'district')}
                                                     value={this.state.dataToPost.district}
                                                     isDisabled={this.state.distritoIsDisabled}
@@ -1086,7 +1109,7 @@ class ModifyRestaurant extends React.Component {
                                                     {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                                 </p>
                                                 <br />
-                                                {/* <Select className="cstm-select" options={optionDistrito} name="district"
+                                                {/* <Select className="cstm-select" options={optiondistrict} name="district"
                                                 placeholder="Distrito"
                                                 onChange={this.selectChangeHandler}
                                                 value={this.state.dataToPost.district} />
@@ -1099,7 +1122,7 @@ class ModifyRestaurant extends React.Component {
                                                     onChange={this.inputChangeHandler}
                                                     value={this.state.dataToPost.neighborhood} />
                                                 {/* <Select className="cstm-select full-width mini float-left"
-                                                options={optionProvince} name="neighborhood"
+                                                options={optionprovince} name="neighborhood"
                                                 style={{"width": "100"}}
                                                 placeholder="---"
                                                 onChange={(e) => this.timeSelectChangeHandler(e, 'neighborhood')}

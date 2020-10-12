@@ -273,7 +273,7 @@ class Categories extends Component {
                     <form onSubmit={this.formSubmitHandler}>
                         <div className="ls-panel">
                             <input type="text" className={"uni-input"} name="name"
-                                   placeholder="Ex: Aperitivo"
+                                   placeholder=" Aperitivo"
                                    onChange={this.inputChangeHandler}
                                    value={this.state.categoryDataToPost.name}
                                    autoComplete={"off"}/>
