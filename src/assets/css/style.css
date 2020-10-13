@@ -770,6 +770,7 @@ body {
 .mod-rest-container .cstm-select {
   margin-bottom: 20px;
   width: 47%;
+  text-transform: uppercase;
 }
 
 .mod-rest-container .cstm-select-full {
@@ -1120,6 +1121,10 @@ body {
   text-transform: uppercase;
   border: 0px;
   width: 85%;
+}
+
+.rotator-container .rotator-scroll .rotator-stripe strong{
+  text-transform: uppercase;
 }
 
 .mod-rest-container .rotator-container .rotator input:focus {

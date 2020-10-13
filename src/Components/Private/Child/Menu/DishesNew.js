@@ -512,7 +512,7 @@ class Dishes extends Component {
                                             <p>{dish.name}</p>
                                             <span className={`price ${(!dish.promo) ? '' : 'hidden'}`}>₡{dish.price}</span>
                                             <span className={`price ${(dish.promo) ? '' : 'hidden'}`}>
-                                                <span style={{ textDecoration: 'line-through' }}>₡{dish.price}</span>
+                                                <span style={{textDecoration: (dish.specialPrice || dish.discount)?'line-through':'' }}>₡{dish.price}</span>
                                                 <span className={`${(dish.specialPrice) ? '' : 'hidden'}`}> | ₡{dish.specialPriceAmount}</span>
                                                 <span className={`${(dish.discount) ? '' : 'hidden'}`}> | ₡{dish.price - Math.round((dish.discountPercentage * dish.price) / 100)}</span>
                                                 <span className={`${(dish.llevaXpagaY) ? '' : 'hidden'}`}> | {dish.lleva} X {dish.paga}</span>
@@ -580,7 +580,7 @@ class Dishes extends Component {
 
                             <p className={`price ${(!this.state.selectedDish.promo) ? '' : 'hidden'}`}>₡{this.state.selectedDish.price}</p>
                             <p className={`price ${(this.state.selectedDish.promo) ? '' : 'hidden'}`}>
-                                <span style={{ textDecoration: 'line-through' }}>₡{this.state.selectedDish.price}</span>
+                                <span style={{textDecoration: (this.state.selectedDish.specialPrice || this.state.selectedDish.discount)?'line-through':'' }}>₡{this.state.selectedDish.price}</span>
                                 <span className={`${(this.state.selectedDish.specialPrice) ? '' : 'hidden'}`}> | ₡{this.state.selectedDish.specialPriceAmount}</span>
                                 <span className={`${(this.state.selectedDish.discount) ? '' : 'hidden'}`}> | ₡{this.calculatePercentage()}</span>
                                 <span className={`${(this.state.selectedDish.llevaXpagaY) ? '' : 'hidden'}`}> | {this.state.selectedDish.lleva}  {this.state.selectedDish.paga}</span>
@@ -620,7 +620,7 @@ class Dishes extends Component {
                                 {/*{!this.state.ignoreValidation ? this.validator.message('name', this.state.selectedDish.description, 'required') : ''}*/}
                                 {this.validator.message('description', this.state.selectedDish.description, 'required')}
                             </p>
-                            <label htmlFor="">CATEGORIA (Próximamente)</label>
+                            <label htmlFor="">CATEGORIAS</label>
                             <Select className="cstm-select" value={this.state.selectedDish.categoryId} name="categoryId"
                                 onChange={(e) => {this.selectHandleChange(e)} }
                                 placeholder="Categoria"
