@@ -642,7 +642,7 @@ class ModifyRestaurant extends React.Component {
     shortendURL = () => {
         let THIS = this
         // console.log("calling")
-        let shortURL = 'http://client.kuai.menu/restaurant/' + localStorage.getItem('restaurantId');
+        let shortURL = 'http://client.kuai.menu/restaurant/' + localStorage.getItem('restaurantId') + '/menu';
         let shortURLres = ''
         TinyURL.shorten(shortURL, function(res, err) {
             if (err)
