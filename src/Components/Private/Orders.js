@@ -81,11 +81,14 @@ class Orders extends React.Component {
         } else {
             this.setState({ orderDiv: true, selectedOrderDiv: true })
         }
-        const order = this.state.myOrders.find(obj => obj.id === orderId);
-        // console.log(order[0])
-        this.setState({ seeMore: true, seeMoreThisOrder: order });
+        // const order = this.state.myOrders.find(obj => obj.id === orderId);
+        const order = this.state.myOrders.filter(obj => {
+            return obj.id === orderId
+        })
 
-        // console.log(orderId)
+        this.setState({ seeMore: true, seeMoreThisOrder: order[0] });
+
+        console.log(order)
 
     }
 

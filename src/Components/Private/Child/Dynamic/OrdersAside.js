@@ -91,8 +91,8 @@ class OrdersAside extends React.Component {
 
     render() {
         
-        const seeMore = this.state.seeMore
-        let seeMoreThisOrder = this.state.seeMoreThisOrder
+        // const seeMore = this.state.seeMore
+        let {seeMoreThisOrder,seeMore} = this.props
         console.log(seeMoreThisOrder)
         let style = {}
         if (seeMore) {
