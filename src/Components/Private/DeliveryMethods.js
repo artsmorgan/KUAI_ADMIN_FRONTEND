@@ -211,7 +211,6 @@ class DeliveryMethods extends React.Component {
               <div className="row">
                 <div className="collapse-area col col-md-6 col-lg-6 col-sm-12 col-xs-12">
                   {this.props.delivery.loading ? <LoaderInScreen/> : this.renderMethods()}
-
                 </div>
               </div>
             </div>
