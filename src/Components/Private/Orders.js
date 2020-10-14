@@ -23,7 +23,7 @@ class Orders extends React.Component {
             seeMore: false,
             seeMoreThisOrder: {},
             myOrders: [],
-            previouseOrder:[],
+            previouseOrder: [],
             mobile: false,
             selectedOrderDiv: true,
             orderDiv: true,
@@ -62,11 +62,11 @@ class Orders extends React.Component {
         if (previousProps.order.loading && !this.props.order.loading) {
             const orders = this.props.order.data;
             let orderList = [];
-            Object.keys(orders).forEach(function(key) {
+            Object.keys(orders).forEach(function (key) {
                 console.log(orders[key].createdAt)
                 orderList.push(orders[key])
                 // console.log();
-              
+
             });
             this.setState({ myOrders: orderList })
             // console.log(orders)
@@ -78,14 +78,12 @@ class Orders extends React.Component {
 
         if (this.state.mobile) {
             this.setState({ orderDiv: false, selectedOrderDiv: true })
-        }else{
+        } else {
             this.setState({ orderDiv: true, selectedOrderDiv: true })
         }
-        const order = this.state.myOrders.filter(obj => {
-            return obj.id === orderId
-        })
+        const order = this.state.myOrders.find(obj => obj.id === orderId);
         // console.log(order[0])
-        this.setState({ seeMore: true, seeMoreThisOrder: order[0] });
+        this.setState({ seeMore: true, seeMoreThisOrder: order });
 
         // console.log(orderId)
 
@@ -97,27 +95,27 @@ class Orders extends React.Component {
 
     selectTab = (e, tabArrayPosition) => {
         this.setState({ selectedTab: pageTabs[tabArrayPosition] })
-        switch(tabArrayPosition){
+        switch (tabArrayPosition) {
             case 0:
                 this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
-                this.setState({ orderDiv: true,selectedOrderDiv:false })
+                this.setState({ orderDiv: true, selectedOrderDiv: false })
                 break;
             case 1:
                 this.getOrdersDispatched();
                 break;
             default:
-                this.setState({ orderDiv: true,selectedOrderDiv:false })
+                this.setState({ orderDiv: true, selectedOrderDiv: false })
         }
-        
+
     }
-    
+
 
 
     getOrdersDispatched = () => {
         let orders = [];
         // console.log("ORDENES DESPACHADAS")
         this.setState({ myOrders: orders })
-        
+
     }
 
     render() {
@@ -144,12 +142,12 @@ class Orders extends React.Component {
                                 <div>
                                     <Nav className="tab-cstm" variant="pills" defaultActiveKey="link-1">
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-1"  onClick={(e) => this.selectTab(e, 0)}>ORDENES</Nav.Link>
-                                         
+                                            <Nav.Link eventKey="link-1" onClick={(e) => this.selectTab(e, 0)}>ORDENES</Nav.Link>
+
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-2"  onClick={(e) => this.selectTab(e, 1)}>ORDENES DESPACHADAS</Nav.Link>
-                                     
+                                            <Nav.Link eventKey="link-2" onClick={(e) => this.selectTab(e, 1)}>ORDENES DESPACHADAS</Nav.Link>
+
                                         </Nav.Item>
                                     </Nav>
                                 </div>
@@ -159,8 +157,11 @@ class Orders extends React.Component {
                                             {
                                                 this.state.selectedTab === 'orderTab' &&
                                                 <>
-                                                    {
 
+                                                    {
+                                                        this.state.myOrders.length !== 0 &&
+                                                        <>
+                                                            {
                                                                 this.state.myOrders.map((item, index) => {
                                                                     return (
                                                                         <tr key={index}>
@@ -177,21 +178,49 @@ class Orders extends React.Component {
                                                                                         this.seeMore(item.id)
                                                                                     }}>
                                                                                     ver más
-                                                                                </Button>
+                                                                            </Button>
                                                                             </td>
                                                                         </tr>
                                                                     );
                                                                 })
                                                             }
+                                                        </>
+
+                                                    }
+                                                    {
+                                                        myOrders.length === 0 &&
+                                                        <>
+                                                            {
+                                                                <tr>
+                                                                    {/* <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td> */}
+                                                                    <td colSpan={3}>
+                                                                        <div align={"center"}>
+                                                                            <img src={SafePana} />
+                                                                            <h6>Actualmente no cuentas con ordenes activas</h6>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </>
+                                                    }
+
+                                                    {
+
+
+                                                    }
                                                 </>
                                             }
 
                                             {
                                                 this.state.selectedTab === 'orderDispatchedTab' &&
                                                 <>
-                                                        {
-                                                            this.state.previouseOrder.map((item, index) => {
-                                                            return (
+
+                                                    {
+                                                        this.state.myOrders.length !== 0 &&
+                                                        <>
+                                                            {
+                                                                this.state.previouseOrder.map((item, index) => {
+                                                                    return (
                                                                         <tr key={index}>
                                                                             <td className="ord-title">
                                                                                 {item.name}
@@ -211,14 +240,30 @@ class Orders extends React.Component {
                                                                         </tr>
                                                                     );
                                                                 })
-                                                        }          
+                                                            }
+                                                        </>
+
+                                                    }
+                                                    {
+                                                        myOrders.length === 0 &&
+                                                        <>
+                                                            {
+                                                                <div align={"center"}>
+                                                                    <img src={SafePana} />
+                                                                    {/* <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6> */}
+                                                                    <h6>Actualmente no cuentas con ordenes despachadas</h6>
+                                                                </div>
+                                                            }
+                                                        </>
+                                                    }
+
                                                 </>
                                             }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <OrdersAside selectedOrderDiv={this.state.selectedOrderDiv} seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder} />
+                            {this.state.seeMore && <OrdersAside selectedOrderDiv={this.state.selectedOrderDiv} seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder} />}
                         </div>
                     </div>
                 </div>
