@@ -5,7 +5,13 @@ import Sidebar from "./Child/Fixed/Sidebar/Sidebar";
 import OrdersAside from "./Child/Dynamic/OrdersAside";
 import myOrders from '../../util/data/myOrders.json'
 import SafePana from "../../assets/images/Safe-pana.svg";
-
+import {
+    getOrderFormData,
+    updateOrderFormData,
+    getDefaultConfigData
+} from '../../actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 const pageTabs = ['orderTab', 'orderDispatchedTab']
 class Orders extends React.Component {
 
@@ -17,6 +23,7 @@ class Orders extends React.Component {
             seeMore: false,
             seeMoreThisOrder: {},
             myOrders: [],
+            previouseOrder: [],
             mobile: false,
             selectedOrderDiv: true,
             orderDiv: true,
@@ -39,7 +46,6 @@ class Orders extends React.Component {
         });
     };
 
-
     componentDidMount() {
         this.updateDimension();
     }
@@ -48,18 +54,36 @@ class Orders extends React.Component {
         window.removeEventListener('resize', this.updateDimension);
     }
 
+    componentWillMount() {
+        this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
+    }
+
+    componentDidUpdate(previousProps) {
+        if (previousProps.order.loading && !this.props.order.loading) {
+            const orders = this.props.order.data;
+            let orderList = [];
+            Object.keys(orders).forEach(function (key) {
+                console.log(orders[key].createdAt)
+                orderList.push(orders[key])
+                // console.log();
+
+            });
+            this.setState({ myOrders: orderList })
+            // console.log(orders)
+        }
+    }
+
+
     seeMore = (orderId) => {
 
         if (this.state.mobile) {
             this.setState({ orderDiv: false, selectedOrderDiv: true })
-        }else{
+        } else {
             this.setState({ orderDiv: true, selectedOrderDiv: true })
         }
-        const order = this.state.myOrders.filter(obj => {
-            return obj.id === orderId
-        })
-        // console.log("desktop")
-        this.setState({ seeMore: true, seeMoreThisOrder: order[0] });
+        const order = this.state.myOrders.find(obj => obj.id === orderId);
+        // console.log(order[0])
+        this.setState({ seeMore: true, seeMoreThisOrder: order });
 
         // console.log(orderId)
 
@@ -71,26 +95,27 @@ class Orders extends React.Component {
 
     selectTab = (e, tabArrayPosition) => {
         this.setState({ selectedTab: pageTabs[tabArrayPosition] })
-        switch(tabArrayPosition){
+        switch (tabArrayPosition) {
             case 0:
-                this.setState({ orderDiv: true,selectedOrderDiv:false })
+                this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
+                this.setState({ orderDiv: true, selectedOrderDiv: false })
                 break;
             case 1:
                 this.getOrdersDispatched();
                 break;
             default:
-                this.setState({ orderDiv: true,selectedOrderDiv:false })
+                this.setState({ orderDiv: true, selectedOrderDiv: false })
         }
-        
+
     }
-    
+
 
 
     getOrdersDispatched = () => {
         let orders = [];
         // console.log("ORDENES DESPACHADAS")
         this.setState({ myOrders: orders })
-        
+
     }
 
     render() {
@@ -117,12 +142,12 @@ class Orders extends React.Component {
                                 <div>
                                     <Nav className="tab-cstm" variant="pills" defaultActiveKey="link-1">
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-1"  onClick={(e) => this.selectTab(e, 0)}>ORDENES</Nav.Link>
-                                         
+                                            <Nav.Link eventKey="link-1" onClick={(e) => this.selectTab(e, 0)}>ORDENES</Nav.Link>
+
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-2"  onClick={(e) => this.selectTab(e, 1)}>ORDENES DESPACHADAS</Nav.Link>
-                                     
+                                            <Nav.Link eventKey="link-2" onClick={(e) => this.selectTab(e, 1)}>ORDENES DESPACHADAS</Nav.Link>
+
                                         </Nav.Item>
                                     </Nav>
                                 </div>
@@ -132,26 +157,69 @@ class Orders extends React.Component {
                                             {
                                                 this.state.selectedTab === 'orderTab' &&
                                                 <>
-                                                    <tr>
-                                                        {/* <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td> */}
-                                                        <td colSpan={3}>
-                                                            <div align={"center"}>
-                                                                <img src={SafePana} />
-                                                                <h6>Actualmente no cuentas con ordenes activas</h6>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+
+                                                    {
+                                                        this.state.myOrders.length !== 0 &&
+                                                        <>
+                                                            {
+                                                                this.state.myOrders.map((item, index) => {
+                                                                    return (
+                                                                        <tr key={index}>
+                                                                            <td className="ord-title">
+                                                                                {item.id}
+                                                                                <span>{(new Date()).toLocaleDateString('en-US', item.createdAt)} | {item.cart.menu.length} items</span>
+                                                                            </td>
+                                                                            <td className="price">
+                                                                                ₡{item.montoTotal}
+                                                                            </td>
+                                                                            <td style={{ textAlign: 'right' }}>
+                                                                                <Button className="btn-detail"
+                                                                                    onClick={() => {
+                                                                                        this.seeMore(item.id)
+                                                                                    }}>
+                                                                                    ver más
+                                                                            </Button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })
+                                                            }
+                                                        </>
+
+                                                    }
+                                                    {
+                                                        myOrders.length === 0 &&
+                                                        <>
+                                                            {
+                                                                <tr>
+                                                                    {/* <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td> */}
+                                                                    <td colSpan={3}>
+                                                                        <div align={"center"}>
+                                                                            <img src={SafePana} />
+                                                                            <h6>Actualmente no cuentas con ordenes activas</h6>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </>
+                                                    }
+
+                                                    {
+
+
+                                                    }
                                                 </>
                                             }
 
                                             {
                                                 this.state.selectedTab === 'orderDispatchedTab' &&
                                                 <>
+
                                                     {
                                                         this.state.myOrders.length !== 0 &&
                                                         <>
                                                             {
-                                                                this.state.myOrders.map((item, index) => {
+                                                                this.state.previouseOrder.map((item, index) => {
                                                                     return (
                                                                         <tr key={index}>
                                                                             <td className="ord-title">
@@ -174,27 +242,28 @@ class Orders extends React.Component {
                                                                 })
                                                             }
                                                         </>
-                                                        
+
                                                     }
                                                     {
-                                                         myOrders.length === 0 &&
+                                                        myOrders.length === 0 &&
                                                         <>
-                                                        {
-                                                            <div align={"center"}>
-                                                            <img src={SafePana}/>
-                                                            {/* <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6> */}
-                                                            <h6>Actualmente no cuentas con ordenes despachadas</h6>
-                                                        </div>
-                                                        }
+                                                            {
+                                                                <div align={"center"}>
+                                                                    <img src={SafePana} />
+                                                                    {/* <h6>Acá podrás seleccionar las ordenes para ver sus detalles</h6> */}
+                                                                    <h6>Actualmente no cuentas con ordenes despachadas</h6>
+                                                                </div>
+                                                            }
                                                         </>
                                                     }
+
                                                 </>
                                             }
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <OrdersAside selectedOrderDiv={this.state.selectedOrderDiv} seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder} />
+                            {this.state.seeMore && <OrdersAside selectedOrderDiv={this.state.selectedOrderDiv} seeMore={this.state.seeMore} seeMoreThisOrder={this.state.seeMoreThisOrder} />}
                         </div>
                     </div>
                 </div>
@@ -203,4 +272,20 @@ class Orders extends React.Component {
     }
 }
 
-export default Orders;
+
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        {
+            getOrderFormData, updateOrderFormData, getDefaultConfigData
+        },
+        dispatch
+    )
+
+const mapStateToProps = store =>
+    (
+        {
+            order: store.order
+        }
+    )
+
+export default connect(mapStateToProps, mapDispatchToProps)(Orders)
