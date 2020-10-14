@@ -19,7 +19,7 @@ class OrdersAside extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        // console.log(props.seeMore)
+        
         this.setState({
             seeMore: props.seeMore,
             seeMoreThisOrder: props.seeMoreThisOrder,
@@ -27,6 +27,9 @@ class OrdersAside extends React.Component {
             seeExpress: props.seeMore ? false : null,
             selectedOrderDiv: props.selectedOrderDiv ? true : null,
         });
+
+        console.log(this.state.seeMoreThisOrder)
+        
     }
 
     seeMore = (orderId) => {
@@ -155,7 +158,7 @@ class OrdersAside extends React.Component {
 
 
                                 </button>
-                                <span>SINPE Móvil</span>
+                                <span>{seeMoreThisOrder.cart?seeMoreThisOrder.cart.paymentMethods.selected:"N/A"}</span>
                             </div>
                             <div className="btn-express" onClick={this.seeExpress}>
                                 <button className="inner">
@@ -167,20 +170,20 @@ class OrdersAside extends React.Component {
                                     </svg>
 
                                 </button>
-                                <span>Rápido</span>
+                                <span>{seeMoreThisOrder.cart?seeMoreThisOrder.cart.deliveryMethods.selected:"N/A"}</span>
                             </div>
                         </div>
                         <div className="order-ptable">
                             <table>
                                 <tbody>
                                 {
-                                    Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.items.map((item, index) => {
+                                    Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.cart.menu.map((item, index) => {
                                         return (
                                             <tr className="item" key={index}>
-                                                <td className="item-quantity">{item.quantity}X</td>
+                                                <td className="item-quantity">1 X</td>
                                                 <td className="item-name">
-                                                    {item.dishName}
-                                                    <span>{item.dishDetail}</span>
+                                                    {item.name}
+                                                    <span>{item.description}</span>
                                                 </td>
                                                 <td className="text-right item-price">
                                                     ₡{item.price}
@@ -203,19 +206,19 @@ class OrdersAside extends React.Component {
                                             </tr>
                                             <tr>
                                                 <td>Subtotal</td>
-                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.subTotal : "N/A"}</td>
+                                                <td className="text-right">₡{seeMoreThisOrder.montoTotal}</td>
                                             </tr>
                                             <tr>
                                                 <td>Impuestos</td>
-                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.taxes : "N/A"}</td>
+                                                <td className="text-right">₡0</td>
                                             </tr>
-                                            {/*<tr>
+                                            <tr>
                                                 <td>Envio express</td>
-                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.express : "N/A"}</td>
-                                            </tr>*/}
+                                                <td className="text-right">₡0</td>
+                                            </tr>
                                             <tr className="total">
                                                 <td>Total</td>
-                                                <td className="text-right">₡{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.prices.total : "N/A"}</td>
+                                                <td className="text-right">₡{seeMoreThisOrder.montoTotal}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -278,15 +281,15 @@ class OrdersAside extends React.Component {
                         <div className="order-desc-area">
                             <div>
                                 <label>recibe:</label>
-                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.name : "N/A"}</p>
+                                <p>{seeMoreThisOrder.orderBy}</p>
                             </div>
                             <div>
                                 <label>dirección:</label>
-                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.address.otherSigns : "N/A"}</p>
+                                {/* <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.address.otherSigns : "N/A"}</p> */}
                             </div>
                             <div>
                                 <label>barrio:</label>
-                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.address.neighborhood : "N/A"}</p>
+                                {/* <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.deliveryInformation.address.neighborhood : "N/A"}</p> */}
                             </div>
                         </div>
                     </div>
@@ -334,14 +337,13 @@ class OrdersAside extends React.Component {
                         <div className="order-desc-area">
                             <div>
                                 <label>número de referencia:</label>
-                                <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.paymentInformation.transferNumber : "N/A"}</p>
+                                {/* <p>{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.paymentInformation.transferNumber : "N/A"}</p> */}
                             </div>
                             <div>
                                 <label>captura:</label>
-                                <div className="cam"
-                                     style={Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.paymentInformation.attachment ? {display: 'none'} : {}}>
+                                {/* <div className="cam" style={Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.paymentInformation.attachment ? {display: 'none'} : {}}>
 
-                                </div>
+                                </div> */}
                             </div>
 
                         </div>
