@@ -63,10 +63,15 @@ class Orders extends React.Component {
             const orders = this.props.order.data;
             let orderList = [];
             Object.keys(orders).forEach(function (key) {
-                console.log(orders[key].createdAt)
-                orderList.push(orders[key])
-                // console.log();
+                /**Time */
+                var t = new Date(1970, 0, 1); // Epoch
+                t.setSeconds(orders[key]['createdAt']['_seconds']);
+                var d = new Date(t);
+                var time = d.getHours()+":"+d.getMinutes()
+                let data = orders[key];
+                data['createTime'] = time;
 
+                orderList.push(data)   
             });
             this.setState({ myOrders: orderList })
             // console.log(orders)
@@ -170,7 +175,7 @@ class Orders extends React.Component {
                                                                         <tr key={index}>
                                                                             <td className="ord-title">
                                                                                 {item.id}
-                                                                                <span>{(new Date()).toLocaleDateString('en-US', item.createdAt)} | {item.cart.menu.length} items</span>
+                                                                                <span>{item.createTime} | {item.cart.menu.length} items</span>
                                                                             </td>
                                                                             <td className="price">
                                                                                 ₡{item.montoTotal}
