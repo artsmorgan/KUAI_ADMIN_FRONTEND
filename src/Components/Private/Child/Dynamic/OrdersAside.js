@@ -18,38 +18,6 @@ class OrdersAside extends React.Component {
         }
     }
 
-    componentWillReceiveProps(props) {
-        
-        this.setState({
-            seeMore: props.seeMore,
-            seeMoreThisOrder: props.seeMoreThisOrder,
-            seeSinpeMobile: props.seeMore ? false : null,
-            seeExpress: props.seeMore ? false : null,
-            selectedOrderDiv: props.selectedOrderDiv ? true : null,
-        });
-
-        console.log(this.state.seeMoreThisOrder)
-        
-    }
-
-    seeMore = (orderId) => {
-        this.setState({
-            width: window.innerWidth
-        }, () => {
-            if (this.state.width < 1024) {
-                $(".order-aside").addClass('order-aside-mb');
-            } else {
-                
-            }
-        });
-        // console.log(orderId)
-        const order = this.state.myOrders.filter(obj => {
-            return obj.id === orderId
-        })
-        // console.log(order)
-        this.setState({seeMore: true, seeMoreThisOrder: order[0]});
-    }
-
     
 
     seeSinpeMobile = () => {
@@ -93,21 +61,10 @@ class OrdersAside extends React.Component {
         
         // const seeMore = this.state.seeMore
         let {seeMoreThisOrder,seeMore} = this.props
-        console.log(seeMoreThisOrder)
+        
+        
         let style = {}
-        if (seeMore) {
-            if (this.state.seeSinpeMobile || this.state.seeExpress) {
-                style.display = "none"
-            } else {
-                style.display = "none"
-            }
-        } else {
-            if (this.state.seeSinpeMobile || this.state.seeExpress) {
-                style.display = "none"
-            } else {
-                style.display = "block"
-            }
-        }
+        
         const xStyle = {cursor: "pointer"}
 
         return (
@@ -115,16 +72,16 @@ class OrdersAside extends React.Component {
                 <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " +' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
                 {/* (this.state.mobile ? 'order-aside-mb' : '')+ */}
                     <h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
-                    <div className="order-detail shadow-1" style={style}>
+                    {/* <div className="order-detail shadow-1" style={style}>
                         <p className="text-center select-ins">
                             Selecciona una
                             orden para ver
                             sus detalles
                         </p>
-                    </div>
+                    </div> */}
 
                     {/* Order Details start */}
-                    <div className="order-detail shadow-1" style={!seeMore ? {display: 'none'} : {}}>
+                    <div className="order-detail shadow-1" style={!seeMore || this.state.seeExpress||this.state.seeSinpeMobile ? {display: 'none'} : {}}>
                         <h3 className="order-title">{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.name : "N/A"}</h3>
                         <div className="action-container">
                             <div className="btn-snipe" onClick={this.seeSinpeMobile}>
