@@ -115,7 +115,7 @@ class Registry extends React.Component {
                 // console.log("Hi")
                 this.setState({registrySuccess: form.REGISTER.success}, () => {
                     if (this.state.registrySuccess) {
-                        window.setTimeout(this.doTheTaskAfterRegSuccess, 3333)
+                        window.setTimeout(this.doTheTaskAfterRegSuccess, 30000)
                     }
                 })
             }
