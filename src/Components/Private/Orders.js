@@ -12,6 +12,8 @@ import {
 } from '../../actions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import _ from 'lodash';
+
 const pageTabs = ['orderTab', 'orderDispatchedTab']
 class Orders extends React.Component {
 
@@ -23,7 +25,7 @@ class Orders extends React.Component {
             seeMore: false,
             seeMoreThisOrder: {},
             myOrders: [],
-            previouseOrder: [],
+            completedOrders: [],
             mobile: false,
             selectedOrderDiv: true,
             orderDiv: true,
@@ -61,23 +63,61 @@ class Orders extends React.Component {
     componentDidUpdate(previousProps) {
         if (previousProps.order.loading && !this.props.order.loading) {
             const orders = this.props.order.data;
-            let orderList = [];
+            let pendingOrders = [];
+            let completedOrders = [];
+            let THIS = this;
             Object.keys(orders).forEach(function (key) {
                 /**Time */
-                var t = new Date(1970, 0, 1); // Epoch
-                t.setSeconds(orders[key]['createdAt']['_seconds']);
-                var d = new Date(t);
-                var time = d.getHours()+":"+d.getMinutes()
-                let data = orders[key];
-                data['createTime'] = time;
+                let order = [];
+                order['status'] = orders[key]['status'];
+                order['id'] = orders[key]['id'];
+                order['orderBy'] = orders[key]['orderBy'];
+                order['montoTotal'] = orders[key]['montoTotal'];
+                order['restaurantId'] = orders[key]['restaurantId'];
+                order['createTime'] = THIS.formattingTime(orders[key]['createdAt']['_seconds']);
+                order['deliveryMethods'] = orders[key]['cart']['deliveryMethods'];
+                order['paymentMethods'] = orders[key]['cart']['paymentMethods'];
 
-                orderList.push(data)   
+                const productSimpleArr = _.groupBy(orders[key]['cart']['menu'], function(product) {
+                    return product.id;
+                });
+
+                let updatedMenu = []
+                Object.keys(productSimpleArr).forEach(function (key) {
+                    let item = {
+                        quantity:productSimpleArr[key].length,
+                        description: productSimpleArr[key][0].description,
+                        id: productSimpleArr[key][0].id,
+                        lineId: productSimpleArr[key][0].lineId,
+                        name: productSimpleArr[key][0].name,
+                        price: productSimpleArr[key][0].price
+                    }
+                    updatedMenu.push(item)
+                });
+
+                order['menu'] = updatedMenu;
+                if(orders[key]['status']=="pendiente"){   
+                    pendingOrders.push(order)  
+                }else{
+                    completedOrders.push(order)
+                }
             });
-            this.setState({ myOrders: orderList })
-            // console.log(orders)
+
+            this.setState({
+                myOrders:pendingOrders,
+                completedOrders:completedOrders
+            })
+
         }
     }
 
+    formattingTime(value){
+        var t = new Date(1970, 0, 1); // Epoch
+        t.setSeconds(value);
+        var d = new Date(t);
+        var time = d.getHours()+":"+d.getMinutes();
+        return time;
+    }
 
     seeMore = (orderId) => {
 
@@ -93,7 +133,7 @@ class Orders extends React.Component {
 
         this.setState({ seeMore: true, seeMoreThisOrder: order[0] });
 
-        console.log(order)
+        // console.log(order)
 
     }
 
@@ -103,9 +143,9 @@ class Orders extends React.Component {
 
     selectTab = (e, tabArrayPosition) => {
         this.setState({ selectedTab: pageTabs[tabArrayPosition] })
+        this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
         switch (tabArrayPosition) {
             case 0:
-                this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
                 this.setState({ orderDiv: true, selectedOrderDiv: false })
                 break;
             case 1:
@@ -175,7 +215,7 @@ class Orders extends React.Component {
                                                                         <tr key={index}>
                                                                             <td className="ord-title">
                                                                                 {item.id}
-                                                                                <span>{item.createTime} | {item.cart.menu.length} items</span>
+                                                                                <span>{item.createTime} | {item.menu.length} items</span>
                                                                             </td>
                                                                             <td className="price">
                                                                                 ₡{item.montoTotal}
@@ -224,18 +264,18 @@ class Orders extends React.Component {
                                                 <>
 
                                                     {
-                                                        this.state.myOrders.length !== 0 &&
+                                                        this.state.completedOrders.length !== 0 &&
                                                         <>
                                                             {
-                                                                this.state.previouseOrder.map((item, index) => {
+                                                                this.state.completedOrders.map((item, index) => {
                                                                     return (
                                                                         <tr key={index}>
                                                                             <td className="ord-title">
-                                                                                {item.name}
-                                                                                <span>{item.date} | {item.items.length} items</span>
+                                                                                {item.id}
+                                                                                <span>{item.createTime} | {item.menu.length} items</span>
                                                                             </td>
                                                                             <td className="price">
-                                                                                ₡{item.prices.total}
+                                                                                ₡{item.montoTotal}
                                                                             </td>
                                                                             <td style={{ textAlign: 'right' }}>
                                                                                 <Button className="btn-detail"
@@ -243,7 +283,7 @@ class Orders extends React.Component {
                                                                                         this.seeMore(item.id)
                                                                                     }}>
                                                                                     ver más
-                                                                                </Button>
+                                                                            </Button>
                                                                             </td>
                                                                         </tr>
                                                                     );
@@ -253,7 +293,7 @@ class Orders extends React.Component {
 
                                                     }
                                                     {
-                                                        myOrders.length === 0 &&
+                                                        this.state.completedOrders.length === 0 &&
                                                         <>
                                                             {
                                                                 <div align={"center"}>
