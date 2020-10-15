@@ -61,7 +61,8 @@ class OrdersAside extends React.Component {
         
         // const seeMore = this.state.seeMore
         let {seeMoreThisOrder,seeMore} = this.props
-        
+        // console.log(seeMoreThisOrder.menu)
+
         let style = {}
         
         const xStyle = {cursor: "pointer"}
@@ -81,7 +82,7 @@ class OrdersAside extends React.Component {
 
                     {/* Order Details start */}
                     <div className="order-detail shadow-1" style={!seeMore || this.state.seeExpress||this.state.seeSinpeMobile ? {display: 'none'} : {}}>
-                        <h3 className="order-title">{Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.name : "N/A"}</h3>
+                        <h3 className="order-title">{seeMoreThisOrder.id}</h3>
                         <div className="action-container">
                             <div className="btn-snipe" onClick={this.seeSinpeMobile}>
                                 <button className="inner">
@@ -115,7 +116,7 @@ class OrdersAside extends React.Component {
 
 
                                 </button>
-                                <span>{seeMoreThisOrder.cart?seeMoreThisOrder.cart.paymentMethods.selected:"N/A"}</span>
+                                <span>{seeMoreThisOrder.paymentMethods?seeMoreThisOrder.paymentMethods.selected:"N/A"}</span>
                             </div>
                             <div className="btn-express" onClick={this.seeExpress}>
                                 <button className="inner">
@@ -127,27 +128,26 @@ class OrdersAside extends React.Component {
                                     </svg>
 
                                 </button>
-                                <span>{seeMoreThisOrder.cart?seeMoreThisOrder.cart.deliveryMethods.selected:"N/A"}</span>
+                                <span>{seeMoreThisOrder.deliveryMethods?seeMoreThisOrder.deliveryMethods.selected:"N/A"}</span>
                             </div>
                         </div>
                         <div className="order-ptable">
                             <table>
                                 <tbody>
                                 {
-                                    Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object && seeMoreThisOrder.cart.menu.map((item, index) => {
-                                        return (
-                                            <tr className="item" key={index}>
-                                                <td className="item-quantity">1 X</td>
-                                                <td className="item-name">
-                                                    {item.name}
-                                                    <span>{item.description}</span>
-                                                </td>
-                                                <td className="text-right item-price">
-                                                    ₡{item.price}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })
+                                    seeMoreThisOrder.menu.map((item) =>
+                                        <tr className="item">
+                                        <td className="item-quantity">{item.quantity} X</td>
+                                        <td className="item-name">
+                                                {item.name}
+                                            <span>{item.description}</span>
+                                        </td>
+                                        <td className="text-right item-price">
+                                            ₡{item.price}
+                                        </td>
+                                    </tr>
+                                    )
+                                    
                                 }
                                 <tr>
                                     <td className="st-title" colSpan="3">
