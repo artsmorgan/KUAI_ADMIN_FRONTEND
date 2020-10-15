@@ -62,14 +62,13 @@ class OrdersAside extends React.Component {
         // const seeMore = this.state.seeMore
         let {seeMoreThisOrder,seeMore} = this.props
         
-        
         let style = {}
         
         const xStyle = {cursor: "pointer"}
 
         return (
             <> 
-                <div className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " +' '+(this.state.selectedOrderDiv ? '' : 'hidden')}>
+                <div className="col col-md-4 col-lg-4 col-sm-12 col-xs-12 ">
                 {/* (this.state.mobile ? 'order-aside-mb' : '')+ */}
                     <h4 className="text-center mb-hidden" style={{marginBottom: '20px'}}>Orden seleccionada</h4>
                     {/* <div className="order-detail shadow-1" style={style}>
