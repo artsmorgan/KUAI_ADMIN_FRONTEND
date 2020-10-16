@@ -2402,6 +2402,14 @@ body {
   }
 }
 
+.active-delivery{
+  svg{
+    fill: #fff;
+    path{
+      fill: #fff;
+    }
+  }
+}
 // @media only screen
 //   and (min-device-width: 320px)
 //   and (max-device-width: 1024px) {

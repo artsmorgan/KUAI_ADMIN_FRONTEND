@@ -121,15 +121,27 @@ class Orders extends React.Component {
 
     seeMore = (orderId) => {
 
+        let order=[];
+        if(this.state.selectedTab=='orderTab'){
+            order = this.state.myOrders.filter(obj => {
+                return obj.id === orderId
+            })
+        }else{
+            order = this.state.completedOrders.filter(obj => {
+                return obj.id === orderId
+            })
+        }
+
+
+
         if (this.state.mobile) {
             this.setState({ orderDiv: false, selectedOrderDiv: true })
         } else {
             this.setState({ orderDiv: true, selectedOrderDiv: true })
         }
         // const order = this.state.myOrders.find(obj => obj.id === orderId);
-        const order = this.state.myOrders.filter(obj => {
-            return obj.id === orderId
-        })
+        
+        
 
         this.setState({ seeMore: true, seeMoreThisOrder: order[0] });
 
@@ -195,7 +207,6 @@ class Orders extends React.Component {
                                         </Nav.Item>
                                         <Nav.Item>
                                             <Nav.Link eventKey="link-2" onClick={(e) => this.selectTab(e, 1)}>ORDENES DESPACHADAS</Nav.Link>
-
                                         </Nav.Item>
                                     </Nav>
                                 </div>

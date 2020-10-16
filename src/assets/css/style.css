@@ -754,6 +754,10 @@ body {
   border-radius: 15px;
 }
 
+.second-area{
+  padding-top: 0px !important;
+}
+
 .mod-rest-container h3 {
   text-align: center;
   margin-bottom: 30px;
@@ -2334,5 +2338,12 @@ body {
   .headerImage {
     display: none;
   }
+}
+
+.active-delivery svg{
+  fill: #fff;
+}
+.active-delivery svg path{
+  fill: #fff;
 }
 /*# sourceMappingURL=style.css.map */
