@@ -184,7 +184,9 @@ class ModifyRestaurant extends React.Component {
         this.setState({
             width: window.innerWidth
         }, () => {
+            console.log(this.state.width)
             if (this.state.width < 1024) {
+                
                 this.setState({ mobile: true });
                 let obj = this.state.selectedTab;
 
@@ -194,8 +196,12 @@ class ModifyRestaurant extends React.Component {
                 } else {
                     this.activateTab(e, obj)
                 }
+                let tabObj = this.state.formTab
 
-
+                tabObj.generalTab = true;
+                tabObj.informationTab = false;
+                tabObj.scheduleTab = false;
+                this.setState({ formTab: tabObj})
             } else {
                 let obj = this.state.formTab
 
@@ -622,6 +628,20 @@ class ModifyRestaurant extends React.Component {
         return returnType;
     }
 
+    getDefaultActiveKey(e) {
+        console.log(this.state.formTab)
+        let tab = this.state.selectedTab ? this.state.selectedTab:'generalTab';
+        switch (tab) {
+            case "informationTab":
+                return "link-2";
+            case "scheduleTab":
+                return "link-3";
+            default:
+                return "link-1";
+        }
+       
+    }
+
     activateTab(e, tabName) {
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
@@ -757,7 +777,7 @@ class ModifyRestaurant extends React.Component {
                     description: restaurant.description ? restaurant.description:'',
                     tinyUrl: !restaurant.tinyUrl ? this.shortendURL() : restaurant.tinyUrl
                 }
-            }, () => {
+            }, (e) => {
                 this.processScheduleValue("get");
                 this.shortendURL()
                 this.processAddressValue("get");
@@ -777,6 +797,9 @@ class ModifyRestaurant extends React.Component {
         // console.log(copyText.setSelectionRange(0, 99999))
         document.execCommand("copy");
     }
+
+
+   
 
 
     render() {
@@ -840,7 +863,7 @@ class ModifyRestaurant extends React.Component {
                                         {/* <div className="">New</div> */}
                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <Nav className="tab-cstm mb-visible" variant="pills"
-                                                defaultActiveKey="link-1">
+                                                defaultActiveKey={(e)=>this.getDefaultActiveKey(e)}>
                                                 <Nav.Item>
                                                     <Nav.Link href="javascript:void(0)" eventKey="link-1"
                                                         onClick={(e) => this.activateTab(e, 'generalTab')}>General</Nav.Link>
