@@ -2317,6 +2317,11 @@ body {
   display: none;
 }
 
+@media (max-width: 1366px) {
+  .hor-inline .time-block{
+    width: 100%;
+  }
+}
 @media (min-width: 320px) and (max-width: 1024px) {
   .mb-sidepanel {
     left: auto !important;
