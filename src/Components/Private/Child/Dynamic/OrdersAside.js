@@ -1,6 +1,8 @@
 import React from 'react';
 import $ from 'jquery';
 import SafePana from "../../../../assets/images/Safe-pana.svg";
+import axios from 'axios';
+import { toastr } from 'react-redux-toastr'
 
 class OrdersAside extends React.Component {
 
@@ -14,7 +16,8 @@ class OrdersAside extends React.Component {
             seeSinpeMobile: false,
             seeExpress: false,
             mobile:false,
-            selectedOrderDiv:true
+            selectedOrderDiv:true,
+            hideActions: false
         }
     }
 
@@ -93,6 +96,50 @@ class OrdersAside extends React.Component {
     }
 
 
+    processConfirm = (orderId) => {
+        // console.log('orderId',orderId)
+        axios.put(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}/${orderId}/confirme`, {}, {})
+        .then(response => {
+            const data = response.data
+            console.log(data)
+            if (response.status===200) {
+                toastr.success("", "Esta orden ha sido confirmada")
+                document.getElementById("orders-confirmed").click();
+            } else {
+                
+            }
+        })
+        .catch(error => {
+            const response = error.response
+            console.log('error',error)
+            if (response && response.status === 401) {
+                toastr.error("Error", "Se ha producido un error confirmando esta orden")
+            }
+        })
+    }
+    processDispatch = (orderId) => {
+        // console.log('orderId',orderId)
+        axios.put(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}/${orderId}/dispatch`, {}, {})
+        .then(response => {
+            const data = response.data
+            console.log(data)
+            if (response.status===200) {
+                toastr.success("", "Esta orden ha sido Despachada")
+                document.getElementById("orders-dispatched").click();
+            } else {
+                
+            }
+        })
+        .catch(error => {
+            const response = error.response
+            console.log('error',error)
+            if (response && response.status === 401) {
+                toastr.error("Error", "Se ha producido un error confirmando esta orden")
+            }
+        })
+    }
+
+
 
 
     render() {
@@ -162,7 +209,7 @@ class OrdersAside extends React.Component {
                                         <path d="M22.7501 11.1665H21.5835C20.6186 11.1665 19.8335 11.9517 19.8335 12.9165V14.0832C19.8335 15.048 20.6186 15.8332 21.5835 15.8332H22.7501C23.715 15.8332 24.5001 15.048 24.5001 14.0832V12.9165C24.5001 11.9517 23.715 11.1665 22.7501 11.1665ZM23.3335 14.0832C23.3335 14.4052 23.0721 14.6666 22.7501 14.6666H21.5835C21.2615 14.6666 21.0001 14.4052 21.0001 14.0832V12.9166C21.0001 12.5946 21.2615 12.3332 21.5835 12.3332H22.7501C23.0721 12.3332 23.3335 12.5946 23.3335 12.9166V14.0832Z" fill="white" />
                                     </svg>
                                 </button>
-                                <span>De Pago</span>
+                                <span>Método de Pago</span>
                             </div>
                             <div className="btn-express" onClick={this.seeExpress}>
                                 <button className="inner active-delivery">
@@ -193,7 +240,7 @@ class OrdersAside extends React.Component {
                                 </svg>
 
                                 </button>
-                                <span>De Entrega</span>
+                                <span>Método de Entrega</span>
                             </div>
                         </div>
                         <div className="order-ptable">
@@ -248,10 +295,13 @@ class OrdersAside extends React.Component {
                                 </tr>
                                 </tbody>
                             </table>
-
+                            { (seeMoreThisOrder.status!=='despachado' || this.state.hideActions === true) ? 
                             <div className="action-container">
-                                <div className="btn-confirm">
-                                    <button className="inner" onClick={() => {this.confirmOrder(Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.id : null)}}>
+                                <>{console.log(seeMoreThisOrder)}</>
+                                <>{console.log(seeMoreThisOrder.status)}</>
+                                <div className={"btn-hold"+ (seeMoreThisOrder.status=='pendiente' ? ' active' : '')} 
+                                     onClick={ seeMoreThisOrder.status=='pendiente' ? e => this.processConfirm(seeMoreThisOrder.id) : null }>
+                                    <button className="inner" >
                                         <svg width="41" height="42" viewBox="0 0 41 42" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -261,8 +311,9 @@ class OrdersAside extends React.Component {
                                     </button>
                                     <span>Confirmar</span>
                                 </div>
-                                <div className="btn-hold">
-                                    <button className="inner" onClick={() => {this.packOffOrder(Object.keys(seeMoreThisOrder).length !== 0 && seeMoreThisOrder.constructor === Object ? seeMoreThisOrder.id : null)}}>
+                                <div className={"btn-hold"+ (seeMoreThisOrder.status=='confirmado' ? ' active' : '')} 
+                                    onClick={ seeMoreThisOrder.status=='confirmado' ? e => this.processDispatch(seeMoreThisOrder.id) : null }>
+                                    <button className="inner" >
                                         <svg width="31" height="32" viewBox="0 0 31 32" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <path fillRule="evenodd" clipRule="evenodd"
@@ -273,6 +324,7 @@ class OrdersAside extends React.Component {
                                     <span>Despachar</span>
                                 </div>
                             </div>
+                            :''}
                         </div>
                     </div>
                     {/* Order details end */}

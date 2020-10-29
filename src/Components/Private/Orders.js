@@ -13,8 +13,11 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import _ from 'lodash';
+import Request from 'axios-request-handler';
+import { toastr } from 'react-redux-toastr'
 
-const pageTabs = ['orderTab', 'orderDispatchedTab']
+
+const pageTabs = ['orderTab', 'orderDispatchedTab', 'orderConfirmedTab']
 class Orders extends React.Component {
 
     constructor(props) {
@@ -50,6 +53,86 @@ class Orders extends React.Component {
 
     componentDidMount() {
         this.updateDimension();
+        let previousOrders = 0;
+        let counter = 0;
+        const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}`, {
+            cancelable:true, //default is true
+        });
+
+        
+
+        orders.poll(10000).get((response) => {
+            // console.log(response.data);
+            
+            const grouped = _.mapValues(_.groupBy(response.data, 'status'),  clist => clist.map(order => _.omit(order, 'status')));
+            console.log('previousOrders', previousOrders);
+            console.log('grouped.pendiente.length', grouped.pendiente.length);
+
+            // if(counter === 0)
+            //     previousOrders = grouped.pendiente.length
+
+            if(previousOrders < grouped.pendiente.length && counter > 0){
+
+                previousOrders = grouped.pendiente.length;
+                let pendingOrders = [];
+                let completedOrders = [];
+                let dispatchedOrders = [];
+                let THIS = this;
+                const orders = response.data
+                Object.keys(orders).forEach(function (key) {
+                    /**Time */
+                    let order = [];
+                    order['status'] = orders[key]['status'];
+                    order['id'] = orders[key]['id'];
+                    order['orderBy'] = orders[key]['orderBy'];
+                    order['montoTotal'] = orders[key]['montoTotal'];
+                    order['restaurantId'] = orders[key]['restaurantId'];
+                    order['createTime'] = THIS.formattingTime(orders[key]['createdAt']['_seconds']);
+                    order['deliveryMethods'] = orders[key]['cart']['deliveryMethods'];
+                    order['paymentMethods'] = orders[key]['cart']['paymentMethods'];
+                    order['totalProducts'] = orders[key]['cart']['menu'].length;
+
+                    const productSimpleArr = _.groupBy(orders[key]['cart']['menu'], function(product) {
+                        return product.id;
+                    });
+
+                    let updatedMenu = []
+                    Object.keys(productSimpleArr).forEach(function (key) {
+                        let item = {
+                            quantity:productSimpleArr[key].length,
+                            description: productSimpleArr[key][0].description,
+                            id: productSimpleArr[key][0].id,
+                            lineId: productSimpleArr[key][0].lineId,
+                            name: productSimpleArr[key][0].name,
+                            price: productSimpleArr[key][0].price
+                        }
+                        updatedMenu.push(item)
+                    });
+
+                    order['menu'] = updatedMenu;
+                    if(orders[key]['status']=="pendiente"){   
+                        pendingOrders.push(order)  
+                    }else if(orders[key]['status']=="confirmado"){
+                        completedOrders.push(order)
+                    }else if(orders[key]['status']=="despachado"){
+                        dispatchedOrders.push(order)
+                    }
+                });
+
+                this.setState({
+                    myOrders:pendingOrders,
+                    completedOrders:completedOrders,
+                    dispatchedOrders: dispatchedOrders
+                })
+                toastr.success("", "Tienes una nueva orden")
+
+            }
+                
+            console.log(grouped);
+            
+            counter++;
+            // you can cancel polling by returning false
+        });
     }
 
     componentWillUnmount() {
@@ -65,6 +148,7 @@ class Orders extends React.Component {
             const orders = this.props.order.data;
             let pendingOrders = [];
             let completedOrders = [];
+            let dispatchedOrders = [];
             let THIS = this;
             Object.keys(orders).forEach(function (key) {
                 /**Time */
@@ -77,6 +161,7 @@ class Orders extends React.Component {
                 order['createTime'] = THIS.formattingTime(orders[key]['createdAt']['_seconds']);
                 order['deliveryMethods'] = orders[key]['cart']['deliveryMethods'];
                 order['paymentMethods'] = orders[key]['cart']['paymentMethods'];
+                order['totalProducts'] = orders[key]['cart']['menu'].length;
 
                 const productSimpleArr = _.groupBy(orders[key]['cart']['menu'], function(product) {
                     return product.id;
@@ -98,14 +183,17 @@ class Orders extends React.Component {
                 order['menu'] = updatedMenu;
                 if(orders[key]['status']=="pendiente"){   
                     pendingOrders.push(order)  
-                }else{
+                }else if(orders[key]['status']=="confirmado"){
                     completedOrders.push(order)
+                }else if(orders[key]['status']=="despachado"){
+                    dispatchedOrders.push(order)
                 }
             });
 
             this.setState({
                 myOrders:pendingOrders,
-                completedOrders:completedOrders
+                completedOrders:completedOrders,
+                dispatchedOrders: dispatchedOrders
             })
 
         }
@@ -126,8 +214,12 @@ class Orders extends React.Component {
             order = this.state.myOrders.filter(obj => {
                 return obj.id === orderId
             })
-        }else{
+        }else if(this.state.selectedTab=='orderDispatchedTab'){
             order = this.state.completedOrders.filter(obj => {
+                return obj.id === orderId
+            })
+        }else if(this.state.selectedTab=='orderConfirmedTab'){
+            order = this.state.dispatchedOrders.filter(obj => {
                 return obj.id === orderId
             })
         }
@@ -178,6 +270,9 @@ class Orders extends React.Component {
 
     }
 
+
+
+
     render() {
         const { myOrders } = this.state
 
@@ -202,11 +297,14 @@ class Orders extends React.Component {
                                 <div>
                                     <Nav className="tab-cstm" variant="pills" defaultActiveKey="link-1">
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-1" onClick={(e) => this.selectTab(e, 0)}>ORDENES</Nav.Link>
+                                            <Nav.Link eventKey="link-1" id="orders-all" onClick={(e) => this.selectTab(e, 0)}>ORDENES</Nav.Link>
 
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Nav.Link eventKey="link-2" onClick={(e) => this.selectTab(e, 1)}>ORDENES DESPACHADAS</Nav.Link>
+                                            <Nav.Link eventKey="link-3" id="orders-confirmed" onClick={(e) => this.selectTab(e, 1)}>ORDENES CONFIRMADAS</Nav.Link>
+                                        </Nav.Item>
+                                        <Nav.Item>
+                                            <Nav.Link eventKey="link-2" id="orders-dispatched" onClick={(e) => this.selectTab(e, 2)}>ORDENES DESPACHADAS</Nav.Link>
                                         </Nav.Item>
                                     </Nav>
                                 </div>
@@ -226,7 +324,7 @@ class Orders extends React.Component {
                                                                         <tr key={index}>
                                                                             <td className="ord-title">
                                                                                 {item.id}
-                                                                                <span>{item.createTime} | {item.menu.length} items</span>
+                                                                                <span>{item.createTime} | {item.totalProducts} items</span>
                                                                             </td>
                                                                             <td className="price">
                                                                                 ₡{item.montoTotal}
@@ -256,6 +354,63 @@ class Orders extends React.Component {
                                                                         <div align={"center"}>
                                                                             <img src={SafePana} />
                                                                             <h6>Actualmente no cuentas con ordenes activas</h6>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        </>
+                                                    }
+
+                                                    {
+
+
+                                                    }
+                                                </>
+                                            }
+
+{
+                                                this.state.selectedTab === 'orderConfirmedTab' &&
+                                                <>
+
+                                                    {
+                                                        this.state.dispatchedOrders.length !== 0 &&
+                                                        <>
+                                                            {
+                                                                this.state.dispatchedOrders.map((item, index) => {
+                                                                    return (
+                                                                        <tr key={index}>
+                                                                            <td className="ord-title">
+                                                                                {item.id}
+                                                                                <span>{item.createTime} | {item.totalProducts} items</span>
+                                                                            </td>
+                                                                            <td className="price">
+                                                                                ₡{item.montoTotal}
+                                                                            </td>
+                                                                            <td style={{ textAlign: 'right' }}>
+                                                                                <Button className="btn-detail"
+                                                                                    onClick={() => {
+                                                                                        this.seeMore(item.id)
+                                                                                    }}>
+                                                                                    ver más
+                                                                            </Button>
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })
+                                                            }
+                                                        </>
+
+                                                    }
+                                                    {
+                                                        this.state.dispatchedOrders.length === 0 &&
+                                                        <>
+                                                            {
+                                                                <tr>
+                                                                    {/* <td colSpan={3}><h1 className="display-4">Actualmente no cuentas con ordenes activas</h1></td> */}
+                                                                    <td colSpan={3}>
+                                                                        <div align={"center"}>
+                                                                            <img src={SafePana} />
+                                                                            <h6>Actualmente no cuentas con ordenes Confirmadas</h6>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
