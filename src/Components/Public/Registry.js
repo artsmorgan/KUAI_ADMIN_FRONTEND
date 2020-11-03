@@ -17,7 +17,7 @@ class Registry extends React.Component {
         super(props);
 
         this.state = {
-            form: {name: '', restaurantName: '', email: '', password: ''},
+            form: {name: '', restaurantName: '', email: '', password: '', phonne: ''},
             step: 'REGISTER',
             show: false,
             registrySuccess: false,
@@ -25,7 +25,8 @@ class Registry extends React.Component {
 
         SimpleReactValidator.addLocale('es', {
             required: 'este campo es requerido',
-            email: 'Introduzca un correo electrónico válido'
+            email: 'Introduzca un correo electrónico válido',
+            phone: 'El teléfono es requerido'
         });
 
         this.validator = new SimpleReactValidator({
@@ -173,6 +174,12 @@ class Registry extends React.Component {
                                 {this.validator.message('password', this.state.form.password, 'required|mixPass')}
                             </p>
                             <p className="help-txt">Minimo 8 caracteres, letras y números unicamente.</p>
+                            <input type="text" placeholder="Teléfono" name="phone"
+                                   onChange={this.inputChangeHandler}
+                                   value={this.state.form.phone}/>
+                            <p style={{color: "red"}}>
+                                {this.validator.message('phone', this.state.form.phone, 'required')}
+                            </p>
                             <Button className="btn btn-theme" type="submit">
                                 REGISTRARSE
                             </Button>
