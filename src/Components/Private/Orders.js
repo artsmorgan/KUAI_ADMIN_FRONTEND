@@ -59,76 +59,80 @@ class Orders extends React.Component {
             cancelable:true, //default is true
         });
 
-        
+        console.log('order',localStorage.getItem('restaurantId'))
 
         orders.poll(10000).get((response) => {
-            // console.log(response.data);
+            console.log(response.data);
+            // if()
             
-            const grouped = _.mapValues(_.groupBy(response.data, 'status'),  clist => clist.map(order => _.omit(order, 'status')));
-            console.log('previousOrders', previousOrders);
-            console.log('grouped.pendiente.length', grouped.pendiente.length);
+            if(response.data && response.data.length > 0 ){
+                const grouped = _.mapValues(_.groupBy(response.data, 'status'),  clist => clist.map(order => _.omit(order, 'status')));
+                console.log('previousOrders', previousOrders);
+                console.log('grouped.pendiente.length', grouped.pendiente.length);
 
-            // if(counter === 0)
-            //     previousOrders = grouped.pendiente.length
+                // if(counter === 0)
+                //     previousOrders = grouped.pendiente.length
 
-            if(previousOrders < grouped.pendiente.length && counter > 0){
+                if(previousOrders < grouped.pendiente.length && counter > 0){
 
-                previousOrders = grouped.pendiente.length;
-                let pendingOrders = [];
-                let completedOrders = [];
-                let dispatchedOrders = [];
-                let THIS = this;
-                const orders = response.data
-                Object.keys(orders).forEach(function (key) {
-                    /**Time */
-                    let order = [];
-                    order['status'] = orders[key]['status'];
-                    order['id'] = orders[key]['id'];
-                    order['orderBy'] = orders[key]['orderBy'];
-                    order['montoTotal'] = orders[key]['montoTotal'];
-                    order['restaurantId'] = orders[key]['restaurantId'];
-                    order['createTime'] = THIS.formattingTime(orders[key]['createdAt']['_seconds']);
-                    order['deliveryMethods'] = orders[key]['cart']['deliveryMethods'];
-                    order['paymentMethods'] = orders[key]['cart']['paymentMethods'];
-                    order['totalProducts'] = orders[key]['cart']['menu'].length;
+                    previousOrders = grouped.pendiente.length;
+                    let pendingOrders = [];
+                    let completedOrders = [];
+                    let dispatchedOrders = [];
+                    let THIS = this;
+                    const orders = response.data
+                    Object.keys(orders).forEach(function (key) {
+                        /**Time */
+                        let order = [];
+                        order['status'] = orders[key]['status'];
+                        order['id'] = orders[key]['id'];
+                        order['orderBy'] = orders[key]['orderBy'];
+                        order['montoTotal'] = orders[key]['montoTotal'];
+                        order['restaurantId'] = orders[key]['restaurantId'];
+                        order['createTime'] = THIS.formattingTime(orders[key]['createdAt']['_seconds']);
+                        order['deliveryMethods'] = orders[key]['cart']['deliveryMethods'];
+                        order['paymentMethods'] = orders[key]['cart']['paymentMethods'];
+                        order['totalProducts'] = orders[key]['cart']['menu'].length;
 
-                    const productSimpleArr = _.groupBy(orders[key]['cart']['menu'], function(product) {
-                        return product.id;
-                    });
+                        const productSimpleArr = _.groupBy(orders[key]['cart']['menu'], function(product) {
+                            return product.id;
+                        });
 
-                    let updatedMenu = []
-                    Object.keys(productSimpleArr).forEach(function (key) {
-                        let item = {
-                            quantity:productSimpleArr[key].length,
-                            description: productSimpleArr[key][0].description,
-                            id: productSimpleArr[key][0].id,
-                            lineId: productSimpleArr[key][0].lineId,
-                            name: productSimpleArr[key][0].name,
-                            price: productSimpleArr[key][0].price
+                        let updatedMenu = []
+                        Object.keys(productSimpleArr).forEach(function (key) {
+                            let item = {
+                                quantity:productSimpleArr[key].length,
+                                description: productSimpleArr[key][0].description,
+                                id: productSimpleArr[key][0].id,
+                                lineId: productSimpleArr[key][0].lineId,
+                                name: productSimpleArr[key][0].name,
+                                price: productSimpleArr[key][0].price
+                            }
+                            updatedMenu.push(item)
+                        });
+
+                        order['menu'] = updatedMenu;
+                        if(orders[key]['status']=="pendiente"){   
+                            pendingOrders.push(order)  
+                        }else if(orders[key]['status']=="confirmado"){
+                            completedOrders.push(order)
+                        }else if(orders[key]['status']=="despachado"){
+                            dispatchedOrders.push(order)
                         }
-                        updatedMenu.push(item)
                     });
 
-                    order['menu'] = updatedMenu;
-                    if(orders[key]['status']=="pendiente"){   
-                        pendingOrders.push(order)  
-                    }else if(orders[key]['status']=="confirmado"){
-                        completedOrders.push(order)
-                    }else if(orders[key]['status']=="despachado"){
-                        dispatchedOrders.push(order)
-                    }
-                });
+                    this.setState({
+                        myOrders:pendingOrders,
+                        completedOrders:completedOrders,
+                        dispatchedOrders: dispatchedOrders
+                    })
+                    toastr.success("", "Tienes una nueva orden")
 
-                this.setState({
-                    myOrders:pendingOrders,
-                    completedOrders:completedOrders,
-                    dispatchedOrders: dispatchedOrders
-                })
-                toastr.success("", "Tienes una nueva orden")
-
+                }
+                    
+                console.log(grouped);
             }
-                
-            console.log(grouped);
+            
             
             counter++;
             // you can cancel polling by returning false
@@ -330,7 +334,7 @@ class Orders extends React.Component {
                                                                                 ₡{item.montoTotal}
                                                                             </td>
                                                                             <td style={{ textAlign: 'right' }}>
-                                                                                <Button className="btn-detail"
+                                                                                <Button className="btn-detail" id={'seemore-'+item.id}
                                                                                     onClick={() => {
                                                                                         this.seeMore(item.id)
                                                                                     }}>

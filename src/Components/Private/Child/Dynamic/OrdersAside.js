@@ -103,8 +103,11 @@ class OrdersAside extends React.Component {
             const data = response.data
             console.log(data)
             if (response.status===200) {
+                const id = "seemore-"+orderId;
+                console.log('id',id)
                 toastr.success("", "Esta orden ha sido confirmada")
                 document.getElementById("orders-confirmed").click();
+                document.getElementById(id).click();
             } else {
                 
             }
@@ -126,6 +129,7 @@ class OrdersAside extends React.Component {
             if (response.status===200) {
                 toastr.success("", "Esta orden ha sido Despachada")
                 document.getElementById("orders-dispatched").click();
+                document.getElementById("seemore-"+orderId).click();
             } else {
                 
             }

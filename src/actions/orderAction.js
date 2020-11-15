@@ -22,8 +22,8 @@ const UPDATE_ORDER_URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/o
 export const getOrderFormData = (payload) => {
     return (dispatch, getState) => {
         dispatch(getOrderFormRequest())
-        // let URL = GET_ORDER_URL + payload.restaurantId;
-        let URL = GET_ORDER_URL + 'b7bf6410-1bb8-4395-a0ad-918d5d48d522';
+        let URL = GET_ORDER_URL + payload.restaurantId;
+        // let URL = GET_ORDER_URL + 'b7bf6410-1bb8-4395-a0ad-918d5d48d522';
 
         if (URL) {
             const state = getState()
