@@ -480,7 +480,7 @@ class DeliveryMethods extends React.Component {
                     <div className="col">
                         <div className="row">
                             <div className="col">
-                                <label htmlFor="">Precio por kilometro</label>
+                                <label htmlFor="">Costo de envío</label>
                                 <input type="number" min="0" className="uni-input"
                                        onChange={(e) => this.inputChangeHandler(e, 'expressPrecioEnvio')}
                                        value={this.state.dataToPost.expressPrecioEnvio} name="expressPrecioEnvio"/>

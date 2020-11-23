@@ -442,7 +442,7 @@ body {
 
 .order-detail {
   background: #fff;
-  height: calc(100vh - 160px);
+  min-height: calc(100vh - 160px);
   border-radius: 18px;
   padding-top: 15px;
   position: relative;
@@ -473,7 +473,7 @@ body {
   border-radius: 12px;
   display: inline-block;
   width: 80px;
-  height: 95px;
+  min-height: 95px;
   margin: 10px 15px;
 }
 
@@ -497,7 +497,7 @@ body {
   border-radius: 12px;
   display: inline-block;
   width: 80px;
-  height: 95px;
+  min-height: 95px;
   margin: 10px 15px;
 }
 

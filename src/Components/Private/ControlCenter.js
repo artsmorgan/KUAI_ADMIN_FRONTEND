@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getControlCenterMethodFormData } from '../../actions';
 import SafePana from "../../assets/images/Safe-pana.svg";
+import axios from 'axios';
 
 class ControlCenter extends React.Component {
   constructor(props) {
@@ -18,6 +19,8 @@ class ControlCenter extends React.Component {
       totalTodaySales: 0,
       totalYestardaySales: 0,
       totalYesterdayOrders: 0,
+      totalWeekSales: 0,
+      totalWeekOrders: 0,
       commissionOrders:0,
       commissionSales:0,
       success:false,
@@ -25,25 +28,56 @@ class ControlCenter extends React.Component {
   }
 
   componentDidUpdate(previousProps) {
-    if (!this.state.success && this.props.controlCenter.success) {
-        const controlCenter = this.props.controlCenter;
-        this.setState({
-          totalMonthOrders: controlCenter.totalMonthOrders,
-          totalMonthSales: controlCenter.totalMonthSales,
-          totalTodayOrders: controlCenter.totalTodayOrders,
-          totalTodaySales: controlCenter.totalTodaySales,
-          totalYestardaySales: controlCenter.totalTodaySales,
-          totalYesterdayOrders: controlCenter.totalYesterdayOrders,
-          commissionOrders:controlCenter.commission.orders,
-          commissionSales:controlCenter.commission.sales,
-          success:true
-        });
-      }
+    // if (!this.state.success && this.props.controlCenter.success) {
+        // const controlCenter = this.props.controlCenter;
+        // console.log('controlCenter ---> ',controlCenter)
+        // this.setState({
+        //   totalMonthOrders: controlCenter.totalMonthOrders,
+        //   totalMonthSales: controlCenter.totalMonthSales,
+        //   totalTodayOrders: controlCenter.totalTodayOrders,
+        //   totalTodaySales: controlCenter.totalTodaySales,
+        //   totalYestardaySales: controlCenter.totalTodaySales,
+        //   totalYesterdayOrders: controlCenter.totalYesterdayOrders,
+        //   commissionOrders:controlCenter.commission.orders,
+        //   commissionSales:controlCenter.commission.sales,
+        //   success:true
+        // });
+      // }
+      axios.get(`https://us-central1-kuai-test.cloudfunctions.net/api/dashboard/${localStorage.getItem('restaurantId')}`, {}, {})
+        .then(response => {
+            const data = response.data
+            
+            if (response.status===200) {
+              console.log(data)
+              this.setState({
+                totalMonthOrders: data.month.count,
+                totalMonthSales: data.month.amount,
+                totalTodayOrders: data.today.count,
+                totalTodaySales: data.today.amount,
+                totalYestardaySales: data.yesterday.amount,
+                totalYesterdayOrders: data.yesterday.count,
+                commissionOrders:data.month.count,
+                commissionSales:data.comission,
+                totalWeekSales: data.week.amount,
+                totalWeekOrders: data.week.count,
+              })
+            } else {
+                
+            }
+        })
+        .catch(error => {
+            const response = error.response
+            console.log('error',error)
+            if (response && response.status === 401) {
+                // toastr.error("Error", "Se ha producido un error confirmando esta orden")
+            }
+        })
 }
 
 
   componentWillMount() {
-    this.props.getControlCenterMethodFormData({ restaurantId: localStorage.getItem('restaurantId') })
+    // const controlCenter = this.props.getControlCenterMethodFormData({ restaurantId: localStorage.getItem('restaurantId') })
+    // console.log('controlCenter',controlCenter )
 
   }
 
@@ -55,16 +89,16 @@ class ControlCenter extends React.Component {
           <Navbar />
           <div className="flex-area content container-fluid">
             <div className="row">
-              <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-              <div align={"center"}>
+              <div className="col-md-8 col-lg-8 col-sm-12 col-xs-12">
+              {/* <div align={"center"}>
                   <img src={SafePana}/>
                   <h6>Acá podrás ver los totales de ventas diarios, semanales, etc. y el total de comisión mensual.</h6>
-                </div>
-                {/* <h3 className="text-center">Total De Hoy</h3> */}
-                {/* <div className="desk-total-view row">
+                </div> */}
+                <h3 className="text-center">Total De Hoy</h3> 
+                <div className="desk-total-view row">
                   <div className="col">
                     <label htmlFor="">
-                    {this.state.totalTodaySales} <span>Ordenes</span>
+                    {this.state.totalTodayOrders} <span>Ordenes</span>
                     </label>
                   </div>
                   <div className="col">
@@ -90,12 +124,12 @@ class ControlCenter extends React.Component {
                 <div className="desk-total-view white row">
                   <div className="col">
                     <label htmlFor="">
-                      ## <span>Ordenes</span>
+                    {this.state.totalWeekOrders} <span>Ordenes</span>
                     </label>
                   </div>
                   <div className="col">
                     <label htmlFor="">
-                      ₡##.### <span>Ventas</span>
+                    ₡{this.state.totalWeekSales} <span>Ventas</span>
                     </label>
                   </div>
                 </div>
@@ -114,7 +148,7 @@ class ControlCenter extends React.Component {
                   </div>
                 </div>
               </div>
-              <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+              <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12">
                 <h3 className="text-center">Costo de comisión</h3>
                 <div className="desk-total-view white row">
                   <div className="col">
@@ -127,7 +161,7 @@ class ControlCenter extends React.Component {
                       ₡{this.state.commissionSales} <span>Ventas</span>
                     </label>
                   </div>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>

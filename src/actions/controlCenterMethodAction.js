@@ -16,7 +16,7 @@ const GET_CONTROL_CENTER_METHOD_URL = '/api/site/';
 export const getControlCenterMethodFormData = (payload) => {
     return (dispatch, getState) => {
         dispatch(getControlCenterMethodFormRequest())
-        let URL = GET_CONTROL_CENTER_METHOD_URL + payload.restaurantId+'/dashboard';
+        let URL = 'https://us-central1-kuai-test.cloudfunctions.net/api/dashboard/' + payload.restaurantId;
         // console.log("---------------")
         // console.log(URL)
         if (URL) {

@@ -198,7 +198,7 @@ class Sidebar extends React.Component {
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                Ordenes <small>(muy pronto)</small>
+                                Ordenes 
                             </Link>
                         </li>
                         <li>
@@ -393,7 +393,7 @@ class Sidebar extends React.Component {
                                 </svg>
 
 
-                                Centro de Control <small>(muy pronto)</small>
+                                Centro de Control 
                             </Link>
                         </li>
                         <li>
