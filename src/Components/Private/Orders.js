@@ -55,7 +55,8 @@ class Orders extends React.Component {
         this.updateDimension();
         let previousOrders = 0;
         let counter = 0;
-        const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}`, {
+        // const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}`, {
+        const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/94b6f20a-4861-45ea-bea3-7c161fe9b0d4`, {
             cancelable:true, //default is true
         });
 
@@ -67,13 +68,13 @@ class Orders extends React.Component {
             
             if(response.data && response.data.length > 0 ){
                 const grouped = _.mapValues(_.groupBy(response.data, 'status'),  clist => clist.map(order => _.omit(order, 'status')));
-                console.log('previousOrders', previousOrders);
-                console.log('grouped.pendiente.length', grouped.pendiente.length);
+                // console.log('previousOrders', previousOrders);
+                // console.log('grouped.pendiente.length', grouped.pendiente.length);
 
                 // if(counter === 0)
                 //     previousOrders = grouped.pendiente.length
 
-                if(previousOrders < grouped.pendiente.length && counter > 0){
+                if(grouped && grouped.pendiente  && previousOrders < grouped.pendiente.length && counter > 0){
 
                     previousOrders = grouped.pendiente.length;
                     let pendingOrders = [];
