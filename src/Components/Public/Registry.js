@@ -116,7 +116,7 @@ class Registry extends React.Component {
                 // console.log("Hi")
                 this.setState({registrySuccess: form.REGISTER.success}, () => {
                     if (this.state.registrySuccess) {
-                        window.setTimeout(this.doTheTaskAfterRegSuccess, 3333)
+                        window.setTimeout(this.doTheTaskAfterRegSuccess, 30000)
                     }
                 })
             }
@@ -217,7 +217,7 @@ class Registry extends React.Component {
 
                 <Modal
                     className="cstm-modal"
-                    size="sm"
+                    size="md"
                     show={this.state.registrySuccess}
                     onHide={this.hideRegistrySuccessModal}
                     aria-labelledby="contained-modal-title-vcenter"
@@ -229,11 +229,13 @@ class Registry extends React.Component {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        <p className="text-center" style={{fontWeight: '500', padding: '30px', minHeight: '210px', display: 'flex' , alignItems: 'center', justifyContent: 'center', marginTop: '-20px'}}>
                         Gracias por registrarse con nosotros, hemos enviado un email de verificación a la direccion
                         que ingresaste.
-
+                        <br/><br/>
                         Sigue la instrucciones que te enviamos para completar tu perfil y comenzar a utilizar la
                         plataforma.
+                        </p>
                     </Modal.Body>
                 </Modal>
             </>

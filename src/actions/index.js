@@ -13,6 +13,11 @@ import {
 } from './formAction'
 
 import {
+    getOrderFormData,
+    updateOrderFormData,
+} from './orderAction'
+
+import {
     getRestaurantFormData,
     updateRestaurantFormData,
     getCantonesFromAPI,
@@ -69,6 +74,9 @@ export {
     postFormData,
     cleanRegisterData,
     
+    getOrderFormData,
+    updateOrderFormData,
+
     getRestaurantFormData,
     updateRestaurantFormData,
     getCantonesFromAPI,

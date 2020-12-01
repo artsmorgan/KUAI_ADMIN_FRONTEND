@@ -442,7 +442,7 @@ body {
 
 .order-detail {
   background: #fff;
-  height: calc(100vh - 160px);
+  min-height: calc(100vh - 160px);
   border-radius: 18px;
   padding-top: 15px;
   position: relative;
@@ -473,7 +473,7 @@ body {
   border-radius: 12px;
   display: inline-block;
   width: 80px;
-  height: 95px;
+  min-height: 95px;
   margin: 10px 15px;
 }
 
@@ -497,7 +497,7 @@ body {
   border-radius: 12px;
   display: inline-block;
   width: 80px;
-  height: 95px;
+  min-height: 95px;
   margin: 10px 15px;
 }
 
@@ -513,11 +513,12 @@ body {
 .order-detail .action-container .btn-express span {
   display: block;
   font-size: 12px;
+  
 }
 
-.order-detail .action-container .btn-confirm {
+.order-detail .action-container .btn-hold.active {
   background: #b30dff;
-  color: #fff;
+  
   border-radius: 12px;
   display: inline-block;
   width: 80px;
@@ -525,7 +526,7 @@ body {
   margin: 10px 15px;
 }
 
-.order-detail .action-container .btn-confirm .inner {
+.order-detail .action-container .btn-hold.active .inner {
   background: #8a15bf;
   width: 60px;
   height: 60px;
@@ -534,9 +535,15 @@ body {
   border-radius: 8px;
 }
 
-.order-detail .action-container .btn-confirm span {
+.order-detail .action-container .btn-hold.active span {
   display: block;
   font-size: 12px;
+  color: #fff !important;
+}
+
+.order-detail .action-container .btn-hold.active .inner svg,
+.order-detail .action-container .btn-hold.active span {
+  opacity: 1;
 }
 
 .order-detail .action-container .btn-hold {
@@ -754,6 +761,10 @@ body {
   border-radius: 15px;
 }
 
+.second-area{
+  padding-top: 0px !important;
+}
+
 .mod-rest-container h3 {
   text-align: center;
   margin-bottom: 30px;
@@ -770,6 +781,7 @@ body {
 .mod-rest-container .cstm-select {
   margin-bottom: 20px;
   width: 47%;
+  text-transform: uppercase;
 }
 
 .mod-rest-container .cstm-select-full {
@@ -1120,6 +1132,10 @@ body {
   text-transform: uppercase;
   border: 0px;
   width: 85%;
+}
+
+.rotator-container .rotator-scroll .rotator-stripe strong{
+  text-transform: uppercase;
 }
 
 .mod-rest-container .rotator-container .rotator input:focus {
@@ -1645,7 +1661,7 @@ body {
 
 .add-menu-new .add-details .dummy {
   width: 100%;
-  height: 10px;
+  /* height: 10px; */
   border-radius: 5px;
   margin-bottom: 5px;
   background: #fff;
@@ -1657,7 +1673,7 @@ body {
 .add-menu-new .add-details .price {
   font-size: 18px;
   color: #000;
-  margin-top: 25px;
+  /* margin-top: 25px; */
   white-space: nowrap;
   overflow: auto;
 }
@@ -2308,6 +2324,11 @@ body {
   display: none;
 }
 
+@media (max-width: 1366px) {
+  .hor-inline .time-block{
+    width: 100%;
+  }
+}
 @media (min-width: 320px) and (max-width: 1024px) {
   .mb-sidepanel {
     left: auto !important;
@@ -2329,5 +2350,12 @@ body {
   .headerImage {
     display: none;
   }
+}
+
+.active-delivery svg{
+  fill: #fff;
+}
+.active-delivery svg path{
+  fill: #fff;
 }
 /*# sourceMappingURL=style.css.map */

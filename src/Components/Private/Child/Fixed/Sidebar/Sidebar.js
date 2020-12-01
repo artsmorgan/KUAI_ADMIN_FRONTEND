@@ -18,7 +18,8 @@ class Sidebar extends React.Component {
         this.state = {
             width: 0,
             show:false,
-            redirectToLogin: false
+            redirectToLogin: false,
+            restaurantProfilePicture:Avatar
         }
 
         // window.addEventListener("resize", this.updateDimension);
@@ -50,6 +51,15 @@ class Sidebar extends React.Component {
     componentWillUnmount() {
         // window.removeEventListener('resize', this.updateDimension);
         
+    }
+
+    componentDidUpdate(previousProps) {
+        if (previousProps.defaultConfig.loading && !this.props.defaultConfig.loading) {
+            const restaurantProfilePicture = this.props.defaultConfig.DEFAULT_CONFIG.restaurantProfilePicture;
+            this.setState({
+                restaurantProfilePicture:restaurantProfilePicture
+            })
+        }
     }
 
     addCollapsed = () => {
@@ -123,7 +133,7 @@ class Sidebar extends React.Component {
                     <div className=" hidden-lg extra-space" style={{height: '60px', position: 'relative'}}>
                         <div className="avatar">
 
-                            <img src={Avatar} alt="User Avatar" style={{width:'100%'}}/>
+                            <img src={this.state.restaurantProfilePicture} alt="User Avatar" style={{width:'70px'}}/>
 
                             <div className="headerImage" style={this.getStyle()}></div> 
 
@@ -188,7 +198,7 @@ class Sidebar extends React.Component {
                                         </clipPath>
                                     </defs>
                                 </svg>
-                                Ordenes <small>(muy pronto)</small>
+                                Ordenes 
                             </Link>
                         </li>
                         <li>
@@ -383,7 +393,7 @@ class Sidebar extends React.Component {
                                 </svg>
 
 
-                                Centro de Control <small>(muy pronto)</small>
+                                Centro de Control 
                             </Link>
                         </li>
                         <li>

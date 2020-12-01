@@ -101,13 +101,21 @@ class PaymentMethods extends React.Component {
 
     paymentInputChangeHandler(e, switchName) {
         let obj = this.state.dataToPost;
+        console.log(e.target.value)
         if(e.target.value==='' || e.target.value.replace(/ /g,'').match(/^[0-9]+$/) != null){
             if(e.target.value===''){
                 obj[e.target.name] = e.target.value;
             }else{
                 obj[e.target.name] = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();
             }   
-            this.setState({dataToPost: obj});
+            this.setState({dataToPost: obj}, () => {
+                console.log(this.state.dataToPost)
+            });
+        } else {
+            obj[e.target.name] = e.target.value;
+            this.setState({dataToPost: obj}, () => {
+                console.log(this.state.dataToPost)
+            });
         }
         this.handleCustomValidation()
     }

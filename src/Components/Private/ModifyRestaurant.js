@@ -184,7 +184,9 @@ class ModifyRestaurant extends React.Component {
         this.setState({
             width: window.innerWidth
         }, () => {
+            console.log(this.state.width)
             if (this.state.width < 1024) {
+                
                 this.setState({ mobile: true });
                 let obj = this.state.selectedTab;
 
@@ -194,8 +196,12 @@ class ModifyRestaurant extends React.Component {
                 } else {
                     this.activateTab(e, obj)
                 }
+                let tabObj = this.state.formTab
 
-
+                tabObj.generalTab = true;
+                tabObj.informationTab = false;
+                tabObj.scheduleTab = false;
+                this.setState({ formTab: tabObj})
             } else {
                 let obj = this.state.formTab
 
@@ -622,6 +628,20 @@ class ModifyRestaurant extends React.Component {
         return returnType;
     }
 
+    getDefaultActiveKey(e) {
+        console.log(this.state.formTab)
+        let tab = this.state.selectedTab ? this.state.selectedTab:'generalTab';
+        switch (tab) {
+            case "informationTab":
+                return "link-2";
+            case "scheduleTab":
+                return "link-3";
+            default:
+                return "link-1";
+        }
+       
+    }
+
     activateTab(e, tabName) {
         let obj = this.state.formTab;
         let alltabs = this.state.formTab;
@@ -757,7 +777,7 @@ class ModifyRestaurant extends React.Component {
                     description: restaurant.description ? restaurant.description:'',
                     tinyUrl: !restaurant.tinyUrl ? this.shortendURL() : restaurant.tinyUrl
                 }
-            }, () => {
+            }, (e) => {
                 this.processScheduleValue("get");
                 this.shortendURL()
                 this.processAddressValue("get");
@@ -777,6 +797,9 @@ class ModifyRestaurant extends React.Component {
         // console.log(copyText.setSelectionRange(0, 99999))
         document.execCommand("copy");
     }
+
+
+   
 
 
     render() {
@@ -840,7 +863,7 @@ class ModifyRestaurant extends React.Component {
                                         {/* <div className="">New</div> */}
                                         <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <Nav className="tab-cstm mb-visible" variant="pills"
-                                                defaultActiveKey="link-1">
+                                                defaultActiveKey={(e)=>this.getDefaultActiveKey(e)}>
                                                 <Nav.Item>
                                                     <Nav.Link href="javascript:void(0)" eventKey="link-1"
                                                         onClick={(e) => this.activateTab(e, 'generalTab')}>General</Nav.Link>
@@ -1041,14 +1064,14 @@ class ModifyRestaurant extends React.Component {
                                             className={"col col-md-4 col-lg-4 col-sm-12 col-xs-12 " + (this.state.formTab.informationTab ? '' : 'hidden')}>
                                             <h3 className="mb-hidden">Información</h3>
                                             <div>
-                                                <label htmlFor="">PROVINCIA:</label> <br />
+                                                {/* <label htmlFor="">PROVINCIA:</label> <br /> */}
                                                 {/* <input className="uni-input md" type="text" name="province"
                                                 placeholder="province"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.province} /> */}
                                                 {/*<div className="row" >*/}
                                                 {/*<div className="col-md-6 col-sm-6 col-lg-6 col-xs-6">*/}
-                                                <Select className="cstm-select f-w"
+                                                {/* <Select className="cstm-select f-w"
                                                     options={optionprovince} name="province"
                                                     style={{ "width": "100" }}
                                                     placeholder="Select Province"
@@ -1058,7 +1081,7 @@ class ModifyRestaurant extends React.Component {
                                                 <p className="error-txt" style={{ color: "red" }}>
                                                     {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                                 </p>
-                                                <br />
+                                                <br /> */}
                                                 {/* <Select className="cstm-select" options={optionprovince}
                                                 name="province" placeholder="Provincia"
                                                 onChange={this.selectChangeHandler}
@@ -1066,12 +1089,12 @@ class ModifyRestaurant extends React.Component {
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('province', this.state.dataToPost.province, 'required')}
                                             </p> */}
-                                                <label htmlFor="">CANTON:</label><br />
+                                                {/* <label htmlFor="">CANTON:</label><br /> */}
                                                 {/* {/* <input className="uni-input md" type="text" name="canton"
                                                 placeholder="canton"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.canton} /> */}
-                                                <Select className="cstm-select f-w"
+                                                {/* <Select className="cstm-select f-w"
                                                     options={optioncanton} name="canton"
                                                     style={{ "width": "100" }}
                                                     placeholder="Select Canton"
@@ -1082,7 +1105,7 @@ class ModifyRestaurant extends React.Component {
                                                 <p className="error-txt" style={{ color: "red" }}>
                                                     {this.validator.message('canton', this.state.dataToPost.canton, 'required')}
                                                 </p>
-                                                <br />
+                                                <br /> */}
 
                                                 {/* <Select className="cstm-select" options={optioncanton} name="canton"
                                                 placeholder="Canton"
@@ -1091,13 +1114,13 @@ class ModifyRestaurant extends React.Component {
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('canton', this.state.dataToPost.canton, 'required')}
                                             </p> */}
-                                                <label htmlFor="">DISTRITO:</label><br />
+                                                {/* <label htmlFor="">DISTRITO:</label><br /> */}
 
                                                 {/* <input className="uni-input md" type="text" name="district"
                                                 placeholder="district"
                                                 onChange={this.inputChangeHandler}
                                                 value={this.state.dataToPost.district} /> */}
-                                                <Select className="cstm-select f-w"
+                                                {/* <Select className="cstm-select f-w"
                                                     options={optiondistrict} name="district"
                                                     style={{ "width": "100" }}
                                                     placeholder="Select District"
@@ -1108,7 +1131,7 @@ class ModifyRestaurant extends React.Component {
                                                 <p className-="error-txt" style={{ color: "red" }}>
                                                     {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                                 </p>
-                                                <br />
+                                                <br /> */}
                                                 {/* <Select className="cstm-select" options={optiondistrict} name="district"
                                                 placeholder="Distrito"
                                                 onChange={this.selectChangeHandler}
@@ -1116,11 +1139,11 @@ class ModifyRestaurant extends React.Component {
                                             <p style={{ color: "red" }}>
                                                 {this.validator.message('district', this.state.dataToPost.district, 'required')}
                                             </p> */}
-                                                <label htmlFor="">BARRIO:</label><br />
+                                                {/* <label htmlFor="">BARRIO:</label><br />
                                                 <input className="uni-input" type="text" name="neighborhood"
                                                     placeholder="neighborhood"
                                                     onChange={this.inputChangeHandler}
-                                                    value={this.state.dataToPost.neighborhood} />
+                                                    value={this.state.dataToPost.neighborhood} /> */}
                                                 {/* <Select className="cstm-select full-width mini float-left"
                                                 options={optionprovince} name="neighborhood"
                                                 style={{"width": "100"}}
@@ -1128,10 +1151,10 @@ class ModifyRestaurant extends React.Component {
                                                 onChange={(e) => this.timeSelectChangeHandler(e, 'neighborhood')}
                                                 value={this.state.dataToPost.neighborhood} isDisabled={false}
                                             /> */}
-                                                <p className-="error-txt" style={{ color: "red" }}>
+                                                {/* <p className-="error-txt" style={{ color: "red" }}>
                                                     {this.validator.message('neighborhood', this.state.dataToPost.neighborhood, 'required')}
                                                 </p>
-                                                <br />
+                                                <br /> */}
                                                 <label htmlFor="">Direccion:</label>
                                                 <textarea className="uni-input tarea" name="otherSigns"
                                                     placeholder="Direccion"
