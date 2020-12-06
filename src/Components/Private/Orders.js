@@ -55,8 +55,8 @@ class Orders extends React.Component {
         this.updateDimension();
         let previousOrders = 0;
         let counter = 0;
-        const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}`, {
-        // const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/94b6f20a-4861-45ea-bea3-7c161fe9b0d4`, {
+        const orders = new  Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/${localStorage.getItem('restaurantId')}`, {
+        // const orders = new Request(`https://us-central1-kuai-test.cloudfunctions.net/api/order/96fcf826-c465-4c90-baa1-0fe3698f97af`, {
             cancelable:true, //default is true
         });
 
@@ -145,6 +145,7 @@ class Orders extends React.Component {
     }
 
     componentWillMount() {
+        // this.props.getOrderFormData({ restaurantId: '96fcf826-c465-4c90-baa1-0fe3698f97af' })
         this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
     }
 
@@ -252,6 +253,7 @@ class Orders extends React.Component {
 
     selectTab = (e, tabArrayPosition) => {
         this.setState({ selectedTab: pageTabs[tabArrayPosition] })
+        // this.props.getOrderFormData({ restaurantId: '96fcf826-c465-4c90-baa1-0fe3698f97af' })
         this.props.getOrderFormData({ restaurantId: localStorage.getItem('restaurantId') })
         switch (tabArrayPosition) {
             case 0:

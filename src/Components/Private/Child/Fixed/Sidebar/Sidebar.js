@@ -218,7 +218,7 @@ class Sidebar extends React.Component {
                                     </g>
                                 </svg>
 
-                                Modificar Restaurante
+                                Modificar Negocio
                             </Link>
                         </li>
                         <li>
